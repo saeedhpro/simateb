@@ -1,0 +1,55 @@
+@font-face {
+  font-family: "IRANYekanThin";
+  src: url("font/IRANYekanThin.ttf");
+}@font-face {
+  font-family: "IRANYekanBlack";
+  src: url("font/IRANYekanBlack.ttf");
+}@font-face {
+  font-family: "IRANYekanExtraBlack";
+  src: url("font/IRANYekanExtraBlack.ttf");
+}
+@font-face {
+  font-family: "IRANYekanBold";
+  src: url("font/IRANYekanBold.ttf");
+}
+@font-face {
+  font-family: "IRANYekanExtraBold";
+  src: url("font/IRANYekanExtraBold.ttf");
+}
+@font-face {
+  font-family: "IRANYekanLight";
+  src: url("font/IRANYekanLight.ttf");
+}
+@font-face {
+  font-family: "IRANYekanMedium";
+  src: url("font/IRANYekanMedium.ttf");
+}
+@font-face {
+  font-family: "IRANYekanRegular";
+  src: url("font/IRANYekanRegular.ttf");
+}
+.thin {
+  font-family: "IRANYekanThin";
+}
+.black {
+  font-family:"IRANYekanBlack";
+}
+.extraBlack {
+  font-family: "IRANYekanExtraBlack";
+}
+.Bold {
+  font-family: "IRANYekanBold";
+}
+.extraBold {
+  font-family: "IRANYekanExtraBold";
+}
+.light {
+  font-family: "IRANYekanLight";
+}
+.medium {
+  font-family: "IRANYekanMedium";
+}
+
+.regular {
+  font-family: "IRANYekanRegular";
+}
