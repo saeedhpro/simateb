@@ -58,7 +58,8 @@ export default {
       return this.item.case_type || ''
     },
     isFriday() {
-      return moment.from(`${this.year}/${this.month}/${this.day}`, "fa", "YYYY/MM/DD").format("dddd") === 'جمعه'
+      const today = moment.from(`${this.year}/${this.month}/${this.day}`, "fa", "YYYY/MM/DD").locale("fa").format("dddd");
+      return today === 'جمعه' || today === 'Friday';
     },
     isHoliday() {
       if (this.holidays.length < 1) {
