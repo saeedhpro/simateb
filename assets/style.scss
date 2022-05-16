@@ -5,13 +5,45 @@ html, main {
   background: #F1F2F5 0 0 no-repeat padding-box;
 }
 
+body {
+  min-width: 450px;
+}
+
+.theme--light.v-pagination .v-pagination__navigation {
+  transform: rotateY(180deg);
+}
+
 a {
   text-decoration: none;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+.status-box {
+  text-align: center;
+  font: normal normal normal 14px/25px IRANYekanRegular !important;
+  letter-spacing: 0;
+  color: #293366;
+  padding: 4px 24px;
+  border-radius: 6px;
 }
 
 .open-drawer {
   i {
     color: #FFFFFF !important;
+  }
+}
+
+.v-input {
+  text-align: right;
+}
+
+.v-select__slot {
+  .v-label {
+    right: 0 !important;
+    left: auto !important;
   }
 }
 
@@ -33,6 +65,10 @@ a {
     border: 1px solid #BDBDBD;
     border-radius: 6px;
   }
+
+  a {
+    color: rgba(0, 0, 0, 0.87)
+  }
 }
 
 .v-pagination {
@@ -43,7 +79,7 @@ a {
     border: 1px solid #DBDBDB;
     border-radius: 8px;
     text-align: center;
-    font: normal normal bold 16px/28px IRANYekanMsn;
+    font: normal normal bold 16px/28px IRANYekanRegular !important;
     letter-spacing: 0;
     color: #212945 !important;
     box-shadow: none !important;
@@ -105,7 +141,7 @@ table {
 
       .login-title {
         text-align: center;
-        font: normal normal 800 20px/35px IRANYekanRegular;
+        font: normal normal 800 20px/35px IRANYekanRegular !important;
         letter-spacing: 0;
         color: #141432;
         border-bottom: 2px solid #141432;
@@ -128,7 +164,7 @@ table {
 
         .form-input {
           text-align: right;
-          font: normal normal medium 14px/25px IRANYekanRegular;
+          font: normal normal medium 14px/25px IRANYekanRegular !important;
           letter-spacing: 0;
           color: #BDBDBD;
 
@@ -143,7 +179,7 @@ table {
           box-shadow: 0px 12px 16px #5063FF28;
           border-radius: 8px;
           text-align: center;
-          font: normal normal bold 16px/28px IRANYekanRegular;
+          font: normal normal bold 16px/28px IRANYekanRegular !important;
           letter-spacing: 0;
           color: #FFFFFF;
           width: 100%;
@@ -220,7 +256,7 @@ table {
 
     .forget-title {
       text-align: center;
-      font: normal normal 800 20px/35px IRANYekanRegular;
+      font: normal normal 800 20px/35px IRANYekanRegular !important;
       letter-spacing: 0;
       color: #141432;
       border-bottom: 2px solid #141432;
@@ -229,7 +265,7 @@ table {
     .forget-text {
       margin-top: 20px;
       text-align: center;
-      font: normal normal 16px/28px IRANYekanRegular;
+      font: normal normal 16px/28px IRANYekanRegular !important;
       font-weight: normal;
       letter-spacing: 0;
       color: #141432;
@@ -242,7 +278,7 @@ table {
       padding: 12px 24px;
       margin-top: 35px;
       text-align: center;
-      font: normal normal bold 14px/25px IRANYekanRegular;
+      font: normal normal bold 14px/25px IRANYekanRegular !important;
       letter-spacing: 0;
       color: #26264E;
     }
@@ -272,7 +308,7 @@ table {
 
     .user-full-name {
       text-align: right;
-      font: normal normal normal 16px/31px IRANYekanRegular;
+      font: normal normal normal 16px/31px IRANYekanRegular !important;
       letter-spacing: 0;
       color: #FFFFFF;
       margin: 0 16px;
@@ -303,8 +339,8 @@ table {
       }
 
       .title {
-        font: normal normal bold 20px/35px IRANYekanRegular;
-        letter-spacing: 0;
+        font: normal normal normal 16px/35px IRANYekanRegular !important;
+        letter-spacing: 0 !important;
         color: #F1F2F5;
         margin: 0 16px;
         transition: all .4s ease;
@@ -320,14 +356,14 @@ table {
       }
 
       &:hover, &.nuxt-link-exact-active {
-        background: #26264E 0% 0% no-repeat padding-box;
+        background: #26264E 0 0 no-repeat padding-box;
         border-radius: 8px;
         transition: all .4s ease;
         -webkit-transition: all .4s ease;
 
         .title {
-          font: normal normal bold 20px/35px IRANYekanRegular;
-          letter-spacing: 0;
+          font: normal normal bold 16px/35px IRANYekanRegular !important;
+          letter-spacing: 0 !important;
           color: #E040FB;
           transition: all .4s ease;
           -webkit-transition: all .4s ease;
@@ -350,7 +386,7 @@ table {
 
     .organization-name {
       text-align: right;
-      font: normal normal normal 16px/31px IRANYekanRegular;
+      font: normal normal normal 16px/31px IRANYekanRegular !important;
       letter-spacing: 0;
       color: #FFFFFF;
       margin-right: 10px;
@@ -382,12 +418,23 @@ table {
     height: 56px;
     max-width: 200px;
     min-width: 150px;
+    margin-left: 10px;
 
     .title {
-      font: normal normal normal 16px/28px IRANYekanRegular;
+      font: normal normal normal 14px/28px IRANYekanRegular !important;
       letter-spacing: 0;
       color: #5063FF;
       margin-right: 10px;
+    }
+
+    &.nuxt-link-exact-active {
+      background: #F6F7FF 0 0 no-repeat padding-box !important;
+      box-shadow: 0 12px 16px #5063FF28 !important;
+      border: 1px solid #5063FF !important;
+
+      .title {
+        color: #5063FF !important;
+      }
     }
   }
 
@@ -399,16 +446,57 @@ table {
     background: #5063FF 0 0 no-repeat padding-box;
     box-shadow: 0 12px 16px #5063FF28;
     border-radius: 8px;
-    padding: 8px 24px;
+    padding: 8px;
     position: relative;
     height: 56px;
     max-width: 250px;
     min-width: 200px;
+    cursor: pointer;
+    margin-left: 5px;
+
+    &:last-child {
+      margin-left: unset !important;
+    }
 
     .title {
-      font: normal normal bold 16px/28px IRANYekanRegular;
+      font: normal normal bold 14px/28px IRANYekanRegular !important;
       letter-spacing: 0;
       color: #FFFFFF;
+    }
+
+    img {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      bottom: 8px;
+    }
+  }
+
+  .page-actions-secondary {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    position: relative;
+    height: 56px;
+    max-width: 250px;
+    min-width: 200px;
+    background: #F1F2F5 0 0 no-repeat padding-box;
+    border: 1px solid #DBDBDB;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-left: 5px;
+
+    &:last-child {
+      margin-left: unset !important;
+    }
+
+    .title {
+      text-align: center;
+      font: normal normal normal 16px/28px IRANYekanRegular !important;
+      letter-spacing: 0;
+      color: #3D3D66 !important;
     }
 
     img {
@@ -430,7 +518,7 @@ table {
     background: #5063FF 0 0 no-repeat padding-box;
     border-radius: 8px;
     text-align: center;
-    font: normal normal bold 16px/31px IRANYekanMsn;
+    font: normal normal bold 16px/31px IRANYekanRegular !important;
     letter-spacing: 0;
     color: #FFFFFF;
     height: 32px;
@@ -449,7 +537,7 @@ table {
       border: 1px solid #DBDBDB;
       border-radius: 8px;
       text-align: right;
-      font: normal normal bold 14px/25px IRANYekanRegular;
+      font: normal normal bold 14px/25px IRANYekanRegular !important;
       letter-spacing: 0;
       color: #141432;
       height: 56px;
@@ -477,7 +565,7 @@ table {
 
       span {
         text-align: center;
-        font: normal normal bold 14px/25px IRANYekanRegular;
+        font: normal normal bold 14px/25px IRANYekanRegular !important;
         letter-spacing: 0;
         color: #5063FF;
       }
@@ -491,13 +579,13 @@ table {
     justify-content: flex-start;
 
     .result-count {
-      font: normal normal normal 14px/25px IRANYekanRegular;
+      font: normal normal normal 14px/25px IRANYekanRegular !important;
       letter-spacing: 0;
       color: #757575;
       min-width: 75px;
 
       span {
-        font: normal normal bold 16px/28px IRANYekanMsn;
+        font: normal normal bold 16px/28px IRANYekanRegular !important;
       }
     }
 
@@ -522,7 +610,7 @@ table {
 
       .search-input {
         text-align: right;
-        font: normal normal normal 14px/25px IRANYekanRegular;
+        font: normal normal normal 14px/25px IRANYekanRegular !important;
         letter-spacing: 0;
         color: #757575;
         margin-right: 10px;
@@ -566,7 +654,7 @@ table {
         height: 40px;
         cursor: pointer;
         text-align: right;
-        font: normal normal normal 14px/25px IRANYekanRegular;
+        font: normal normal normal 14px/25px IRANYekanRegular !important;
         letter-spacing: 0;
         color: #26264E;
         margin-right: 10px;
@@ -604,7 +692,7 @@ table {
       flex-direction: column;
       align-items: flex-start;
       justify-content: flex-start;
-      font: normal normal normal 16px/35px IRANYekanRegular;
+      font: normal normal normal 16px/35px IRANYekanRegular !important;
       letter-spacing: 0;
       color: #141432;
 
@@ -621,10 +709,10 @@ table {
 
         .file-id-box {
           text-align: center;
-          font: normal normal normal 16px/32px IRANYekanRegular;
+          font: normal normal normal 16px/32px IRANYekanRegular !important;
 
           .file-id {
-            font: normal normal normal 16x/32px IRANYekanRegular;
+            font: normal normal normal 16x/32px IRANYekanRegular !important;
             background: #F0F0F0 0 0 no-repeat padding-box;
             border-radius: 8px;
             letter-spacing: 0;
@@ -640,7 +728,7 @@ table {
     .description-box {
       .title {
         text-align: right;
-        font: normal normal normal 16px/28px IRANYekanRegular;
+        font: normal normal normal 16px/28px IRANYekanRegular !important;
         letter-spacing: 0;
         color: #141432;
       }
@@ -648,7 +736,7 @@ table {
       .description {
         margin-top: 8px;
         text-align: right;
-        font: normal normal normal 16px/31px IRANYekanRegular;
+        font: normal normal normal 16px/31px IRANYekanRegular !important;
         letter-spacing: 0;
         color: #141432;
         min-height: 60px;
@@ -668,7 +756,7 @@ table {
         border-radius: 8px;
         padding: 8px 40px;
         text-align: center;
-        font: normal normal normal 16px/31px IRANYekanRegular;
+        font: normal normal normal 16px/31px IRANYekanRegular !important;
         letter-spacing: 0;
         color: #757575;
         cursor: pointer;
@@ -701,7 +789,7 @@ table {
         border-radius: 8px;
         width: 100%;
         text-align: center;
-        font: normal normal normal 14px/28px IRANYekanRegular;
+        font: normal normal normal 14px/28px IRANYekanRegular !important;
         letter-spacing: 0;
         color: #26264E !important;
         transition: all .4s ease;
@@ -754,7 +842,7 @@ table {
         left: 16px;
         bottom: 16px;
         text-align: center;
-        font: normal normal normal 14px/28px IRANYekanRegular;
+        font: normal normal normal 14px/28px IRANYekanRegular !important;
         letter-spacing: 0;
         color: #5063FF;
       }
@@ -764,6 +852,1049 @@ table {
       background: #FAFAFA 0 0 no-repeat padding-box;
       border-radius: 8px;
       min-height: 172px;
+      padding: 16px 20px;
+      font: normal normal normal 14px/25px IRANYekanRegular !important;
+      letter-spacing: 0;
+      color: #26264E;
+
+      .time-box {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+
+        span {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: center;
+          margin: 0 5px;
+        }
+
+        .circle {
+          background: #DBDBDB 0 0 no-repeat padding-box;
+          width: 6px;
+          height: 6px;
+          display: inline-flex;
+          border-radius: 6px;
+        }
+
+        .status-box {
+          text-align: center;
+          font: normal normal normal 14px/25px IRANYekanRegular !important;
+          letter-spacing: 0;
+          color: #293366;
+          padding: 4px 24px;
+          border-radius: 6px;
+        }
+      }
+
+      .case-type {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        font: normal normal normal 14px/25px IRANYekanRegular !important;
+        letter-spacing: 0;
+        color: #26264E;
+        text-align: center;
+        margin-top: 20px;
+
+        span {
+          background: #F0F0F5 0 0 no-repeat padding-box;
+          border-radius: 6px;
+          padding: 4px 24px;
+          margin-right: 15px;
+        }
+      }
+
+      .code {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        font: normal normal normal 14px/25px IRANYekanRegular !important;
+        letter-spacing: 0;
+        color: #26264E;
+        text-align: center;
+        margin-top: 20px;
+
+        span {
+          border-radius: 6px;
+          padding: 4px 24px;
+          margin-right: 5px;
+          text-align: right;
+          font: normal normal bold 16px/28px IRANYekanRegular !important;
+          letter-spacing: 0;
+          color: #26264E;
+        }
+      }
+
+      .prescription-box {
+        text-align: right;
+        font: normal normal normal 14px/25px IRANYekanRegular !important;
+        letter-spacing: 0;
+        color: #26264E;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        margin-bottom: 10px;
+
+        .prescription {
+          text-align: center;
+          font: normal normal normal 14px/25px IRANYekanRegular !important;
+          letter-spacing: 0;
+          color: #26264E;
+          padding: 4px 16px;
+          background: #F0F0F5 0 0 no-repeat padding-box;
+          border-radius: 6px;
+          margin-right: 5px;
+
+          &.radiology {
+            background: #EBF0FF 0 0 no-repeat padding-box;
+            border: 0.5px solid #5063FF;
+            color: #5063FF;
+          }
+
+          &.photography {
+            background: #EBFFEC 0 0 no-repeat padding-box;
+            border: 0.5px solid #388E3C;
+            color: #388E3C;
+          }
+        }
+      }
+    }
+  }
+}
+
+.profile-photography-list-component {
+  .profile-photography-item-component {
+
+  }
+}
+
+.create-update-modal.medical {
+  background: #F1F2F5 0 0 no-repeat padding-box !important;
+  box-shadow: 0 16px 64px #14143214 !important;
+  border-radius: 8px !important;
+}
+
+.medical-tabs-header {
+  direction: ltr;
+
+  .v-item-group {
+    background: none !important;
+
+    .v-tabs-slider-wrapper {
+      display: none !important;
+    }
+
+    .v-tab {
+      width: 100%;
+      text-align: center;
+      font: normal normal normal 14px/28px IRANYekanRegular !important;
+      letter-spacing: 0;
+      color: #26264E !important;
+      transition: all .2s ease-in-out;
+      -webkit-transition: all .2s ease-in-out;
+      margin: 0 5px;
+      background: #FFFFFF 0 0 no-repeat padding-box;
+      box-shadow: 0 2px 4px #14143214;
+      border-radius: 8px;
+
+      &:hover {
+        background: #F6F7FF 0 0 no-repeat padding-box;
+        box-shadow: 0 12px 16px #5063FF28;
+        //border: 1px solid #5063FF;
+        color: #5063FF !important;
+        transition: all .2s ease-in-out;
+        -webkit-transition: all .2s ease-in-out;
+      }
+    }
+  }
+}
+
+.medical-tabs-box {
+  .v-item-group {
+    background: none !important;
+
+    .v-tabs-slider-wrapper {
+      display: none !important;
+    }
+  }
+}
+
+.medical-condition-component, .dental-examination-component, .occlusal-examination-component, .treatment-component {
+  background: #FFFFFF 0 0 no-repeat padding-box;
+  box-shadow: 0 2px 4px #14143214;
+  border-radius: 8px;
+  padding: 24px;
+  margin-top: 16px;
+  direction: ltr;
+
+  .v-list-item__title {
+    text-align: left !important
+
+  }
+}
+
+.treatment-component {
+  .treatment-list-box {
+    border-radius: 8px;
+    border: 1px solid rgba(0, 0, 0, .125);
+
+    .treatment-button {
+      border-bottom: 1px solid rgba(0, 0, 0, .125);
+      width: 100%;
+      text-align: left;
+
+      &:last-child {
+        border-bottom: none !important;
+      }
+    }
+  }
+}
+
+.send-documents-component {
+  .action-box {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+
+    .choose-file, .choose-image {
+      padding: 10px 37px;
+      cursor: pointer;
+      position: relative;
+      min-width: 200px;
+      height: 56px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      text-align: center;
+      font: normal normal bold 14px/28px IRANYekanRegular !important;
+      letter-spacing: 0;
+
+      img {
+        position: absolute;
+        height: 40px;
+        width: 40px;
+        top: 8px;
+        right: 10px;
+      }
+    }
+
+    .choose-file {
+      background: #FFFFFF 0 0 no-repeat padding-box;
+      border: 1px solid #5063FF;
+      color: #5063FF;
+      margin-left: 10px;
+    }
+
+    .choose-image {
+      background: #5063FF 0 0 no-repeat padding-box;
+      box-shadow: 0 12px 16px #5063FF28;
+      color: #FFFFFF;
+    }
+  }
+}
+
+.files-list-component {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+
+  .file-item-component {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 20px;
+
+    .file-image {
+      height: 176px;
+      width: 176px;
+      border-radius: 8px;
+    }
+
+    .input-box {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      min-height: 172px;
+
+      label {
+        text-align: right;
+        font: normal normal normal 14px/25px IRANYekanRegular !important;
+        letter-spacing: 0;
+        color: #26264E;
+      }
+
+      textarea {
+        background: #FFFFFF 0 0 no-repeat padding-box;
+        border: 1px solid #DBDBDB;
+        border-radius: 8px;
+        outline: none;
+        text-align: right;
+        font: normal normal normal 14px/25px IRANYekanRegular !important;
+        letter-spacing: 0;
+        color: #26264E;
+        padding: 2px 10px;
+        height: 135px;
+        margin-top: 10px;
+        width: 100%;
+
+        &:disabled {
+          background: #FAFAFA 0 0 no-repeat padding-box;
+        }
+      }
+    }
+
+    .remove-button {
+      background: #FCFCFC 0 0 no-repeat padding-box;
+      border: 1px solid #BDBDBD;
+      border-radius: 8px;
+      height: 135px;
+      width: 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-top: 35px;
+    }
+  }
+}
+
+.accept-file-remove-model {
+  text-align: center;
+  position: relative;
+  min-height: 253px;
+  display: flex !important;
+  flex-direction: column;
+  justify-content: space-evenly;
+
+  .accept-file-remove-title {
+    text-align: center !important;
+    font: normal normal 800 21px/41px IRANYekanRegular !important;
+    letter-spacing: 0;
+    color: #212945;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-top: 16px;
+  }
+
+  .accept-file-remove-text {
+    text-align: center;
+    font: normal normal bold 14px/28px IRANYekanRegular !important;
+    letter-spacing: 0;
+    color: #212945;
+  }
+
+  .close {
+    background: #FAFAFA 0 0 no-repeat padding-box;
+    border: 1px solid #141432;
+    border-radius: 6px;
+    position: absolute;
+    top: 16px;
+    right: 16px;
+  }
+
+  .accept-button {
+    background: #EBEBEB 0 0 no-repeat padding-box;
+    color: #424242;
+  }
+
+  .cancel-button {
+    background: #5063FF 0 0 no-repeat padding-box;
+    color: #FFFFFF;
+  }
+
+  .red-button {
+    background: #F44336 0 0 no-repeat padding-box;
+    color: #FFFFFF;
+  }
+
+  .action-button {
+    border-radius: 8px;
+    max-width: 288px;
+    width: 100%;
+    height: 56px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font: normal normal bold 14px/28px IRANYekanRegular !important;
+    letter-spacing: 0;
+  }
+}
+
+.create-update-model {
+}
+
+.create-update-modal-title-box {
+  background: #DBDBDB 0 0 no-repeat padding-box;
+  border-radius: 8px 8px 0 0;
+
+  .create-update-modal-title {
+    display: flex;
+
+    .create-update-modal-close {
+      background: #DBDBDB 0 0 no-repeat padding-box;
+      border: 1px solid #141432;
+      border-radius: 6px;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    span {
+      text-align: right;
+      font: normal normal normal 14px/28px IRANYekanRegular !important;
+      letter-spacing: 0;
+      color: #141432;
+      margin-right: 10px;
+    }
+  }
+
+  .create-update-modal-regbox {
+    text-align: left;
+    color: #141432;
+    font: normal normal normal 14px/25px IRANYekanRegular !important;
+    letter-spacing: 0;
+  }
+}
+
+.second-button {
+  background: #FAFAFA 0 0 no-repeat padding-box;
+  border: 1px solid #757575;
+  border-radius: 8px;
+  text-align: center;
+  font: normal normal normal 16px/28px IRANYekanRegular !important;
+  letter-spacing: 0;
+  color: #757575;
+  padding: 8px 28px;
+  width: 100%;
+}
+
+.main-button {
+  background: #5063FF 0 0 no-repeat padding-box;
+  border-radius: 8px;
+  text-align: center;
+  font: normal normal bold 16px/28px IRANYekanRegular !important;
+  letter-spacing: 0;
+  color: #FFFFFF;
+  padding: 8px 28px;
+  width: 100%;
+}
+
+.create-update-model-input-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  label {
+    text-align: right;
+    font: normal normal bold 14px/25px IRANYekanRegular !important;
+    letter-spacing: 0;
+    color: #141432;
+    margin-bottom: 10px;
+  }
+
+  & > input, & > div > input {
+    height: 42px;
+    background: #FFFFFF 0 0 no-repeat padding-box;
+    border: 1px solid #DBDBDB;
+    border-radius: 8px;
+    padding: 5px 10px;
+    width: 100%;
+    outline: none !important;
+  }
+
+  & > textarea, & > div > textarea {
+    background: #FFFFFF 0 0 no-repeat padding-box !important;
+    border: 1px solid #DBDBDB !important;
+    border-radius: 8px;
+    padding: 5px 10px;
+    width: 100%;
+    outline: none !important;
+  }
+
+  .date-picker {
+    position: relative;
+    width: 100%;
+
+    img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 9;
+      background: #FFFFFF 0 0 no-repeat padding-box;
+      border: 1px solid #DBDBDB;
+      border-radius: 8px;
+      padding: 8px;
+    }
+  }
+}
+
+.create-update-model-input-title {
+  text-align: center;
+  font: normal normal 800 24px/41px IRANYekanRegular !important;
+  letter-spacing: 0;
+  color: #212945;
+}
+
+.create-update-model-input-description {
+  text-align: center;
+  font: normal normal normal 16px/28px IRANYekanRegular !important;
+  letter-spacing: 0;
+  color: #212945;
+}
+
+.card-box {
+  background: #FFFFFF 0 0 no-repeat padding-box !important;
+  box-shadow: 0 2px 4px #14143214 !important;
+  border-radius: 8px !important;
+  padding: 40px;
+}
+
+.search-box {
+  .right-box {
+    display: flex;
+
+    .small-circle {
+      background-color: #F5AC00;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-left: 5px;
+    }
+
+    .number {
+      background: #5063FF 0 0 no-repeat padding-box;
+      border-radius: 8px;
+      text-align: center;
+      font: normal normal bold 18px/31px IRANYekanRegular !important;
+      letter-spacing: 0;
+      color: #FFFFFF;
+      padding: 2px 9px;
+      margin: 0 5px;
+    }
+
+    .do-action-btn {
+      background: #FAFAFA 0 0 no-repeat padding-box;
+      border: 1px solid #DBDBDB;
+      border-radius: 8px;
+      padding: 15px 24px;
+      height: 56px;
+      margin-right: 10px;
+      min-width: 130px;
+    }
+  }
+
+  .selected-count {
+    background: #5063FF 0 0 no-repeat padding-box;
+    border-radius: 8px;
+    text-align: center;
+    font: normal normal bold 16px/31px IRANYekanRegular !important;
+    letter-spacing: 0;
+    color: #FFFFFF;
+    height: 32px;
+    width: 32px;
+    margin-top: 16px;
+    margin-left: 10px;
+  }
+
+  .page-main-actions-left {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+
+    .result-count {
+      font: normal normal normal 14px/25px IRANYekanRegular !important;
+      letter-spacing: 0;
+      color: #757575;
+      min-width: 75px;
+
+      span {
+        font: normal normal bold 16px/28px IRANYekanRegular !important;
+      }
+    }
+
+    .page-search-box {
+      background: #FFFFFF 0 0 no-repeat padding-box;
+      border: 1px solid #DBDBDB;
+      border-radius: 8px;
+      height: 56px;
+      width: 100%;
+      position: relative;
+      padding: 8px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-start;
+
+      svg {
+        width: 18px;
+        height: 18px;
+        margin-right: 10px;
+      }
+
+      .search-input {
+        text-align: right;
+        font: normal normal normal 14px/25px IRANYekanRegular !important;
+        letter-spacing: 0;
+        color: #757575;
+        margin-right: 10px;
+        width: 100%;
+        height: 100%;
+        padding: 4px 10px 4px 4px;
+
+        &:focus, &:focus-visible {
+          border: none !important;
+          outline: none;
+        }
+      }
+
+      .search-button {
+        background: #F6F7FF 0 0 no-repeat padding-box;
+        border: 1px solid #5063FF;
+        border-radius: 6px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        min-width: 40px;
+        height: 40px;
+        cursor: pointer;
+
+        img {
+          width: 18px;
+          height: 18px;
+        }
+      }
+
+      .search-filter {
+        background: #FAFAFA 0 0 no-repeat padding-box;
+        border: 1px solid #DBDBDB;
+        border-radius: 6px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        width: 80px;
+        height: 40px;
+        cursor: pointer;
+        text-align: right;
+        font: normal normal normal 14px/25px IRANYekanRegular !important;
+        letter-spacing: 0;
+        color: #26264E;
+        margin-right: 10px;
+        padding: 7px 12px;
+
+        img {
+          width: 16px;
+          height: 18px;
+          margin-left: 5px;
+        }
+      }
+    }
+  }
+}
+
+.case-type-checkbox-component {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  background: #FFFFFF 0 0 no-repeat padding-box;
+  border: 1px solid #DBDBDB;
+  border-radius: 8px;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-left: 10px;
+  transition: all .2s ease-in-out;
+
+  &.checked {
+    background: #F6F7FF 0 0 no-repeat padding-box !important;
+    border: 1px solid #5063FF !important;
+    transition: all .2s ease-in-out;
+
+    .circle {
+      background: #5063FF url("/images/form/check.svg") no-repeat center center;
+      transition: all .2s ease-in-out;
+    }
+  }
+
+  &:last-child {
+    margin-left: 0 !important;
+  }
+
+  .circle {
+    background: #EBEBEB 0 0 no-repeat padding-box;
+    border-radius: 320px;
+    width: 24px;
+    height: 24px;
+    transition: all .2s ease-in-out;
+    margin-left: 10px;
+  }
+
+  .name {
+    text-align: center;
+    font: normal normal bold 14px/28px IRANYekanRegular !important;
+    letter-spacing: 0;
+    color: #141432;
+  }
+}
+
+.has-erja {
+  background: #EBF0FF 0 0 no-repeat padding-box;
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    width: 20px;
+    height: 14px;
+  }
+}
+
+.tafkik {
+  text-align: right;
+  font: normal normal bold 14px/25px IRANYekanRegular !important;
+  letter-spacing: 0;
+  color: #757575;
+}
+
+.show-button {
+  background: #EBEBEB 0 0 no-repeat padding-box;
+  border-radius: 8px;
+  text-align: center;
+  font: normal normal bold 14px/25px IRANYekanRegular !important;
+  letter-spacing: 0;
+  color: #424242;
+  padding: 16px 25px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    margin-left: 10px;
+  }
+}
+
+.header-case-type-th {
+  padding: 0 !important;
+
+  &:last-child {
+    .header-case-type-box, .header-date {
+      margin-left: unset;
+    }
+  }
+
+  .header-date {
+    min-width: 100px;
+    margin-left: 5px;
+    background: #F0F0F0 0 0 no-repeat padding-box;
+    border: 1px solid #DBDBDB;
+    border-radius: 4px;
+    height: 48px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.header-case-type-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  margin-left: 5px;
+
+  .header-case-type {
+    background: #FAFAFA 0 0 no-repeat padding-box;
+    border: 1px solid #EBEBEB;
+    border-radius: 4px;
+    min-width: 100px;
+    width: 100%;
+    margin-bottom: 5px !important;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+
+    div {
+      margin-right: 10px;
+    }
+
+    span {
+      text-align: center;
+      font: normal normal bold 14px/28px IRANYekanRegualr;
+      letter-spacing: 0;
+      color: #141432;
+      background: #EBEBEB 0 0 no-repeat padding-box;
+      border: 1px solid #EBEBEB;
+      border-radius: 4px;
+      width: 28px;
+      height: 100%;
+    }
+  }
+}
+
+.appointment-table {
+  tr, tr:nth-child(even) {
+    background: none !important;
+  }
+
+  td {
+    border: none !important;
+    padding: 0 !important;
+    padding-left: 5px !important;
+    margin-top: 5px;
+
+    &:last-child {
+      padding-left: unset !important;
+    }
+  }
+}
+
+.table-appointment-component {
+  background: #F5F5FF 0% 0% no-repeat padding-box;
+  border: 1px solid #5063FF;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  padding: 5px;
+  cursor: pointer;
+
+  &.is-friday {
+    background: #FFF7EB 0 0 no-repeat padding-box;
+    border: 1px solid #EBEBEB;
+  }
+
+  &.is-holiday {
+    background: #FFEBEB 0 0 no-repeat padding-box;
+    border: 1px solid #EBEBEB;
+  }
+
+  .full-name {
+    text-align: center;
+    font: normal normal bold 10px/16px IRANYekanRegular !important;
+    letter-spacing: 0;
+    color: #141432
+  }
+
+  .start-at {
+    text-align: center;
+    font: normal normal normal 10px/16px IRANYekanRegular !important;
+    letter-spacing: 0;
+    color: #141432
+  }
+
+  .case-type {
+    text-align: center;
+    font: normal normal normal 10px/16px IRANYekanRegular !important;
+    letter-spacing: 0;
+    color: #141432;
+    background: #E6E6E6 0 0 no-repeat padding-box;
+    border-radius: 4px;
+    padding: 5px;
+  }
+}
+
+.table-appointment-none {
+  background: #FCFCFC 0 0 no-repeat padding-box;
+  border: 1px solid #EBEBEB;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 5px;
+  cursor: pointer;
+  height: 70px;
+
+  &.is-friday {
+    background: #FFF7EB 0 0 no-repeat padding-box;
+    border: 1px solid #EBEBEB;
+  }
+
+  &.is-holiday {
+    background: #FFEBEB 0 0 no-repeat padding-box;
+    border: 1px solid #EBEBEB;
+  }
+}
+
+.message {
+  border-radius: 6px;
+  padding: 6px 12px;
+  font: normal normal bold 12px/21px IRANYekanRegular !important;
+  text-align: center;
+  letter-spacing: 0;
+
+  &.message-sent {
+    background: #EBFFEC 0 0 no-repeat padding-box;
+    color: #388E3C;
+  }
+
+  &.message-not-sent {
+    background: #F44336 0 0 no-repeat padding-box;
+    color: #FFECEB;
+  }
+}
+
+.action-buttons {
+  background: #FFFFFF 0% 0% no-repeat padding-box;
+  border: 1px solid #BDBDBD;
+  border-radius: 8px;
+  padding: 6px 16px;
+  text-align: center;
+  font: normal normal medium 14px/25px IRANYekanRegular !important;
+  letter-spacing: 0px;
+  color: #757575;
+}
+
+.v-select {
+  width: 100%;
+}
+
+.theme--light.v-text-field--outlined:not(.v-input--is-focused):not(.v-input--has-state) > .v-input__control > .v-input__slot fieldset {
+  color: rgba(0, 0, 0, 0.38);
+  border: 1px solid #DBDBDB;
+  outline: none !important;
+}
+
+.second-false-button {
+  padding: 8px 28px;
+  width: 100%;
+  background: #EBEBEB 0% 0% no-repeat padding-box;
+  border-radius: 8px;
+  text-align: center;
+  font: normal normal bold 16px/28px IRANYekanRegular !important;
+  letter-spacing: 0px;
+  color: #424242;
+}
+
+.main-false-button {
+  padding: 8px 28px;
+  width: 100%;
+  background: #F44336 0% 0% no-repeat padding-box;
+  border-radius: 8px;
+  text-align: center;
+  font: normal normal bold 16px/28px IRANYekanRegular !important;
+  letter-spacing: 0px;
+  color: #FFFFFF;
+}
+
+.item-checkbox-component {
+  background: #FFFFFF 0 0 no-repeat padding-box;
+  border: 1px solid #DBDBDB;
+  border-radius: 8px;
+  padding: 10px 16px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: all .3s ease-in-out;
+
+  label {
+    cursor: pointer;
+    text-align: left;
+    font: normal normal normal 14px/28px IRANYekanRegular !important;
+    letter-spacing: 0;
+    color: #141432;
+    margin-bottom: 0 !important;
+  }
+
+  &:last-child {
+    margin-right: 0;
+  }
+
+  &:hover, &.selected {
+    background: #F6F7FF 0 0 no-repeat padding-box;
+    border: 1px solid #5063FF;
+    transition: all .3s ease-in-out;
+  }
+
+  span.img {
+    width: 24px;
+    height: 24px;
+    background: #EBEBEB 0 0 no-repeat padding-box;
+    border-radius: 320px;
+    margin-right: 12px;
+
+    &.selected {
+      background: #5063FF url("/images/form/check.svg") no-repeat center center;
+    }
+  }
+
+  &.rtl {
+    span.img {
+      margin-left: 12px;
+      margin-right: 0 !important;
+    }
+  }
+}
+
+.medical-sub-header {
+  text-align: left;
+  font: normal normal bold 16px/36px IRANYekanRegular !important;
+  letter-spacing: 0;
+  color: #141432;
+}
+
+.rtl {
+  direction: rtl !important;
+}
+
+.medical-tabs-header.rtl {
+  .v-slide-group__content {
+    direction: ltr;
+  }
+
+  .v-tab {
+    min-width: 112px;
+    border: 1px solid #5981ff;
+    border-bottom: 0 !important;
+    border-radius: 0;
+    font: normal normal normal 11px/24px IRANYekanRegular !important;
+
+    &.v-tab--active {
+      background: #F6F7FF 0 0 no-repeat padding-box;
+      border: 1px solid #5063FF;
+      border-bottom: 0 !important;
+      color: #5063FF !important;
     }
   }
 }

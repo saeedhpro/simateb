@@ -6,13 +6,13 @@ export default {
     titleTemplate: '%s - simateb',
     title: 'simateb',
     meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' },
-      { name: 'format-detection', content: 'telephone=no' }
+      {charset: 'utf-8'},
+      {name: 'viewport', content: 'width=device-width, initial-scale=1'},
+      {hid: 'description', name: 'description', content: ''},
+      {name: 'format-detection', content: 'telephone=no'}
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      {rel: 'icon', type: 'image/x-icon', href: '/favicon.ico'}
     ]
   },
 
@@ -25,8 +25,13 @@ export default {
   plugins: [
     '~/plugins/axios.js',
     '~/plugins/filter.js',
-    { src: '~/plugins/notification.js', ssr: false },
-    { src: '~/plugins/vuelidate.js', ssr: false }
+    {src: '~/plugins/datepicker.js', ssr: false},
+    {src: '~/plugins/multiselect.js', ssr: false},
+    {src: '~/plugins/money.js', ssr: false},
+    {src: '~/plugins/cropper.js', ssr: false},
+    {src: '~/plugins/persianFilter.js', ssr: false},
+    {src: '~/plugins/notification.js', ssr: false},
+    {src: '~/plugins/vuelidate.js', ssr: false}
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -35,7 +40,7 @@ export default {
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
     // https://go.nuxtjs.dev/vuetify
-    '@nuxtjs/vuetify',
+    ['@nuxtjs/vuetify', {rtl: true}],
     'nuxt-moment-jalaali'
   ],
 
@@ -59,8 +64,7 @@ export default {
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {
-  },
+  axios: {},
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
@@ -92,6 +96,9 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+    vendor: [
+      'vue-cropper',
+    ]
   },
   server: {
     port: 5000

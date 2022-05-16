@@ -1,0 +1,187 @@
+<template>
+  <div class="file-item-component">
+    <v-row>
+      <v-col
+        cols="12"
+        sm="4"
+        md="3"
+        >
+        <v-dialog
+          v-model="show"
+          max-width="600px"
+          width="100%"
+        >
+          <v-img
+            width="100%"
+            :src="path"
+          />
+        </v-dialog>
+        <img class="file-image" :src="path" @click="toggleShow">
+      </v-col>
+      <v-col
+        cols="12"
+        sm="8"
+        md="4"
+      >
+
+        <div class="input-box">
+          <label
+            for="comment"
+          >
+            توضیح پزشک
+          </label>
+          <textarea
+            id="comment"
+            class="comment-input"
+            @input="changeInput"
+            name="comment"
+            :value="c"
+          >
+
+      </textarea>
+        </div>
+      </v-col>
+      <v-col
+        cols="12"
+        sm="8"
+        md="4"
+      >
+        <div class="input-box">
+          <label
+            for="info"
+          >
+            نظر بیمار
+          </label>
+          <textarea
+            id="info"
+            class="info-input"
+            @input="changeInput"
+            name="info"
+            :value="i"
+          >
+
+      </textarea>
+        </div>
+      </v-col>
+      <v-col
+        cols="12"
+        sm="4"
+        md="1"
+      >
+        <v-dialog
+          v-model="showDelete"
+          max-width="680"
+        >
+          <v-card
+            class="accept-file-remove-model"
+          >
+            <button
+              class="close"
+              @click="remove"
+            >
+              <v-icon>mdi-close</v-icon>
+            </button>
+            <v-card-title class="accept-file-remove-title">
+              <span>لطفا در انجام این عمل دقت کنید!</span>
+            </v-card-title>
+
+            <v-card-text
+              class="accept-file-remove-text"
+            >
+              همه سوابق و مشخصات بیمار حذف خواهند شد و قابل بازگشت نیستند
+            </v-card-text>
+
+            <v-card-actions>
+              <button
+                class="action-button accept-button"
+                @click="acceptDelete"
+
+              >
+                ادامه بده
+              </button>
+              <v-spacer></v-spacer>
+              <button
+                class="action-button cancel-button"
+                @click="remove"
+              >
+                انصراف
+              </button>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+        <button
+          @click="remove"
+          class="remove-button"
+        >
+          <v-icon>
+            mdi-delete-outline
+          </v-icon>
+        </button>
+      </v-col>
+    </v-row>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "FileItemComponent",
+  props: {
+    id: {
+      type: Number,
+      required: true,
+    },
+    path: {
+      type: String,
+      required: true,
+      default: "",
+    },
+    ext: {
+      type: String,
+      required: true,
+      default: "jpg",
+    },
+    info: {
+      type: String,
+      default: "",
+    },
+    comment: {
+      type: String,
+      default: "",
+    }
+  },
+  mounted() {
+    this.i = this.info
+    this.c = this.comment
+  },
+  data() {
+    return {
+      show: false,
+      showDelete: false,
+      c: '',
+      i: '',
+    }
+  },
+  methods: {
+    toggleShow() {
+      this.show = !this.show
+    },
+    remove() {
+      this.showDelete = !this.showDelete
+    },
+    acceptDelete() {
+      this.$emit('remove', this.id)
+      this.remove()
+    },
+    changeInput(e) {
+      this.$emit('change', {
+        id: this.id,
+        [e.target.name]: e.target.value,
+      })
+    }
+  }
+}
+</script>
+
+<style scoped>
+
+</style>

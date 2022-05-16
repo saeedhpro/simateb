@@ -8,12 +8,24 @@ export const state = () => ({
     total_rows: 0,
     total_pages: 0
   },
-  appointment: null
+  appointment: null,
+  que: {
+    default_duration: 20,
+    limits: [],
+    ques: [],
+    work_hour: {
+      start: '16:00:00',
+      end: '21:00:00',
+    }
+  },
 })
 
 export const mutations = {
   setList(state, list) {
     state.list = list
+  },
+  setQue(state, que) {
+    state.que = que
   },
   setAppointment(state, user) {
     state.user = user
@@ -23,6 +35,17 @@ export const mutations = {
 export const actions = {
   getUserAppointmentsList(ctx, data) {
     return this.$axios.get(`/users/${data.id}/appointments?page=${data.page}`)
+      .then(res => {
+        const data = res.data;
+        ctx.commit('setList', data)
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  getOrganizationAppointmentsList(ctx, data) {
+    return this.$axios.get(`/organizations/appointments?start=${data.start}&end=${data.end}&page=${data.page}`)
       .then(res => {
         const data = res.data;
         ctx.commit('setList', data)
@@ -43,7 +66,33 @@ export const actions = {
       .catch(err => {
         return Promise.reject(err)
       })
-  }
+  },
+  getQue(ctx, data) {
+    return this.$axios.get(`/appointments/que?start=${data.start}&end=${data.end}`)
+      .then(res => {
+        const data = res.data;
+        ctx.commit('setQue', data)
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  search(ctx, data) {
+    let route = `/appointments/search?start=${data.start}&end=${data.end}&q=${data.q}&page=${data.page}`
+    if (data.status) {
+      route += `&status=${data.status}`
+    }
+    return this.$axios.get(route)
+      .then(res => {
+        const data = res.data;
+        ctx.commit('setList', data)
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
 }
 
 export const getters = {
@@ -52,5 +101,8 @@ export const getters = {
   },
   getUser(state) {
     return state.user
+  },
+  getQue(state) {
+    return state.que
   }
 }

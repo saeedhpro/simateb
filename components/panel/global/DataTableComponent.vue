@@ -26,7 +26,7 @@
         dir="ltr"
         v-model="p"
         :length="length"
-        :total-visible="3"
+        :total-visible="5"
       ></v-pagination>
       <slot name="notfound"></slot>
     </div>

@@ -4,7 +4,14 @@
       <appointment-item-component
         v-for="(i,n) in list.data"
         :key="n"
-
+        :created_at="i.created_at"
+        :status="i.status"
+        :case-type="i.case_type"
+        :code="i.code"
+        :info="i.info"
+        :prescription="i.prescription"
+        :radiology-cases="i.radiology_cases"
+        :photography-cases="i.photography_cases"
       />
     </div>
   </div>
