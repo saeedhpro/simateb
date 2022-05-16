@@ -467,7 +467,7 @@ export default {
       this.appointment.case_type = item.checked ? item.name : ''
     },
     getToday(day) {
-      return moment.from(`${this.year}/${this.month}/${day}`, "fa", "YYYY/MM/DD").format("dddd")
+      return moment.from(`${this.year}/${this.month}/${day}`, "fa", "YYYY/MM/DD").locale("fa").format("dddd");
     },
     getTime(day) {
       const wh = this.que.work_hour
