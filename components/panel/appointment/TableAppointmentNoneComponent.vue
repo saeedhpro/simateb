@@ -44,7 +44,10 @@ export default {
   },
   computed: {
     isFriday() {
-      return moment.from(`${this.year}/${this.month}/${this.day}`, "fa", "YYYY/MM/DD").format("dddd") === 'جمعه'
+      console.log(moment.from(`${this.year}/${this.month}/${this.day}`, "fa", "YYYY/MM/DD").format("dddd"))
+      console.log(moment.from(`${this.year}/${this.month}/${this.day}`, "fa", "YYYY/MM/DD").locale("fa").format("dddd"))
+      const today = moment.from(`${this.year}/${this.month}/${this.day}`, "fa", "YYYY/MM/DD").format("dddd");
+      return today === 'جمعه' || today === 'Friday';
     },
     isHoliday() {
       if (this.holidays.length < 1) {
