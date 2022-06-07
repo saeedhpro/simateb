@@ -532,7 +532,7 @@ export default {
         },
         {
           id: 3,
-          title: 'کنسل',
+          title: 'کنسل شده',
           color: '#F44336',
           background: '#FFEDEB'
         },
@@ -607,7 +607,7 @@ export default {
     },
     createAppointment() {
       this.toggleOverlay()
-      this.$store.dispatch('appointments/search', this.search)
+      this.$store.dispatch('appointments/createAppointment', this.appointment)
         .then(() => {
           setTimeout(() => {
             this.togglePazireshModal()

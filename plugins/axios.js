@@ -112,8 +112,8 @@ const setupProgress = (axios, ctx) => {
 }
 
 export default (ctx, inject) => {
-  // const baseURL = 'http://localhost:3000/api/v1'
-  const baseURL = 'https://api.appdoctor.ir/api/v1'
+  const baseURL = 'http://localhost:3000/api/v1'
+  // const baseURL = 'https://api.appdoctor.ir/api/v1'
   const token = ctx.$cookies.get('access_token');
   const headers = {
     common: {

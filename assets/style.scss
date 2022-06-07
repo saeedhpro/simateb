@@ -1174,6 +1174,68 @@ table {
   }
 }
 
+.form-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  background: #FAFAFA 0 0 no-repeat padding-box;
+  border: 1px solid #757575;
+  border-radius: 8px;
+  text-align: center;
+  font: normal normal normal 16px/28px IRANYekanRegular !important;
+  letter-spacing: 0;
+  color: #757575;
+  padding: 8px 28px;
+  width: 100%;
+}
+
+.accept-button {
+  background: #EBEBEB 0 0 no-repeat padding-box;
+  color: #424242;
+}
+
+.cancel-button {
+  background: #5063FF 0 0 no-repeat padding-box;
+  color: #FFFFFF;
+}
+
+.red-button {
+  background: #F44336 0 0 no-repeat padding-box;
+  color: #FFFFFF;
+}
+
+.reserve-button {
+  background-color: rgb(255, 249, 235);
+  color: rgb(245, 172, 0);
+}
+
+.add-more-button {
+  background: #FAFAFA 0 0 no-repeat padding-box;
+  border: 1px solid #DBDBDB;
+  border-radius: 8px;
+  text-align: right;
+  font: normal normal bold 14px/25px IRANYekanRegular !important;
+  letter-spacing: 0;
+  color: #212121;
+  padding: 6px 16px;
+}
+
+.show-flex {
+  display: flex;
+}
+
+.add-doc-button {
+  background: #5063FF 0 0 no-repeat padding-box;
+  border-radius: 8px;
+  text-align: right;
+  font: normal normal bold 14px/25px IRANYekan;
+  letter-spacing: 0;
+  color: #FFFFFF;
+  padding: 8px 16px;
+}
+
 .accept-file-remove-model {
   text-align: center;
   position: relative;
@@ -1571,6 +1633,7 @@ table {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: auto;
 
   img {
     width: 20px;
@@ -1897,4 +1960,175 @@ table {
       color: #5063FF !important;
     }
   }
+}
+
+.paziresh-form {
+  .paziresh-form-box {
+    .profile-image {
+      width: 100%;
+    }
+
+    .detail-box {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      height: 100%;
+
+      .name-box {
+        text-align: right;
+        text-decoration: underline;
+        font: normal normal bold 16px/35px IRANYekanRegular !important;
+        letter-spacing: 0;
+        color: #212121;
+
+        span.small {
+          text-align: right;
+          font: normal normal normal 14px/28px IRANYekanRegular !important;
+          letter-spacing: 0;
+          color: #141432;
+        }
+      }
+
+      .phone-box {
+        text-align: right;
+        font: normal normal bold 16px/35px IRANYekanRegular !important;
+        letter-spacing: 1px;
+        color: #141432;
+
+        &.second {
+          margin-top: 24px;
+        }
+
+        span.small {
+          text-align: right;
+          font: normal normal normal 14px/28px IRANYekanRegular !important;
+          letter-spacing: 0;
+          color: #141432;
+        }
+      }
+    }
+
+    .item-case-box {
+      background: #F0F0F5 0 0 no-repeat padding-box;
+      border-radius: 6px;
+      padding: 5px 16px;
+      text-align: center;
+      font: normal normal medium 16px/31px IRANYekanRegular !important;
+      letter-spacing: 0;
+      color: #141432;
+    }
+  }
+}
+
+.prescription-action-form-component {
+  border: 1px solid #BDBDBD;
+  border-radius: 8px;
+  width: 100%;
+  margin-bottom: 12px;
+  .title-box {
+    background: #EBF0FF 0 0 no-repeat padding-box;
+    border: 1px solid #EBF0FF;
+    border-radius: 8px 8px 0 0;
+    text-align: center;
+    font: normal normal normal 16px/28px IRANYekanRegular !important;
+    letter-spacing: 0;
+    color: #212945;
+    padding: 6px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .items-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    .item {
+      text-align: left;
+      font: normal normal normal 16px/28px IRANYekanRegular !important;
+      letter-spacing: 0;
+      color: #212945;
+      padding: 24px 12px;
+      cursor: pointer;
+      width: 100%;
+      background: #FAFAFA 0 0 no-repeat padding-box;
+      border-bottom: 1px solid #EBEBEB;
+      &:last-child {
+        border-bottom: unset !important;
+        border-radius: 8px;
+      }
+    }
+  }
+}
+.wire-box {
+  .wire-box-header {
+    background: #FAFAFA 0 0 no-repeat padding-box;
+    border: 1px solid #757575;
+    border-radius: 8px;
+    text-align: center;
+    font: normal normal normal 16px/28px IRANYekanRegular !important;
+    letter-spacing: 0;
+    color: #212121;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    min-height: unset !important;
+    .v-expansion-panel-header__icon {
+      margin-right: unset !important;
+    }
+  }
+}
+.wire-table {
+  margin-top: 16px;
+  thead {
+    th {
+      background: #EBF0FF 0 0 no-repeat padding-box !important;
+    }
+  }
+}
+.cursor-pointer {
+  cursor: pointer !important;
+}
+.prescription-textarea {
+  background: #FFFFFF 0 0 no-repeat padding-box;
+  border: 1px solid #DBDBDB;
+  border-radius: 8px;
+}
+.refer-item-component {
+  margin-top: 24px;
+  background: #FAFAFA 0 0 no-repeat padding-box;
+  border: 1px solid #DBDBDB !important;
+  border-radius: 0 0 8px 8px;
+  .refer-item-box {
+    border-radius: 8px 8px 0 0 !important;
+    border: unset !important;
+    .refer-item-header {
+      background: #FAFAFA 0 0 no-repeat padding-box;
+      text-align: center;
+      font: normal normal normal 14px/24px IRANYekanRegular !important;
+      letter-spacing: 0;
+      color: #212945;
+      padding: 14px;
+      border-radius: 0 0 8px 8px !important;
+    }
+    .refer-item-content {
+      background: #FAFAFA 0 0 no-repeat padding-box;
+      border: 1px solid #DBDBDB !important;
+      border-radius: 0 0 8px 8px !important;
+      padding: 8px !important;
+      .refer-item-select {
+        font: normal normal normal 12px/20px IRANYekanRegular !important;
+        fieldset {
+          background: #FFFFFF !important;
+        }
+      }
+    }
+  }
+}
+.v-expansion-panel-content__wrap {
+  padding: 0 !important;
 }

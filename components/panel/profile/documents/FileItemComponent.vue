@@ -5,7 +5,7 @@
         cols="12"
         sm="4"
         md="3"
-        >
+      >
         <v-dialog
           v-model="show"
           max-width="600px"

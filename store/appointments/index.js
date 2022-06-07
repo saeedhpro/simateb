@@ -93,6 +93,42 @@ export const actions = {
         return Promise.reject(err)
       })
   },
+  createAppointment(ctx, data) {
+    return this.$axios.post('/organizations/appointments?', data)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  acceptAppointment(ctx, data) {
+    return this.$axios.post(`/appointments/${data.id}/accept`, data)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  cancelAppointment(ctx, data) {
+    return this.$axios.post(`/appointments/${data.id}/cancel`, data)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  reserveAppointment(ctx, data) {
+    return this.$axios.post(`/appointments/${data.id}/reserve`, data)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
 }
 
 export const getters = {

@@ -144,7 +144,7 @@ export default {
         },
         {
           id: 3,
-          title: 'کنسل',
+          title: 'کنسل شده',
           color: '#F44336',
           background: '#FFEDEB'
         },

@@ -20,7 +20,7 @@
 
           <v-divider inset/>
           <div class="page-actions"
-               @click="toggleCreateModal"
+               @click="togglePazireshModal"
           >
             <img src="/images/pages/new-user.svg" alt="users">
             <span class="title">پذیرش جدید</span>
@@ -213,6 +213,191 @@
         </v-card>
       </v-col>
     </v-row>
+    <v-dialog
+      v-model="showPazireshModal"
+      persistent
+      max-width="1056px"
+    >
+      <v-card
+        class="create-update-modal"
+      >
+        <v-card-title
+          class="create-update-modal-title-box"
+        >
+          <div class="create-update-modal-title">
+            <button
+              @click="togglePazireshModal"
+              class="create-update-modal-close"
+            >
+              <v-icon>mdi-close</v-icon>
+            </button>
+            <span>فرم پذیرش</span>
+          </div>
+          <v-spacer/>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col
+                cols="12"
+                sm="4"
+                md="4"
+              >
+                <date-picker
+                  v-model="appointment.start_at"
+                  custom-input="#start-at"
+                  format="YYYY-MM-DD HH:mm:ss"
+                  display-format="HH:mm:ss jYYYY/jMM/jDD"
+                  type="datetime"
+                />
+                <div class="create-update-model-input-box">
+                  <label>تاریخ و ساعت پذیرش</label>
+                  <div class="date-picker">
+                    <img src="/images/form/datepicker.svg">
+                    <input id="start-at" class="date-picker">
+                  </div>
+                </div>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="4"
+                md="4"
+              >
+                <div class="create-update-model-input-box">
+                  <label>نام بیمار</label>
+                  <multiselect searchable clearOnSelect allowEmpty v-model="user" placeholder="" label="fname"
+                               track-by="fname" :options="users"
+                               :option-height="104" :custom-label="customLabel" :show-labels="false">
+                    <template slot="singleLabel" slot-scope="props"><img class="option__image"
+                                                                         :src="props.option.logo" alt=""><span
+                      class="option__desc"><span
+                      class="option__title">{{ `${props.option.fname} ${props.option.lname}` }}</span></span>
+                    </template>
+                    <template slot="option" slot-scope="props"><img class="option__image"
+                                                                    :src="props.option.logo" alt="">
+                      <div class="option__desc"><span class="option__title">{{ props.option.fname }}</span><span
+                        class="option__small">{{ ` ${props.option.lname} - ${props.option.tel}` }}</span></div>
+                    </template>
+                  </multiselect>
+                </div>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="4"
+                md="4"
+              >
+                <div class="create-update-model-input-box">
+                  <label>شماره موبایل</label>
+                  <input disabled type="tel" v-model="appointment.tel">
+                </div>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col
+                cols="12"
+                sm="4"
+                md="4"
+              >
+                <div class="create-update-model-input-box">
+                  <label>کد ملی</label>
+                  <input disabled type="text" v-model="appointment.cardno">
+                </div>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="4"
+                md="4"
+              >
+                <div class="create-update-model-input-box">
+                  <label>شماره پرونده</label>
+                  <input disabled type="text" v-model="appointment.file_id">
+                </div>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="4"
+                md="4"
+              >
+                <div class="create-update-model-input-box">
+                  <label>هزینه ویزیت</label>
+                  <input v-money="money" type="text" v-model.lazy="appointment.income">
+                </div>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col
+                cols="12"
+                sm="3"
+                md="2"
+                v-for="(c,n) in cases"
+                :key="n"
+              >
+                <case-type-checkbox-component
+                  :id="c.id"
+                  :name="c.name"
+                  :items="cases"
+                  :is-checked="appointment.case_type === c.name"
+                  @change="onChecked"
+                />
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col>
+                <div class="create-update-model-input-box">
+                  <label>شرح حال و توضیحات پذیرش</label>
+                  <textarea
+                    v-model="appointment.info"
+                    rows="6"
+                  ></textarea>
+                </div>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-container>
+            <v-row>
+              <v-col
+                cols="12"
+                sm="3"
+                md="3"
+              >
+                <button
+                  class="second-button"
+                  @click="clearPazireshForm"
+                >پاک کردن فرم
+                </button>
+              </v-col>
+              <v-spacer/>
+              <v-col
+                cols="12"
+                sm="3"
+                md="3"
+              >
+                <button
+                  class="second-button"
+                  @click="togglePazireshModal"
+                >
+                  بستن
+                </button>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="4"
+                md="4"
+              >
+                <button
+                  class="main-button"
+                  @click="createAppointment"
+                >
+                  ذخیره
+                </button>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <v-overlay :value="overlay">
       <v-progress-circular
         indeterminate
@@ -226,10 +411,12 @@
 import moment from 'jalali-moment'
 import TableAppointmentComponent from "~/components/panel/appointment/TableAppointmentComponent";
 import TableAppointmentNoneComponent from "~/components/panel/appointment/TableAppointmentNoneComponent";
+import DataTableComponent from "~/components/panel/global/DataTableComponent";
+import CaseTypeCheckboxComponent from "~/components/panel/appointment/CaseTypeCheckboxComponent";
 
 export default {
   name: "index",
-  components: {TableAppointmentNoneComponent, TableAppointmentComponent},
+  components: {TableAppointmentNoneComponent, TableAppointmentComponent, CaseTypeCheckboxComponent, DataTableComponent},
   layout: 'panel',
   middleware: 'auth',
   data() {
@@ -253,7 +440,7 @@ export default {
         start_at: '',
         tel: '',
         cardno: '',
-        income: 0,
+        income: '0',
         user_id: null,
         case_type: '',
         info: '',
@@ -346,7 +533,7 @@ export default {
         },
         {
           id: 3,
-          title: 'کنسل',
+          title: 'کنسل شده',
           color: '#F44336',
           background: '#FFEDEB'
         },
@@ -374,8 +561,30 @@ export default {
     this.month = month
     this.getHolidays()
     this.getAppointmentList()
+    this.getUsers()
   },
   methods: {
+    createAppointment() {
+      if (!this.user) return
+      this.toggleOverlay()
+      this.$store.dispatch('appointments/createAppointment', {
+        ...this.appointment,
+        user_id: this.user.id,
+        income: parseFloat(this.appointment.income.split(' ')[0].split(',').join('')),
+      })
+        .then(() => {
+          setTimeout(() => {
+            this.togglePazireshModal()
+            this.clearPazireshForm()
+            this.getAppointmentList()
+          }, 350)
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.toggleOverlay()
+          }, 350)
+        })
+    },
     toggleCreateModal() {
       this.showCreateModal = !this.showCreateModal
     },
@@ -495,12 +704,22 @@ export default {
       this.most = 5
       let list = this.que.ques;
       let list2 = Array(this.lastDay).fill(null).map(() => Array(0))
-      const yearMonth = moment().locale("fa").format("jYYYY/jMM");
+      let year = this.year
+      if (year < 10) {
+        year = `0${year}`
+      }
+      let month = this.month
+      if (month < 10) {
+        month = `0${month}`
+      }
+      const yearMonth = `${year}/${month}`;
       for (let i = 0; i < this.lastDay; i++) {
         for (let j = 0; j < list.length; j++) {
-          const start = moment.from(`${yearMonth}/${i} 00:00:00`, "fa", "YYYY/MM/DD HH:mm:ss").locale("en").format("YYYY/MM/DD HH:mm:ss")
-          const end = moment.from(`${yearMonth}/${i} 23:59:49`, "fa", "YYYY/MM/DD HH:mm:ss").locale("en").format("YYYY/MM/DD HH:mm:ss")
-          if (this.$moment(list[j].start_at).isBetween(this.$moment(start), this.$moment(end))) {
+          let s = i + 1;
+          if (s < 10) {
+            s = `0${s}`
+          }
+          if (this.$moment(list[j].start_at).format("jYYYY/jMM/jDD") === `${yearMonth}/${s}`) {
             list2[i].push(list[j])
           }
         }

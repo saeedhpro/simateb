@@ -22,7 +22,7 @@
     </v-simple-table>
     <div class="text-center pt-2">
       <v-pagination
-        v-if="length > 1"
+        v-if="hasPaginate && length > 1"
         dir="ltr"
         v-model="p"
         :length="length"
@@ -49,6 +49,10 @@ export default {
     perPage: {
       type: Number,
       default: 10
+    },
+    hasPaginate: {
+      type: Boolean,
+      default: true
     },
     page: {
       type: Number,

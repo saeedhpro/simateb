@@ -359,7 +359,7 @@ export default {
         },
         {
           id: 3,
-          title: 'کنسل',
+          title: 'کنسل شده',
           color: '#F44336',
           background: '#FFEDEB'
         },
@@ -480,12 +480,22 @@ export default {
     calcList() {
       let list = this.que.ques;
       let list2 = Array(this.lastDay).fill(null).map(() => Array(0))
-      const yearMonth = moment().locale("fa").format("jYYYY/jMM");
+      let year = this.year
+      if (year < 10) {
+        year = `0${year}`
+      }
+      let month = this.month
+      if (month < 10) {
+        month = `0${month}`
+      }
+      const yearMonth = `${year}/${month}`;
       for (let i = 0; i < this.lastDay; i++) {
         for (let j = 0; j < list.length; j++) {
-          const start = moment.from(`${yearMonth}/${i} 00:00:00`, "fa", "YYYY/MM/DD HH:mm:ss").locale("en").format("YYYY/MM/DD HH:mm:ss")
-          const end = moment.from(`${yearMonth}/${i} 23:59:49`, "fa", "YYYY/MM/DD HH:mm:ss").locale("en").format("YYYY/MM/DD HH:mm:ss")
-          if (this.$moment(list[j].start_at).isBetween(this.$moment(start), this.$moment(end))) {
+          let s = i + 1;
+          if (s < 10) {
+            s = `0${s}`
+          }
+          if (this.$moment(list[j].start_at).format("jYYYY/jMM/jDD") === `${yearMonth}/${s}`) {
             list2[i].push(list[j])
           }
         }
@@ -495,10 +505,28 @@ export default {
           this.most = list2[i].length
         }
       }
+      this.calcDurations()
+      if (this.showHour && this.most < this.durations) {
+        this.most = this.durations
+      }
+      if (!this.showHour && this.most < 5) {
+        this.most = 5
+      }
       this.list = list2
       setTimeout(() => {
         this.toggleOverlay()
       }, 250)
+    },
+    calcDurations() {
+      const wh = this.que.work_hour
+      const start = wh.start
+      const end = wh.end
+      let duration = this.que.default_duration
+      if (duration === 0) {
+        duration = 20
+      }
+      const d = moment.duration(moment(end, "HH:mm:ss").diff(moment(start, "HH:mm:ss"))).asMinutes()
+      this.durations = Math.ceil(d / duration)
     },
     onMonthChanged(month) {
       this.month = month

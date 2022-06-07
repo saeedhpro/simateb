@@ -8,7 +8,7 @@
           <div class="page-header">
             <img src="/images/pages/users.svg" alt="organizations">
             <span class="title">
-            برنامه نوبت دهی
+            نوبت دهی اینترنتی (VIP)
           </span>
           </div>
           <v-divider inset/>
@@ -30,7 +30,7 @@
                   >
                     <v-icon>mdi-close</v-icon>
                   </button>
-                  <span>فرم ایجاد برنامه نوبت دهی</span>
+                  <span>فرم ایجاد نوبت دهی اینترنتی (VIP)</span>
                 </div>
                 <v-spacer/>
                 <div class="create-update-modal-regbox">
@@ -171,7 +171,7 @@
                       sm="12"
                       md="12"
                     >
-                      <div class="create-update-model-input-description">آیا از حذف کردن این برنامه نوبت دهی اطمینان دارید؟
+                      <div class="create-update-model-input-description">آیا از حذف کردن این پذیرش vip اطمینان دارید؟
                       </div>
                     </v-col>
                   </v-row>
@@ -213,7 +213,7 @@
                @click="createModal"
           >
             <img src="/images/pages/new-user.svg" alt="organizations">
-            <span class="title">نوبت دهی جدید</span>
+            <span class="title">پذیرش vip جدید</span>
           </div>
         </div>
       </v-col>
@@ -275,9 +275,12 @@
                   <tr v-for="(i, n) in schedules.data" :key="n">
                     <td class="text-center">{{ (search.page - 1) * 10 + n + 1 | persianDigit }}</td>
                     <td class="text-center">
-                      {{ moment(i.start_at) | toPersianDate('YYYY/MM/DD dddd') }}
+                      {{ i.start_at | toPersianDate('YYYY/MM/DD dddd') }}
                     </td>
-                    <td class="text-center">{{ 0 | persianDigit }}</td>
+                    <td class="text-center">
+                      {{ i.start_at | toPersianDate('HH:mm:ss') }}
+                    </td>
+                    <td class="text-center">{{ i.count | persianDigit }}</td>
                     <td class="text-center flex flex-row justify-space-around align-center">
                       <button @click="editSchedule(i)" class="action-buttons">
                         <v-icon size="16">mdi-pencil-outline</v-icon>

@@ -7,7 +7,9 @@
         <div class="page-header-box">
           <nuxt-link to="/organization" class="page-header">
             <img src="/images/pages/users.svg" alt="users">
-            <span class="title">پذیرش</span>
+            <span class="title">
+              {{ isDoctor ? 'پذیرش' : 'ارسال نتایج' }}
+            </span>
           </nuxt-link>
           <nuxt-link to="/organization/search" class="page-header">
             <img src="/images/pages/users.svg" alt="users">
@@ -15,8 +17,17 @@
           </nuxt-link>
 
           <v-divider inset/>
-          <div class="page-actions"
-               @click="togglePazireshModal"
+          <div class="page-actions-secondary"
+               @click="isDoctor ? togglePazireshModal : () => {}"
+          >
+            <span class="title">
+              {{ today | toPersianDate('dddd DD MMMM') }}
+            </span>
+          </div>
+          <div
+            v-if="isDoctor"
+            class="page-actions"
+            @click="togglePazireshModal"
           >
             <img src="/images/pages/new-user.svg" alt="users">
             <span class="title">پذیرش جدید</span>
@@ -218,7 +229,8 @@
               cols="12"
             >
               <data-table-component
-                :headers="headers"
+                v-if="isDoctor"
+                :headers="doctorHeaders"
                 :page="search.page"
                 :total="appointments.total_rows"
                 @paginate="paginate"
@@ -228,27 +240,18 @@
                     <td class="text-center">{{ (search.page - 1) * 10 + n + 1 | persianDigit }}</td>
                     <td class="text-center">
                       <div class="table-row flex flex-row align-center justify-start">
-                        <input type="checkbox"
-                               class="table-selectable-checkbox"
-                               v-model="selectedItems"
-                               :value="i.id"
-                               :ripple="false"
-                        />
                         <img
                           :src="i.user && i.user.logo ? i.user.logo : 'https://randomuser.me/api/portraits/men/88.jpg'">
-                        <span>
-                          <nuxt-link v-if="i.user" :to="`/profile/${i.user.id}`">{{
-                              `${i.user.fname} ${i.user.lname}` | persianDigit
-                            }}</nuxt-link>
-                          <span v-else></span>
-                        </span>
+                        <span><nuxt-link :to="`/profile/${i.user ? i.user.id : 1}`">{{
+                            `${i.user ? i.user.fname : ''} ${i.user ? i.user.lname : ''}` | persianDigit
+                          }}</nuxt-link></span>
                       </div>
                     </td>
                     <td class="text-center">{{ i.user && i.user.tel ? i.user.tel : '-' | persianDigit }}</td>
                     <td class="text-center">{{ i.user && i.user.file_id ? i.user.file_id : '-' | persianDigit }}</td>
-                    <td class="text-center">{{ $moment(i.start_at).format('jYYYY/jM/jDD') | persianDigit }}</td>
+                    <td class="text-center">{{ i.user && i.case_type ? i.case_type : '-' | persianDigit }}</td>
                     <td class="text-center">
-                      {{ $moment(i.start_at).format('HH:mm:ss') | persianDigit }}
+                      {{ $moment(i.start_at).format("HH:mm") | toPersianNumber }}
                     </td>
                     <td class="text-center">
                       <div
@@ -279,6 +282,53 @@
                   <div v-if="appointments.total_rows === 0">اطلاعاتی یافت نشد</div>
                 </template>
               </data-table-component>
+              <data-table-component
+                v-else
+                :headers="headers"
+                :page="search.page"
+                :total="appointments.total_rows"
+                @paginate="paginate"
+              >
+                <template v-slot:body>
+                  <tr v-for="(i, n) in appointments.data" :key="n">
+                    <td class="text-center">{{ (search.page - 1) * 10 + n + 1 | persianDigit }}</td>
+                    <td class="text-center">
+                      <div class="table-row flex flex-row align-center justify-start">
+                        <img
+                          :src="i.user && i.user.logo ? i.user.logo : 'https://randomuser.me/api/portraits/men/88.jpg'">
+                        <span>
+                          <nuxt-link v-if="!isDoctor" to="" @click="openPazireshModal(i)">{{
+                              `${i.user.fname} ${i.user.lname}` | persianDigit
+                            }}</nuxt-link>
+                          <nuxt-link v-if="isDoctor && i.user" :to="`/profile/${i.user.id}`">{{
+                              `${i.user.fname} ${i.user.lname}` | persianDigit
+                            }}</nuxt-link>
+                          <span v-else></span>
+                        </span>
+                      </div>
+                    </td>
+                    <td class="text-center">{{ i.user && i.user.tel ? i.user.tel : '-' | persianDigit }}</td>
+                    <td class="text-center">{{ i.code ? i.code : '-' | persianDigit }}</td>
+                    <td class="text-center">
+                      {{ i.start_at | toRelativeDate }}
+                      {{ i.start_at | toPersianDate('dddd DD MMMM') }}
+                    </td>
+                    <td class="text-center">{{ getCases(i) | persianDigit }}</td>
+                    <td class="text-center">
+                      <span
+                        class="status-box"
+                        :style="{
+                          'background-color': `${statuses[i.status - 1].background}`,
+                          'color': `${statuses[i.status - 1].color}`
+                        }"
+                      >{{ statuses[i.status - 1].title }}</span>
+                    </td>
+                  </tr>
+                </template>
+                <template v-slot:notfound>
+                  <div v-if="appointments.total_rows === 0">اطلاعاتی یافت نشد</div>
+                </template>
+              </data-table-component>
             </v-col>
           </v-row>
         </v-card>
@@ -286,6 +336,191 @@
     </v-row>
     <v-dialog
       v-model="showPazireshModal"
+      persistent
+      max-width="1056px"
+    >
+      <v-card
+        class="create-update-modal"
+      >
+        <v-card-title
+          class="create-update-modal-title-box"
+        >
+          <div class="create-update-modal-title">
+            <button
+              @click="togglePazireshModal"
+              class="create-update-modal-close"
+            >
+              <v-icon>mdi-close</v-icon>
+            </button>
+            <span>فرم پذیرش</span>
+          </div>
+          <v-spacer/>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col
+                cols="12"
+                sm="4"
+                md="4"
+              >
+                <date-picker
+                  v-model="appointment.start_at"
+                  custom-input="#start-at"
+                  format="YYYY-MM-DD HH:mm:ss"
+                  display-format="HH:mm:ss jYYYY/jMM/jDD"
+                  type="datetime"
+                />
+                <div class="create-update-model-input-box">
+                  <label>تاریخ و ساعت پذیرش</label>
+                  <div class="date-picker">
+                    <img src="/images/form/datepicker.svg">
+                    <input id="start-at" class="date-picker">
+                  </div>
+                </div>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="4"
+                md="4"
+              >
+                <div class="create-update-model-input-box">
+                  <label>نام بیمار</label>
+                  <multiselect searchable clearOnSelect allowEmpty v-model="user" placeholder="" label="fname"
+                               track-by="fname" :options="users"
+                               :option-height="104" :custom-label="customLabel" :show-labels="false">
+                    <template slot="singleLabel" slot-scope="props"><img class="option__image"
+                                                                         :src="props.option.logo" alt=""><span
+                      class="option__desc"><span
+                      class="option__title">{{ `${props.option.fname} ${props.option.lname}` }}</span></span>
+                    </template>
+                    <template slot="option" slot-scope="props"><img class="option__image"
+                                                                    :src="props.option.logo" alt="">
+                      <div class="option__desc"><span class="option__title">{{ props.option.fname }}</span><span
+                        class="option__small">{{ ` ${props.option.lname}` }}</span></div>
+                    </template>
+                  </multiselect>
+                </div>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="4"
+                md="4"
+              >
+                <div class="create-update-model-input-box">
+                  <label>شماره موبایل</label>
+                  <input disabled type="tel" v-model="appointment.tel">
+                </div>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col
+                cols="12"
+                sm="4"
+                md="4"
+              >
+                <div class="create-update-model-input-box">
+                  <label>کد ملی</label>
+                  <input disabled type="text" v-model="appointment.cardno">
+                </div>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="4"
+                md="4"
+              >
+                <div class="create-update-model-input-box">
+                  <label>شماره پرونده</label>
+                  <input disabled type="text" v-model="appointment.file_id">
+                </div>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="4"
+                md="4"
+              >
+                <div class="create-update-model-input-box">
+                  <label>هزینه ویزیت</label>
+                  <input v-money="money" type="text" v-model.lazy="appointment.income">
+                </div>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col
+                cols="12"
+                sm="3"
+                md="2"
+                v-for="(c,n) in cases"
+                :key="n"
+              >
+                <case-type-checkbox-component
+                  :id="c.id"
+                  :name="c.name"
+                  :items="cases"
+                  :is-checked="appointment.case_type === c.name"
+                  @change="onChecked"
+                />
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col>
+                <div class="create-update-model-input-box">
+                  <label>شرح حال و توضیحات پذیرش</label>
+                  <textarea
+                    v-model="appointment.info"
+                    rows="6"
+                  ></textarea>
+                </div>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-container>
+            <v-row>
+              <v-col
+                cols="12"
+                sm="3"
+                md="3"
+              >
+                <button
+                  class="second-button"
+                  @click="clearPazireshForm"
+                >پاک کردن فرم
+                </button>
+              </v-col>
+              <v-spacer/>
+              <v-col
+                cols="12"
+                sm="3"
+                md="3"
+              >
+                <button
+                  class="second-button"
+                  @click="togglePazireshModal"
+                >
+                  بستن
+                </button>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="4"
+                md="4"
+              >
+                <button
+                  class="main-button"
+                  @click="createAppointment"
+                >
+                  ذخیره
+                </button>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog
+      v-model="openShowPazireshModal"
       persistent
       max-width="1056px"
     >
@@ -492,6 +727,8 @@ export default {
       showPazireshModal: false,
       showFilterModal: false,
       overlay: false,
+      openShowPazireshModal: false,
+      item: null,
       selectedItems: [],
       actions: [
         {
@@ -521,15 +758,24 @@ export default {
         case_type: '',
         info: '',
       },
-      headers: [
+      doctorHeaders: [
         '',
         'بیمار',
         'موبایل',
         'پرونده',
-        'تاریخ',
+        'علت مراجعه',
         'ساعت',
         'رادیولوژی',
         'فوتوگرافی',
+        'وضعیت',
+      ],
+      headers: [
+        '',
+        'بیمار',
+        'موبایل',
+        'کد پذیرش',
+        'تاریخ ویزیت',
+        'درخواست پزشک',
         'وضعیت',
       ],
       statuses: [
@@ -547,7 +793,7 @@ export default {
         },
         {
           id: 3,
-          title: 'کنسل',
+          title: 'کنسل شده',
           color: '#F44336',
           background: '#FFEDEB'
         },
@@ -648,6 +894,14 @@ export default {
     },
     onChecked(item) {
       this.appointment.case_type = item.checked ? item.name : ''
+    },
+    openPazireshModal(item) {
+      this.item = item
+      this.toggleShowPazireshModal()
+      console.log(item)
+    },
+    toggleShowPazireshModal() {
+      this.openShowPazireshModal = !this.openShowPazireshModal
     }
   },
   computed: {
@@ -678,7 +932,11 @@ export default {
     },
     today() {
       return moment().format("YYYY/MM/DD")
-    }
+    },
+    isDoctor() {
+      const profession_id = this.loginUser.organization.profession_id;
+      return profession_id !== 1 && profession_id !== 2 && profession_id !== 3
+    },
   }
 }
 </script>
