@@ -1,6 +1,6 @@
 <template>
   <v-container
-  fluid
+    fluid
   >
     <v-row>
       <v-col
@@ -128,9 +128,7 @@ export default {
     this.toggleOverLay()
     this.getOnlineUserList()
     this.getOnlinePatientList()
-    setTimeout(() => {
-      this.toggleOverLay()
-    }, 1000)
+    this.toggleOverLay()
   },
   methods: {
     toggleOverLay() {

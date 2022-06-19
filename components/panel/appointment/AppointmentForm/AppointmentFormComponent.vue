@@ -7,7 +7,7 @@
     >
       <v-card
         class="create-update-modal"
-        :class="{'paziresh-form' : loaded}"
+        :class="{'paziresh-form' : hasItem}"
       >
         <v-card-title
           class="create-update-modal-title-box"
@@ -24,7 +24,7 @@
           <v-spacer/>
         </v-card-title>
         <v-card-text
-          v-if="loaded"
+          v-if="hasItem && appointment"
           class="paziresh-form-box">
           <v-container>
             <v-row>
@@ -157,106 +157,109 @@
               </v-row>
             </div>
             <div v-else>
-              <div v-if="appointment.status >= 2">
-                <v-divider
-                  class="my-5"/>
-                <v-row
+              <v-divider class="my-5"/>
+              <v-row
+              >
+                <v-col
+                  cols="12"
+                  sm="4"
+                  md="2"
                 >
-                  <v-col
-                    cols="12"
-                    sm="6"
-                    md="6"
-                  >
-                    <div class="flex flex-row align-items-center justify-space-between show-flex">
-                      <div class="detail-box d-inline-flex">
-                        <div class="phone-box">
+                  <div class="detail-box">
+                    <div class="phone-box">
+                    <span class="small">
+                          افدامات فعلی:
+                    </span>
+                    </div>
+                  </div>
+                </v-col>
+                <v-col
+                  cols="12"
+                  sm="8"
+                  md="10"
+                >
+                  <div class="detail-box">
+                    <div class="phone-box">
+                      <span>{{ appointment.prescription }}</span>
+                    </div>
+                  </div>
+                </v-col>
+              </v-row>
+              <v-divider
+                class="my-5"/>
+              <v-row
+              >
+                <v-col
+                  cols="12"
+                  sm="6"
+                  md="6"
+                >
+                  <div class="flex flex-row align-items-center justify-space-between show-flex">
+                    <div class="detail-box d-inline-flex">
+                      <div class="phone-box">
                           <span class="small">
                             شرح اقدامات و دستور پزشک
                           </span>
-                        </div>
                       </div>
-                      <button @click="openDoctorPrescriptionModal('prescription')" class="add-more-button">
-                        <v-icon>mdi-plus</v-icon>
-                        اضافه کردن
-                      </button>
                     </div>
-                    <div class="mt-2 create-update-model-input-box">
+                    <button @click="openDoctorPrescriptionModal('prescription')" class="add-more-button">
+                      <v-icon>mdi-plus</v-icon>
+                      اضافه کردن
+                    </button>
+                  </div>
+                  <div class="mt-2 create-update-model-input-box">
                       <textarea
                         class="prescription-textarea"
                         v-model="appointment.prescription"
                         rows="5"
                       ></textarea>
-                    </div>
-                  </v-col>
-                  <v-divider vertical inset/>
-                  <v-col
-                    cols="12"
-                    sm="6"
-                    md="6"
-                  >
-                    <div class="flex flex-row align-items-center justify-space-between show-flex">
-                      <div class="detail-box d-inline-flex">
-                        <div class="phone-box">
+                  </div>
+                </v-col>
+                <v-divider vertical inset/>
+                <v-col
+                  cols="12"
+                  sm="6"
+                  md="6"
+                >
+                  <div class="flex flex-row align-items-center justify-space-between show-flex">
+                    <div class="detail-box d-inline-flex">
+                      <div class="phone-box">
                           <span class="small">
                             اقدامات در ویزیت بعدی
                           </span>
-                        </div>
                       </div>
-                      <button @click="openDoctorPrescriptionModal('future_prescription')" class="add-more-button">
-                        <v-icon>mdi-plus</v-icon>
-                        اضافه کردن
-                      </button>
                     </div>
-                    <div class="mt-2 create-update-model-input-box">
+                    <button @click="openDoctorPrescriptionModal('future_prescription')" class="add-more-button">
+                      <v-icon>mdi-plus</v-icon>
+                      اضافه کردن
+                    </button>
+                  </div>
+                  <div class="mt-2 create-update-model-input-box">
                       <textarea
                         class="prescription-textarea"
                         v-model="appointment.future_prescription"
                         rows="5"
                       ></textarea>
-                    </div>
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col
-                    cols="12"
-                  >
-                    <refer-box-component
-
-                    />
-                  </v-col>
-                </v-row>
-                <v-divider class="my-5"/>
-                <v-row
+                  </div>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col
+                  cols="12"
                 >
-                  <v-col
-                    cols="12"
-                    sm="4"
-                    md="2"
-                  >
-                    <div class="detail-box">
-                      <div class="phone-box">
-                    <span class="small">
-                          افدامات فعلی:
-                    </span>
-                      </div>
-                    </div>
-                  </v-col>
-                  <v-col
-                    cols="12"
-                    sm="8"
-                    md="10"
-                  >
-                    <div class="detail-box">
-                      <div class="phone-box">
-                        <span>{{ appointment.prescription }}</span>
-                      </div>
-                    </div>
-                  </v-col>
-                </v-row>
-              </div>
+                  <refer-box-component
+                    :photography="item.photography"
+                    :radiology="item.radiology"
+                    @selected="itemSelected"
+                    @setMsg="setMsg"
+                    @setPhotographyCases="setPhotographyCases"
+                    @setRadiologyCases="setRadiologyCases"
+                  />
+                </v-col>
+              </v-row>
             </div>
             <v-divider
-              v-if="loaded"
+              v-if="hasItem"
               class="my-5"
             />
             <v-row
@@ -288,6 +291,30 @@
                   </v-icon>
                   افزودن تصویر
                 </button>
+              </v-col>
+              <v-col
+                cols="12"
+              >
+                <v-row>
+                  <v-col
+                    cols="12"
+                    sm="4"
+                    md="6"
+                    v-for="(r,n) in results"
+                    :key="n"
+                  >
+                    <img @click="openShowResult(r)" class="result-img" :src="r" alt=""/>
+                  </v-col>
+                  <v-col
+                    cols="12"
+                    sm="4"
+                    md="3"
+                    v-for="(r,n) in newFiles"
+                    :key="n"
+                  >
+                    <img @click="openShowResult(r)" class="result-img" :src="r" alt=""/>
+                  </v-col>
+                </v-row>
               </v-col>
             </v-row>
           </v-container>
@@ -433,7 +460,32 @@
               <v-col
                 cols="12"
                 sm="3"
+                v-if="!isDoctor"
+              >
+                <button
+                  class="second-button"
+                  @click="closeForm"
+                >
+                  بستن
+                </button>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="3"
+                v-if="!isDoctor && appointment.status === 2"
+              >
+                <button
+                  class="main-button form-button"
+                  @click="doAction('update')"
+                >
+                  ذخیره
+                </button>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="3"
                 md="3"
+                v-if="isDoctor"
               >
                 <button
                   class="second-button"
@@ -448,34 +500,48 @@
                 md="4"
                 v-if="isDoctor"
               >
-                <button
-                  v-if="appointment.status === 0"
-                  class="main-button"
-                  @click="doAction('create')"
-                >
-                  ذخیره
-                </button>
-                <button
-                  v-else-if="appointment.status === 1"
-                  class="main-button form-button"
-                  @click="doAction('accept')"
-                >
-                  پذیرش
-                </button>
-                <button
-                  v-else-if="appointment.status === 2"
-                  class="red-button form-button"
-                  @click="doAction('cancel')"
-                >
-                  کنسل
-                </button>
-                <button
-                  v-else-if="appointment.status === 3"
-                  class="reserve-button form-button"
-                  @click="doAction('reserve')"
-                >
-                  رزرو
-                </button>
+                <v-row>
+                  <v-col>
+                    <button
+                      v-if="appointment.status === 0"
+                      class="main-button"
+                      @click="doAction('create')"
+                    >
+                      ذخیره
+                    </button>
+                    <button
+                      v-else-if="appointment.status === 1"
+                      class="main-button form-button"
+                      @click="doAction('accept')"
+                    >
+                      پذیرش
+                    </button>
+                    <button
+                      v-else-if="appointment.status === 2"
+                      class="red-button form-button"
+                      @click="doAction('cancel')"
+                    >
+                      کنسل
+                    </button>
+                    <button
+                      v-else-if="appointment.status === 3"
+                      class="reserve-button form-button"
+                      @click="doAction('reserve')"
+                    >
+                      رزرو
+                    </button>
+                  </v-col>
+                  <v-col
+                    v-if="appointment.status === 2"
+                  >
+                    <button
+                      class="main-button form-button"
+                      @click="doAction('update')"
+                    >
+                      ذخیره
+                    </button>
+                  </v-col>
+                </v-row>
               </v-col>
             </v-row>
           </v-container>
@@ -593,6 +659,30 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <input
+      type="file"
+      ref="image"
+      name="image"
+      hidden
+      accept="image/*"
+      @change="chooseImage"
+    >
+    <crop-image-component
+      ref="crop"
+      @changed="cropped"
+      @imaged="imaged"
+    />
+    <v-dialog
+      v-model="showFile"
+      max-width="500px"
+    >
+      <img
+        alt=""
+        @click="closeShowResult"
+        class="image"
+        :src="file"
+      >
+    </v-dialog>
   </div>
 </template>
 
@@ -603,12 +693,18 @@ import PrescriptionActionFormComponent
 import DataTableComponent from "~/components/panel/global/DataTableComponent";
 import WireBoxComponent from "~/components/panel/appointment/AppointmentForm/WireBoxComponent";
 import ReferBoxComponent from "~/components/panel/appointment/AppointmentForm/ReferBoxComponent";
+import CropImageComponent from "~/components/panel/global/CropImageComponent";
 
 export default {
   name: "AppointmentFormComponent",
   components: {
     ReferBoxComponent,
-    WireBoxComponent, DataTableComponent, PrescriptionActionFormComponent, CaseTypeCheckboxComponent},
+    WireBoxComponent,
+    DataTableComponent,
+    PrescriptionActionFormComponent,
+    CaseTypeCheckboxComponent,
+    CropImageComponent,
+  },
   props: {
     open: {
       type: Boolean,
@@ -618,14 +714,20 @@ export default {
     item: {
       type: Object,
       default: null
+    },
+    hasItem: {
+      type: Boolean,
+      default: false,
+      required: true,
     }
   },
   data() {
     return {
       overlay: false,
-      loaded: false,
       doctorPrescription: false,
       pType: 'prescription',
+      file: null,
+      showFile: false,
       statuses: [
         {
           id: 1,
@@ -800,16 +902,39 @@ export default {
           action: 'Multil Loop 18'
         },
       ],
+      newFiles: [],
     }
   },
   methods: {
+    getResults() {
+      this.$store.dispatch('appointments/getAppointmentResults', this.item.id)
+    },
+    imaged(file) {
+      this.newFiles.push(file)
+    },
+    chooseImage(e) {
+      this.$refs.crop.setImage(e)
+    },
+    async cropped(o) {
+      console.log(o)
+      // const blob = await this.blobToBase64(o)
+      // console.log(blob)
+      // this.newFiles.push(o)
+    },
+    openShowResult(o) {
+      this.file = o
+      this.showFile = !this.showFile
+    },
+    closeShowResult() {
+      this.showFile = !this.showFile
+      this.file = null
+    },
     closeForm() {
       this.$emit('close')
       this.resetForm();
     },
     resetForm() {
       if (!this.item) {
-        this.loaded = false
         this.appointment = {
           start_at: this.$moment().format("YYYY/MM/DD HH:mm:ss"),
           tel: '',
@@ -873,7 +998,6 @@ export default {
         user_id: this.item.user_id,
         vip_introducer: this.item.vip_introducer,
       }
-      this.loaded = true;
     },
     getUsers() {
       this.$store.dispatch('users/getUsers')
@@ -902,6 +1026,9 @@ export default {
         case 'cancel':
           this.doCancel()
           break;
+        case 'update':
+          this.doUpdate()
+          break;
         case 'reserve':
           this.doReserve()
           break;
@@ -924,8 +1051,40 @@ export default {
           this.loading()
         })
     },
+    doUpdate() {
+      if (!this.appointment.user_id) {
+        this.loading()
+        return
+      }
+      const data = {
+        ...this.appointment,
+        status: 2,
+        results: this.newFiles
+      }
+      delete data.staff
+      delete data.organization
+      delete data.user
+      delete data.radiology
+      delete data.photography
+      this.$store.dispatch('appointments/updateAppointment', data)
+        .then(() => {
+          // this.closeForm()
+        })
+        .finally(() => {
+          this.loading()
+        })
+    },
     doAccept() {
-      this.$store.dispatch('appointments/acceptAppointment', this.appointment)
+      const data = {
+        ...this.appointment,
+        status: 2,
+      }
+      delete data.staff
+      delete data.organization
+      delete data.user
+      delete data.radiology
+      delete data.photography
+      this.$store.dispatch('appointments/acceptAppointment', data)
         .then(() => {
           this.closeForm()
         })
@@ -947,7 +1106,16 @@ export default {
         })
     },
     doReserve() {
-      this.$store.dispatch('appointments/reserveAppointment', this.appointment)
+      const data = {
+        ...this.appointment,
+        status: 1,
+      }
+      delete data.staff
+      delete data.organization
+      delete data.user
+      delete data.radiology
+      delete data.photography
+      this.$store.dispatch('appointments/reserveAppointment', data)
         .then(() => {
           this.closeForm()
         })
@@ -958,7 +1126,8 @@ export default {
         })
     },
     openAddResultModal() {
-
+      this.$refs.image.value = null
+      this.$refs.image.click()
     },
     openDoctorPrescriptionModal(type) {
       switch (type) {
@@ -998,8 +1167,37 @@ export default {
       }
       this.toggleDoctorPrescription()
     },
+    itemSelected(item) {
+      switch (item.type) {
+        case 'photography':
+          this.appointment.photography_id = item.val
+          break;
+        case 'radiology':
+          this.appointment.radiology_id = item.val
+          break;
+      }
+    },
+    setMsg(item) {
+      switch (item.type) {
+        case 'photography':
+          this.appointment.photography_msg = item.val
+          break;
+        case 'radiology':
+          this.appointment.radiology_msg = item.val
+          break;
+      }
+    },
+    setPhotographyCases(cases) {
+      this.appointment.photography_cases = cases.join(',')
+    },
+    setRadiologyCases(cases) {
+      this.appointment.radiology_cases = cases.join(',')
+    }
   },
   computed: {
+    results() {
+      return this.$store.getters['appointments/getResults']
+    },
     users() {
       return this.$store.getters['users/getUsers']
     },
@@ -1051,10 +1249,14 @@ export default {
   },
   watch: {
     user() {
+      this.appointment.file_id = this.user.file_id
+      this.appointment.cardno = this.user.cardno
       this.appointment.user_id = this.user.id
+      this.appointment.tel = this.user.tel
     },
     item() {
       this.resetForm()
+      this.getResults()
     },
   }
 }

@@ -7,12 +7,12 @@
       hide-overlay
       :disabled="!imgSrc"
     >
-      <img
-        v-show="cropSrc"
-        :src="cropSrc"
-        style="width: 200px; border: 1px solid gray"
-        alt="Cropped Image"
-      />
+<!--      <img-->
+<!--        v-show="cropSrc"-->
+<!--        :src="cropSrc"-->
+<!--        style="width: 200px; border: 1px solid gray"-->
+<!--        alt="Cropped Image"-->
+<!--      />-->
       <v-card>
         <v-card-title><span class="headline"></span></v-card-title>
         <v-card-text>
@@ -125,16 +125,26 @@ export default {
           maxHeight: this.maxHeight
         })
         .toBlob(
-          blob => {
+          async (blob) => {
+            const base64 = await this.toBase64(blob)
             this.cropImg = URL.createObjectURL(blob);
             this.croppedBlob = blob;
             this.$emit("update:objectUrl", this.cropImg);
+            this.$emit("imaged", base64);
             this.$emit("changed", this.cropImg);
           },
           "image/jpeg",
-          0.95
+          1
         );
       this.dialog = false;
+    },
+    toBase64 (file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+      })
     },
     rotate(dir) {
       if (dir === "r") {

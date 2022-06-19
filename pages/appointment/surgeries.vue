@@ -20,7 +20,7 @@
 
           <v-divider inset/>
           <div class="page-actions"
-               @click="toggleCreateModal"
+               @click="togglePazireshModal"
           >
             <img src="/images/pages/new-user.svg" alt="users">
             <span class="title">پذیرش جدید</span>
@@ -173,7 +173,7 @@
                         <div
                           class="header-date"
                         >
-                          {{ getToday(i) | toPersianDate('dddd') }}
+                          {{ getToday(i) }}
                           {{ i | toPersianNumber }}
                           {{ months[month - 1].label }}
                         </div>
@@ -190,30 +190,18 @@
                         <table-appointment-component
                           v-if="list[j - 1] && list[j - 1][i - 1]"
                           :item="list[j - 1][i - 1]"
-                          :year="year"
-                          :month="month"
                           :day="j"
+                          :month="month"
+                          :year="year"
+                          @click.native="openItem(list[j - 1][i - 1])"
                         />
                         <table-appointment-none-component
                           v-else
-                          :start-at="''"
-                          :year="year"
-                          :month="month"
+                          :start-at="getTime(i)"
+                          :show-hour="showHour"
                           :day="j"
-                        />
-                      </td>
-                    </tr>
-                    <tr
-                      v-for="(i, n) in 5 - most"
-                    >
-                      <td
-                        v-for="(j, k) in lastDay"
-                      >
-                        <table-appointment-none-component
-                          :start-at="''"
-                          :year="year"
                           :month="month"
-                          :day="j"
+                          :year="year"
                         />
                       </td>
                     </tr>
@@ -226,6 +214,13 @@
         </v-card>
       </v-col>
     </v-row>
+    <appointment-form-component
+      :open="showPazireshModal"
+      :item="item"
+      @close="closePazireshModal"
+      @loading="toggleOverlay"
+      :has-item="hasItem"
+    />
     <v-overlay :value="overlay">
       <v-progress-circular
         indeterminate
@@ -239,10 +234,19 @@
 import moment from 'jalali-moment'
 import TableAppointmentComponent from "~/components/panel/appointment/TableAppointmentComponent";
 import TableAppointmentNoneComponent from "~/components/panel/appointment/TableAppointmentNoneComponent";
+import DataTableComponent from "~/components/panel/global/DataTableComponent";
+import CaseTypeCheckboxComponent from "~/components/panel/appointment/CaseTypeCheckboxComponent";
+import AppointmentFormComponent from "~/components/panel/appointment/AppointmentForm/AppointmentFormComponent";
 
 export default {
   name: "surgeries",
-  components: {TableAppointmentNoneComponent, TableAppointmentComponent},
+  components: {
+    TableAppointmentNoneComponent,
+    TableAppointmentComponent,
+    CaseTypeCheckboxComponent,
+    DataTableComponent,
+    AppointmentFormComponent
+  },
   layout: 'panel',
   middleware: 'auth',
   data() {
@@ -252,6 +256,8 @@ export default {
       showHour: false,
       showCaseType: false,
       overlay: false,
+      item: null,
+      hasItem: false,
       most: 1,
       durations: 10,
       selectedItems: [],
@@ -266,7 +272,7 @@ export default {
         start_at: '',
         tel: '',
         cardno: '',
-        income: 0,
+        income: '0',
         user_id: null,
         case_type: '',
         info: '',
@@ -376,7 +382,7 @@ export default {
         suffix: ' تومان',
         prefix: '',
         precision: 0,
-        masked: false /* doesn't work with directive */
+        masked: false,
       }
     }
   },
@@ -385,11 +391,49 @@ export default {
     const month = parseInt(moment().locale("fa").format("jMM"))
     this.year = year
     this.month = month
+    this.getHolidays()
     this.getAppointmentList()
+    this.getUsers()
   },
   methods: {
+    createAppointment() {
+      if (!this.user) return
+      this.toggleOverlay()
+      this.$store.dispatch('appointments/createAppointment', {
+        ...this.appointment,
+        user_id: this.user.id,
+        income: parseFloat(this.appointment.income.split(' ')[0].split(',').join('')),
+      })
+        .then(() => {
+          setTimeout(() => {
+            this.togglePazireshModal()
+            this.clearPazireshForm()
+            this.getAppointmentList()
+          }, 350)
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.toggleOverlay()
+          }, 350)
+        })
+    },
     toggleCreateModal() {
       this.showCreateModal = !this.showCreateModal
+    },
+    openItem(item) {
+      this.item = item
+      this.hasItem = true
+      this.togglePazireshModal()
+    },
+    closePazireshModal() {
+      this.togglePazireshModal()
+      this.hasItem = false
+      setTimeout(() => {
+        if (this.item) {
+          this.item = null
+        }
+      }, 100)
+      this.getAppointmentList()
     },
     toggleOverlay() {
       this.overlay = !this.overlay
@@ -405,21 +449,14 @@ export default {
       }
     },
     togglePazireshModal() {
-      this.clearPazireshForm()
       this.showPazireshModal = !this.showPazireshModal
     },
     toggleShowCaseType() {
       this.showCaseType = !this.showCaseType
     },
     toggleShowHour() {
-      if (this.showHour) {
-        if (this.most < this.durations) {
-          this.most = this.durations
-        }
-      } else {
-        this.most = 5
-      }
       this.showHour = !this.showHour
+      this.calcList()
     },
     paginate(page = 1) {
       this.search.page = page
@@ -465,6 +502,17 @@ export default {
           this.$router.push({
             path: '/holidays'
           })
+          break;
+        case 2:
+          this.$router.push({
+            path: '/schedule'
+          })
+          break;
+        case 3:
+          this.$router.push({
+            path: '/cases'
+          })
+          break;
       }
     },
     customLabel(item) {
@@ -474,10 +522,32 @@ export default {
       this.appointment.case_type = item.checked ? item.name : ''
     },
     getToday(day) {
-      let yearMonth = moment().locale("fa").format("jYYYY/jMM");
-      return moment.from(`${yearMonth}/${day}`, "fa", "YYYY/MM/DD").locale("en").format("YYYY/MM/DD")
+      return moment.from(`${this.year}/${this.month}/${day}`, "fa", "YYYY/MM/DD").locale("fa").format("dddd");
+    },
+    getTime(day) {
+      const wh = this.que.work_hour
+      const start = wh.start
+      const end = wh.end
+      let duration = this.que.default_duration
+      if (duration === 0) {
+        duration = 20
+      }
+      return moment(start, "HH:mm:ss").add((day - 1) * duration, "minutes").format("HH:mm:ss")
+    },
+    calcDurations() {
+      const wh = this.que.work_hour
+      const start = wh.start
+      const end = wh.end
+      let duration = this.que.default_duration
+      if (duration === 0) {
+        duration = 20
+      }
+      const d = moment.duration(moment(end, "HH:mm:ss").diff(moment(start, "HH:mm:ss"))).asMinutes()
+      this.durations = Math.ceil(d / duration)
     },
     calcList() {
+      this.overlay = true
+      this.most = 5
       let list = this.que.ques;
       let list2 = Array(this.lastDay).fill(null).map(() => Array(0))
       let year = this.year
@@ -514,19 +584,8 @@ export default {
       }
       this.list = list2
       setTimeout(() => {
-        this.toggleOverlay()
+        this.overlay = false
       }, 250)
-    },
-    calcDurations() {
-      const wh = this.que.work_hour
-      const start = wh.start
-      const end = wh.end
-      let duration = this.que.default_duration
-      if (duration === 0) {
-        duration = 20
-      }
-      const d = moment.duration(moment(end, "HH:mm:ss").diff(moment(start, "HH:mm:ss"))).asMinutes()
-      this.durations = Math.ceil(d / duration)
     },
     onMonthChanged(month) {
       this.month = month
@@ -536,6 +595,9 @@ export default {
       this.year = year
       this.getAppointmentList()
     },
+    getHolidays() {
+      this.$store.dispatch('holidays/getHolidays')
+    }
   },
   computed: {
     loginUser() {

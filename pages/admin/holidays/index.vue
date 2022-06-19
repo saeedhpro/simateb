@@ -421,9 +421,7 @@ export default {
       this.showFilterModal = false
       this.$store.dispatch('admin/holidays/getList', this.search)
         .finally(() => {
-          setTimeout(() => {
-            this.toggleOverlay()
-          }, 350)
+          this.toggleOverlay()
         })
     },
     getStatus(sent) {
@@ -446,12 +444,12 @@ export default {
             this.closeForm()
             this.showCreateModal = false
             this.getHolidayList()
-          }, 350)
+          }, 100)
         })
         .finally(() => {
           setTimeout(() => {
             this.toggleOverlay()
-          }, 350)
+          }, 100)
         })
     },
     deleteHolidays(ids) {

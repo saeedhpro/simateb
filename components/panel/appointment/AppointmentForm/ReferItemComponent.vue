@@ -30,6 +30,7 @@
               item-value="id"
               item-text="name"
               v-model="selectedItem"
+              class="refer-item-select"
             ></v-select>
           </v-col>
           <v-col
@@ -57,7 +58,7 @@
           >
             <div class="create-update-model-input-box">
               <textarea
-                v-model="cases"
+                v-model="msg"
                 rows="4"
               ></textarea>
             </div>
@@ -65,12 +66,30 @@
         </v-row>
       </div>
     </v-card>
+    <photography-select-form
+      v-if="organization"
+      :open="showPhotographyFrom"
+      :organization="organization"
+      @close="closePhotographyFrom"
+      @setPhotographyCases="setPhotographyCases"
+    />
+    <radiology-select-form
+      v-if="organization"
+      :open="showRadiologyFrom"
+      :organization="organization"
+      @close="closeRadiologyForm"
+      @setRadiologyCases="setRadiologyCases"
+    />
   </div>
 </template>
 
 <script>
+import PhotographySelectForm from "~/components/panel/appointment/AppointmentForm/PhotographySelectForm";
+import RadiologySelectForm from "~/components/panel/appointment/AppointmentForm/RadiologySelectForm";
+
 export default {
   name: "ReferItemComponent",
+  components: {RadiologySelectForm, PhotographySelectForm},
   props: {
     type: {
       type: String,
@@ -80,16 +99,24 @@ export default {
       type: String,
       default: 'رادیولوژی',
     },
+    refer: {
+      type: Object,
+      default: null,
+    },
   },
   data() {
     return {
+      organization: null,
       selectedItem: null,
       showRadiologyFrom: false,
       showPhotographyFrom: false,
-      cases: '',
+      msg: '',
     }
   },
   mounted() {
+    if (this.refer) {
+      this.selectedItem = this.refer.id
+    }
     this.getList()
   },
   methods: {
@@ -97,12 +124,20 @@ export default {
       return this.$store.dispatch('organizations/getList', this.type)
     },
     openPhotographyFrom() {
+      if (!this.selectedItem) return
       this.toggleShowPhotographyFrom()
+    },
+    closePhotographyFrom() {
+      this.toggleShowPhotographyFrom()
+    },
+    closeRadiologyForm() {
+      this.toggleShowRadiologyFrom()
     },
     toggleShowPhotographyFrom() {
       this.showPhotographyFrom = !this.showPhotographyFrom
     },
     openRadiologyFrom() {
+      if (!this.selectedItem) return
       this.toggleShowRadiologyFrom()
     },
     toggleShowRadiologyFrom() {
@@ -110,9 +145,15 @@ export default {
     },
     selected(val) {
       this.$emit('selected', {
-        val: this.cases,
+        val: val,
         type: this.type,
       })
+    },
+    setPhotographyCases(cases) {
+      this.$emit('setPhotographyCases', cases)
+    },
+    setRadiologyCases(cases) {
+      this.$emit('setRadiologyCases', cases)
     }
   },
   computed: {
@@ -125,8 +166,18 @@ export default {
   },
   watch: {
     selectedItem(val) {
-      console.log(val)
-      this.$emit('selected', this.selectedItem)
+      this.selected(val)
+      if (this.type === 'photography') {
+        this.organization = this.photographyList.find(i => i.id === val)
+      } else {
+        this.organization = this.radiologyList.find(i => i.id === val)
+      }
+    },
+    msg(val) {
+      this.$emit('setMsg', {
+        val: val,
+        type: this.type,
+      })
     }
   }
 }

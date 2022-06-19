@@ -5,6 +5,10 @@ html, main {
   background: #F1F2F5 0 0 no-repeat padding-box;
 }
 
+* {
+  font-family: IRANYekanRegular;
+}
+
 .theme--light.v-pagination .v-pagination__navigation {
   transform: rotateY(180deg);
 }
@@ -1226,7 +1230,7 @@ table {
   background: #5063FF 0 0 no-repeat padding-box;
   border-radius: 8px;
   text-align: right;
-  font: normal normal bold 14px/25px IRANYekan;
+  font: normal normal bold 14px/25px IRANYekanRegular;
   letter-spacing: 0;
   color: #FFFFFF;
   padding: 8px 16px;
@@ -1434,6 +1438,7 @@ table {
 .search-box {
   .right-box {
     display: flex;
+    font-family: IRANYekanRegular !important;
 
     .small-circle {
       background-color: #F5AC00;
@@ -1937,6 +1942,10 @@ table {
   direction: rtl !important;
 }
 
+.ltr {
+  direction: ltr !important;
+}
+
 .medical-tabs-header.rtl {
   .v-slide-group__content {
     direction: ltr;
@@ -2022,6 +2031,7 @@ table {
   border-radius: 8px;
   width: 100%;
   margin-bottom: 12px;
+
   .title-box {
     background: #EBF0FF 0 0 no-repeat padding-box;
     border: 1px solid #EBF0FF;
@@ -2036,11 +2046,13 @@ table {
     align-items: center;
     justify-content: center;
   }
+
   .items-box {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
+
     .item {
       text-align: left;
       font: normal normal normal 16px/28px IRANYekanRegular !important;
@@ -2051,6 +2063,7 @@ table {
       width: 100%;
       background: #FAFAFA 0 0 no-repeat padding-box;
       border-bottom: 1px solid #EBEBEB;
+
       &:last-child {
         border-bottom: unset !important;
         border-radius: 8px;
@@ -2058,6 +2071,7 @@ table {
     }
   }
 }
+
 .wire-box {
   .wire-box-header {
     background: #FAFAFA 0 0 no-repeat padding-box;
@@ -2073,35 +2087,43 @@ table {
     align-items: center;
     justify-content: center;
     min-height: unset !important;
+
     .v-expansion-panel-header__icon {
       margin-right: unset !important;
     }
   }
 }
+
 .wire-table {
   margin-top: 16px;
+
   thead {
     th {
       background: #EBF0FF 0 0 no-repeat padding-box !important;
     }
   }
 }
+
 .cursor-pointer {
   cursor: pointer !important;
 }
+
 .prescription-textarea {
   background: #FFFFFF 0 0 no-repeat padding-box;
   border: 1px solid #DBDBDB;
   border-radius: 8px;
 }
+
 .refer-item-component {
   margin-top: 24px;
   background: #FAFAFA 0 0 no-repeat padding-box;
   border: 1px solid #DBDBDB !important;
   border-radius: 0 0 8px 8px;
+
   .refer-item-box {
     border-radius: 8px 8px 0 0 !important;
     border: unset !important;
+
     .refer-item-header {
       background: #FAFAFA 0 0 no-repeat padding-box;
       text-align: center;
@@ -2111,13 +2133,16 @@ table {
       padding: 14px;
       border-radius: 0 0 8px 8px !important;
     }
+
     .refer-item-content {
       background: #FAFAFA 0 0 no-repeat padding-box;
       border: 1px solid #DBDBDB !important;
       border-radius: 0 0 8px 8px !important;
       padding: 8px !important;
+
       .refer-item-select {
         font: normal normal normal 12px/20px IRANYekanRegular !important;
+
         fieldset {
           background: #FFFFFF !important;
         }
@@ -2125,6 +2150,175 @@ table {
     }
   }
 }
+
 .v-expansion-panel-content__wrap {
   padding: 0 !important;
+}
+
+.ortho-cases-box {
+  background: #FAFAFA 0 0 no-repeat padding-box;
+  border: 1px solid #BDBDBD;
+  border-radius: 8px;
+  padding: 24px;
+  margin-top: 20px;
+  text-align: right;
+  font: normal normal bold 16px/28px IRANYekanRegular !important;
+  letter-spacing: 0;
+  color: #212945;
+  width: 100%;
+
+  .ortho-cases-item {
+    border-bottom: 1px solid #DBDBDB;
+
+    &:last-child {
+      border-bottom: unset !important;
+    }
+  }
+}
+
+.ortho-cases-form-top {
+  direction: ltr !important;
+
+  .ortho-case-list {
+    border: 1px solid #BDBDBD;
+    border-radius: 8px;
+
+    .ortho-case-list-header {
+      background: #AEB9E6 0 0 no-repeat padding-box;
+      border: 1px solid #AEB9E6;
+      border-radius: 8px;
+      text-align: center;
+      font: normal normal bold 16px/28px IRANYekanRegular !important;
+      letter-spacing: 0;
+      color: #141432;
+      padding: 8px;
+    }
+
+    .ortho-cases-item {
+      text-align: left;
+      font: normal normal bold 16px/28px IRANYekanRegular !important;
+      letter-spacing: 0;
+      color: #212945;
+      margin-left: 24px;
+
+      &.rtl {
+        margin-left: unset !important;
+        margin-right: 24px;
+      }
+    }
+  }
+}
+
+.ortho-cases-form-bottom {
+  background: #E1E5F5 0 0 no-repeat padding-box;
+  border: 1px solid #8F9BCE;
+  border-radius: 8px;
+  padding: 10px 24px;
+  text-align: right;
+  font: normal normal bold 16px/28px IRANYekanRegular !important;
+  letter-spacing: 0;
+  color: #141432;
+  margin-top: 20px;
+}
+
+.radiology-form-item {
+  background: #F7F7F7 0 0 no-repeat padding-box;
+  border: 1px solid #BDBDBD;
+  border-radius: 8px;
+  padding: 24px;
+  direction: ltr;
+  text-align: left;
+  font: normal normal bold 16px/28px IRANYekanRegular !important;
+  letter-spacing: 0;
+  color: #212945;
+
+  .radiology-form-item-header {
+    text-align: center;
+    font: normal normal 800 24px/41px IRANYekanRegular !important;
+    letter-spacing: 0;
+    color: #8F9BCE;
+  }
+
+  .radio-item {
+    .v-input--selection-controls {
+      margin: 0;
+      padding: 0;
+    }
+
+    .row {
+      padding: 0;
+    }
+
+    .col {
+      padding: 0;
+    }
+
+    .radio-item-second {
+      margin-left: 35px;
+      display: flex;
+
+      .row {
+        padding: 0;
+      }
+
+      .col-md-6 {
+        padding: 0;
+      }
+
+      .v-input--selection-controls {
+        margin: 0;
+        padding: 0;
+      }
+    }
+
+    .radio-select-button {
+      background: #F5F5F5 0 0 no-repeat padding-box;
+      border: 1px solid #CCCCCC;
+      border-radius: 8px;
+      font: normal normal normal 14px/25px IRANYekanRegular !important;
+      letter-spacing: 0;
+      color: #212121;
+      text-align: center;
+      padding: 8px 16px;
+      margin-left: 24px;
+    }
+  }
+}
+
+.dent-list {
+  display: flex;
+  overflow-x: scroll;
+  justify-content: center;
+
+  .dent-item {
+    cursor: pointer;
+    border: 1px solid #FFFFFF;
+    border-radius: 8px;
+    margin: 1px;
+    max-width: 45px;
+    height: 100%;
+    width: 100%;
+
+    img {
+      max-width: 45px;
+      height: 100%;
+      width: 100%;
+    }
+
+    &.selected {
+      background: #EBF0FF 0 0 no-repeat padding-box;
+      border: 1px solid #5063FF;
+    }
+  }
+}
+
+.select-item-search {
+  font-family: IRANYekanRegular !important;
+  cursor: pointer;
+}
+
+.result-img {
+  width: 100%;
+  border-radius: 8px;
+  cursor: pointer;
 }

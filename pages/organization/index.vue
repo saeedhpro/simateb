@@ -204,7 +204,8 @@
                               <button
                                 class="second-button"
                                 @click="clearForm"
-                              >پاک کردن فرم
+                              >
+                                پاک کردن فرم
                               </button>
                             </v-col>
                             <v-spacer/>
@@ -260,7 +261,7 @@
                         <img
                           :src="i.user && i.user.logo ? i.user.logo : 'https://randomuser.me/api/portraits/men/88.jpg'">
                         <span>
-                          <a @click="openPazireshModal(i)">{{
+                          <a class="select-item-search" @click="openPazireshModal(i)">{{
                               i.user ? `${i.user.fname} ${i.user.lname}` : '-' | persianDigit
                             }}</a>
                         </span>
@@ -274,14 +275,14 @@
                     </td>
                     <td class="text-center">
                       <div
-                        v-if="i.photography"
+                        v-if="i.radiology"
                         class="has-erja">
                         <img src="/images/form/check2.svg">
                       </div>
                     </td>
                     <td class="text-center">
                       <div
-                        v-if="i.radiology"
+                        v-if="i.photography"
                         class="has-erja">
                         <img src="/images/form/check2.svg">
                       </div>
@@ -356,6 +357,7 @@
       :item="item"
       @close="closePazireshModal"
       @loading="toggleOverlay"
+      :has-item="hasItem"
     />
     <v-overlay :value="overlay">
       <v-progress-circular
@@ -552,6 +554,14 @@ export default {
       this.clearForm()
       this.toggleFilterModal()
     },
+    clearForm() {
+      this.search = {
+        page: 1,
+        start: this.$moment().format("YYYY-MM-DD"),
+        end: this.$moment().format("YYYY-MM-DD"),
+        q: '',
+      }
+    },
     toggleFilterModal() {
       this.showFilterModal = !this.showFilterModal
     },
@@ -630,6 +640,9 @@ export default {
         }
       }
     },
+    hasItem() {
+      return !!this.item
+    }
   },
   watch: {
     user() {

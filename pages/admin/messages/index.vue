@@ -488,9 +488,7 @@ export default {
       this.showFilterModal = false
       this.$store.dispatch('admin/messages/getList', this.search)
         .finally(() => {
-          setTimeout(() => {
-            this.toggleOverlay()
-          }, 350)
+          this.toggleOverlay()
         })
     },
     getStatus(sent) {

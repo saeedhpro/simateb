@@ -18,6 +18,7 @@ export const state = () => ({
       end: '21:00:00',
     }
   },
+  results: [],
 })
 
 export const mutations = {
@@ -29,6 +30,9 @@ export const mutations = {
   },
   setAppointment(state, user) {
     state.user = user
+  },
+  setResults(state, results) {
+    state.results = results
   }
 }
 
@@ -59,8 +63,20 @@ export const actions = {
     return this.$axios.get(`/appointments/${id}`)
       .then(res => {
         const data = res.data;
-        console.log(data)
         ctx.commit('setUser', data)
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  getAppointmentResults(ctx, id) {
+    ctx.commit('setResults', [])
+    return this.$axios.get(`/appointments/${id}/results`)
+      .then(res => {
+        const data = res.data;
+        console.log(data, "results")
+        ctx.commit('setResults', data)
         return Promise.resolve(res)
       })
       .catch(err => {
@@ -95,6 +111,15 @@ export const actions = {
   },
   createAppointment(ctx, data) {
     return this.$axios.post('/organizations/appointments?', data)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  updateAppointment(ctx, data) {
+    return this.$axios.put(`/appointments/${data.id}`, data)
       .then(res => {
         return Promise.resolve(res)
       })
@@ -140,5 +165,8 @@ export const getters = {
   },
   getQue(state) {
     return state.que
+  },
+  getResults(state) {
+    return state.results
   }
 }

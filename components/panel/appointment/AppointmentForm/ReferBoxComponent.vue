@@ -19,7 +19,24 @@
               <refer-item-component
                 type="radiology"
                 title="رادیولوژی"
-                @selected="addToCases"
+                :refer="radiology"
+                @selected="itemSelected"
+                @setMsg="setMsg"
+                @setRadiologyCases="setRadiologyCases"
+              />
+            </v-col>
+            <v-col
+              cols="12"
+              sm="6"
+              md="6"
+            >
+              <refer-item-component
+                type="photography"
+                title="فوتوگرافی"
+                :refer="photography"
+                @selected="itemSelected"
+                @setMsg="setMsg"
+                @setPhotographyCases="setPhotographyCases"
               />
             </v-col>
           </v-row>
@@ -34,9 +51,31 @@ import ReferItemComponent from "~/components/panel/appointment/AppointmentForm/R
 export default {
   name: "ReferBoxComponent",
   components: {ReferItemComponent},
+  props: {
+    photography: {
+      type: Object,
+      default: null,
+    },
+    radiology: {
+      type: Object,
+      default: null,
+    },
+  },
   methods: {
-    addToCases(val) {
+    itemSelected(val) {
       this.$emit('selected', val)
+    },
+    setMsg(val) {
+      this.$emit('setMsg', {
+        val: val,
+        type: this.type,
+      })
+    },
+    setPhotographyCases(cases) {
+      this.$emit('setPhotographyCases', cases)
+    },
+    setRadiologyCases(cases) {
+      this.$emit('setRadiologyCases', cases)
     }
   }
 }
