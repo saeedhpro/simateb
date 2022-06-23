@@ -10,6 +10,12 @@ export const state = () => ({
   },
   organization: null,
   organizations: [],
+  organizationsByProfession: {
+    laboratories: [],
+    radiologies: [],
+    photographies: [],
+    doctors: [],
+  },
 })
 
 export const mutations = {
@@ -21,6 +27,9 @@ export const mutations = {
   },
   setOrganizations(state, organizations) {
     state.organizations = organizations
+  },
+  setOrganizationsByProfession(state, organizations) {
+    state.organizationsByProfession = organizations
   },
 }
 
@@ -47,6 +56,17 @@ export const actions = {
         return Promise.reject(err)
       })
   },
+  getOrganizationsByProfession(ctx, id) {
+    return this.$axios.get(`/admin/organizations/${id}/prof`)
+      .then(res => {
+        const data = res.data;
+        ctx.commit('setOrganizationsByProfession', data)
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
   getOrganization(ctx, id) {
     return this.$axios.get(`/admin/organizations/${id}`)
       .then(res => {
@@ -60,6 +80,15 @@ export const actions = {
   },
   createOrganization(ctx, data) {
     return this.$axios.post(`/admin/organizations?`, data)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  updateOrganization(ctx, data) {
+    return this.$axios.put(`/admin/organizations/${data.id}`, data)
       .then(res => {
         return Promise.resolve(res)
       })
@@ -96,5 +125,8 @@ export const getters = {
   },
   getOrganizations(state) {
     return state.organizations
+  },
+  getOrganizationsByProfession(state) {
+    return state.organizationsByProfession
   },
 }

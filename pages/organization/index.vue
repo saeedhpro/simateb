@@ -481,6 +481,10 @@ export default {
     },
     getAppointmentList() {
       this.toggleOverlay()
+      if (this.profession === 'photography' || this.profession === 'radiology' || this.profession === 'laboratory') {
+        this.search.start = ''
+        this.search.end = ''
+      }
       this.$store.dispatch('appointments/getOrganizationAppointmentsList', this.search)
         .finally(() => {
           this.toggleOverlay()

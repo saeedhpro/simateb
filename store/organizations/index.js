@@ -2,6 +2,7 @@ require('whatwg-fetch')
 export const state = () => ({
   radiologyList: [],
   photographyList: [],
+  organization: null,
 })
 
 export const mutations = {
@@ -10,6 +11,9 @@ export const mutations = {
   },
   setPhotographyList(state, photographyList) {
     state.photographyList = photographyList
+  },
+  setOrganization(state, organization) {
+    state.organization = organization
   },
 }
 
@@ -29,6 +33,17 @@ export const actions = {
         return Promise.reject(err)
       })
   },
+  getOrganization(ctx, id) {
+    return this.$axios.get(`/organizations/${id}`)
+      .then(res => {
+        const data = res.data;
+          ctx.commit('setOrganization', data)
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
 }
 
 export const getters = {
@@ -37,5 +52,8 @@ export const getters = {
   },
   getPhotographyList(state) {
     return state.photographyList
+  },
+  getOrganization(state) {
+    return state.organization
   },
 }

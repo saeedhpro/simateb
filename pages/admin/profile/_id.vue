@@ -336,9 +336,9 @@ import OcclusalExaminationComponent from "~/components/panel/profile/medical/Occ
 import TreatmentComponent from "~/components/panel/profile/medical/TreatmentComponent";
 
 export default {
-  name: "profile",
-  layout: "panel",
-  middleware: "auth",
+  name: "profile.vue",
+  layout: "admin",
+  middleware: "admin",
   components: {
     TreatmentComponent,
     OcclusalExaminationComponent,

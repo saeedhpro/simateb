@@ -20,6 +20,7 @@
                 type="radiology"
                 title="رادیولوژی"
                 :refer="radiology"
+                :items="radioItems"
                 @selected="itemSelected"
                 @setMsg="setMsg"
                 @setRadiologyCases="setRadiologyCases"
@@ -34,6 +35,7 @@
                 type="photography"
                 title="فوتوگرافی"
                 :refer="photography"
+                :items="photoItems"
                 @selected="itemSelected"
                 @setMsg="setMsg"
                 @setPhotographyCases="setPhotographyCases"
@@ -60,6 +62,14 @@ export default {
       type: Object,
       default: null,
     },
+    photoItems: {
+      type: Array,
+      default: () => []
+    },
+    radioItems: {
+      type: Array,
+      default: () => []
+    }
   },
   methods: {
     itemSelected(val) {

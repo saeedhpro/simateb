@@ -779,12 +779,12 @@ export default {
             this.getOrganizationsList()
             this.action = null
             this.selectedOrganizations = []
-          }, 350)
+          }, 50)
         })
         .finally(() => {
           setTimeout(() => {
             this.toggleOverlay()
-          }, 350)
+          }, 50)
         })
     }
   },

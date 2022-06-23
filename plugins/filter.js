@@ -14,7 +14,7 @@ export default function persianDigit (value) {
     9: '۹'
   }
 
-  let result = value.toString()
+  let result = value ? value.toString() : ''
   for (let i = 0; i <= 9; i++) {
     result = result.replace(new RegExp(`${i}`, 'g'), persian[i])
   }

@@ -9,6 +9,15 @@ html, main {
   font-family: IRANYekanRegular;
 }
 
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #5063ff8c;
+  border-radius: 10px;
+}
+
 .theme--light.v-pagination .v-pagination__navigation {
   transform: rotateY(180deg);
 }
@@ -1370,6 +1379,12 @@ table {
   align-items: flex-start;
   justify-content: flex-start;
 
+  .file-input {
+    img {
+      border-radius: 8px;
+    }
+  }
+
   label {
     text-align: right;
     font: normal normal bold 14px/25px IRANYekanRegular !important;
@@ -2321,4 +2336,284 @@ table {
   width: 100%;
   border-radius: 8px;
   cursor: pointer;
+}
+
+.full-height {
+  height: 100%;
+}
+
+.gender-switch-box-component {
+  display: flex;
+  width: 100%;
+
+  .gender-switch-item {
+    padding: 8px;
+    background: #F0F0F0 0 0 no-repeat padding-box;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    cursor: pointer;
+    position: relative;
+    height: 44px;
+    border: 1px solid #F0F0F0;
+
+    &.selected {
+      background: #F6F7FF 0 0 no-repeat padding-box;
+      border: 1px solid #5063FF;
+      border-radius: 8px;
+
+      .img-box {
+        background-color: #5063ff;
+      }
+
+      .gender-title {
+        color: #5063FF;
+      }
+    }
+
+    .img-box {
+      background-color: #dbdbdb;
+      padding: 2px;
+      border-radius: 8px;
+      height: 30px;
+      width: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      top: 7px;
+      right: 8px;
+
+      img {
+        height: 20px;
+        width: 20px;
+      }
+    }
+
+    .gender-title {
+      text-align: center;
+      font: normal normal medium 16px/28px IRANYekanRegular !important;
+      letter-spacing: 0;
+      color: #424242;
+    }
+  }
+}
+
+.organization-page {
+  .organization-details {
+    background: #FFFFFF 0 0 no-repeat padding-box;
+    box-shadow: 0 8px 32px #14143214;
+    border-radius: 8px;
+    padding: 24px;
+    margin-top: 48px;
+    border-bottom: 2px solid #5063FF;
+
+    .profile-image {
+      max-width: 144px;
+      max-height: 144px;
+      width: 100%;
+      height: 100%;
+      border-radius: 8px;
+    }
+
+    .detail-box {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      font: normal normal normal 16px/35px IRANYekanRegular !important;
+      letter-spacing: 0;
+      color: #141432;
+
+      .name-box {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+
+        .v-divider {
+          margin: 0 1px;
+        }
+
+        .file-id-box {
+          text-align: center;
+          font: normal normal normal 16px/32px IRANYekanRegular !important;
+
+          .file-id {
+            font: normal normal normal 16x/32px IRANYekanRegular !important;
+            background: #F0F0F0 0 0 no-repeat padding-box;
+            border-radius: 8px;
+            letter-spacing: 0;
+            color: #141432;
+            padding: 8px;
+            width: 40px;
+            height: 40px;
+          }
+        }
+      }
+    }
+
+    .description-box {
+      .title {
+        text-align: right;
+        font: normal normal normal 16px/28px IRANYekanRegular !important;
+        letter-spacing: 0;
+        color: #141432;
+      }
+
+      .description {
+        margin-top: 8px;
+        text-align: right;
+        font: normal normal normal 16px/31px IRANYekanRegular !important;
+        letter-spacing: 0;
+        color: #141432;
+        min-height: 60px;
+      }
+    }
+
+    .action-box {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+
+      .action-button {
+        background: #FFFFFF 0 0 no-repeat padding-box;
+        border: 1px solid #BDBDBD;
+        border-radius: 8px;
+        padding: 8px 40px;
+        text-align: center;
+        font: normal normal normal 16px/31px IRANYekanRegular !important;
+        letter-spacing: 0;
+        color: #757575;
+        cursor: pointer;
+
+        .v-icon {
+          margin-left: 5px;
+        }
+      }
+
+      .more-action-button {
+        background: #FFFFFF 0 0 no-repeat padding-box;
+        border: 1px solid #BDBDBD;
+        border-radius: 8px;
+        padding: 22px;
+      }
+    }
+  }
+
+  .profile-tabs-header {
+    .v-item-group {
+      background: none !important;
+
+      .v-tabs-slider-wrapper {
+        display: none !important;
+      }
+
+      .v-tab {
+        background: #FFFFFF 0 0 no-repeat padding-box;
+        box-shadow: 0 2px 4px #14143214;
+        border-radius: 8px;
+        width: 100%;
+        text-align: center;
+        font: normal normal normal 14px/28px IRANYekanRegular !important;
+        letter-spacing: 0;
+        color: #26264E !important;
+        transition: all .4s ease;
+        -webkit-transition: all .4s ease;
+        margin: 0 5px;
+
+        img {
+          margin-left: 10px;
+        }
+
+        &:hover {
+          background: #F6F7FF 0 0 no-repeat padding-box;
+          box-shadow: 0 12px 16px #5063FF28;
+          border: 1px solid #5063FF;
+          color: #5063FF !important;
+          transition: all .4s ease;
+          -webkit-transition: all .4s ease;
+
+        }
+      }
+    }
+  }
+
+  .profile-tabs-box {
+    width: 100%;
+    min-height: 40px;
+    background: #FFFFFF 0 0 no-repeat padding-box;
+    box-shadow: 0 2px 4px #14143214;
+    border-radius: 8px;
+    padding: 24px;
+  }
+}
+
+.rel-organization-item-component {
+  border: 1px solid #DBDBDB;
+  border-radius: 8px 8px 0 0;
+
+  .rel-organization-item-title {
+    background: #F0F0F0 0 0 no-repeat padding-box;
+    border-radius: 8px 8px 0 0;
+    padding: 14px;
+    text-align: center;
+    font: normal normal medium 16px/28px IRANYekanRegular !important;
+    letter-spacing: 0;
+    color: #212945;
+  }
+
+  .rel-organization-item-content {
+    padding: 8px;
+    text-align: right;
+    font: normal normal medium 16px/28px IRANYekanRegular !important;
+    letter-spacing: 0;
+
+    .rel-organization-item-list {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      max-height: 289px;
+      overflow-y: scroll;
+
+      .rel-organization-selected-item {
+        background: #F6F7FF 0 0 no-repeat padding-box;
+        border: 1px solid #5063FF;
+        border-radius: 8px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 8px 16px 8px 8px;
+        margin-bottom: 8px;
+
+        .name {
+          text-align: right;
+          font: normal normal medium 16px/28px IRANYekanRegular !important;
+          letter-spacing: 0;
+          color: #141432;
+        }
+
+        .close-btn {
+          background: #F6F7FF 0 0 no-repeat padding-box;
+          border: 1px solid #5063FF;
+          border-radius: 6px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 36px;
+          height: 36px;
+          cursor: pointer;
+        }
+      }
+    }
+  }
 }

@@ -299,9 +299,9 @@
                         <img
                           :src="i.user && i.user.logo ? i.user.logo : 'https://randomuser.me/api/portraits/men/88.jpg'">
                         <span>
-                          <nuxt-link v-if="!isDoctor" to="" @click="openPazireshModal(i)">{{
+                          <a v-if="!isDoctor" @click="openItem(i)">{{
                               `${i.user.fname} ${i.user.lname}` | persianDigit
-                            }}</nuxt-link>
+                            }}</a>
                           <nuxt-link v-if="isDoctor && i.user" :to="`/profile/${i.user.id}`">{{
                               `${i.user.fname} ${i.user.lname}` | persianDigit
                             }}</nuxt-link>
@@ -523,7 +523,19 @@ export default {
     },
     toggleShowPazireshModal() {
       this.openShowPazireshModal = !this.openShowPazireshModal
-    }
+    },
+    getCases(item) {
+      const profession_id = this.loginUser.organization.profession_id;
+      if (profession_id === 1) {
+        return item.photography_cases
+      } else if (profession_id === 2) {
+        return item.laboratory_cases
+      } else if (profession_id === 3) {
+        return item.radiology_cases
+      } else {
+        return '-'
+      }
+    },
   },
   computed: {
     loginUser() {

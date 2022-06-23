@@ -453,7 +453,15 @@ export default {
       type: Object,
       default: null,
       required: true,
-    }
+    },
+    items: {
+      type: Array,
+      default: () => [],
+      required: true,
+    },
+  },
+  mounted () {
+    this.cases = this.items
   },
   data() {
     return {
@@ -474,7 +482,6 @@ export default {
     },
     saveCases() {
       this.$emit('setRadiologyCases', this.cases)
-      this.closeForm()
     },
     showSelectDent(type) {
       this.type = type
@@ -500,6 +507,11 @@ export default {
       return this.open;
     },
   },
+  watch: {
+    items(val) {
+      this.cases = val
+    }
+  }
 }
 </script>
 

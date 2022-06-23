@@ -70,6 +70,7 @@
       v-if="organization"
       :open="showPhotographyFrom"
       :organization="organization"
+      :items="items"
       @close="closePhotographyFrom"
       @setPhotographyCases="setPhotographyCases"
     />
@@ -77,6 +78,7 @@
       v-if="organization"
       :open="showRadiologyFrom"
       :organization="organization"
+      :items="items"
       @close="closeRadiologyForm"
       @setRadiologyCases="setRadiologyCases"
     />
@@ -103,6 +105,11 @@ export default {
       type: Object,
       default: null,
     },
+    items: {
+      type: Array,
+      default: () => [],
+      required: true,
+    },
   },
   data() {
     return {
@@ -114,14 +121,16 @@ export default {
     }
   },
   mounted() {
-    if (this.refer) {
-      this.selectedItem = this.refer.id
-    }
     this.getList()
   },
   methods: {
     getList() {
-      return this.$store.dispatch('organizations/getList', this.type)
+      this.$store.dispatch('organizations/getList', this.type)
+      .finally(() => {
+        if (this.refer) {
+          this.selectedItem = this.refer.id
+        }
+      })
     },
     openPhotographyFrom() {
       if (!this.selectedItem) return
@@ -151,9 +160,11 @@ export default {
     },
     setPhotographyCases(cases) {
       this.$emit('setPhotographyCases', cases)
+      this.closePhotographyFrom()
     },
     setRadiologyCases(cases) {
       this.$emit('setRadiologyCases', cases)
+      this.closeRadiologyForm()
     }
   },
   computed: {
@@ -178,7 +189,7 @@ export default {
         val: val,
         type: this.type,
       })
-    }
+    },
   }
 }
 </script>

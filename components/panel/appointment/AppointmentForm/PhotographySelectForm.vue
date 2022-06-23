@@ -251,7 +251,12 @@ export default {
       type: Object,
       default: null,
       required: true,
-    }
+    },
+    items: {
+      type: Array,
+      default: () => [],
+      required: true,
+    },
   },
   data() {
     return {
@@ -307,6 +312,9 @@ export default {
         'ارتودنسی',
       ],
     }
+  },
+  mounted() {
+    this.cases = this.items
   },
   methods: {
     closeForm() {

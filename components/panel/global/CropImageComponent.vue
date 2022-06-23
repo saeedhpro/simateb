@@ -44,7 +44,7 @@
           <v-spacer></v-spacer>
 
           <v-btn
-            color="red darken-1" @click="dialog = false;"
+            color="red darken-1 white--text" @click="dialog = false;"
           >
             لغو
           </v-btn

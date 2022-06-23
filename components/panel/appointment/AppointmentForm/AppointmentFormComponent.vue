@@ -120,7 +120,7 @@
                   cols="12"
                   sm="4"
                   md="2"
-                  v-if="appointment[profession+'_cases'].length > 0"
+                  v-if="profession && appointment[profession+'_cases'].length > 0"
                   v-for="(c,i) in appointment[profession+'_cases'].split(',')"
                   :key="i"
                 >
@@ -248,8 +248,10 @@
                   cols="12"
                 >
                   <refer-box-component
-                    :photography="item.photography"
-                    :radiology="item.radiology"
+                    :photography="appointment.photography"
+                    :radiology="appointment.radiology"
+                    :radio-items="radiologyCases"
+                    :photo-items="photographyCases"
                     @selected="itemSelected"
                     @setMsg="setMsg"
                     @setPhotographyCases="setPhotographyCases"
@@ -299,7 +301,7 @@
                   <v-col
                     cols="12"
                     sm="4"
-                    md="6"
+                    md="3"
                     v-for="(r,n) in results"
                     :key="n"
                   >
@@ -310,7 +312,7 @@
                     sm="4"
                     md="3"
                     v-for="(r,n) in newFiles"
-                    :key="n"
+                    :key="n + 1000"
                   >
                     <img @click="openShowResult(r)" class="result-img" :src="r" alt=""/>
                   </v-col>
@@ -916,7 +918,6 @@ export default {
       this.$refs.crop.setImage(e)
     },
     async cropped(o) {
-      console.log(o)
       // const blob = await this.blobToBase64(o)
       // console.log(blob)
       // this.newFiles.push(o)
@@ -934,6 +935,7 @@ export default {
       this.resetForm();
     },
     resetForm() {
+      this.newFiles = []
       if (!this.item) {
         this.appointment = {
           start_at: this.$moment().format("YYYY/MM/DD HH:mm:ss"),
@@ -948,6 +950,7 @@ export default {
         }
       } else {
         this.setAppointment()
+        this.getResults()
       }
     },
     setAppointment() {
@@ -1045,9 +1048,9 @@ export default {
         income: parseFloat(this.appointment.income.split(' ')[0].split(',').join('')),
       })
         .then(() => {
-          this.closeForm()
         })
         .finally(() => {
+          this.closeForm()
           this.loading()
         })
     },
@@ -1068,9 +1071,9 @@ export default {
       delete data.photography
       this.$store.dispatch('appointments/updateAppointment', data)
         .then(() => {
-          // this.closeForm()
         })
         .finally(() => {
+          this.closeForm()
           this.loading()
         })
     },
@@ -1086,22 +1089,22 @@ export default {
       delete data.photography
       this.$store.dispatch('appointments/acceptAppointment', data)
         .then(() => {
-          this.closeForm()
         })
         .catch(err => {
         })
         .finally(() => {
+          this.closeForm()
           this.loading()
         })
     },
     doCancel() {
       this.$store.dispatch('appointments/cancelAppointment', this.appointment)
         .then(() => {
-          this.closeForm()
         })
         .catch(err => {
         })
         .finally(() => {
+          this.closeForm()
           this.loading()
         })
     },
@@ -1117,11 +1120,11 @@ export default {
       delete data.photography
       this.$store.dispatch('appointments/reserveAppointment', data)
         .then(() => {
-          this.closeForm()
         })
         .catch(err => {
         })
         .finally(() => {
+          this.closeForm()
           this.loading()
         })
     },
@@ -1204,6 +1207,18 @@ export default {
     cases() {
       return this.$store.getters['cases/getCaseTypes']
     },
+    photographyCases() {
+      if (this.appointment.photography_cases === "") {
+        return []
+      }
+      return  this.appointment.photography_cases.split(',')
+    },
+    radiologyCases() {
+      if (this.appointment.radiology_cases === "") {
+        return []
+      }
+      return  this.appointment.radiology_cases.split(',')
+    },
     show() {
       return this.open;
     },
@@ -1256,7 +1271,6 @@ export default {
     },
     item() {
       this.resetForm()
-      this.getResults()
     },
   }
 }

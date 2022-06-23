@@ -401,7 +401,7 @@ export default {
   name: "index",
   components: {DataTableComponent},
   layout: "panel",
-  middleware: "auth",
+  middleware: "admin",
   data() {
     return {
       overlay: false,
