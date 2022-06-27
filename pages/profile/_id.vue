@@ -42,49 +42,6 @@
               cols="12"
               md="6"
             >
-              <v-dialog
-                v-model="showDelete"
-                max-width="680"
-              >
-                <v-card
-                  class="accept-file-remove-model"
-                >
-                  <button
-                    class="close"
-                    @click="remove"
-                  >
-                    <v-icon>mdi-close</v-icon>
-                  </button>
-                  <v-card-title class="accept-file-remove-title">
-                    <span>حذف کاربر</span>
-                  </v-card-title>
-
-                  <v-card-text
-                    class="accept-file-remove-text"
-                  >
-                    آیا از حذف کردن این کاربر اطمینان دارید؟<br/>
-                    لطفا دقت کنید که پس از حذف، اطلاعات کاربر قابل بازگشت نیست
-                  </v-card-text>
-
-                  <v-card-actions>
-                    <button
-                      class="action-button accept-button"
-                      @click="remove"
-
-                    >
-                      خیر
-                    </button>
-                    <v-spacer></v-spacer>
-                    <button
-                      class="action-button red-button"
-                      @click="deleteUser"
-                    >
-                      بله، حذف کن
-                    </button>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
-
               <div class="description-box">
                 <div class="title">توضیحات</div>
                 <div class="description">
@@ -124,7 +81,7 @@
                     </v-icon>
                     <span>تاریخچه درمانی</span>
                   </div>
-                  <div class="action-button">
+                  <div class="action-button" @click="showUpdate">
                     <v-icon>
                       mdi-pencil-outline
                     </v-icon>
@@ -190,13 +147,22 @@
             <v-tab-item>
               <appointment-list-component :user-id="user.id"/>
             </v-tab-item>
-            <v-tab-item>
+            <v-tab-item v-if="canSee('radiology')">
+              <radiology-list-component
+                :user-id="user.id"
+              />
             </v-tab-item>
-            <v-tab-item/>
-            <v-tab-item>
+            <v-tab-item v-if="canSee('photography')">
+              <photography-list-component
+                :user-id="user.id"
+              />
+            </v-tab-item>
+            <v-tab-item v-if="canSee('doctor')">
               <send-documents-component :user-id="user.id"/>
             </v-tab-item>
-            <v-tab-item/>
+            <v-tab-item v-if="canSee('doctor')">
+              <div class="hi">Salam 3</div>
+            </v-tab-item>
           </v-tabs-items>
         </div>
       </v-col>
@@ -318,6 +284,54 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-dialog
+      v-model="showDelete"
+      max-width="680"
+    >
+      <v-card
+        class="accept-file-remove-model"
+      >
+        <button
+          class="close"
+          @click="remove"
+        >
+          <v-icon>mdi-close</v-icon>
+        </button>
+        <v-card-title class="accept-file-remove-title">
+          <span>حذف کاربر</span>
+        </v-card-title>
+
+        <v-card-text
+          class="accept-file-remove-text"
+        >
+          آیا از حذف کردن این کاربر اطمینان دارید؟<br/>
+          لطفا دقت کنید که پس از حذف، اطلاعات کاربر قابل بازگشت نیست
+        </v-card-text>
+
+        <v-card-actions>
+          <button
+            class="action-button accept-button"
+            @click="remove"
+
+          >
+            خیر
+          </button>
+          <v-spacer></v-spacer>
+          <button
+            class="action-button red-button"
+            @click="deleteUser"
+          >
+            بله، حذف کن
+          </button>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <update-user-form-component
+      :is-admin="false"
+      :item="user"
+      :open="showUpdateModal"
+      @close="closeUpdateModal"
+    />
     <v-overlay :value="overlay">
       <v-progress-circular
         indeterminate
@@ -334,12 +348,18 @@ import MedicalConditionComponent from "~/components/panel/profile/medical/Medica
 import DentalExaminationComponent from "~/components/panel/profile/medical/DentalExaminationComponent";
 import OcclusalExaminationComponent from "~/components/panel/profile/medical/OcclusalExaminationComponent";
 import TreatmentComponent from "~/components/panel/profile/medical/TreatmentComponent";
+import PhotographyListComponent from "~/components/panel/profile/photography/PhotographyListComponent";
+import RadiologyListComponent from "~/components/panel/profile/radiology/RadiologyListComponent";
+import UpdateUserFormComponent from "~/components/panel/profile/user/UpdateUserFormComponent";
 
 export default {
-  name: "profile",
+  name: "profile.vue",
   layout: "panel",
   middleware: "auth",
   components: {
+    UpdateUserFormComponent,
+    RadiologyListComponent,
+    PhotographyListComponent,
     TreatmentComponent,
     OcclusalExaminationComponent,
     DentalExaminationComponent,
@@ -357,9 +377,20 @@ export default {
       overlay: false,
       showDelete: false,
       showHistoryModal: false,
+      showUpdateModal: false,
     }
   },
   methods: {
+    showUpdate() {
+      this.toggleShowUpdateModal()
+    },
+    closeUpdateModal() {
+      this.getUser(this.$route.params.id)
+      this.toggleShowUpdateModal()
+    },
+    toggleShowUpdateModal() {
+      this.showUpdateModal = !this.showUpdateModal
+    },
     toggleOverLay() {
       this.overlay = !this.overlay
     },
@@ -414,11 +445,11 @@ export default {
       const professionID = this.loginUser.organization.profession_id
       switch (tabName) {
         case 'photography':
-          return professionID === 1
+          return professionID !== 2 && professionID !== 3
         case 'laboratory':
-          return professionID === 2
+          return professionID !== 1 && professionID !== 3
         case 'radiology':
-          return professionID === 3
+          return professionID !== 1 && professionID !== 2
         case 'doctor':
           return professionID !== 1 && professionID !== 2 && professionID !== 3
       }

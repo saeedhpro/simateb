@@ -5,10 +5,12 @@
         cols="12"
         sm="4"
         md="2"
+        v-if="forOrganization"
       >
         <div class="img-box">
           <button
             class="edit-button"
+            @click="openUpdateModal"
           >
             ویرایش
           </button>
@@ -17,8 +19,8 @@
 
       <v-col
         cols="12"
-        sm="8"
-        md="10"
+        :sm="forOrganization ? 8 : 12"
+        :md="forOrganization ? 10 : 12"
       >
         <div class="appointment-details">
           <v-row>
@@ -36,16 +38,16 @@
                   'background-color': `${statuses[status - 1].background}`,
                   'color': `${statuses[status - 1].color}`
                 }"
-                >{{ statuses[status - 1].title }}</span>
+                >{{ statuses[status - 1].title | toPersianNumber }}</span>
               </div>
               <div class="case-type" v-if="caseType">
-                علت مراجعه: <span>{{ caseType }}</span>
+                علت مراجعه: <span>{{ caseType | toPersianNumber }}</span>
               </div>
               <div class="code" v-if="info">
-                توضیحات پذیرش: <span>{{ info }}</span>
+                توضیحات پذیرش: <span>{{ info | toPersianNumber }}</span>
               </div>
               <div class="code" v-if="code">
-                کد پذیرش: <span>{{ code }}</span>
+                کد پذیرش: <span>{{ code | toPersianNumber }}</span>
               </div>
             </v-col>
             <v-col
@@ -59,7 +61,7 @@
                   :key="n"
                   class="prescription"
                 >
-                  {{ p }}
+                  {{ p | toPersianNumber }}
                 </span>
               </div>
               <div class="prescription-box" v-if="radiologyCases">
@@ -69,7 +71,7 @@
                   :key="n"
                   class="prescription radiology"
                 >
-                  {{ p }}
+                  {{ p | toPersianNumber }}
                 </span>
               </div>
               <div class="prescription-box" v-if="photographyCases">
@@ -79,9 +81,22 @@
                   :key="n"
                   class="prescription photography"
                 >
-                  {{ p }}
+                  {{ p | toPersianNumber }}
                 </span>
               </div>
+              <v-container fluid>
+                <v-row>
+                  <v-col
+                    cols="12"
+                    sm="4"
+                    md="2"
+                    v-for="(i,n) in radiologyResultList"
+                    :key="n"
+                  >
+                    <img :src="i" alt="" >
+                  </v-col>
+                </v-row>
+              </v-container>
             </v-col>
           </v-row>
         </div>
@@ -96,6 +111,14 @@ export default {
   props: {
     created_at: {
       type: String,
+      required: true,
+    },
+    id: {
+      type: Number,
+      required: true,
+    },
+    organizationId: {
+      type: Number,
       required: true,
     },
     status: {
@@ -155,6 +178,35 @@ export default {
           background: '#F1F2F5'
         }
       ],
+      radiologyResultList: [],
+      photographyResultList: [],
+    }
+  },
+  mounted() {
+    this.getResults()
+  },
+  methods: {
+    getResults() {
+      let type = ''
+      type = "radiology"
+      this.$store.dispatch('appointments/getAppointmentResults', {
+        id: this.id,
+        type: type
+      })
+        .then((res) => {
+          this.radiologyResultList = res.data
+        })
+      type = "photography"
+      this.$store.dispatch('appointments/getAppointmentResults', {
+        id: this.id,
+        type: type
+      })
+        .then((res) => {
+          this.photographyResultList = res.data
+        })
+    },
+    openUpdateModal() {
+      this.$emit('updated')
     }
   },
   computed: {
@@ -166,6 +218,12 @@ export default {
     },
     photographyCasesArray() {
       return this.photographyCases.length ? this.photographyCases.split(',') : []
+    },
+    loginUser() {
+      return this.$store.getters['login/getUser']
+    },
+    forOrganization() {
+      return this.loginUser.organization_id === this.organizationId
     },
   }
 }

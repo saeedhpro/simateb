@@ -40,7 +40,7 @@
 
 <script>
 export default {
-  name: "PhotographyItemComponent",
+  name: "RadiologyItemComponent",
   props: {
     appointment: {
       type: Object,
@@ -62,7 +62,7 @@ export default {
     getResults() {
       this.$store.dispatch('appointments/getAppointmentResults', {
         id: this.appointment.id,
-        type: 'photography'
+        type: 'radiology'
       })
         .then(res => {
           this.results = res.data

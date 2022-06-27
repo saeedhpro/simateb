@@ -298,7 +298,7 @@ export default {
         .finally(() => {
           setTimeout(() => {
             this.toggleOverlay()
-          }, 350)
+          }, 50)
         })
     },
     paginate(page = 1) {
@@ -325,7 +325,7 @@ export default {
             this.toggleRemoveItemModal()
             this.toggleOverlay()
             this.getCaseList()
-          }, 350)
+          }, 50)
         })
     },
     editCase(caseType) {
@@ -377,12 +377,12 @@ export default {
             this.closeForm()
             this.showCreateModal = false
             this.getCaseList()
-          }, 350)
+          }, 50)
         })
         .finally(() => {
           setTimeout(() => {
             this.toggleOverlay()
-          }, 350)
+          }, 50)
         })
     },
   },

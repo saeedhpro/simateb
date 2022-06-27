@@ -190,13 +190,22 @@
             <v-tab-item>
               <appointment-list-component :user-id="user.id"/>
             </v-tab-item>
-            <v-tab-item>
+            <v-tab-item v-if="canSee('radiology')">
+              <radiology-list-component
+                :user-id="user.id"
+              />
             </v-tab-item>
-            <v-tab-item/>
-            <v-tab-item>
+            <v-tab-item v-if="canSee('photography')">
+              <photography-list-component
+                :user-id="user.id"
+              />
+            </v-tab-item>
+            <v-tab-item v-if="canSee('doctor')">
               <send-documents-component :user-id="user.id"/>
             </v-tab-item>
-            <v-tab-item/>
+            <v-tab-item v-if="canSee('doctor')">
+              <div class="hi">Salam 3</div>
+            </v-tab-item>
           </v-tabs-items>
         </div>
       </v-col>
@@ -334,12 +343,16 @@ import MedicalConditionComponent from "~/components/panel/profile/medical/Medica
 import DentalExaminationComponent from "~/components/panel/profile/medical/DentalExaminationComponent";
 import OcclusalExaminationComponent from "~/components/panel/profile/medical/OcclusalExaminationComponent";
 import TreatmentComponent from "~/components/panel/profile/medical/TreatmentComponent";
+import PhotographyListComponent from "~/components/panel/profile/photography/PhotographyListComponent";
+import RadiologyListComponent from "~/components/panel/profile/radiology/RadiologyListComponent";
 
 export default {
   name: "profile.vue",
   layout: "admin",
   middleware: "admin",
   components: {
+    RadiologyListComponent,
+    PhotographyListComponent,
     TreatmentComponent,
     OcclusalExaminationComponent,
     DentalExaminationComponent,
@@ -414,11 +427,11 @@ export default {
       const professionID = this.loginUser.organization.profession_id
       switch (tabName) {
         case 'photography':
-          return professionID === 1
+          return professionID !== 2 && professionID !== 3
         case 'laboratory':
-          return professionID === 2
+          return professionID !== 1 && professionID !== 3
         case 'radiology':
-          return professionID === 3
+          return professionID !== 1 && professionID !== 2
         case 'doctor':
           return professionID !== 1 && professionID !== 2 && professionID !== 3
       }

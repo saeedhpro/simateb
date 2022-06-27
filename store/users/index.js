@@ -19,6 +19,22 @@ export const state = () => ({
   user: null,
   users: [],
   medicalHistory: null,
+  photographyList: {
+    data: [],
+    limit: 10,
+    page: 1,
+    sort: '',
+    total_rows: 0,
+    total_pages: 0
+  },
+  radiologyList: {
+    data: [],
+    limit: 10,
+    page: 1,
+    sort: '',
+    total_rows: 0,
+    total_pages: 0
+  }
 })
 
 export const mutations = {
@@ -36,6 +52,12 @@ export const mutations = {
   },
   setMedicalHistory(state, medicalHistory) {
     state.medicalHistory = medicalHistory
+  },
+  setPhotographyList(state, list) {
+    state.photographyList = list
+  },
+  setRadiologyList(state, list) {
+    state.radiologyList = list
   },
 }
 
@@ -56,6 +78,21 @@ export const actions = {
       .then(res => {
         const data = res.data;
         ctx.commit('setPatients', data)
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  getUserResultedAppointmentsList(ctx, data) {
+    return this.$axios.get(`/users/${data.id}/appointments/resulted?page=${data.page}&type=${data.type}&limit=10`)
+      .then(res => {
+        const data = res.data;
+        if(data.type === 'photography') {
+          ctx.commit('setPhotographyList', data)
+        } else {
+          ctx.commit('setRadiologyList', data)
+        }
         return Promise.resolve(res)
       })
       .catch(err => {
@@ -86,6 +123,15 @@ export const actions = {
   },
   createUser(ctx, data) {
     return this.$axios.post(`/users?`, data)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  updateUser(ctx, data) {
+    return this.$axios.put(`/users/${data.id}`, data)
       .then(res => {
         return Promise.resolve(res)
       })
@@ -239,5 +285,11 @@ export const getters = {
   },
   getMedicalHistory(state) {
     return state.medicalHistory
-  }
+  },
+  photographyList(state) {
+    return state.photographyList
+  },
+  radiologyList(state) {
+    return state.radiologyList
+  },
 }

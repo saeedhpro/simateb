@@ -22,9 +22,9 @@
           </div>
           <v-spacer/>
           <div class="create-update-modal-regbox">
-            ثبت در سیستم توسط: {{ `${loginUser.lname} ${loginUser.fname}` }}
-            ({{ loginUser.created | toRelativeDate }} {{
-              loginUser.created | toPersianDate('YYYY/MM/DD HH:mm:ss')
+            ثبت در سیستم توسط: {{ `${form.lname} ${form.fname}` }}
+            ({{ form.created | toRelativeDate }} {{
+              form.created | toPersianDate('YYYY/MM/DD HH:mm:ss')
             }})
           </div>
         </v-card-title>
@@ -36,7 +36,7 @@
                 sm="6"
                 md="4"
               >
-                <div class="create-update-model-input-box full-height">
+                <div class="create-update-model-input-box full-height" style="max-height: 175px">
                   <div class="file-input full-height">
                     <input
                       type="file"
@@ -365,7 +365,7 @@
               >
                 <button
                   class="main-button"
-                  @click="createUser"
+                  @click="updateUser"
                 >
                   ذخیره
                 </button>
@@ -391,6 +391,11 @@ export default {
       default: false,
       required: true,
     },
+    item: {
+      type: Object,
+      default: null,
+      required: true,
+    },
     isAdmin: {
       type: Boolean,
       default: false,
@@ -399,6 +404,7 @@ export default {
   data() {
     return {
       form: {
+        id: 0,
         fname: '',
         lname: '',
         email: '',
@@ -428,6 +434,7 @@ export default {
     }
   },
   mounted() {
+    this.resetForm()
     this.getProvinces()
     this.getOrganizations()
     this.getUserGroups()
@@ -439,25 +446,26 @@ export default {
     },
     resetForm() {
       this.form = {
-        fname: '',
-        lname: '',
-        email: '',
-        user_group_id: 1,
-        gender: '',
-        tel: '',
-        tel1: '',
-        cardno: '',
-        birth_date: '',
-        file_id: '',
-        province_id: 0,
-        county_id: 0,
-        city_id: 0,
-        address: '',
-        introducer: '',
-        known_as: '',
-        info: '',
-        due_payment: '',
-        pass: '',
+        id: this.item.id,
+        fname: this.item.fname,
+        lname: this.item.lname,
+        email: this.item.email,
+        user_group_id: this.item.user_group_id,
+        gender: this.item.gender ? this.item.gender.toLowerCase() : null,
+        tel: this.item.tel,
+        tel1: this.item.tel1,
+        cardno: this.item.cardno,
+        birth_date: this.item.birth_date,
+        file_id: this.item.file_id,
+        province_id: null,
+        county_id: null,
+        city_id: this.item.city_id,
+        address: this.item.address,
+        introducer: this.item.introducer,
+        known_as: this.item.known_as,
+        info: this.item.info,
+        due_payment: this.item.due_payment,
+        pass: this.item.pass,
         new: null,
       }
       this.city = null
@@ -474,8 +482,8 @@ export default {
     imaged(file) {
       this.form.new = file
     },
-    createUser() {
-      this.$store.dispatch('users/createUser', this.form)
+    updateUser() {
+      this.$store.dispatch('users/updateUser', this.form)
         .finally(() => {
           this.closeForm()
         })

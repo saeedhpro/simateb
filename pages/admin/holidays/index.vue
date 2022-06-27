@@ -462,12 +462,12 @@ export default {
             this.getHolidayList()
             this.action = null
             this.selectedHolidays = []
-          }, 350)
+          }, 50)
         })
         .finally(() => {
           setTimeout(() => {
             this.toggleOverlay()
-          }, 350)
+          }, 50)
         })
     },
     getAllOrganizations() {
@@ -493,7 +493,7 @@ export default {
             this.toggleRemoveItemModal()
             this.toggleOverlay()
             this.getHolidayList()
-          }, 350)
+          }, 50)
         })
     }
   },

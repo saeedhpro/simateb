@@ -402,7 +402,7 @@ export default {
         .finally(() => {
           setTimeout(() => {
             this.toggleOverlay()
-          }, 350)
+          }, 50)
         })
     },
     getStatus(sent) {
@@ -423,12 +423,12 @@ export default {
             this.closeForm()
             this.showCreateModal = false
             this.getHolidayList()
-          }, 350)
+          }, 50)
         })
         .finally(() => {
           setTimeout(() => {
             this.toggleOverlay()
-          }, 350)
+          }, 50)
         })
     },
     deleteHolidays(ids) {
@@ -441,12 +441,12 @@ export default {
             this.getHolidayList()
             this.action = null
             this.selectedHolidays = []
-          }, 350)
+          }, 50)
         })
         .finally(() => {
           setTimeout(() => {
             this.toggleOverlay()
-          }, 350)
+          }, 50)
         })
     },
     showRemoveItem(id) {
@@ -469,7 +469,7 @@ export default {
             this.toggleRemoveItemModal()
             this.toggleOverlay()
             this.getHolidayList()
-          }, 350)
+          }, 50)
         })
     }
   },

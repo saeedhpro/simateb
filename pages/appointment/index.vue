@@ -409,12 +409,12 @@ export default {
             this.togglePazireshModal()
             this.clearPazireshForm()
             this.getAppointmentList()
-          }, 350)
+          }, 50)
         })
         .finally(() => {
           setTimeout(() => {
             this.toggleOverlay()
-          }, 350)
+          }, 50)
         })
     },
     toggleCreateModal() {

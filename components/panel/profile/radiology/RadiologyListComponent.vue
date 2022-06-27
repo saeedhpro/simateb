@@ -1,7 +1,7 @@
 <template>
   <div class="profile-photography-list-component">
     <div class="photography-results-box">
-      <photography-item-component
+      <radiology-item-component
         v-for="(i,n) in list.data"
         :key="n"
         :appointment="i"
@@ -11,11 +11,11 @@
 </template>
 
 <script>
-import PhotographyItemComponent from "~/components/panel/profile/photography/PhotographyItemComponent";
+import RadiologyItemComponent from "~/components/panel/profile/radiology/RadiologyItemComponent";
 
 export default {
-  name: "PhotographyListComponent",
-  components: {PhotographyItemComponent},
+  name: "RadiologyListComponent",
+  components: {RadiologyItemComponent},
   props: {
     userId: {
       type: Number,
@@ -42,7 +42,7 @@ export default {
     getList() {
       this.$store.dispatch('users/getUserResultedAppointmentsList', {
         id: this.userId,
-        type: 'photography',
+        type: 'radiology',
         page: this.page,
       })
       .then((res) => {

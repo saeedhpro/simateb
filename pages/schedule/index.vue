@@ -341,7 +341,7 @@ export default {
         .finally(() => {
           setTimeout(() => {
             this.toggleOverlay()
-          }, 350)
+          }, 50)
         })
     },
     paginate(page = 1) {
@@ -368,7 +368,7 @@ export default {
             this.toggleRemoveItemModal()
             this.toggleOverlay()
             this.getScheduleList()
-          }, 350)
+          }, 50)
         })
     },
     editSchedule(schedule) {
@@ -417,12 +417,12 @@ export default {
             this.closeForm()
             this.showCreateModal = false
             this.getScheduleList()
-          }, 350)
+          }, 50)
         })
         .finally(() => {
           setTimeout(() => {
             this.toggleOverlay()
-          }, 350)
+          }, 50)
         })
     },
     onMonthChanged(month) {

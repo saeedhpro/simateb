@@ -7,7 +7,6 @@
     >
       <v-card
         class="create-update-modal"
-        v-if="organization"
       >
         <v-card-title
           class="create-update-modal-title-box"
@@ -19,7 +18,7 @@
             >
               <v-icon>mdi-close</v-icon>
             </button>
-            <span>فرم اطلاعات موسسه {{ organization.name }}</span>
+            <span>افزودن موسسه</span>
           </div>
           <v-spacer/>
         </v-card-title>
@@ -275,7 +274,7 @@
               >
                 <button
                   class="main-button"
-                  @click="updateOrganization"
+                  @click="createOrganization"
                 >
                   ذخیره
                 </button>
@@ -293,7 +292,7 @@ import CropImageComponent from "~/components/panel/global/CropImageComponent";
 import RelOrganizationItemComponent from "~/components/panel/orgnization/RelOrganizationItemComponent";
 
 export default {
-  name: "UpdateOrganizationFromComponent",
+  name: "CreateOrganizationFromComponent",
   components: {RelOrganizationItemComponent, CropImageComponent},
   props: {
     show: {
@@ -301,16 +300,11 @@ export default {
       default: false,
       required: true,
     },
-    item: {
-      type: Object,
-      default: null,
-      required: true,
-    }
   },
   mounted() {
     this.resetForm()
     this.getProfessions()
-    this.getOrganizationsByProfessionList(this.item.id)
+    this.getOrganizationsByProfessionList(this.organization.id)
   },
   data() {
     return {
@@ -361,40 +355,38 @@ export default {
     },
     resetForm() {
       this.organization = {
-        id: this.item.id,
-        name: this.item.name,
+        id: 0,
         new: null,
-        profession_id: this.item.profession_id,
-        website: this.item.website,
-        phone: this.item.phone,
-        phone1: this.item.phone1,
-        instagram: this.item.instagram,
-        sms_price: this.item.sms_price,
-        sms_credit: this.item.sms_credit,
-        case_types: this.item.case_types,
-        known_as: this.item.known_as,
-        created_at: this.item.created_at,
-        logo: this.item.logo,
-        info: this.item.info,
-        slider_rnd_img: this.item.slider_rnd_img,
-        slider_imgs: this.item.slider_imgs,
-        sliders: this.item.sliders,
-        work_hour_start: this.item.work_hour_start,
-        work_hour_end: this.item.work_hour_end,
-        about_us_html: this.item.about_us_html,
-        text1: this.item.text1,
-        image1: this.item.image1,
-        image2: this.item.image2,
-        text2: this.item.text2,
-        image3: this.item.image3,
-        text3: this.item.text3,
-        rel_organizations: [
-          ...this.item.rel_organizations
-        ],
+        name: '',
+        profession_id: null,
+        website: '',
+        phone: '',
+        phone1: '',
+        instagram: '',
+        sms_price: 0,
+        sms_credit: 0,
+        case_types: '',
+        known_as: '',
+        created_at: '',
+        logo: '',
+        info: '',
+        slider_rnd_img: '',
+        slider_imgs: 0,
+        sliders: '',
+        work_hour_start: '',
+        work_hour_end: '',
+        about_us_html: '',
+        text1: '',
+        image1: '',
+        image2: '',
+        text2: '',
+        image3: '',
+        text3: '',
+        rel_organizations: [],
       }
-      this.profession = this.item.profession
+      this.profession = null
     },
-    updateOrganization() {
+    createOrganization() {
       const data = {
         ...this.organization,
         rel_organizations: [
@@ -410,8 +402,7 @@ export default {
         sms_credit: parseFloat(this.organization.sms_credit.split(' ')[0].split(',').join('')),
       }
       delete data.logo
-      console.log(data, "data")
-      this.$store.dispatch('admin/organizations/updateOrganization', data)
+      this.$store.dispatch('admin/organizations/createOrganization', data)
       this.closeForm()
     },
     chooseImage(e) {
@@ -467,16 +458,16 @@ export default {
       return this.$store.getters['login/getUser']
     },
     photographyRelList() {
-      return this.item.rel_organizations.filter(i => i.profession_id === 1)
+      return this.organization.rel_organizations.filter(i => i.profession_id === 1)
     },
     laboratoryRelList() {
-      return this.item.rel_organizations.filter(i => i.profession_id === 2)
+      return this.organization.rel_organizations.filter(i => i.profession_id === 2)
     },
     radiologyRelList() {
-      return this.item.rel_organizations.filter(i => i.profession_id === 3)
+      return this.organization.rel_organizations.filter(i => i.profession_id === 3)
     },
     doctorRelList() {
-      return this.item.rel_organizations.filter(i => i.profession_id !== 1 && i.profession_id !== 2 && i.profession_id !== 3)
+      return this.organization.rel_organizations.filter(i => i.profession_id !== 1 && i.profession_id !== 2 && i.profession_id !== 3)
     }
   },
   watch: {

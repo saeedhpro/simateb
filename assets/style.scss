@@ -1129,9 +1129,11 @@ table {
     margin-top: 20px;
 
     .file-image {
-      height: 176px;
-      width: 176px;
+      height: 100%;
+      max-width: 176px;
+      width: 100%;
       border-radius: 8px;
+      cursor: pointer;
     }
 
     .input-box {
@@ -2614,6 +2616,47 @@ table {
           cursor: pointer;
         }
       }
+    }
+  }
+}
+.photography-item-component {
+  .top-box {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background: #F5F5F5 0 0 no-repeat padding-box;
+    border-radius: 8px;
+    padding: 8px 16px;
+    .right-box {
+      .appcode {
+        text-align: right;
+        font: normal normal normal 14px/25px IRANYekanRegular !important;
+        letter-spacing: 0;
+        color: #26264E;
+      }
+      .appcode-number {
+        text-align: right;
+        font: normal normal bold 16px/28px IRANYekanRegular !important;
+        letter-spacing: 0;
+        color: #26264E;
+      }
+    }
+    .time-box {
+      text-align: left;
+      font: normal normal normal 14px/25px IRANYekanRegular !important;
+      letter-spacing: 0;
+      color: #26264E;
+    }
+  }
+  .images-box {
+    .result-image {
+      width: 100%;
+      height: 100%;
+      max-width: 260px;
+      cursor: pointer;
+      max-height: 260px;
+      border-radius: 8px;
     }
   }
 }

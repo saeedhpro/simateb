@@ -458,7 +458,7 @@ export default {
         .finally(() => {
           setTimeout(() => {
             this.toggleOverlay()
-          }, 350)
+          }, 50)
         })
     },
     clearForm() {

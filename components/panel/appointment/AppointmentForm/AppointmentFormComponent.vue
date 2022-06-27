@@ -8,6 +8,7 @@
       <v-card
         class="create-update-modal"
         :class="{'paziresh-form' : hasItem}"
+        v-if="loaded"
       >
         <v-card-title
           class="create-update-modal-title-box"
@@ -24,7 +25,7 @@
           <v-spacer/>
         </v-card-title>
         <v-card-text
-          v-if="hasItem && appointment"
+          v-if="hasItem"
           class="paziresh-form-box">
           <v-container>
             <v-row>
@@ -726,6 +727,7 @@ export default {
   data() {
     return {
       overlay: false,
+      loaded: false,
       doctorPrescription: false,
       pType: 'prescription',
       file: null,
@@ -909,7 +911,10 @@ export default {
   },
   methods: {
     getResults() {
-      this.$store.dispatch('appointments/getAppointmentResults', this.item.id)
+      this.$store.dispatch('appointments/getAppointmentResults', {
+        id: this.item.id,
+        type: ''
+      })
     },
     imaged(file) {
       this.newFiles.push(file)
@@ -952,6 +957,7 @@ export default {
         this.setAppointment()
         this.getResults()
       }
+      this.loaded = true
     },
     setAppointment() {
       this.appointment = {

@@ -17,7 +17,7 @@
                 >
                   <img
                     class="profile-image"
-                    :src="'https://randomuser.me/api/portraits/men/88.jpg'">
+                    :src="organization.logo ? organization.logo : '/images/pages/img.svg'">
                 </v-col>
                 <v-col
                   cols="12"
@@ -78,7 +78,6 @@ export default {
   middleware: "admin",
   mounted() {
     this.getOrganization()
-    this.showUpdate()
   },
   data() {
     return {

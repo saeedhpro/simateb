@@ -23,7 +23,7 @@ export const mutations = {
       state.list = state.list.splice(i, 1)
     }
     state.list = [...state.list]
-  }
+  },
 }
 
 export const actions = {
@@ -41,13 +41,27 @@ export const actions = {
   setList(ctx, files) {
     ctx.commit('setList', files)
   },
-  updateFile(ctx, file) {
-    ctx.commit('updateFile', file)
+  createFile(ctx, data) {
+    return this.$axios.post(`/files`, data)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  updateFile(ctx, data) {
+    return this.$axios.put(`/files/${data.id}`, data)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
   },
   removeFile(ctx, id) {
     return this.$axios.delete(`/files/${id}`)
       .then(res => {
-        ctx.commit('removeFile', id)
         return Promise.resolve(res)
       })
       .catch(err => {

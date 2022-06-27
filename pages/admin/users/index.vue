@@ -388,12 +388,12 @@ export default {
             this.getUsersList()
             this.action = null
             this.selectedUsers = []
-          }, 350)
+          }, 50)
         })
         .finally(() => {
           setTimeout(() => {
             this.toggleOverlay()
-          }, 350)
+          }, 50)
         })
     }
   },

@@ -268,7 +268,7 @@ export default {
           charging: histories.charging,
         }
       }
-    }, 200)
+    }, 100)
   },
   data() {
     return {

@@ -21,30 +21,24 @@ export default {
   name: "FilesListComponent",
   components: {FileItemComponent},
   props: {
-    userId: {
-      type: Number,
+    files: {
+      type: Array,
       required: true,
+      default: () => []
     },
   },
   mounted() {
-    this.getUserFiles()
   },
   methods: {
-    getUserFiles() {
-      this.$store.dispatch('files/getList', this.userId)
-    },
     remove(id) {
       this.$store.dispatch('files/removeFile', id)
+      this.$emit('refresh')
     },
     onChange(data) {
       this.$store.dispatch('files/updateFile', data)
+      this.$emit('refresh')
     }
   },
-  computed: {
-    files() {
-      return this.$store.getters['files/getList']
-    }
-  }
 }
 </script>
 

@@ -36,7 +36,7 @@
                 sm="6"
                 md="4"
               >
-                <div class="create-update-model-input-box full-height">
+                <div class="create-update-model-input-box full-height" style="max-height: 175px">
                   <div class="file-input full-height">
                     <input
                       type="file"

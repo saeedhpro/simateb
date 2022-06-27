@@ -16,7 +16,10 @@
             :src="path"
           />
         </v-dialog>
-        <img class="file-image" :src="path" @click="toggleShow">
+        <a v-if="ext === 'pdf'" class="file-image" :href="path" target="_blank">
+          <img src="/images/form/pdf.svg" alt="" style="max-height: 160px">
+        </a>
+        <img v-else class="file-image" :src="path" @click="toggleShow" alt="">
       </v-col>
       <v-col
         cols="12"
@@ -26,15 +29,15 @@
 
         <div class="input-box">
           <label
-            for="comment"
+            for="info"
           >
             توضیح پزشک
           </label>
           <textarea
-            id="comment"
-            class="comment-input"
+            id="info"
+            class="info-input"
             @input="changeInput"
-            name="comment"
+            name="info"
             :value="c"
           >
 
@@ -48,15 +51,15 @@
       >
         <div class="input-box">
           <label
-            for="info"
+            for="comment"
           >
             نظر بیمار
           </label>
           <textarea
-            id="info"
-            class="info-input"
+            id="comment"
+            class="comment-input"
             @input="changeInput"
-            name="info"
+            name="comment"
             :value="i"
           >
 

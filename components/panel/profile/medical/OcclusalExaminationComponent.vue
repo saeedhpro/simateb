@@ -344,7 +344,7 @@ export default {
           diagnosis: histories.diagnosis,
         }
       }
-    }, 200)
+    }, 100)
   },
   data() {
     return {

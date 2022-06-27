@@ -92,6 +92,7 @@ export default {
     setImage(e) {
       // const file = e;
       const file = e.target.files[0];
+      if (!file) return;
       // this.file = file
       this.filename = file.name;
 

@@ -70,9 +70,9 @@ export const actions = {
         return Promise.reject(err)
       })
   },
-  getAppointmentResults(ctx, id) {
+  getAppointmentResults(ctx, data) {
     ctx.commit('setResults', [])
-    return this.$axios.get(`/appointments/${id}/results`)
+    return this.$axios.get(`/appointments/${data.id}/results?type=${data.type}`)
       .then(res => {
         const data = res.data;
         ctx.commit('setResults', data)

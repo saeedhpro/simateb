@@ -508,12 +508,12 @@ export default {
             this.toggleCreateModal()
             this.closeForm()
             this.getMessageList()
-          }, 350)
+          }, 50)
         })
         .finally(() => {
           setTimeout(() => {
             this.toggleOverlay()
-          }, 350)
+          }, 50)
         })
     },
     deleteMessages(ids) {
@@ -526,12 +526,12 @@ export default {
             this.getMessageList()
             this.action = null
             this.selectedMessages = []
-          }, 350)
+          }, 50)
         })
         .finally(() => {
           setTimeout(() => {
             this.toggleOverlay()
-          }, 350)
+          }, 50)
         })
     },
     getUsers() {
