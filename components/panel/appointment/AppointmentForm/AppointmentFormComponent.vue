@@ -6,8 +6,7 @@
       max-width="1056px"
     >
       <v-card
-        class="create-update-modal"
-        :class="{'paziresh-form' : hasItem}"
+        class="create-update-modal paziresh-form"
         v-if="loaded"
       >
         <v-card-title
@@ -25,7 +24,6 @@
           <v-spacer/>
         </v-card-title>
         <v-card-text
-          v-if="hasItem"
           class="paziresh-form-box">
           <v-container>
             <v-row>
@@ -262,7 +260,6 @@
               </v-row>
             </div>
             <v-divider
-              v-if="hasItem"
               class="my-5"
             />
             <v-row
@@ -318,127 +315,6 @@
                     <img @click="openShowResult(r)" class="result-img" :src="r" alt=""/>
                   </v-col>
                 </v-row>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card-text>
-        <v-card-text
-          v-else
-        >
-          <v-container>
-            <v-row>
-              <v-col
-                cols="12"
-                sm="4"
-                md="4"
-              >
-                <date-picker
-                  v-model="appointment.start_at"
-                  custom-input="#start-at"
-                  format="YYYY-MM-DD HH:mm:ss"
-                  display-format="HH:mm:ss jYYYY/jMM/jDD"
-                  type="datetime"
-                />
-                <div class="create-update-model-input-box">
-                  <label>تاریخ و ساعت پذیرش</label>
-                  <div class="date-picker">
-                    <img src="/images/form/datepicker.svg">
-                    <input id="start-at" class="date-picker">
-                  </div>
-                </div>
-              </v-col>
-              <v-col
-                cols="12"
-                sm="4"
-                md="4"
-              >
-                <div class="create-update-model-input-box">
-                  <label>نام بیمار</label>
-                  <multiselect searchable clearOnSelect allowEmpty v-model="user" placeholder="" label="fname"
-                               track-by="fname" :options="users"
-                               :option-height="104" :custom-label="customLabel" :show-labels="false">
-                    <template slot="singleLabel" slot-scope="props"><img class="option__image"
-                                                                         :src="props.option.logo" alt=""><span
-                      class="option__desc"><span
-                      class="option__title">{{ `${props.option.fname} ${props.option.lname}` }}</span></span>
-                    </template>
-                    <template slot="option" slot-scope="props"><img class="option__image"
-                                                                    :src="props.option.logo" alt="">
-                      <div class="option__desc"><span class="option__title">{{ props.option.fname }}</span><span
-                        class="option__small">{{ ` ${props.option.lname}` }}</span></div>
-                    </template>
-                  </multiselect>
-                </div>
-              </v-col>
-              <v-col
-                cols="12"
-                sm="4"
-                md="4"
-              >
-                <div class="create-update-model-input-box">
-                  <label>شماره موبایل</label>
-                  <input disabled type="tel" v-model="appointment.tel">
-                </div>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col
-                cols="12"
-                sm="4"
-                md="4"
-              >
-                <div class="create-update-model-input-box">
-                  <label>کد ملی</label>
-                  <input disabled type="text" v-model="appointment.cardno">
-                </div>
-              </v-col>
-              <v-col
-                cols="12"
-                sm="4"
-                md="4"
-              >
-                <div class="create-update-model-input-box">
-                  <label>شماره پرونده</label>
-                  <input disabled type="text" v-model="appointment.file_id">
-                </div>
-              </v-col>
-              <v-col
-                cols="12"
-                sm="4"
-                md="4"
-              >
-                <div class="create-update-model-input-box">
-                  <label>هزینه ویزیت</label>
-                  <input v-money="money" type="text" v-model.lazy="appointment.income">
-                </div>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col
-                cols="12"
-                sm="3"
-                md="2"
-                v-for="(c,n) in cases"
-                :key="n"
-              >
-                <case-type-checkbox-component
-                  :id="c.id"
-                  :name="c.name"
-                  :items="cases"
-                  :is-checked="appointment.case_type === c.name"
-                  @change="onChecked"
-                />
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col>
-                <div class="create-update-model-input-box">
-                  <label>شرح حال و توضیحات پذیرش</label>
-                  <textarea
-                    v-model="appointment.info"
-                    rows="6"
-                  ></textarea>
-                </div>
               </v-col>
             </v-row>
           </v-container>
@@ -506,14 +382,7 @@
                 <v-row>
                   <v-col>
                     <button
-                      v-if="appointment.status === 0"
-                      class="main-button"
-                      @click="doAction('create')"
-                    >
-                      ذخیره
-                    </button>
-                    <button
-                      v-else-if="appointment.status === 1"
+                      v-if="appointment.status === 1"
                       class="main-button form-button"
                       @click="doAction('accept')"
                     >
@@ -718,11 +587,6 @@ export default {
       type: Object,
       default: null
     },
-    hasItem: {
-      type: Boolean,
-      default: false,
-      required: true,
-    }
   },
   data() {
     return {
@@ -941,22 +805,8 @@ export default {
     },
     resetForm() {
       this.newFiles = []
-      if (!this.item) {
-        this.appointment = {
-          start_at: this.$moment().format("YYYY/MM/DD HH:mm:ss"),
-          tel: '',
-          cardno: '',
-          income: 0,
-          user_id: null,
-          case_type: '',
-          info: '',
-          status: 0,
-          user: null,
-        }
-      } else {
-        this.setAppointment()
-        this.getResults()
-      }
+      this.setAppointment()
+      this.getResults()
       this.loaded = true
     },
     setAppointment() {
@@ -1023,12 +873,9 @@ export default {
     loading() {
       this.$emit('loading')
     },
-    doAction(action = 'create') {
+    doAction(action = 'accept') {
       this.loading()
       switch (action) {
-        case 'create':
-          this.createAppointment()
-          break;
         case 'accept':
           this.doAccept()
           break;
@@ -1042,23 +889,6 @@ export default {
           this.doReserve()
           break;
       }
-    },
-    createAppointment() {
-      if (!this.appointment.user_id) {
-        this.loading()
-        return
-      }
-      this.$store.dispatch('appointments/createAppointment', {
-        ...this.appointment,
-        user_id: this.user.id,
-        income: parseFloat(this.appointment.income.split(' ')[0].split(',').join('')),
-      })
-        .then(() => {
-        })
-        .finally(() => {
-          this.closeForm()
-          this.loading()
-        })
     },
     doUpdate() {
       if (!this.appointment.user_id) {
@@ -1217,13 +1047,13 @@ export default {
       if (this.appointment.photography_cases === "") {
         return []
       }
-      return  this.appointment.photography_cases.split(',')
+      return this.appointment.photography_cases.split(',')
     },
     radiologyCases() {
       if (this.appointment.radiology_cases === "") {
         return []
       }
-      return  this.appointment.radiology_cases.split(',')
+      return this.appointment.radiology_cases.split(',')
     },
     show() {
       return this.open;

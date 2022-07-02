@@ -126,18 +126,20 @@
                               sm="4"
                               md="4"
                             >
-                              <date-picker
-                                v-model="search.start"
-                                custom-input="#start-date"
-                                format="YYYY-MM-DD"
-                                displat-format="jYYYY-jMM-jDD"
-                              />
                               <div class="create-update-model-input-box">
                                 <label>تاریخ ابتدا</label>
-                                <div class="date-picker">
-                                  <img src="/images/form/datepicker.svg">
-                                  <input id="start-date" class="date-picker">
-                                </div>
+                                <date-picker
+                                  v-model="search.start"
+                                  format="YYYY-MM-DD"
+                                  displat-format="jYYYY-jMM-jDD"
+                                  editable
+                                  class="date-picker"
+                                  type="date"
+                                >
+                                  <template v-slot:label>
+                                    <img src="/images/form/datepicker.svg">
+                                  </template>
+                                </date-picker>
                               </div>
                             </v-col>
                             <v-col
@@ -145,18 +147,20 @@
                               sm="4"
                               md="4"
                             >
-                              <date-picker
-                                v-model="search.end"
-                                custom-input="#end-date"
-                                format="YYYY-MM-DD"
-                                displat-format="jYYYY-jMM-jDD"
-                              />
                               <div class="create-update-model-input-box">
                                 <label>تاریخ انتها</label>
-                                <div class="date-picker">
-                                  <img src="/images/form/datepicker.svg">
-                                  <input id="end-date" class="date-picker">
-                                </div>
+                                <date-picker
+                                  v-model="search.end"
+                                  format="YYYY-MM-DD"
+                                  displat-format="jYYYY-jMM-jDD"
+                                  editable
+                                  class="date-picker"
+                                  type="date"
+                                >
+                                  <template v-slot:label>
+                                    <img src="/images/form/datepicker.svg">
+                                  </template>
+                                </date-picker>
                               </div>
                             </v-col>
                           </v-row>

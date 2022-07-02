@@ -157,18 +157,20 @@
                               sm="4"
                               md="4"
                             >
-                              <date-picker
-                                v-model="search.start"
-                                custom-input="#start-date"
-                                format="YYYY-MM-DD"
-                                displat-format="jYYYY-jMM-jDD"
-                              />
                               <div class="create-update-model-input-box">
                                 <label>تاریخ ابتدا</label>
-                                <div class="date-picker">
-                                  <img src="/images/form/datepicker.svg">
-                                  <input id="start-date" class="date-picker">
-                                </div>
+                                <date-picker
+                                  v-model="search.start"
+                                  format="YYYY-MM-DD"
+                                  displat-format="jYYYY-jMM-jDD"
+                                  editable
+                                  class="date-picker"
+                                  type="date"
+                                >
+                                  <template v-slot:label>
+                                    <img src="/images/form/datepicker.svg">
+                                  </template>
+                                </date-picker>
                               </div>
                             </v-col>
                             <v-col
@@ -176,18 +178,20 @@
                               sm="4"
                               md="4"
                             >
-                              <date-picker
-                                v-model="search.end"
-                                custom-input="#end-date"
-                                format="YYYY-MM-DD"
-                                displat-format="jYYYY-jMM-jDD"
-                              />
                               <div class="create-update-model-input-box">
                                 <label>تاریخ انتها</label>
-                                <div class="date-picker">
-                                  <img src="/images/form/datepicker.svg">
-                                  <input id="end-date" class="date-picker">
-                                </div>
+                                <date-picker
+                                  v-model="search.end"
+                                  format="YYYY-MM-DD"
+                                  displat-format="jYYYY-jMM-jDD"
+                                  editable
+                                  class="date-picker"
+                                  type="date"
+                                >
+                                  <template v-slot:label>
+                                    <img src="/images/form/datepicker.svg">
+                                  </template>
+                                </date-picker>
                               </div>
                             </v-col>
                           </v-row>
@@ -261,7 +265,7 @@
                         <img
                           :src="i.user && i.user.logo ? i.user.logo : 'https://randomuser.me/api/portraits/men/88.jpg'">
                         <span>
-                          <a class="select-item-search" @click="openPazireshModal(i)">{{
+                          <a class="select-item-search" @click="openAppointmentModal(i)">{{
                               i.user ? `${i.user.fname} ${i.user.lname}` : '-' | persianDigit
                             }}</a>
                         </span>
@@ -352,12 +356,16 @@
         </v-card>
       </v-col>
     </v-row>
-    <appointment-form-component
+    <create-appointment-form-component
       :open="showPazireshModal"
-      :item="item"
       @close="closePazireshModal"
       @loading="toggleOverlay"
-      :has-item="hasItem"
+    />
+    <appointment-form-component
+      :open="showAppointmentModal"
+      :item="item"
+      @close="closeAppointmentModal"
+      @loading="toggleOverlay"
     />
     <v-overlay :value="overlay">
       <v-progress-circular
@@ -373,14 +381,17 @@ import moment from "jalali-moment";
 import DataTableComponent from "~/components/panel/global/DataTableComponent";
 import CaseTypeCheckboxComponent from "~/components/panel/appointment/CaseTypeCheckboxComponent";
 import AppointmentFormComponent from "~/components/panel/appointment/AppointmentForm/AppointmentFormComponent";
+import CreateAppointmentFormComponent
+  from "~/components/panel/appointment/AppointmentForm/CreateAppointmentFormComponent";
 
 export default {
   name: "index",
-  components: {AppointmentFormComponent, CaseTypeCheckboxComponent, DataTableComponent},
+  components: {CreateAppointmentFormComponent, AppointmentFormComponent, CaseTypeCheckboxComponent, DataTableComponent},
   layout: 'panel',
   data() {
     return {
       showPazireshModal: false,
+      showAppointmentModal: false,
       overlay: false,
       showFilterModal: false,
       openShowPazireshModal: false,
@@ -499,9 +510,12 @@ export default {
     getCaseTypes() {
       this.$store.dispatch('cases/getCaseTypes')
     },
-    openPazireshModal(item) {
-      this.item = item
+    openPazireshModal() {
       this.togglePazireshModal()
+    },
+    openAppointmentModal(item) {
+      this.item = item
+      this.toggleAppointmentModal()
     },
     createAppointment() {
       this.toggleOverlay()
@@ -571,15 +585,17 @@ export default {
     },
     closePazireshModal() {
       this.togglePazireshModal()
-      setTimeout(() => {
-        if (this.item) {
-          this.item = null
-        }
-      }, 100)
+      this.getAppointmentList()
+    },
+    closeAppointmentModal() {
+      this.toggleAppointmentModal()
       this.getAppointmentList()
     },
     togglePazireshModal() {
       this.showPazireshModal = !this.showPazireshModal
+    },
+    toggleAppointmentModal() {
+      this.showAppointmentModal = !this.showAppointmentModal
     },
     openAddResultModal() {
 

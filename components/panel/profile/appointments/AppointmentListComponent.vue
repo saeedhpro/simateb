@@ -22,7 +22,6 @@
       :item="item"
       @close="closeUpdateModal"
       @loading="toggleOverlay"
-      :has-item="true"
     />
   </div>
 </template>

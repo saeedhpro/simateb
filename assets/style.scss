@@ -1414,20 +1414,53 @@ table {
     outline: none !important;
   }
 
-  .date-picker {
-    position: relative;
-    width: 100%;
+}
 
-    img {
+.date-picker {
+  position: relative;
+  width: 100%;
+
+  //img {
+  //  position: absolute;
+  //  top: 0;
+  //  left: 0;
+  //  z-index: 9;
+  //  background: #FFFFFF 0 0 no-repeat padding-box;
+  //  border: 1px solid #DBDBDB;
+  //  border-radius: 8px;
+  //  padding: 8px;
+  //}
+  .vpd-input-group {
+    position: relative !important;
+    label {
+      background: #FFFFFF 0 0 no-repeat padding-box !important;
+      border: 1px solid #DBDBDB;
+      border-radius: 8px;
+      padding: 8px;
       position: absolute;
       top: 0;
       left: 0;
       z-index: 9;
+    }
+    input {
+      height: 42px;
       background: #FFFFFF 0 0 no-repeat padding-box;
       border: 1px solid #DBDBDB;
       border-radius: 8px;
-      padding: 8px;
+      padding: 5px 10px;
+      width: 100%;
+      outline: none !important;
     }
+  }
+  .v-input-date-picker {
+    background: #FFFFFF 0 0 no-repeat padding-box;
+    border: 1px solid #DBDBDB;
+    border-radius: 8px;
+    padding: 8px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 9;
   }
 }
 

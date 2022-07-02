@@ -189,18 +189,19 @@
                 sm="4"
                 md="4"
               >
-                <date-picker
-                  v-model="form.birth_date"
-                  custom-input="#birth-date"
-                  format="YYYY-MM-DD"
-                  display-format="jYYYY/jMM/jDD"
-                />
                 <div class="create-update-model-input-box">
                   <label>تاریخ تولد</label>
-                  <div class="date-picker">
-                    <img src="/images/form/datepicker.svg">
-                    <input id="birth-date" class="date-picker">
-                  </div>
+                  <date-picker
+                    v-model="form.birth_date"
+                    format="YYYY-MM-DD"
+                    display-format="jYYYY/jMM/jDD"
+                    editable
+                    class="date-picker"
+                  >
+                    <template v-slot:label>
+                      <img src="/images/form/datepicker.svg">
+                    </template>
+                  </date-picker>
                 </div>
               </v-col>
               <v-col
@@ -290,7 +291,7 @@
                     v-model="form.address"
                     rows="3"
                   ></textarea>
-<!--                  <span class="create-update-modal-error red&#45;&#45;text">این یک ارور است</span>-->
+                  <!--                  <span class="create-update-modal-error red&#45;&#45;text">این یک ارور است</span>-->
                 </div>
               </v-col>
               <v-col
@@ -317,16 +318,16 @@
                 </div>
               </v-col>
               <v-col
-              cols="12"
-              sm="4"
-              md="4"
-              v-if="isAdmin"
-            >
-              <div class="create-update-model-input-box">
-                <label>رمز عبور</label>
-                <input type="password" v-model="form.pass">
-              </div>
-            </v-col>
+                cols="12"
+                sm="4"
+                md="4"
+                v-if="isAdmin"
+              >
+                <div class="create-update-model-input-box">
+                  <label>رمز عبور</label>
+                  <input type="password" v-model="form.pass">
+                </div>
+              </v-col>
             </v-row>
           </v-container>
         </v-card-text>
@@ -495,6 +496,23 @@ export default {
     getUserGroups() {
       this.$store.dispatch('admin/userGroups/getUserGroups')
     },
+    checkNationalCode(code) {
+      const L = code.length;
+      if (L < 8 || parseInt(code, 10) === 0) {
+        return false
+      }
+      code = ('0000' + code).substr(L + 4 - 10);
+      if (parseInt(code.substr(3, 6), 10) === 0) {
+        return false
+      }
+      const c = parseInt(code.substr(9, 1), 10);
+      let s = 0;
+      for (let i = 0; i < 9; i++) {
+        s += parseInt(code.substr(i, 1), 10) * (10 - i);
+      }
+      s = s % 11;
+      return (s < 2 && c === s) || (s >= 2 && c === (11 - s));
+    }
   },
   computed: {
     show() {

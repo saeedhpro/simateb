@@ -214,12 +214,16 @@
         </v-card>
       </v-col>
     </v-row>
-    <appointment-form-component
+    <create-appointment-form-component
       :open="showPazireshModal"
-      :item="item"
       @close="closePazireshModal"
       @loading="toggleOverlay"
-      :has-item="hasItem"
+    />
+    <appointment-form-component
+      :open="showAppointmentModal"
+      :item="item"
+      @close="closeAppointmentModal"
+      @loading="toggleOverlay"
     />
     <v-overlay :value="overlay">
       <v-progress-circular
@@ -237,10 +241,13 @@ import TableAppointmentNoneComponent from "~/components/panel/appointment/TableA
 import DataTableComponent from "~/components/panel/global/DataTableComponent";
 import CaseTypeCheckboxComponent from "~/components/panel/appointment/CaseTypeCheckboxComponent";
 import AppointmentFormComponent from "~/components/panel/appointment/AppointmentForm/AppointmentFormComponent";
+import CreateAppointmentFormComponent
+  from "~/components/panel/appointment/AppointmentForm/CreateAppointmentFormComponent";
 
 export default {
   name: "index",
   components: {
+    CreateAppointmentFormComponent,
     TableAppointmentNoneComponent,
     TableAppointmentComponent,
     CaseTypeCheckboxComponent,
@@ -252,6 +259,7 @@ export default {
   data() {
     return {
       showPazireshModal: false,
+      showAppointmentModal: false,
       showCreateModal: false,
       showHour: false,
       showCaseType: false,
@@ -422,17 +430,17 @@ export default {
     },
     openItem(item) {
       this.item = item
-      this.hasItem = true
-      this.togglePazireshModal()
+      this.toggleAppointmentModal()
+    },
+    toggleAppointmentModal() {
+      this.showAppointmentModal = !this.showAppointmentModal
     },
     closePazireshModal() {
       this.togglePazireshModal()
-      this.hasItem = false
-      setTimeout(() => {
-        if (this.item) {
-          this.item = null
-        }
-      }, 100)
+      this.getAppointmentList()
+    },
+    closeAppointmentModal() {
+      this.toggleAppointmentModal()
       this.getAppointmentList()
     },
     toggleOverlay() {

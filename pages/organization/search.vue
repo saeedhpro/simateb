@@ -140,18 +140,20 @@
                               sm="4"
                               md="4"
                             >
-                              <date-picker
-                                v-model="search.start"
-                                custom-input="#start-date"
-                                format="YYYY-MM-DD"
-                                displat-format="jYYYY-jMM-jDD"
-                              />
                               <div class="create-update-model-input-box">
                                 <label>تاریخ ابتدا</label>
-                                <div class="date-picker">
-                                  <img src="/images/form/datepicker.svg">
-                                  <input id="start-date" class="date-picker">
-                                </div>
+                                <date-picker
+                                  v-model="search.start"
+                                  format="YYYY-MM-DD"
+                                  displat-format="jYYYY-jMM-jDD"
+                                  editable
+                                  class="date-picker"
+                                  type="date"
+                                >
+                                  <template v-slot:label>
+                                    <img src="/images/form/datepicker.svg">
+                                  </template>
+                                </date-picker>
                               </div>
                             </v-col>
                             <v-col
@@ -159,18 +161,20 @@
                               sm="4"
                               md="4"
                             >
-                              <date-picker
-                                v-model="search.end"
-                                custom-input="#end-date"
-                                format="YYYY-MM-DD"
-                                displat-format="jYYYY-jMM-jDD"
-                              />
                               <div class="create-update-model-input-box">
                                 <label>تاریخ انتها</label>
-                                <div class="date-picker">
-                                  <img src="/images/form/datepicker.svg">
-                                  <input id="end-date" class="date-picker">
-                                </div>
+                                <date-picker
+                                  v-model="search.end"
+                                  format="YYYY-MM-DD"
+                                  displat-format="jYYYY-jMM-jDD"
+                                  editable
+                                  class="date-picker"
+                                  type="date"
+                                >
+                                  <template v-slot:label>
+                                    <img src="/images/form/datepicker.svg">
+                                  </template>
+                                </date-picker>
                               </div>
                             </v-col>
                           </v-row>
@@ -336,6 +340,11 @@
         </v-card>
       </v-col>
     </v-row>
+    <create-appointment-form-component
+      :open="showPazireshModal"
+      @close="closePazireshModal"
+      @loading="toggleOverlay"
+    />
     <appointment-form-component
       :open="showPazireshModal"
       :item="item"
@@ -357,10 +366,12 @@ import moment from "jalali-moment";
 import DataTableComponent from "~/components/panel/global/DataTableComponent";
 import CaseTypeCheckboxComponent from "~/components/panel/appointment/CaseTypeCheckboxComponent";
 import AppointmentFormComponent from "~/components/panel/appointment/AppointmentForm/AppointmentFormComponent";
+import CreateAppointmentFormComponent
+  from "~/components/panel/appointment/AppointmentForm/CreateAppointmentFormComponent";
 
 export default {
   name: "search",
-  components: {AppointmentFormComponent, CaseTypeCheckboxComponent, DataTableComponent},
+  components: {CreateAppointmentFormComponent, AppointmentFormComponent, CaseTypeCheckboxComponent, DataTableComponent},
   layout: 'panel',
   data() {
     return {
