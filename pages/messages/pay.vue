@@ -6,6 +6,7 @@
 export default {
   name: "pay",
   layout: "panel",
+  middleware: "auth",
 
 }
 </script>

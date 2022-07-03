@@ -32,7 +32,7 @@
             <v-col
               cols="12"
               sm="12"
-              md="6"
+              md="4"
             >
               <div class="right-box">
                 <v-checkbox
@@ -57,10 +57,11 @@
                 </button>
               </div>
             </v-col>
+            <v-spacer />
             <v-col
               cols="12"
               sm="12"
-              md="6"
+              md="5"
             >
               <div class="page-main-actions-left">
                 <div class="result-count">

@@ -155,7 +155,7 @@
             <v-col
               cols="12"
               sm="12"
-              md="6"
+              md="4"
             >
               <div class="right-box">
                 <v-checkbox
@@ -180,10 +180,11 @@
                 </button>
               </div>
             </v-col>
+            <v-spacer />
             <v-col
               cols="12"
               sm="12"
-              md="6"
+              md="5"
             >
               <div class="page-main-actions-left">
                 <div class="result-count">
@@ -405,7 +406,7 @@ export default {
   name: "index",
   components: {DataTableComponent},
   layout: "panel",
-  middleware: "admin",
+  middleware: "auth",
   data() {
     return {
       overlay: false,
@@ -505,13 +506,13 @@ export default {
         numbers: [],
         msg: '',
       }
+      this.selectedUsers = []
     },
     createMessage() {
       this.toggleOverlay()
       this.$store.dispatch('messages/createMessage', this.form)
         .then(() => {
           setTimeout(() => {
-            this.toggleCreateModal()
             this.closeForm()
             this.getMessageList()
           }, 50)
@@ -567,6 +568,11 @@ export default {
         }
       }
     },
+  },
+  watch: {
+    selectedUsers(items) {
+      this.form.numbers = items.map(i => i.tel)
+    }
   }
 }
 </script>
