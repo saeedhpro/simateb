@@ -57,7 +57,7 @@
                 </button>
               </div>
             </v-col>
-            <v-spacer />
+            <v-spacer/>
             <v-col
               cols="12"
               sm="12"
@@ -233,7 +233,7 @@
                         <input type="checkbox"
                                class="table-selectable-checkbox"
                                v-model="selectedUsers"
-                               :value="i.id"
+                               :value="i"
                                :ripple="false"
                         />
                         <img :src="i.logo ? i.logo : 'https://randomuser.me/api/portraits/men/88.jpg'">
@@ -243,7 +243,7 @@
                       </div>
                     </td>
                     <td class="text-center">{{ i.tel ? i.tel : '-' | persianDigit }}</td>
-                    <td class="text-center">{{ i.file_id ? i.file_id : '-' | persianDigit }}</td>
+                    <td class="text-center"><span class="text-center file-id">{{ i.file_id ? i.file_id : '-' | persianDigit }}</span></td>
                     <td class="text-center">{{ i.birth ? i.birth : '-' | persianDigit }}</td>
                     <td class="text-center">
                       {{ i.created ? $moment(i.created.Time).format('jYYYY/jM/jDD') : '-' | persianDigit }}
@@ -266,6 +266,158 @@
       :open="showCreateModal"
       @close="closeForm"
     />
+    <v-dialog
+      v-model="showDelete"
+      max-width="680"
+    >
+      <v-card
+        class="accept-file-remove-model"
+      >
+        <button
+          class="close"
+          @click="toggleShowDelete"
+        >
+          <v-icon>mdi-close</v-icon>
+        </button>
+        <v-card-title class="accept-file-remove-title">
+          <span>حذف کاربر</span>
+        </v-card-title>
+
+        <v-card-text
+          class="accept-file-remove-text"
+        >
+          آیا از حذف کردن کاربران اطمینان دارید؟<br/>
+          لطفا دقت کنید که پس از حذف، اطلاعات کاربران قابل بازگشت نیست
+        </v-card-text>
+
+        <v-card-actions>
+          <button
+            class="action-button accept-button"
+            @click="toggleShowDelete"
+          >
+            خیر
+          </button>
+          <v-spacer></v-spacer>
+          <button
+            class="action-button red-button"
+            @click="removeUsers"
+          >
+            بله، حذف کن
+          </button>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog
+      v-model="showSendSmsModal"
+      persistent
+      max-width="1056px"
+    >
+      <v-card
+        class="create-update-modal"
+      >
+        <v-card-title
+          class="create-update-modal-title-box"
+        >
+          <div class="create-update-modal-title">
+            <button
+              @click="closeForm"
+              class="create-update-modal-close"
+            >
+              <v-icon>mdi-close</v-icon>
+            </button>
+            <span>فرم ارسال پیامک</span>
+          </div>
+          <v-spacer/>
+          <div class="create-update-modal-regbox">
+            ثبت در سیستم توسط: {{ `${loginUser.staff.lname} ${loginUser.staff.fname}` }}
+            ({{ loginUser.created | toRelativeDate }} {{
+              loginUser.created | toPersianDate('YYYY/MM/DD HH:mm:ss')
+            }})
+          </div>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+            </v-row>
+            <v-row>
+              <v-col
+                cols="12"
+              >
+                <div class="create-update-model-input-box">
+                  <label>کاربران</label>
+                  <multiselect
+                    v-model="selectedUsers"
+                    :disabled="true"
+                    :options="allUsers"
+                    :multiple="true"
+                    :close-on-select="false"
+                    :clear-on-select="false"
+                    :preserve-search="true"
+                    label="fname"
+                    track-by="fname"
+                    searchable
+                    placeholder=""
+                    :show-labels="false">
+                    <template slot="singleLabel" slot-scope="props"><span
+                      class="option__desc"><span
+                      class="option__title">{{ `${props.option.fname} ${props.option.lname}` }}</span></span>
+                    </template>
+                    <template slot="option" slot-scope="props">
+                      <div class="option__desc"><span
+                        class="option__title">{{ `${props.option.fname} ${props.option.lname}` }}</span></div>
+                    </template>
+                  </multiselect>
+                </div>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col
+                cols="12"
+              >
+                <div class="create-update-model-input-box">
+                  <label>متن پیامک</label>
+                  <textarea
+                    v-model="form.msg"
+                    rows="4"
+                  ></textarea>
+                </div>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-container>
+            <v-row>
+              <v-spacer/>
+              <v-col
+                cols="12"
+                sm="3"
+                md="3"
+              >
+                <button
+                  class="second-button"
+                  @click="closeSendSmsFrom"
+                >
+                  بستن
+                </button>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="4"
+                md="4"
+              >
+                <button
+                  class="main-button"
+                  @click="createMessage"
+                >
+                  ذخیره
+                </button>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <v-overlay :value="overlay">
       <v-progress-circular
         indeterminate
@@ -313,6 +465,10 @@ export default {
       },
       actions: [
         {
+          id: 0,
+          label: 'اقدام جمعی'
+        },
+        {
           id: 1,
           label: 'حذف کن'
         },
@@ -321,14 +477,21 @@ export default {
           label: 'ارسال پیامک'
         }
       ],
+      form: {
+        msg: "",
+        numbers: []
+      },
       selectedUsers: [],
       showCreateModal: false,
       showFilterModal: false,
+      showDelete: false,
+      showSendSmsModal: false,
       overlay: false,
     }
   },
   mounted() {
     this.paginate()
+    this.getAllUsers()
   },
   methods: {
     doAction() {
@@ -336,7 +499,10 @@ export default {
       switch (this.action) {
         case 1:
         case '1':
-          this.deleteUsers(this.selectedUsers)
+          this.toggleShowDelete()
+        case 2:
+        case '2':
+          this.toggleShowSendSmsModal()
       }
     },
     paginate(page = 1) {
@@ -352,6 +518,9 @@ export default {
             this.toggleOverlay()
           }, 50)
         })
+    },
+    getAllUsers() {
+      this.$store.dispatch('users/getUsers')
     },
     toggleCreateModal() {
       this.showCreateModal = !this.showCreateModal
@@ -395,11 +564,48 @@ export default {
             this.toggleOverlay()
           }, 50)
         })
-    }
+    },
+    toggleShowDelete() {
+      this.showDelete = !this.showDelete
+    },
+    removeUsers() {
+      this.toggleShowDelete()
+      this.deleteUsers(this.selectedUsers.map(i => i.id))
+    },
+    closeSendSmsFrom() {
+      this.clearSendSmsFrom()
+      this.toggleShowSendSmsModal()
+    },
+    clearSendSmsFrom() {
+      this.form = {
+        msg: "",
+        numbers: []
+      }
+    },
+    toggleShowSendSmsModal() {
+      this.showSendSmsModal = !this.showSendSmsModal
+    },
+    createMessage() {
+      this.toggleOverlay()
+      this.$store.dispatch('messages/createMessage', this.form)
+        .then(() => {
+          setTimeout(() => {
+            this.closeSendSmsFrom()
+          }, 50)
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.toggleOverlay()
+          }, 50)
+        })
+    },
   },
   computed: {
     users() {
       return this.$store.getters['users/getPatients']
+    },
+    allUsers() {
+      return this.$store.getters['users/getUsers']
     },
     loginUser() {
       return this.$store.getters['login/getUser']
@@ -411,13 +617,18 @@ export default {
       set(bool) {
         if (bool) {
           this.selectedUsers = []
-          this.selectedUsers = this.users.data.map(i => i.id)
+          this.selectedUsers = this.users.data
         } else {
           this.selectedUsers = []
         }
       }
     },
   },
+  watch: {
+    selectedUsers() {
+      this.form.numbers = this.selectedUsers.map(i => i.tel)
+    }
+  }
 }
 </script>
 

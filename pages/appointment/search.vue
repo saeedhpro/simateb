@@ -310,6 +310,10 @@ export default {
       selectedItems: [],
       actions: [
         {
+          id: 0,
+          label: 'اقدام جمعی'
+        },
+        {
           id: 1,
           label: 'حذف کن'
         },

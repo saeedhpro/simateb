@@ -342,6 +342,10 @@ export default {
       action: null,
       actions: [
         {
+          id: 0,
+          label: 'اقدام جمعی'
+        },
+        {
           id: 1,
           label: 'روزهای تعطیل'
         },

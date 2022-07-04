@@ -434,6 +434,10 @@ export default {
       selectedMessages: [],
       actions: [
         {
+          id: 0,
+          label: 'اقدام جمعی'
+        },
+        {
           id: 1,
           label: 'حذف کن'
         },
