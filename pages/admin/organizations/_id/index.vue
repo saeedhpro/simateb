@@ -233,7 +233,7 @@ export default {
   data() {
     return {
       showUpdateModal: false,
-      showAddUserModal: true,
+      showAddUserModal: false,
       selectedUsers: [],
       headers: [
         '',
