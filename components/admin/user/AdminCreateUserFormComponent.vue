@@ -536,7 +536,7 @@ export default {
     },
     createUser() {
       if (this.validateFrom()) {
-        this.$store.dispatch('users/createUser', this.form)
+        this.$store.dispatch('admin/users/createUser', this.form)
           .finally(() => {
             this.closeForm()
           })
@@ -557,9 +557,6 @@ export default {
       }
       if (!this.form.user_group_id) {
         this.errors.user_group_id = 'فیلد گروه اجباری است'
-      }
-      if (!this.form.email) {
-        this.errors.email = 'فیلد ایمیل اجباری است'
       }
       if (!this.form.user_group_id) {
         this.errors.user_group_id = 'فیلد گروه اجباری است'

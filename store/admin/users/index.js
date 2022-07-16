@@ -40,11 +40,21 @@ export const actions = {
         return Promise.reject(err)
       })
   },
-  getUsers(ctx, data) {
+  getUsers(ctx,) {
     return this.$axios.get(`/admin/users`)
       .then(res => {
         const data = res.data;
         ctx.commit('setUsers', data)
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+
+  createUser(ctx, data) {
+    return this.$axios.post(`/admin/users`, data)
+      .then(res => {
         return Promise.resolve(res)
       })
       .catch(err => {
