@@ -6,7 +6,7 @@
       <v-col align-self="center">
         <div class="page-header-box">
           <div class="page-header">
-            <img src="/images/pages/users.svg" alt="users">
+            <img src="/images/pages/user.svg" alt="users">
             <span class="title">
             کاربران
           </span>
@@ -37,7 +37,7 @@
             <v-col
               cols="12"
               sm="12"
-              md="4"
+              md="3"
             >
               <div class="right-box">
                 <v-checkbox
@@ -62,7 +62,7 @@
                 </button>
               </div>
             </v-col>
-            <v-spacer />
+            <v-spacer/>
             <v-col
               cols="12"
               sm="12"
@@ -84,138 +84,11 @@
                           d="M17.722,16.559l-4.711-4.711a7.094,7.094,0,0,0,1.582-4.535,7.327,7.327,0,1,0-2.777,5.729l4.711,4.711a.972.972,0,0,0,.629.247.844.844,0,0,0,.6-.247A.822.822,0,0,0,17.722,16.559ZM1.687,7.313a5.625,5.625,0,1,1,5.625,5.625A5.632,5.632,0,0,1,1.687,7.313Z"
                           transform="translate(0)"/>
                   </svg>
-                  <input class="search-input" v-model="search.q" type="text" ref="search-input" placeholder="جستجو">
+                  <input class="search-input" v-model="search.q" type="text" ref="search-input" placeholder="جستجو"
+                         @input="changeSearch">
                   <div @click="getUsersList" class="search-button">
                     <img src="/images/pages/search-button.svg">
                   </div>
-                  <div @click="toggleFilterModal" class="search-filter">
-                    <img src="/images/pages/filter.svg">
-                    فیلتر
-                  </div>
-                  <v-dialog
-                    v-model="showFilterModal"
-                    persistent
-                    max-width="1056px"
-                  >
-                    <v-card
-                      class="create-update-modal"
-                    >
-                      <v-card-title
-                        class="create-update-modal-title-box"
-                      >
-                        <div class="create-update-modal-title">
-                          <button
-                            @click="closeFilterModal"
-                            class="create-update-modal-close"
-                          >
-                            <v-icon>mdi-close</v-icon>
-                          </button>
-                          <span>جستجو پیشرفته</span>
-                        </div>
-                        <v-spacer/>
-                      </v-card-title>
-                      <v-card-text>
-                        <v-container>
-                          <v-row>
-                            <v-col
-                              cols="12"
-                              sm="4"
-                              md="4"
-                            >
-                              <div class="create-update-model-input-box">
-                                <label>عبارت جستجو</label>
-                                <input type="text" v-model="search.q">
-                              </div>
-                            </v-col>
-                            <v-col
-                              cols="12"
-                              sm="4"
-                              md="4"
-                            >
-                              <div class="create-update-model-input-box">
-                                <label>تاریخ ابتدا</label>
-                                <date-picker
-                                  v-model="search.start"
-                                  format="YYYY-MM-DD"
-                                  displat-format="jYYYY-jMM-jDD"
-                                  editable
-                                  class="date-picker"
-                                  type="date"
-                                >
-                                  <template v-slot:label>
-                                    <img src="/images/form/datepicker.svg">
-                                  </template>
-                                </date-picker>
-                              </div>
-                            </v-col>
-                            <v-col
-                              cols="12"
-                              sm="4"
-                              md="4"
-                            >
-                              <div class="create-update-model-input-box">
-                                <label>تاریخ انتها</label>
-                                <date-picker
-                                  v-model="search.end"
-                                  format="YYYY-MM-DD"
-                                  displat-format="jYYYY-jMM-jDD"
-                                  editable
-                                  class="date-picker"
-                                  type="date"
-                                >
-                                  <template v-slot:label>
-                                    <img src="/images/form/datepicker.svg">
-                                  </template>
-                                </date-picker>
-                              </div>
-                            </v-col>
-                          </v-row>
-                        </v-container>
-                      </v-card-text>
-                      <v-card-actions>
-                        <v-container>
-                          <v-row>
-                            <v-col
-                              cols="12"
-                              sm="3"
-                              md="3"
-                            >
-                              <button
-                                class="second-button"
-                                @click="clearFilterForm"
-                              >پاک کردن فرم
-                              </button>
-                            </v-col>
-                            <v-spacer/>
-                            <v-col
-                              cols="12"
-                              sm="3"
-                              md="3"
-                            >
-                              <button
-                                class="second-button"
-                                @click="closeFilterModal"
-                              >
-                                بستن
-                              </button>
-                            </v-col>
-                            <v-col
-                              cols="12"
-                              sm="4"
-                              md="4"
-                            >
-                              <button
-                                class="main-button"
-                                @click="getUsersList"
-                              >
-                                جستجو
-                              </button>
-                            </v-col>
-                          </v-row>
-                        </v-container>
-                      </v-card-actions>
-                    </v-card>
-                  </v-dialog>
                 </div>
               </div>
             </v-col>
@@ -248,10 +121,15 @@
                       </div>
                     </td>
                     <td class="text-center">{{ i.tel ? i.tel : '-' | persianDigit }}</td>
-                    <td class="text-center">{{ i.file_id ? i.file_id : '-' | persianDigit }}</td>
                     <td class="text-center">{{ i.user_group ? i.user_group.name : '-' | persianDigit }}</td>
                     <td class="text-center">{{ i.birth ? i.birth : '-' | persianDigit }}</td>
-                    <td class="text-center">{{ i.organization ? i.organization.name : '-' | persianDigit }}</td>
+                    <td class="text-center" style="color: #000000">
+                      <span v-if="i.organization">
+                        <nuxt-link :to="`/admin/organizations/${i.organization.id}`">{{
+                            i.organization.name | persianDigit
+                          }}</nuxt-link>
+                      </span>
+                      <span v-else>-</span>
                     <td class="text-center">
                       {{ i.created ? $moment(i.created).format('jYYYY/jM/jDD') : '-' | persianDigit }}
                     </td>
@@ -303,8 +181,7 @@ export default {
       headers: [
         '',
         'کاربر',
-        'موبایل',
-        'پرونده',
+        'شماره تماس',
         'گروه',
         'سن',
         'موسسه',
@@ -332,7 +209,6 @@ export default {
       ],
       selectedUsers: [],
       showCreateModal: false,
-      showFilterModal: false,
       overlay: false,
     }
   },
@@ -352,40 +228,22 @@ export default {
       this.search.page = page
       this.getUsersList()
     },
+    changeSearch(e) {
+      this.getUsersList()
+    },
     getUsersList() {
-      this.toggleOverlay()
       this.showFilterModal = false
       this.$store.dispatch('admin/users/getList', this.search)
-        .finally(() => {
-          setTimeout(() => {
-            this.toggleOverlay()
-          }, 50)
-        })
     },
     toggleCreateModal() {
       this.showCreateModal = !this.showCreateModal
     },
-    toggleFilterModal() {
-      this.showFilterModal = !this.showFilterModal
-    },
     toggleOverlay() {
       this.overlay = !this.overlay
-    },
-    closeFilterModal() {
-      this.clearFilterForm()
-      this.toggleFilterModal()
     },
     closeForm() {
       this.toggleCreateModal()
       this.paginate(1)
-    },
-    clearFilterForm() {
-      this.search = {
-        page: this.search.page,
-        start: '',
-        end: '',
-        q: '',
-      }
     },
     deleteUsers(ids) {
       this.toggleOverlay()

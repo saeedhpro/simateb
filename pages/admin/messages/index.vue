@@ -6,16 +6,16 @@
       <v-col align-self="center">
         <div class="page-header-box">
           <div class="page-header">
-            <img src="/images/pages/users.svg" alt="organizations">
+            <img src="/images/pages/sms.svg" alt="">
             <span class="title">
-            پیام ها
+            پیامک ها
           </span>
           </div>
           <v-divider inset/>
           <v-dialog
             v-model="showCreateModal"
             persistent
-            max-width="1056px"
+            max-width="768px"
           >
             <v-card
               class="create-update-modal"
@@ -30,15 +30,9 @@
                   >
                     <v-icon>mdi-close</v-icon>
                   </button>
-                  <span>فرم ارسال پیامک</span>
+                  <span>پیامک جدید</span>
                 </div>
                 <v-spacer/>
-                <div class="create-update-modal-regbox">
-                  ثبت در سیستم توسط: {{ `${loginUser.staff.lname} ${loginUser.staff.fname}` }}
-                  ({{ loginUser.created | toRelativeDate }} {{
-                    loginUser.created | toPersianDate('YYYY/MM/DD HH:mm:ss')
-                  }})
-                </div>
               </v-card-title>
               <v-card-text>
                 <v-container>
@@ -49,11 +43,11 @@
                       cols="12"
                     >
                       <div class="create-update-model-input-box">
-                        <label>کاربران</label>
+                        <label>کاربر / موسسه</label>
                         <multiselect
                           v-model="selectedUsers"
                           :options="users"
-                          :multiple="true"
+                          :multiple="false"
                           :close-on-select="false"
                           :clear-on-select="false"
                           :preserve-search="true"
@@ -93,18 +87,6 @@
               <v-card-actions>
                 <v-container>
                   <v-row>
-                    <v-col
-                      cols="12"
-                      sm="3"
-                      md="3"
-                    >
-                      <button
-                        class="second-button"
-                        @click="clearForm"
-                      >
-                        پاک کردن فرم
-                      </button>
-                    </v-col>
                     <v-spacer/>
                     <v-col
                       cols="12"
@@ -127,7 +109,7 @@
                         class="main-button"
                         @click="createMessage"
                       >
-                        ذخیره
+                        ارسال یامک
                       </button>
                     </v-col>
                   </v-row>
@@ -138,7 +120,7 @@
           <div class="page-actions"
                @click="toggleCreateModal"
           >
-            <img src="/images/pages/new-user.svg" alt="organizations">
+            <img src="/images/pages/plus.svg" style="height: 40px; width: 40px" alt="">
             <span class="title">پیام جدید</span>
           </div>
         </div>

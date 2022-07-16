@@ -7,7 +7,7 @@
       >
         <div
           class="gender-switch-item"
-          :class="{'selected': value === 'female'}"
+          :class="{'selected': value === 'female', 'has-error': error}"
           @click="select('female')"
         >
           <span class="img-box">
@@ -23,7 +23,7 @@
       >
         <div
           class="gender-switch-item"
-          :class="{'selected': value === 'male'}"
+          :class="{'selected': value === 'male', 'has-error': error}"
           @click="select('male')"
         >
           <span class="img-box">
@@ -44,13 +44,17 @@ export default {
     value: {
       type: String,
       required: true,
-    }
+    },
+    error: {
+      type: String,
+      default: ""
+    },
   },
   methods: {
     select(val) {
       this.$emit('input', val)
     }
-  }
+  },
 }
 </script>
 

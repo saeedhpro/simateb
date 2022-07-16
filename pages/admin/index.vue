@@ -11,6 +11,13 @@
           class="page-main-box"
         >
           <v-row>
+            <v-col>
+              <div class="dashboard-header">
+                <span>آخرین کاربران آنلاین</span>
+              </div>
+            </v-col>
+          </v-row>
+          <v-row>
             <v-col
               cols="12"
             >
@@ -52,6 +59,13 @@
         <v-card
           class="page-main-box"
         >
+          <v-row>
+            <v-col>
+              <div class="dashboard-header">
+                <span>آخرین ورود بیماران</span>
+              </div>
+            </v-col>
+          </v-row>
           <v-row>
             <v-col
               cols="12"

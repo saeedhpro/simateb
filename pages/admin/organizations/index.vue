@@ -8,8 +8,8 @@
           <div class="page-header">
             <img src="/images/pages/users.svg" alt="organizations">
             <span class="title">
-            موسسات
-          </span>
+              مطب‌ها / موسسات / آزمایشگاه‌ها
+            </span>
           </div>
           <v-divider inset/>
           <div class="page-actions"
@@ -29,35 +29,7 @@
           class="page-main-box"
         >
           <v-row class="search-box">
-            <v-col
-              cols="12"
-              sm="12"
-              md="4"
-            >
-              <div class="right-box">
-                <v-checkbox
-                  v-model="selectedAll"
-                ></v-checkbox>
-                <div class="selected-count" v-if="selectedOrganizations.length > 0">
-                  {{ selectedOrganizations.length | persianDigit }}
-                </div>
-                <v-select
-                  outlined
-                  :items="actions"
-                  label="اقدام جمعی"
-                  item-value="id"
-                  item-text="label"
-                  v-model="action"
-                ></v-select>
-                <button
-                  class="do-action-btn"
-                  @click="doAction"
-                  :disabled="!action"
-                >انجام بده
-                </button>
-              </div>
-            </v-col>
-            <v-spacer />
+            <v-spacer/>
             <v-col
               cols="12"
               sm="12"
@@ -79,138 +51,11 @@
                           d="M17.722,16.559l-4.711-4.711a7.094,7.094,0,0,0,1.582-4.535,7.327,7.327,0,1,0-2.777,5.729l4.711,4.711a.972.972,0,0,0,.629.247.844.844,0,0,0,.6-.247A.822.822,0,0,0,17.722,16.559ZM1.687,7.313a5.625,5.625,0,1,1,5.625,5.625A5.632,5.632,0,0,1,1.687,7.313Z"
                           transform="translate(0)"/>
                   </svg>
-                  <input class="search-input" v-model="search.q" type="text" ref="search-input" placeholder="جستجو">
+                  <input class="search-input" v-model="search.q" type="text" ref="search-input" placeholder="جستجو"
+                         @input="getOrganizationsList">
                   <div @click="getOrganizationsList" class="search-button">
                     <img src="/images/pages/search-button.svg">
                   </div>
-                  <div @click="toggleFilterModal" class="search-filter">
-                    <img src="/images/pages/filter.svg">
-                    فیلتر
-                  </div>
-                  <v-dialog
-                    v-model="showFilterModal"
-                    persistent
-                    max-width="1056px"
-                  >
-                    <v-card
-                      class="create-update-modal"
-                    >
-                      <v-card-title
-                        class="create-update-modal-title-box"
-                      >
-                        <div class="create-update-modal-title">
-                          <button
-                            @click="closeFilterModal"
-                            class="create-update-modal-close"
-                          >
-                            <v-icon>mdi-close</v-icon>
-                          </button>
-                          <span>جستجو پیشرفته</span>
-                        </div>
-                        <v-spacer/>
-                      </v-card-title>
-                      <v-card-text>
-                        <v-container>
-                          <v-row>
-                            <v-col
-                              cols="12"
-                              sm="4"
-                              md="4"
-                            >
-                              <div class="create-update-model-input-box">
-                                <label>عبارت جستجو</label>
-                                <input type="text" v-model="search.q">
-                              </div>
-                            </v-col>
-                            <v-col
-                              cols="12"
-                              sm="4"
-                              md="4"
-                            >
-                              <div class="create-update-model-input-box">
-                                <label>تاریخ ابتدا</label>
-                                <date-picker
-                                  v-model="search.start"
-                                  format="YYYY-MM-DD"
-                                  displat-format="jYYYY-jMM-jDD"
-                                  editable
-                                  class="date-picker"
-                                  type="date"
-                                >
-                                  <template v-slot:label>
-                                    <img src="/images/form/datepicker.svg">
-                                  </template>
-                                </date-picker>
-                              </div>
-                            </v-col>
-                            <v-col
-                              cols="12"
-                              sm="4"
-                              md="4"
-                            >
-                              <div class="create-update-model-input-box">
-                                <label>تاریخ انتها</label>
-                                <date-picker
-                                  v-model="search.end"
-                                  format="YYYY-MM-DD"
-                                  displat-format="jYYYY-jMM-jDD"
-                                  editable
-                                  class="date-picker"
-                                  type="date"
-                                >
-                                  <template v-slot:label>
-                                    <img src="/images/form/datepicker.svg">
-                                  </template>
-                                </date-picker>
-                              </div>
-                            </v-col>
-                          </v-row>
-                        </v-container>
-                      </v-card-text>
-                      <v-card-actions>
-                        <v-container>
-                          <v-row>
-                            <v-col
-                              cols="12"
-                              sm="3"
-                              md="3"
-                            >
-                              <button
-                                class="second-button"
-                                @click="clearForm"
-                              >پاک کردن فرم
-                              </button>
-                            </v-col>
-                            <v-spacer/>
-                            <v-col
-                              cols="12"
-                              sm="3"
-                              md="3"
-                            >
-                              <button
-                                class="second-button"
-                                @click="closeFilterModal"
-                              >
-                                بستن
-                              </button>
-                            </v-col>
-                            <v-col
-                              cols="12"
-                              sm="4"
-                              md="4"
-                            >
-                              <button
-                                class="main-button"
-                                @click="getOrganizationsList"
-                              >
-                                جستجو
-                              </button>
-                            </v-col>
-                          </v-row>
-                        </v-container>
-                      </v-card-actions>
-                    </v-card>
-                  </v-dialog>
                 </div>
               </div>
             </v-col>
@@ -236,7 +81,7 @@
                                :value="i.id"
                         />
                         <img :src="i.logo ? i.logo : 'https://randomuser.me/api/portraits/men/88.jpg'">
-                        <span><nuxt-link :to="`/organizations/${i.id}`">{{
+                        <span><nuxt-link :to="`/admin/organizations/${i.id}`">{{
                             `${i.name}` | persianDigit
                           }}</nuxt-link></span>
                       </div>
@@ -247,7 +92,10 @@
                     <td class="text-center">
                       {{ i.created_at ? $moment(i.created_at).format('jYYYY/jM/jDD') : '-' | persianDigit }}
                     </td>
-                    <td class="text-center">{{ i.staff ? `${i.staff.fname} ${i.staff.lname}` : '-' | persianDigit }}</td>
+                    <td class="text-center">{{
+                        i.staff ? `${i.staff.fname} ${i.staff.lname}` : '-' | persianDigit
+                      }}
+                    </td>
                   </tr>
                 </template>
                 <template v-slot:notfound>
@@ -324,7 +172,6 @@ export default {
       ],
       selectedOrganizations: [],
       showCreateModal: false,
-      showFilterModal: false,
       overlay: false,
       form: {
         file: null,
@@ -376,14 +223,7 @@ export default {
       this.getOrganizationsList()
     },
     getOrganizationsList() {
-      this.toggleOverlay()
-      this.showFilterModal = false
       this.$store.dispatch('admin/organizations/getList', this.search)
-        .finally(() => {
-          setTimeout(() => {
-            this.toggleOverlay()
-          }, 50)
-        })
     },
     getProvinces() {
       this.$store.dispatch('provinces/getList')
@@ -396,9 +236,6 @@ export default {
     },
     toggleCreateModal() {
       this.showCreateModal = !this.showCreateModal
-    },
-    toggleFilterModal() {
-      this.showFilterModal = !this.showFilterModal
     },
     updated(o) {
       this.form.file = o
@@ -414,21 +251,9 @@ export default {
     toggleOverlay() {
       this.overlay = !this.overlay
     },
-    closeFilterModal() {
-      this.clearFilterForm()
-      this.toggleFilterModal()
-    },
     closeForm() {
       this.clearForm()
       this.toggleCreateModal()
-    },
-    clearFilterForm() {
-      this.search = {
-        page: this.search.page,
-        start: '',
-        end: '',
-        q: '',
-      }
     },
     clearForm() {
       this.form = {

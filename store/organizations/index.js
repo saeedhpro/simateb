@@ -44,6 +44,15 @@ export const actions = {
         return Promise.reject(err)
       })
   },
+  updateOrganizationAbout(ctx, data) {
+    return this.$axios.put(`/organizations/${data.id}/about`, data)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
 }
 
 export const getters = {

@@ -16,6 +16,14 @@ export const state = () => ({
     total_rows: 0,
     total_pages: 0
   },
+  organizationPatients: {
+    data: [],
+    limit: 10,
+    page: 1,
+    sort: '',
+    total_rows: 0,
+    total_pages: 0
+  },
   user: null,
   users: [],
   medicalHistory: null,
@@ -43,6 +51,9 @@ export const mutations = {
   },
   setPatients(state, patients) {
     state.patients = patients
+  },
+  setOrganizationPatients(state, patients) {
+    state.organizationPatients = patients
   },
   setUsers(state, users) {
     state.users = users
@@ -84,6 +95,17 @@ export const actions = {
         return Promise.reject(err)
       })
   },
+  getOrganizationPatients(ctx, data) {
+    return this.$axios.get(`/organizations/${data.id}/users?page=${data.page}&q=${data.q}&group=1`)
+      .then(res => {
+        const data = res.data;
+        ctx.commit('setOrganizationPatients', data)
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
   getUserResultedAppointmentsList(ctx, data) {
     return this.$axios.get(`/users/${data.id}/appointments/resulted?page=${data.page}&type=${data.type}&limit=10`)
       .then(res => {
@@ -101,6 +123,17 @@ export const actions = {
   },
   getUsers(ctx, data) {
     return this.$axios.get(`/organizations/users`)
+      .then(res => {
+        const data = res.data;
+        ctx.commit('setUsers', data)
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  getOrganizationUsers(ctx, id) {
+    return this.$axios.get(`/organizations/${id}/users/all`)
       .then(res => {
         const data = res.data;
         ctx.commit('setUsers', data)
@@ -276,6 +309,9 @@ export const getters = {
   },
   getPatients(state) {
     return state.patients
+  },
+  getOrganizationPatients(state) {
+    return state.organizationPatients
   },
   getUsers(state) {
     return state.users
