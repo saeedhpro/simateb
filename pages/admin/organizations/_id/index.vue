@@ -36,7 +36,7 @@
 <script>
 import AdminOrganizationTopComponent from "~/components/admin/organization/AdminOrganizationTopComponent";
 import AdminOrganizationHeaderComponent from "~/components/admin/organization/AdminOrganizationHeaderComponent";
-import AdminOrganizationMainComponent from "~/components/admin/organization/AdminOrganizationMainComponent";
+import AdminOrganizationMainComponent from "~/components/admin/organization/main/AdminOrganizationMainComponent";
 
 export default {
   name: "ShowOrganizationComponent.vue",
