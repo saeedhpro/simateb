@@ -161,7 +161,7 @@ export default {
   middleware: 'admin',
   data() {
     return {
-      showCreateModal: true,
+      showCreateModal: false,
       headers: [
         '',
         'دریافت کننده',

@@ -410,7 +410,6 @@ export default {
         sms_credit: parseFloat(this.organization.sms_credit.split(' ')[0].split(',').join('')),
       }
       delete data.logo
-      console.log(data, "data")
       this.$store.dispatch('admin/organizations/updateOrganization', data)
       this.closeForm()
     },

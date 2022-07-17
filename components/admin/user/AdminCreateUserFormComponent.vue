@@ -395,6 +395,10 @@ export default {
       default: false,
       required: true,
     },
+    org: {
+      type: Object,
+      default: null,
+    },
   },
   data() {
     return {
@@ -403,7 +407,7 @@ export default {
         lname: '',
         email: '',
         user_group_id: 1,
-        organization_id: 1,
+        organization_id: this.org ? this.org.id : 1,
         gender: '',
         tel: '',
         tel1: '',
@@ -458,7 +462,7 @@ export default {
         id: 1,
         name: 'بیمار'
       },
-      organization: {
+      organization: this.org ? this.org : {
         id: 1,
         name: "فتوگرافی سیما طب"
       },
@@ -481,7 +485,7 @@ export default {
         lname: '',
         email: '',
         user_group_id: 1,
-        organization_id: 1,
+        organization_id: this.org ? this.org.id : 1,
         gender: '',
         tel: '',
         tel1: '',
@@ -519,7 +523,7 @@ export default {
         id: 1,
         name: 'بیمار'
       }
-      this.organization = {
+      this.organization = this.org ? this.org : {
         id: 1,
         name: "فتوگرافی سیما طب"
       }
@@ -537,7 +541,7 @@ export default {
     createUser() {
       if (this.validateFrom()) {
         this.$store.dispatch('admin/users/createUser', this.form)
-          .finally(() => {
+          .then(() => {
             this.closeForm()
           })
       }
@@ -551,39 +555,51 @@ export default {
       }
       if (!this.form.lname) {
         this.errors.lname = 'فیلد نام خانوادگی اجباری است'
+        isValid = false
       }
       if (!this.form.gender) {
         this.errors.gender = 'فیلد جنسیت اجباری است'
+        isValid = false
       }
       if (!this.form.user_group_id) {
         this.errors.user_group_id = 'فیلد گروه اجباری است'
+        isValid = false
       }
       if (!this.form.user_group_id) {
         this.errors.user_group_id = 'فیلد گروه اجباری است'
+        isValid = false
       }
       if (!this.form.tel) {
         this.errors.tel = 'فیلد شماره موبایل اجباری است'
+        isValid = false
       }
       if (!this.form.birth_date) {
         this.errors.birth_date = 'فیلد تاریخ تولد اجباری است'
+        isValid = false
       }
       if (!this.form.province_id) {
         this.errors.province_id = 'فیلد استان اجباری است'
+        isValid = false
       }
       if (!this.form.county_id) {
         this.errors.county_id = 'فیلد شهرستان اجباری است'
+        isValid = false
       }
       if (!this.form.city_id) {
         this.errors.city_id = 'فیلد شهر اجباری است'
+        isValid = false
       }
       if (!this.form.address) {
         this.errors.address = 'فیلد آدرس اجباری است'
+        isValid = false
       }
       if (!this.form.pass) {
         this.errors.pass = 'فیلد پسورد اجباری است'
+        isValid = false
       }
       if (this.has_surgery && !this.form.surgery) {
         this.errors.surgery = 'فیلد علت جراحی اجباری است'
+        isValid = false
       }
       return isValid;
     },
@@ -678,8 +694,8 @@ export default {
       if (val) {
         this.form.organization_id = val.id
       } else {
-        this.form.organization_id = 1
-        this.organization = {
+        this.form.organization_id = this.org ? this.org.id : 1
+        this.organization = this.org ? this.org : {
           id: 1,
           name: "فتوگرافی سیما طب"
         }
