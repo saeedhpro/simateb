@@ -113,14 +113,14 @@
                 </div>
                 <div class="create-update-model-input-box">
                   <label>عکس یک</label>
-                  <div class="about-org-img">
+                  <div class="about-org-img" @click="chooseImage(1)">
                     <div class="image-box" v-if="image1">
                       <img :src="image1" alt="">
                     </div>
-                    <div class="image-box" v-else-if="organization.image1" @click="chooseImage(1)">
+                    <div class="image-box" v-else-if="organization.image1">
                       <img :src="organization.image1" alt="">
                     </div>
-                    <div class="plus-box" v-else @click="chooseImage(1)">
+                    <div class="plus-box" v-else>
                       <img src="/images/pages/circle-plus.svg" alt="">
                       <div class="choose-image">افزودن تصویر</div>
                     </div>
@@ -143,14 +143,14 @@
                 </div>
                 <div class="create-update-model-input-box">
                   <label>عکس دو</label>
-                  <div class="about-org-img">
+                  <div class="about-org-img" @click="chooseImage(2)">
                     <div class="image-box" v-if="image2">
                       <img :src="image2" alt="">
                     </div>
-                    <div class="image-box" v-else-if="organization.image2" @click="chooseImage(2)">
+                    <div class="image-box" v-else-if="organization.image2">
                       <img :src="organization.image2" alt="">
                     </div>
-                    <div class="plus-box" v-else @click="chooseImage(2)">
+                    <div class="plus-box" v-else>
                       <img src="/images/pages/circle-plus.svg" alt="">
                       <div class="choose-image">افزودن تصویر</div>
                     </div>
@@ -173,14 +173,14 @@
                 </div>
                 <div class="create-update-model-input-box">
                   <label>عکس سه</label>
-                  <div class="about-org-img">
+                  <div class="about-org-img" @click="chooseImage(3)">
                     <div class="image-box" v-if="image3">
                       <img :src="image3" alt="">
                     </div>
-                    <div class="image-box" v-else-if="organization.image3" @click="chooseImage(3)">
+                    <div class="image-box" v-else-if="organization.image3">
                       <img :src="organization.image3" alt="">
                     </div>
-                    <div class="plus-box" v-else @click="chooseImage(3)">
+                    <div class="plus-box" v-else>
                       <img src="/images/pages/circle-plus.svg" alt="">
                       <div class="choose-image">افزودن تصویر</div>
                     </div>
@@ -203,14 +203,14 @@
                 </div>
                 <div class="create-update-model-input-box">
                   <label>عکس چهار</label>
-                  <div class="about-org-img">
+                  <div class="about-org-img" @click="chooseImage(4)">
                     <div class="image-box" v-if="image4">
                       <img :src="image4" alt="">
                     </div>
-                    <div class="image-box" v-else-if="organization.image4" @click="chooseImage(4)">
+                    <div class="image-box" v-else-if="organization.image4">
                       <img :src="organization.image4" alt="">
                     </div>
-                    <div class="plus-box" v-else @click="chooseImage(4)">
+                    <div class="plus-box" v-else>
                       <img src="/images/pages/circle-plus.svg" alt="">
                       <div class="choose-image">افزودن تصویر</div>
                     </div>
@@ -297,15 +297,13 @@ export default {
       this.$refs.file.click()
     },
     setCropImage(e) {
-      console.log(e)
       this.$refs.crop.setImage(e)
     },
     cropped(file) {
-      console.log(file)
     },
     imaged(file) {
       if (!file) return
-      switch (this.image) {
+      switch (this.index) {
         case 1:
           this.image1 = file
           break;

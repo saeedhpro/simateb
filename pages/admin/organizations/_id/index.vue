@@ -234,6 +234,7 @@ export default {
     return {
       showUpdateModal: false,
       showAddUserModal: false,
+      showSendSmsModal: false,
       selectedUsers: [],
       headers: [
         '',
@@ -263,6 +264,10 @@ export default {
         }
       ],
       action: null,
+      form: {
+        numbers: [],
+        msg: "",
+      }
     }
   },
   methods: {
@@ -276,6 +281,9 @@ export default {
         case '2':
           this.toggleShowSendSmsModal()
       }
+    },
+    toggleShowSendSmsModal() {
+      this.showSendSmsModal = !this.showSendSmsModal
     },
     toggleAddUserModal() {
       this.showAddUserModal = !this.showAddUserModal

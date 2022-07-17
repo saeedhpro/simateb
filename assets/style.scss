@@ -595,7 +595,7 @@ table {
       letter-spacing: 0;
       color: #757575;
       min-width: 75px;
-
+      display: flex;
       span {
         font: normal normal bold 16px/28px IRANYekanRegular !important;
       }
@@ -2779,7 +2779,7 @@ table {
   }
 
   .about-org-img {
-    background: #F6F7FF 0% 0% no-repeat padding-box;
+    background: #F6F7FF 0 0 no-repeat padding-box;
     border: 1px dashed #5063FF;
     border-radius: 8px;
     width: 100%;
@@ -2791,6 +2791,14 @@ table {
     justify-content: center;
     cursor: pointer;
 
+    .image-box {
+      width: 100%;
+      height: 100%;
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
     .plus-box {
       display: flex;
       flex-direction: column;

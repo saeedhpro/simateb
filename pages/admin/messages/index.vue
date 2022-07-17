@@ -12,111 +12,6 @@
           </span>
           </div>
           <v-divider inset/>
-          <v-dialog
-            v-model="showCreateModal"
-            persistent
-            max-width="768px"
-          >
-            <v-card
-              class="create-update-modal"
-            >
-              <v-card-title
-                class="create-update-modal-title-box"
-              >
-                <div class="create-update-modal-title">
-                  <button
-                    @click="closeForm"
-                    class="create-update-modal-close"
-                  >
-                    <v-icon>mdi-close</v-icon>
-                  </button>
-                  <span>پیامک جدید</span>
-                </div>
-                <v-spacer/>
-              </v-card-title>
-              <v-card-text>
-                <v-container>
-                  <v-row>
-                  </v-row>
-                  <v-row>
-                    <v-col
-                      cols="12"
-                    >
-                      <div class="create-update-model-input-box">
-                        <label>کاربر / موسسه</label>
-                        <multiselect
-                          v-model="selectedUsers"
-                          :options="users"
-                          :multiple="false"
-                          :close-on-select="false"
-                          :clear-on-select="false"
-                          :preserve-search="true"
-                          label="fname"
-                          track-by="fname"
-                          searchable
-                          placeholder=""
-                          :show-labels="false">
-                          <template slot="singleLabel" slot-scope="props"><span
-                            class="option__desc"><span
-                            class="option__title">{{ `${props.option.fname} ${props.option.lname}` }}</span></span>
-                          </template>
-                          <template slot="option" slot-scope="props">
-                            <div class="option__desc"><span
-                              class="option__title">{{ `${props.option.fname} ${props.option.lname}` }}</span></div>
-                          </template>
-                        </multiselect>
-                      </div>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col
-                      cols="12"
-                    >
-                      <div class="create-update-model-input-box">
-                        <label>متن پیامک</label>
-                        <textarea
-                          v-model="form.msg"
-                          rows="4"
-                        >
-                        </textarea>
-                      </div>
-                    </v-col>
-                  </v-row>
-                </v-container>
-              </v-card-text>
-              <v-card-actions>
-                <v-container>
-                  <v-row>
-                    <v-spacer/>
-                    <v-col
-                      cols="12"
-                      sm="3"
-                      md="3"
-                    >
-                      <button
-                        class="second-button"
-                        @click="closeForm"
-                      >
-                        بستن
-                      </button>
-                    </v-col>
-                    <v-col
-                      cols="12"
-                      sm="4"
-                      md="4"
-                    >
-                      <button
-                        class="main-button"
-                        @click="createMessage"
-                      >
-                        ارسال یامک
-                      </button>
-                    </v-col>
-                  </v-row>
-                </v-container>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
           <div class="page-actions"
                @click="toggleCreateModal"
           >
@@ -137,7 +32,7 @@
             <v-col
               cols="12"
               sm="12"
-              md="4"
+              md="3"
             >
               <div class="right-box">
                 <v-checkbox
@@ -184,138 +79,10 @@
                           d="M17.722,16.559l-4.711-4.711a7.094,7.094,0,0,0,1.582-4.535,7.327,7.327,0,1,0-2.777,5.729l4.711,4.711a.972.972,0,0,0,.629.247.844.844,0,0,0,.6-.247A.822.822,0,0,0,17.722,16.559ZM1.687,7.313a5.625,5.625,0,1,1,5.625,5.625A5.632,5.632,0,0,1,1.687,7.313Z"
                           transform="translate(0)"/>
                   </svg>
-                  <input class="search-input" v-model="search.q" type="text" ref="search-input" placeholder="جستجو">
+                  <input class="search-input" v-model="search.q" type="text" ref="search-input" placeholder="جستجو" @input="getMessageList">
                   <div @click="getMessageList" class="search-button">
                     <img src="/images/pages/search-button.svg">
                   </div>
-                  <div @click="toggleFilterModal" class="search-filter">
-                    <img src="/images/pages/filter.svg">
-                    فیلتر
-                  </div>
-                  <v-dialog
-                    v-model="showFilterModal"
-                    persistent
-                    max-width="1056px"
-                  >
-                    <v-card
-                      class="create-update-modal"
-                    >
-                      <v-card-title
-                        class="create-update-modal-title-box"
-                      >
-                        <div class="create-update-modal-title">
-                          <button
-                            @click="closeFilterModal"
-                            class="create-update-modal-close"
-                          >
-                            <v-icon>mdi-close</v-icon>
-                          </button>
-                          <span>جستجو پیشرفته</span>
-                        </div>
-                        <v-spacer/>
-                      </v-card-title>
-                      <v-card-text>
-                        <v-container>
-                          <v-row>
-                            <v-col
-                              cols="12"
-                              sm="4"
-                              md="4"
-                            >
-                              <div class="create-update-model-input-box">
-                                <label>عبارت جستجو</label>
-                                <input type="text" v-model="search.q">
-                              </div>
-                            </v-col>
-                            <v-col
-                              cols="12"
-                              sm="4"
-                              md="4"
-                            >
-                              <div class="create-update-model-input-box">
-                                <label>تاریخ ابتدا</label>
-                                <date-picker
-                                  v-model="search.start"
-                                  format="YYYY-MM-DD"
-                                  displat-format="jYYYY-jMM-jDD"
-                                  editable
-                                  class="date-picker"
-                                  type="date"
-                                >
-                                  <template v-slot:label>
-                                    <img src="/images/form/datepicker.svg">
-                                  </template>
-                                </date-picker>
-                              </div>
-                            </v-col>
-                            <v-col
-                              cols="12"
-                              sm="4"
-                              md="4"
-                            >
-                              <div class="create-update-model-input-box">
-                                <label>تاریخ انتها</label>
-                                <date-picker
-                                  v-model="search.end"
-                                  format="YYYY-MM-DD"
-                                  displat-format="jYYYY-jMM-jDD"
-                                  editable
-                                  class="date-picker"
-                                  type="date"
-                                >
-                                  <template v-slot:label>
-                                    <img src="/images/form/datepicker.svg">
-                                  </template>
-                                </date-picker>
-                              </div>
-                            </v-col>
-                          </v-row>
-                        </v-container>
-                      </v-card-text>
-                      <v-card-actions>
-                        <v-container>
-                          <v-row>
-                            <v-col
-                              cols="12"
-                              sm="3"
-                              md="3"
-                            >
-                              <button
-                                class="second-button"
-                                @click="clearForm"
-                              >پاک کردن فرم
-                              </button>
-                            </v-col>
-                            <v-spacer/>
-                            <v-col
-                              cols="12"
-                              sm="3"
-                              md="3"
-                            >
-                              <button
-                                class="second-button"
-                                @click="closeFilterModal"
-                              >
-                                بستن
-                              </button>
-                            </v-col>
-                            <v-col
-                              cols="12"
-                              sm="4"
-                              md="4"
-                            >
-                              <button
-                                class="main-button"
-                                @click="getMessageList"
-                              >
-                                جستجو
-                              </button>
-                            </v-col>
-                          </v-row>
-                        </v-container>
-                      </v-card-actions>
-                    </v-card>
-                  </v-dialog>
                 </div>
               </div>
             </v-col>
@@ -372,28 +139,29 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-overlay :value="overlay">
-      <v-progress-circular
-        indeterminate
-        size="64"
-      ></v-progress-circular>
-    </v-overlay>
+    <send-sms-component
+      :users="users"
+      :multiple="true"
+      :selectedItems="selectedUsers"
+      :open="showCreateModal"
+      @selected="itemSelected"
+      @close="closeSmsForm"
+    />
   </v-container>
 </template>
 
 <script>
 import DataTableComponent from "~/components/panel/global/DataTableComponent";
+import SendSmsComponent from "~/components/global/sms/SendSmsComponent";
 
 export default {
   name: "index.vue",
-  components: {DataTableComponent},
+  components: {SendSmsComponent, DataTableComponent},
   layout: 'admin',
   middleware: 'admin',
   data() {
     return {
-      overlay: false,
-      showFilterModal: false,
-      showCreateModal: false,
+      showCreateModal: true,
       headers: [
         '',
         'دریافت کننده',
@@ -406,10 +174,6 @@ export default {
       search: {
         q: '',
         page: 1,
-      },
-      form: {
-        numbers: [],
-        msg: '',
       },
       action: null,
       selectedUsers: [],
@@ -437,26 +201,16 @@ export default {
         case 1:
         case '1':
           this.deleteMessages(this.selectedMessages)
+          break
+        case 2:
+        case '2':
+          this.toggleCreateModal()
+          break
       }
     },
     closeForm() {
       this.clearForm()
       this.toggleCreateModal()
-    },
-    clearFilterForm() {
-      this.search = {
-        page: this.search.page,
-        start: '',
-        end: '',
-        q: '',
-      }
-    },
-    closeFilterModal() {
-      this.clearFilterForm()
-      this.toggleFilterModal()
-    },
-    toggleFilterModal() {
-      this.showFilterModal = !this.showFilterModal
     },
     toggleCreateModal() {
       this.showCreateModal = !this.showCreateModal
@@ -467,48 +221,26 @@ export default {
     chooseImage() {
 
     },
-    toggleOverlay() {
-      this.overlay = !this.overlay
-    },
     paginate(page = 1) {
       this.search.page = page
       this.getMessageList()
     },
     getMessageList() {
-      this.toggleOverlay()
-      this.showFilterModal = false
       this.$store.dispatch('admin/messages/getList', this.search)
-        .finally(() => {
-          this.toggleOverlay()
-        })
     },
     getStatus(sent) {
       return sent ? 'ارسال شده' : 'ارسال نشد'
     },
-    clearForm() {
-      this.form = {
-        numbers: [],
-        msg: '',
-      }
+    itemSelected(e) {
+      this.selectedUsers = e
     },
-    createMessage() {
-      this.toggleOverlay()
-      this.$store.dispatch('admin/messages/createMessage', this.form)
-        .then(() => {
-          setTimeout(() => {
-            this.toggleCreateModal()
-            this.closeForm()
-            this.getMessageList()
-          }, 50)
-        })
-        .finally(() => {
-          setTimeout(() => {
-            this.toggleOverlay()
-          }, 50)
-        })
+    closeSmsForm() {
+      this.selectedUsers = []
+      this.action = null
+      this.toggleCreateModal()
+      this.getMessageList()
     },
     deleteMessages(ids) {
-      this.toggleOverlay()
       this.$store.dispatch('admin/messages/deleteMessages', {
         ids
       })
@@ -517,11 +249,6 @@ export default {
             this.getMessageList()
             this.action = null
             this.selectedMessages = []
-          }, 50)
-        })
-        .finally(() => {
-          setTimeout(() => {
-            this.toggleOverlay()
           }, 50)
         })
     },

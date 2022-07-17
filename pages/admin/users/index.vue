@@ -12,9 +12,8 @@
           </span>
           </div>
           <v-divider inset/>
-          <create-user-form-component
+          <admin-create-user-form-component
             :open="showCreateModal"
-            :is-admin="true"
             @close="closeForm"
           />
           <div class="page-actions"
@@ -111,7 +110,7 @@
                         <input type="checkbox"
                                class="table-selectable-checkbox"
                                v-model="selectedUsers"
-                               :value="i.id"
+                               :value="i"
                                :ripple="false"
                         />
                         <img :src="i.logo ? i.logo : 'https://randomuser.me/api/portraits/men/88.jpg'">
@@ -147,12 +146,56 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-overlay :value="overlay">
-      <v-progress-circular
-        indeterminate
-        size="64"
-      ></v-progress-circular>
-    </v-overlay>
+    <v-dialog
+      v-model="showDelete"
+      max-width="680"
+    >
+      <v-card
+        class="accept-file-remove-model"
+      >
+        <button
+          class="close"
+          @click="toggleRemove"
+        >
+          <v-icon>mdi-close</v-icon>
+        </button>
+        <v-card-title class="accept-file-remove-title">
+          <span>حذف کاربران</span>
+        </v-card-title>
+
+        <v-card-text
+          class="accept-file-remove-text"
+        >
+          آیا از حذف کردن حذف کاربران اطمینان دارید؟<br/>
+          لطفا دقت کنید که پس از حذف، اطلاعات حذف کاربران قابل بازگشت نیست
+        </v-card-text>
+
+        <v-card-actions>
+          <button
+            class="action-button accept-button"
+            @click="toggleRemove"
+
+          >
+            خیر
+          </button>
+          <v-spacer></v-spacer>
+          <button
+            class="action-button red-button"
+            @click="remove"
+          >
+            بله، حذف کن
+          </button>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <send-sms-component
+      :users="allUsers"
+      :multiple="true"
+      :selectedItems="selectedUsers"
+      :open="showSmsModal"
+      @selected="itemSelected"
+      @close="closeSmsForm"
+    />
   </v-container>
 </template>
 
@@ -160,10 +203,14 @@
 import DataTableComponent from "~/components/panel/global/DataTableComponent";
 import CropImageComponent from "~/components/panel/global/CropImageComponent";
 import CreateUserFormComponent from "~/components/panel/profile/user/CreateUserFormComponent";
+import AdminCreateUserFormComponent from "~/components/admin/user/AdminCreateUserFormComponent";
+import SendSmsComponent from "~/components/global/sms/SendSmsComponent";
 
 export default {
   name: "index",
-  components: {CreateUserFormComponent, CropImageComponent, DataTableComponent},
+  components: {
+    SendSmsComponent,
+    AdminCreateUserFormComponent, CreateUserFormComponent, CropImageComponent, DataTableComponent},
   layout: 'admin',
   middleware: 'auth',
   data() {
@@ -209,20 +256,37 @@ export default {
       ],
       selectedUsers: [],
       showCreateModal: false,
-      overlay: false,
+      showDelete: false,
+      showSmsModal: false,
     }
   },
   mounted() {
     this.paginate()
+    this.getAllUsers()
   },
   methods: {
+    toggleRemove() {
+      this.showDelete = !this.showDelete
+    },
+    toggleSmsModal() {
+      this.showSmsModal = !this.showSmsModal
+    },
     doAction() {
       if (!this.action) return
       switch (this.action) {
         case 1:
         case '1':
-          this.deleteUsers(this.selectedUsers)
+          this.toggleRemove();
+          break;
+        case 2:
+        case '2':
+          this.toggleSmsModal();
+          break;
       }
+    },
+    remove() {
+      this.deleteUsers(this.selectedUsers)
+      this.toggleRemove()
     },
     paginate(page = 1) {
       this.search.page = page
@@ -235,18 +299,17 @@ export default {
       this.showFilterModal = false
       this.$store.dispatch('admin/users/getList', this.search)
     },
+    getAllUsers() {
+      this.$store.dispatch('admin/users/getUsers')
+    },
     toggleCreateModal() {
       this.showCreateModal = !this.showCreateModal
-    },
-    toggleOverlay() {
-      this.overlay = !this.overlay
     },
     closeForm() {
       this.toggleCreateModal()
       this.paginate(1)
     },
     deleteUsers(ids) {
-      this.toggleOverlay()
       this.$store.dispatch('users/deleteUsers', {
         ids
       })
@@ -257,14 +320,19 @@ export default {
             this.selectedUsers = []
           }, 50)
         })
-        .finally(() => {
-          setTimeout(() => {
-            this.toggleOverlay()
-          }, 50)
-        })
+    },
+    itemSelected(e) {
+      this.selectedUsers = e
+    },
+    closeSmsForm() {
+      this.selectedUsers = []
+      this.toggleSmsModal()
     }
   },
   computed: {
+    allUsers() {
+      return this.$store.getters['admin/users/getUsers']
+    },
     users() {
       return this.$store.getters['admin/users/getList']
     },
@@ -292,7 +360,7 @@ export default {
     },
     cities() {
       return this.$store.getters['provinces/getCities']
-    }
+    },
   },
   watch: {
     province(item) {

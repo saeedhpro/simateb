@@ -51,7 +51,6 @@ export const actions = {
         return Promise.reject(err)
       })
   },
-
   createUser(ctx, data) {
     return this.$axios.post(`/admin/users`, data)
       .then(res => {
