@@ -30,8 +30,8 @@
           <div class="create-update-model-input-box">
             <label>عکس یک</label>
             <div class="about-org-img" @click="chooseImage(1)">
-              <div class="image-box" v-if="image1">
-                <img :src="image1" alt="">
+              <div class="image-box" v-if="new1">
+                <img :src="new1" alt="">
               </div>
               <div class="image-box" v-else-if="organization.image1">
                 <img :src="organization.image1" alt="">
@@ -60,8 +60,8 @@
           <div class="create-update-model-input-box">
             <label>عکس دو</label>
             <div class="about-org-img" @click="chooseImage(2)">
-              <div class="image-box" v-if="image2">
-                <img :src="image2" alt="">
+              <div class="image-box" v-if="new2">
+                <img :src="new2" alt="">
               </div>
               <div class="image-box" v-else-if="organization.image2">
                 <img :src="organization.image2" alt="">
@@ -90,8 +90,8 @@
           <div class="create-update-model-input-box">
             <label>عکس سه</label>
             <div class="about-org-img" @click="chooseImage(3)">
-              <div class="image-box" v-if="image3">
-                <img :src="image3" alt="">
+              <div class="image-box" v-if="new3">
+                <img :src="new3" alt="">
               </div>
               <div class="image-box" v-else-if="organization.image3">
                 <img :src="organization.image3" alt="">
@@ -120,8 +120,8 @@
           <div class="create-update-model-input-box">
             <label>عکس چهار</label>
             <div class="about-org-img" @click="chooseImage(4)">
-              <div class="image-box" v-if="image4">
-                <img :src="image4" alt="">
+              <div class="image-box" v-if="new4">
+                <img :src="new4" alt="">
               </div>
               <div class="image-box" v-else-if="organization.image4">
                 <img :src="organization.image4" alt="">
@@ -166,10 +166,10 @@ export default {
   data() {
     return {
       index: 0,
-      text1: '',
-      text2: '',
-      text3: '',
-      text4: '',
+      text1: this.organization.text1,
+      text2: this.organization.text2,
+      text3: this.organization.text3,
+      text4: this.organization.text4,
       image1: '',
       image2: '',
       image3: '',
@@ -192,6 +192,7 @@ export default {
     cropped(file) {
     },
     imaged(file) {
+      console.log(file)
       if (!file) return
       switch (this.index) {
         case 1:

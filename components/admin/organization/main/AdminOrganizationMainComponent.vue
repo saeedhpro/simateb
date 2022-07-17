@@ -56,7 +56,7 @@
             <input class="search-input" v-model="q" type="text" ref="search-input" placeholder="جستجو"
                    @input="getUsersList">
             <div @click="getUsersList" class="search-button">
-              <img src="/static/images/pages/search-button.svg">
+              <img src="/images/pages/search-button.svg">
             </div>
           </div>
         </div>
