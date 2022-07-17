@@ -155,7 +155,7 @@
 import CropImageComponent from "~/components/panel/global/CropImageComponent";
 export default {
   name: "AdminOrganizationAboutComponent",
-  components: {CropImageComponent, },
+  components: {CropImageComponent,},
   props: {
     organization: {
       type: Object,
@@ -183,6 +183,7 @@ export default {
   methods: {
     chooseImage(n) {
       this.index = n
+      this.$refs.file.value = null
       this.$refs.file.click()
     },
     setCropImage(e) {

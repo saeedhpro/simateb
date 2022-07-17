@@ -20,16 +20,10 @@
       <v-col
         cols="12"
       >
-        <v-card
-          class="page-main-box"
-        >
-          <v-row>
-            <v-col
-              cols="12"
-            >
-            </v-col>
-          </v-row>
-        </v-card>
+        <admin-organization-slider-component
+          v-if="organization"
+          :organization="organization"
+        />
       </v-col>
     </v-row>
   </div>
@@ -39,10 +33,12 @@
 import DataTableComponent from "~/components/panel/global/DataTableComponent";
 import AdminOrganizationTopComponent from "~/components/admin/organization/AdminOrganizationTopComponent";
 import AdminOrganizationHeaderComponent from "~/components/admin/organization/AdminOrganizationHeaderComponent";
+import AdminOrganizationSliderComponent from "~/components/admin/organization/slider/AdminOrganizationSliderComponent";
 
 export default {
   name: "ShowOrganizationSliderComponent.vue",
   components: {
+    AdminOrganizationSliderComponent,
     AdminOrganizationHeaderComponent,
     AdminOrganizationTopComponent,
     DataTableComponent,

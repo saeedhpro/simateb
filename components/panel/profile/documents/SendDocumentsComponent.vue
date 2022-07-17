@@ -209,9 +209,11 @@ export default {
       this.$refs.crop.setImage(e)
     },
     openChooseImage() {
+      this.$refs.image.value = null
       this.$refs.image.click()
     },
     openChooseFile() {
+      this.$refs.file.value = null
       this.$refs.file.click()
     },
     sendFile() {

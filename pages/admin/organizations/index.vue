@@ -112,12 +112,6 @@
       :show="showCreateModal"
       @close="closeCreateModal"
     />
-    <v-overlay :value="overlay">
-      <v-progress-circular
-        indeterminate
-        size="64"
-      ></v-progress-circular>
-    </v-overlay>
   </v-container>
 </template>
 
@@ -173,7 +167,6 @@ export default {
       ],
       selectedOrganizations: [],
       showCreateModal: false,
-      overlay: false,
       form: {
         file: null,
         fname: '',
@@ -242,16 +235,6 @@ export default {
       this.form.file = o
       this.show = !this.show
     },
-    chooseImage(e) {
-      this.$refs.crop.setImage(e)
-    },
-    openChooseImage() {
-      this.$refs.image.value = null
-      this.$refs.image.click()
-    },
-    toggleOverlay() {
-      this.overlay = !this.overlay
-    },
     closeForm() {
       this.clearForm()
       this.toggleCreateModal()
@@ -280,7 +263,6 @@ export default {
       }
     },
     createOrganization() {
-      this.toggleOverlay()
       this.$store.dispatch('admin/organizations/createOrganization', this.form)
         .then(() => {
           setTimeout(() => {
@@ -289,14 +271,8 @@ export default {
             this.getOrganizationsList()
           }, 50)
         })
-        .finally(() => {
-          setTimeout(() => {
-            this.toggleOverlay()
-          }, 50)
-        })
     },
     deleteOrganizations(ids) {
-      this.toggleOverlay()
       this.$store.dispatch('admin/organizations/deleteOrganizations', {
         ids
       })
@@ -305,11 +281,6 @@ export default {
             this.getOrganizationsList()
             this.action = null
             this.selectedOrganizations = []
-          }, 50)
-        })
-        .finally(() => {
-          setTimeout(() => {
-            this.toggleOverlay()
           }, 50)
         })
     }

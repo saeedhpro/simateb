@@ -10,6 +10,7 @@ export const state = () => ({
   },
   organization: null,
   organizations: [],
+  sliders: [],
   organizationsByProfession: {
     laboratories: [],
     radiologies: [],
@@ -21,6 +22,9 @@ export const state = () => ({
 export const mutations = {
   setList(state, list) {
     state.list = list
+  },
+  setSliders(state, sliders) {
+    state.sliders = sliders
   },
   setOrganization(state, organization) {
     state.organization = organization
@@ -50,6 +54,27 @@ export const actions = {
       .then(res => {
         const data = res.data;
         ctx.commit('setOrganizations', data)
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  getSliders(ctx, id) {
+    ctx.commit('setSliders', [])
+    return this.$axios.get(`/admin/organizations/${id}/sliders`)
+      .then(res => {
+        const data = res.data;
+        ctx.commit('setSliders', data)
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  addSliders(ctx, data) {
+    return this.$axios.post(`/admin/organizations/${data.id}/sliders`, data)
+      .then(res => {
         return Promise.resolve(res)
       })
       .catch(err => {
@@ -119,6 +144,9 @@ export const actions = {
 export const getters = {
   getList(state) {
     return state.list
+  },
+  getSliders(state) {
+    return state.sliders
   },
   getOrganization(state) {
     return state.organization
