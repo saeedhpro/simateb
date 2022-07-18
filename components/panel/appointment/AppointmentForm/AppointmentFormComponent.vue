@@ -1105,8 +1105,10 @@ export default {
       this.appointment.user_id = this.user.id
       this.appointment.tel = this.user.tel
     },
-    item() {
-      this.resetForm()
+    item(val) {
+      if (val) {
+        this.resetForm()
+      }
     },
   }
 }

@@ -44,6 +44,7 @@
                       <img src="/images/form/datepicker.svg">
                     </template>
                   </date-picker>
+                  <span class="create-update-modal-input-error" v-if="errors.start_at">{{ errors.start_at }}</span>
                 </div>
               </v-col>
               <v-col
@@ -51,33 +52,24 @@
                 sm="4"
                 md="4"
               >
-                <div class="create-update-model-input-box">
-                  <label>نام بیمار</label>
-                  <multiselect searchable clearOnSelect allowEmpty v-model="user" placeholder="" label="fname"
-                               track-by="fname" :options="users"
-                               :option-height="104" :custom-label="customLabel" :show-labels="false">
-                    <template slot="singleLabel" slot-scope="props"><img class="option__image"
-                                                                         :src="props.option.logo" alt=""><span
-                      class="option__desc"><span
-                      class="option__title">{{ `${props.option.fname} ${props.option.lname}` }}</span></span>
-                    </template>
-                    <template slot="option" slot-scope="props"><img class="option__image"
-                                                                    :src="props.option.logo" alt="">
-                      <div class="option__desc"><span class="option__title">{{ props.option.fname }}</span><span
-                        class="option__small">{{ ` ${props.option.lname}` }}</span></div>
-                    </template>
-                  </multiselect>
-                </div>
+                <custom-multi-select
+                  v-model="user"
+                  :items="users"
+                  :error="errors.user_id"
+                  :has-custom-label="true"
+                  @input="errors.user_id = ''"
+                  label="نام بیمار"
+                />
               </v-col>
               <v-col
                 cols="12"
                 sm="4"
                 md="4"
               >
-                <div class="create-update-model-input-box">
-                  <label>شماره موبایل</label>
-                  <input disabled type="tel" v-model="appointment.tel">
-                </div>
+                <custom-text-input
+                  :label="'شماره موبایل'"
+                  v-model="appointment.tel"
+                />
               </v-col>
             </v-row>
             <v-row>
@@ -86,30 +78,30 @@
                 sm="4"
                 md="4"
               >
-                <div class="create-update-model-input-box">
-                  <label>کد ملی</label>
-                  <input disabled type="text" v-model="appointment.cardno">
-                </div>
+                <custom-text-input
+                  :label="'کد ملی'"
+                  v-model="appointment.cardno"
+                />
               </v-col>
               <v-col
                 cols="12"
                 sm="4"
                 md="4"
               >
-                <div class="create-update-model-input-box">
-                  <label>شماره پرونده</label>
-                  <input disabled type="text" v-model="appointment.file_id">
-                </div>
+                <custom-text-input
+                  :label="'شماره پرونده'"
+                  v-model="appointment.file_id"
+                />
               </v-col>
               <v-col
                 cols="12"
                 sm="4"
                 md="4"
               >
-                <div class="create-update-model-input-box">
-                  <label>هزینه ویزیت</label>
-                  <input v-money="money" type="text" v-model.lazy="appointment.income">
-                </div>
+                <custom-price-input
+                  :label="'هزینه ویزیت'"
+                  v-model="appointment.income"
+                />
               </v-col>
             </v-row>
             <v-row>
@@ -131,13 +123,11 @@
             </v-row>
             <v-row>
               <v-col>
-                <div class="create-update-model-input-box">
-                  <label>شرح حال و توضیحات پذیرش</label>
-                  <textarea
-                    v-model="appointment.info"
-                    rows="6"
-                  ></textarea>
-                </div>
+                <custom-text-area-input
+                  :label="'شرح حال و توضیحات پذیرش'"
+                  v-model="appointment.info"
+                  :rows="6"
+                />
               </v-col>
             </v-row>
           </v-container>
@@ -199,10 +189,18 @@
 <script>
 import CaseTypeCheckboxComponent from "~/components/panel/appointment/CaseTypeCheckboxComponent";
 import DataTableComponent from "~/components/panel/global/DataTableComponent";
+import CustomMultiSelect from "~/components/custom/CustomMultiSelect";
+import CustomTextInput from "~/components/custom/CustomTextInput";
+import CustomPriceInput from "~/components/custom/CustomPriceInput";
+import CustomTextAreaInput from "~/components/custom/CustomTextAreaInput";
 
 export default {
   name: "CreateAppointmentFormComponent",
   components: {
+    CustomTextAreaInput,
+    CustomPriceInput,
+    CustomTextInput,
+    CustomMultiSelect,
     DataTableComponent,
     CaseTypeCheckboxComponent,
   },
@@ -226,13 +224,10 @@ export default {
         status: 0,
         user: null,
       },
-      money: {
-        decimal: '.',
-        thousands: ',',
-        suffix: ' تومان',
-        prefix: '',
-        precision: 0,
-        masked: false
+      errors: {
+        start_at: '',
+        user_id: '',
+        case_type: '',
       },
       user: null,
     }
@@ -254,6 +249,27 @@ export default {
         status: 0,
         user: null,
       }
+      this.resetErrors()
+    },
+    resetErrors() {
+      this.errors = {
+        start_at: '',
+        user_id: '',
+        case_type: '',
+      }
+    },
+    validateFrom() {
+      this.resetErrors()
+      let isValid = true
+      if (!this.appointment.start_at) {
+        this.errors.start_at = 'فیلد تاریخ و ساعت پذیرش اجباری است'
+        isValid = false
+      }
+      if (!this.appointment.user_id) {
+        this.errors.user_id = 'فیلد بیمار اجباری است'
+        isValid = false
+      }
+      return isValid;
     },
     getUsers() {
       this.$store.dispatch('users/getUsers')
@@ -271,22 +287,22 @@ export default {
       this.$emit('loading')
     },
     createAppointment() {
-      this.loading()
-      if (!this.appointment.user_id) {
+      if (this.validateFrom()) {
         this.loading()
-        return
-      }
-      this.$store.dispatch('appointments/createAppointment', {
-        ...this.appointment,
-        user_id: this.user.id,
-        income: parseFloat(this.appointment.income.split(' ')[0].split(',').join('')),
-      })
-        .then(() => {
-        })
-        .finally(() => {
-          this.closeForm()
+        if (!this.appointment.user_id) {
           this.loading()
+          return
+        }
+        this.$store.dispatch('appointments/createAppointment', {
+          ...this.appointment,
+          user_id: this.user.id,
+          income: parseFloat(this.appointment.income.split(' ')[0].split(',').join('')),
         })
+          .then(() => {
+            this.closeForm()
+            this.loading()
+          })
+      }
     },
   },
   computed: {

@@ -255,7 +255,7 @@
                                 <date-picker
                                   v-model="search.start"
                                   format="YYYY-MM-DD"
-                                  displat-format="jYYYY-jMM-jDD"
+                                  display-format="jYYYY/jMM/jDD"
                                   editable
                                   class="date-picker"
                                   type="date"
@@ -276,7 +276,7 @@
                                 <date-picker
                                   v-model="search.end"
                                   format="YYYY-MM-DD"
-                                  displat-format="jYYYY-jMM-jDD"
+                                  display-format="jYYYY/jMM/jDD"
                                   editable
                                   class="date-picker"
                                   type="date"

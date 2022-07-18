@@ -58,20 +58,19 @@
                       sm="4"
                       md="4"
                     >
-                      <date-picker
-                        v-model="form.hdate"
-                        custom-input="#hdate"
-                        format="YYYY-MM-DD"
-                        display-format="jYYYY/jMM/jDD"
-                      />
                       <div class="create-update-model-input-box">
                         <label>تاریخ</label>
-                        <div class="date-picker">
-                          <img src="/images/form/datepicker.svg">
-                          <input
-                            id="hdate"
-                            class="date-picker">
-                        </div>
+                        <date-picker
+                          v-model="form.hdate"
+                          format="YYYY-MM-DD"
+                          display-format="jYYYY/jMM/jDD"
+                          editable
+                          class="date-picker"
+                        >
+                          <template v-slot:label>
+                            <img src="/images/form/datepicker.svg">
+                          </template>
+                        </date-picker>
                       </div>
                     </v-col>
                     <v-col

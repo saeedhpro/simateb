@@ -8,8 +8,8 @@
       allowEmpty
       v-model="data"
       placeholder=""
-      label="name"
-      track-by="name"
+      :label="trackBy"
+      :track-by="trackBy"
       :options="items"
       :option-height="104"
       :show-labels="false"
@@ -17,10 +17,10 @@
     >
       <template slot="singleLabel" slot-scope="props"><span
         class="option__desc"><span
-        class="option__title">{{ `${props.option.name}` }}</span></span>
+        class="option__title">{{ hasCustomLabel ? props.option.fname : `${props.option.fname} ${props.option.lname}` | toPersianNumber }}</span></span>
       </template>
       <template slot="option" slot-scope="props">
-        <div class="option__desc"><span class="option__title">{{ props.option.name }}</span></div>
+        <div class="option__desc"><span class="option__title">{{ hasCustomLabel ? `${props.option.fname} ${props.option.lname}` : props.option.name | toPersianNumber  }}</span></div>
       </template>
     </multiselect>
     <span class="create-update-modal-input-error" v-if="error">{{ error }}</span>
@@ -51,6 +51,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    hasCustomLabel: {
+      type: Boolean,
+      default: false,
+    },
+    customLabel: {
+      type: Function,
+      default: item => item.fname,
+    },
   },
   computed: {
     data: {
@@ -60,6 +68,12 @@ export default {
       set (value) {
         this.$emit("input", value)
       }
+    },
+    trackBy() {
+      if (this.hasCustomLabel) {
+        return 'fname'
+      }
+      return 'name'
     }
   }
 }
