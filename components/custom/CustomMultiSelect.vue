@@ -41,7 +41,6 @@ export default {
     },
     value: {
       type: [String, Object, Number],
-      required: true,
     },
     items: {
       type: Array,

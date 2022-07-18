@@ -63,50 +63,45 @@
                     sm="6"
                     md="6"
                   >
-                    <div class="create-update-model-input-box">
-                      <label>نام</label>
-                      <input type="text" v-model="organization.name">
-                    </div>
+                    <custom-text-input
+                      :label="'نام'"
+                      :error="errors.name"
+                      v-model="organization.name"
+                      @input="errors.name = ''"
+                    />
                   </v-col>
                   <v-col
                     cols="12"
                     sm="6"
                     md="6"
                   >
-                    <div class="create-update-model-input-box">
-                      <label>توضیح</label>
-                      <input type="text" v-model="organization.known_as">
-                    </div>
+                    <custom-text-input
+                      :label="'توضیح'"
+                      v-model="organization.known_as"
+                    />
                   </v-col>
                   <v-col
                     cols="12"
                     sm="6"
                     md="6"
                   >
-                    <div class="create-update-model-input-box">
-                      <label>تخصص</label>
-                      <multiselect searchable clearOnSelect allowEmpty v-model="profession" placeholder="" label="name"
-                                   track-by="name" :options="professions"
-                                   :option-height="104" :show-labels="false">
-                        <template slot="singleLabel" slot-scope="props"><span
-                          class="option__desc"><span
-                          class="option__title">{{ `${props.option.name}` }}</span></span>
-                        </template>
-                        <template slot="option" slot-scope="props">
-                          <div class="option__desc"><span class="option__title">{{ props.option.name }}</span></div>
-                        </template>
-                      </multiselect>
-                    </div>
+                    <custom-multi-select
+                      v-model="profession"
+                      :items="professions"
+                      :error="errors.profession_id"
+                      @input="errors.profession_id = ''"
+                      label="تخصص"
+                    />
                   </v-col>
                   <v-col
                     cols="12"
                     sm="6"
                     md="6"
                   >
-                    <div class="create-update-model-input-box">
-                      <label>وبسایت</label>
-                      <input type="url" v-model="organization.website">
-                    </div>
+                    <custom-text-input
+                      :label="'وبسایت'"
+                      v-model="organization.website"
+                    />
                   </v-col>
                 </v-row>
               </v-col>
@@ -117,63 +112,64 @@
                 sm="6"
                 md="4"
               >
-                <div class="create-update-model-input-box">
-                  <label>شماره تماس ۱</label>
-                  <input type="text" v-model="organization.phone">
-                </div>
+                <custom-text-input
+                  :label="'شماره تماس ۱'"
+                  :error="errors.phone"
+                  v-model="organization.phone"
+                  @input="errors.phone = ''"
+                />
               </v-col>
               <v-col
                 cols="12"
                 sm="6"
                 md="4"
               >
-                <div class="create-update-model-input-box">
-                  <label>شماره تماس ۲</label>
-                  <input type="text" v-model="organization.phone1">
-                </div>
+                <custom-text-input
+                  :label="'شماره تماس ۲'"
+                  v-model="organization.phone1"
+                />
               </v-col>
               <v-col
                 cols="12"
                 sm="6"
                 md="4"
               >
-                <div class="create-update-model-input-box">
-                  <label>آدرس اینستاگرام</label>
-                  <input type="text" v-model="organization.instagram">
-                </div>
+                <custom-text-input
+                  :label="'آدرس اینستاگرام'"
+                  v-model="organization.instagram"
+                />
               </v-col>
               <v-col
                 cols="12"
                 sm="6"
                 md="4"
               >
-                <div class="create-update-model-input-box">
-                  <label>هزینه پیامک</label>
-                  <input v-money="money" type="text" v-model.lazy="organization.sms_price">
-                </div>
+                <custom-price-input
+                  :label="'هزینه پیامک'"
+                  v-model="organization.sms_price"
+                />
               </v-col>
               <v-col
                 cols="12"
                 sm="6"
                 md="4"
               >
-                <div class="create-update-model-input-box">
-                  <label>اعتبار پیامک</label>
-                  <input v-money="money" type="text" v-model.lazy="organization.sms_credit">
-                </div>
+                <custom-price-input
+                  :label="'اعتبار پیامک'"
+                  v-model="organization.sms_credit"
+                />
               </v-col>
             </v-row>
             <v-row>
               <v-col
                 cols="12"
               >
-                <div class="create-update-model-input-box">
-                  <label>دسته بندی مراجعات بیماران</label>
-                  <textarea
-                    v-model="organization.case_types"
-                    rows="3"
-                  ></textarea>
-                </div>
+                <custom-text-area-input
+                  :label="'دسته بندی مراجعات بیماران'"
+                  :error="errors.case_types"
+                  v-model="organization.case_types"
+                  @input="errors.case_types = ''"
+                />
               </v-col>
             </v-row>
             <v-row>
@@ -290,10 +286,17 @@
 <script>
 import CropImageComponent from "~/components/panel/global/CropImageComponent";
 import RelOrganizationItemComponent from "~/components/panel/orgnization/RelOrganizationItemComponent";
+import CustomTextInput from "~/components/custom/CustomTextInput";
+import CustomMultiSelect from "~/components/custom/CustomMultiSelect";
+import CustomPriceInput from "~/components/custom/CustomPriceInput";
+import CustomTextAreaInput from "~/components/custom/CustomTextAreaInput";
 
 export default {
   name: "CreateOrganizationFromComponent",
-  components: {RelOrganizationItemComponent, CropImageComponent},
+  components: {
+    CustomTextAreaInput,
+    CustomPriceInput, CustomMultiSelect, CustomTextInput, RelOrganizationItemComponent, CropImageComponent
+  },
   props: {
     show: {
       type: Boolean,
@@ -339,19 +342,18 @@ export default {
         rel_organizations: [],
       },
       profession: null,
-      money: {
-        decimal: '.',
-        thousands: ',',
-        suffix: ' تومان',
-        prefix: '',
-        precision: 0,
-        masked: false /* doesn't work with directive */
-      }
+      errors: {
+        name: '',
+        profession_id: '',
+        phone: '',
+        case_types: '',
+      },
     }
   },
   methods: {
     closeForm() {
       this.$emit('close')
+      this.resetForm();
     },
     resetForm() {
       this.organization = {
@@ -385,25 +387,59 @@ export default {
         rel_organizations: [],
       }
       this.profession = null
+      this.resetErrors()
+    },
+    resetErrors() {
+      this.errors = {
+        name: '',
+        profession_id: '',
+        phone: '',
+        case_types: '',
+      }
+    },
+    validateFrom() {
+      this.resetErrors()
+      let isValid = true
+      if (!this.organization.name) {
+        this.errors.name = 'فیلد نام اجباری است'
+        isValid = false
+      }
+      if (!this.organization.profession_id) {
+        this.errors.profession_id = 'فیلد تخصص اجباری است'
+        isValid = false
+      }
+      if (!this.organization.phone) {
+        this.errors.phone = 'فیلد شماره تماس اجباری است'
+        isValid = false
+      }
+      if (!this.organization.case_types) {
+        this.errors.case_types = 'فیلد دسته بندی مراجعات بیماران اجباری است'
+        isValid = false
+      }
+      return isValid;
     },
     createOrganization() {
-      const data = {
-        ...this.organization,
-        rel_organizations: [
-          ...this.organization.rel_organizations.map(i => {
-            return {
-              organization_id: i.organization.id,
-              profession_id: i.profession.id,
-              rel_organization_id: i.rel_organization.id,
-            }
-          }),
-        ],
-        sms_price: parseFloat(this.organization.sms_price.split(' ')[0].split(',').join('')),
-        sms_credit: parseFloat(this.organization.sms_credit.split(' ')[0].split(',').join('')),
+      if (this.validateFrom()) {
+        const data = {
+          ...this.organization,
+          rel_organizations: [
+            ...this.organization.rel_organizations.map(i => {
+              return {
+                organization_id: i.organization.id,
+                profession_id: i.profession.id,
+                rel_organization_id: i.rel_organization.id,
+              }
+            }),
+          ],
+          sms_price: parseFloat(this.organization.sms_price.split(' ')[0].split(',').join('')),
+          sms_credit: parseFloat(this.organization.sms_credit.split(' ')[0].split(',').join('')),
+        }
+        delete data.logo
+        this.$store.dispatch('admin/organizations/createOrganization', data)
+          .then(() => {
+            this.closeForm()
+          })
       }
-      delete data.logo
-      this.$store.dispatch('admin/organizations/createOrganization', data)
-      this.closeForm()
     },
     chooseImage(e) {
       this.$refs.crop.setImage(e)

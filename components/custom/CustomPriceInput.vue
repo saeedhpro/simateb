@@ -1,14 +1,14 @@
 <template>
   <div class="create-update-model-input-box" :class="{'has-error': error}">
     <label v-if="label">{{ label }}</label>
-    <input :type="type" v-model="data" :autocomplete="type === 'password' ? 'new-password' : 'off'">
+    <input  v-money="money" :type="type" v-model.lazy="data" :autocomplete="type === 'password' ? 'new-password' : 'off'">
     <span class="create-update-modal-input-error" v-if="error">{{ error }}</span>
   </div>
 </template>
 
 <script>
 export default {
-  name: "CustomTextInput",
+  name: "CustomPriceInput",
   props: {
     label: {
       type: String,
@@ -26,6 +26,18 @@ export default {
       type: [String, Object, Number],
       default: "",
     },
+  },
+  data() {
+    return {
+      money: {
+        decimal: '.',
+        thousands: ',',
+        suffix: ' تومان',
+        prefix: '',
+        precision: 0,
+        masked: false
+      }
+    }
   },
   computed: {
     data: {

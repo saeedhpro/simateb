@@ -1386,9 +1386,14 @@ table {
   justify-content: flex-start;
 
   &.has-error {
-    input {
+    textarea, input, .multiselect__tags {
       outline: none !important;
-      border: 1px solid #F44336;
+      border: 1px solid #F44336 !important;
+    }
+    .multiselect__tags {
+      input {
+        border: none !important;
+      }
     }
 
     .create-update-modal-input-error {

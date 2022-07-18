@@ -84,9 +84,9 @@
                          :ripple="false"
                   />
                   <img :src="i.logo ? i.logo : 'https://randomuser.me/api/portraits/men/88.jpg'">
-                  <span><nuxt-link :to="`/profile/${i.id}`">{{
+                  <span class="cursor-pointer" @click="editUser(i)">{{
                       `${i.fname} ${i.lname}` | persianDigit
-                    }}</nuxt-link></span>
+                    }}</span>
                 </div>
               </td>
               <td class="text-center">{{ i.tel ? i.tel : '-' | persianDigit }}</td>
@@ -112,6 +112,12 @@
       @close="toggleShowDelete"
       @remove="remove"
     />
+    <admin-update-user-form-component
+      v-if="item"
+      :open="showEditUser"
+      :item="item"
+      @close="closeEditUserModal"
+    />
     <send-sms-component
       :users="allUsers"
       :multiple="true"
@@ -127,10 +133,12 @@
 import DataTableComponent from "~/components/panel/global/DataTableComponent";
 import AdminDeleteUsersComponent from "~/components/admin/global/AdminDeleteUsersComponent";
 import SendSmsComponent from "~/components/global/sms/SendSmsComponent";
+import AdminUpdateUserFormComponent from "~/components/admin/user/AdminUpdateUserFormComponent";
 
 export default {
   name: "AdminOrganizationMainComponent",
   components: {
+    AdminUpdateUserFormComponent,
     AdminDeleteUsersComponent,
     DataTableComponent,
     SendSmsComponent,
@@ -146,6 +154,7 @@ export default {
     return {
       showDelete: false,
       showSendSmsModal: false,
+      showEditUser: false,
       selectedUsers: [],
       headers: [
         '',
@@ -172,6 +181,7 @@ export default {
         }
       ],
       action: null,
+      item: null,
     }
   },
   methods: {
@@ -194,6 +204,18 @@ export default {
           this.toggleShowSendSmsModal()
           break
       }
+    },
+    closeEditUserModal() {
+      this.toggleEditUserModal()
+      this.item = null
+      this.paginate(this.page)
+    },
+    editUser(item) {
+      this.item = item
+      this.toggleEditUserModal()
+    },
+    toggleEditUserModal() {
+      this.showEditUser = !this.showEditUser
     },
     toggleShowSendSmsModal() {
       this.showSendSmsModal = !this.showSendSmsModal

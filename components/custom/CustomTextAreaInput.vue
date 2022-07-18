@@ -4,6 +4,7 @@
     <textarea
       v-model="data"
       :rows="rows"
+      autocomplete="off"
     ></textarea>
     <span class="create-update-modal-input-error" v-if="error">{{ error }}</span>
   </div>

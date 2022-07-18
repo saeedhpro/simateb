@@ -358,7 +358,7 @@
               >
                 <button
                   class="main-button"
-                  @click="createUser"
+                  @click="updateUser"
                 >
                   ذخیره
                 </button>
@@ -374,49 +374,42 @@
 <script>
 import CropImageComponent from "~/components/panel/global/CropImageComponent";
 import GenderSwitchBoxComponent from "~/components/panel/profile/user/GenderSwitchBoxComponent";
-import CustomToggleButton from "~/components/admin/global/CustomToggleButton";
 import CustomTextInput from "~/components/custom/CustomTextInput";
 import CustomMultiSelect from "~/components/custom/CustomMultiSelect";
-import CustomDateInput from "~/components/custom/CustomDateInput";
 import CustomTextAreaInput from "~/components/custom/CustomTextAreaInput";
-import CustomToggleInput from "~/components/custom/CustomToggleInput";
 
 export default {
-  name: "AdminCreateUserFormComponent",
-  components: {
-    CustomToggleInput,
-    CustomTextAreaInput,
-    CustomDateInput,
-    CustomMultiSelect, CustomTextInput, CustomToggleButton, GenderSwitchBoxComponent, CropImageComponent
-  },
+  name: "AdminUpdateUserFormComponent",
+  components: {CustomTextAreaInput, CustomMultiSelect, CustomTextInput, GenderSwitchBoxComponent, CropImageComponent},
   props: {
     open: {
       type: Boolean,
       default: false,
       required: true,
     },
-    org: {
+    item: {
       type: Object,
       default: null,
+      required: true,
     },
   },
   data() {
     return {
       form: {
+        id: 0,
         fname: '',
         lname: '',
         email: '',
         user_group_id: 1,
-        organization_id: this.org ? this.org.id : 1,
         gender: '',
         tel: '',
         tel1: '',
         cardno: '',
         birth_date: '',
         file_id: '',
-        province_id: 30,
-        county_id: 419,
-        city_id: 1225,
+        province_id: 0,
+        county_id: 0,
+        city_id: 0,
         address: '',
         introducer: '',
         known_as: '',
@@ -444,31 +437,32 @@ export default {
         has_surgery: '',
         surgery: '',
       },
-      province: {
-        id: 30,
-        name: "همدان",
-      },
-      county: {
-        id: 419,
-        name: "همدان",
-        province_id: 30,
-      },
-      city: {
+      city: this.item.city ? this.item.city : {
         id: 1225,
         name: "همدان",
         county_id: 419,
       },
-      userGroup: {
+      county: this.item.county ? this.item.county : {
+        id: 419,
+        name: "همدان",
+        province_id: 30,
+      },
+      province: this.item.province ? this.item.province : {
+        id: 30,
+        name: "همدان",
+      },
+      userGroup: this.item.user_group ? this.item.user_group : {
         id: 1,
         name: 'بیمار'
       },
-      organization: this.org ? this.org : {
+      organization: this.item.organization ? this.item.organization : {
         id: 1,
         name: "فتوگرافی سیما طب"
       },
     }
   },
   mounted() {
+    this.resetForm()
     this.getProvinces()
     this.getOrganizations()
     this.getUserGroups()
@@ -480,71 +474,54 @@ export default {
     },
     resetForm() {
       this.form = {
-        fname: '',
-        lname: '',
-        email: '',
-        user_group_id: 1,
-        organization_id: this.org ? this.org.id : 1,
-        gender: '',
-        tel: '',
-        tel1: '',
-        cardno: '',
-        birth_date: '',
-        file_id: '',
-        province_id: 0,
-        county_id: 0,
-        city_id: 0,
-        address: '',
-        introducer: '',
-        known_as: '',
-        info: '',
-        due_payment: '',
+        id: this.item.id,
+        fname: this.item.fname,
+        lname: this.item.lname,
+        email: this.item.email,
+        user_group_id: this.item.user_group_id,
+        organization_id: this.item.organization ? this.item.organization.id : 1,
+        gender: this.item.gender ? this.item.gender.toLowerCase() : null,
+        tel: this.item.tel,
+        tel1: this.item.tel1,
+        cardno: this.item.cardno,
+        birth_date: this.item.birth_date,
+        file_id: this.item.file_id,
+        province_id: null,
+        county_id: null,
+        city_id: this.item.city_id,
+        address: this.item.address,
+        introducer: this.item.introducer,
+        known_as: this.item.known_as,
+        info: this.item.info,
+        due_payment: this.item.due_payment,
         pass: '',
         new: null,
-        has_surgery: false,
-        surgery: '',
+        has_surgery: this.item.has_surgery,
+        surgery: this.item.surgery,
       }
-      this.city = {
+      this.city = this.item.city ? this.item.city : {
         id: 1225,
         name: "همدان",
         county_id: 419,
       }
-      this.county = {
+      this.county = this.item.county ? this.item.county : {
         id: 419,
         name: "همدان",
         province_id: 30,
       }
-      this.province = {
+      this.province = this.item.province ? this.item.province : {
         id: 30,
         name: "همدان",
       }
-      this.userGroup = {
+      this.userGroup = this.item.user_group ? this.item.user_group : {
         id: 1,
         name: 'بیمار'
       }
-      this.organization = this.org ? this.org : {
+      this.organization = this.item.organization ? this.organization : {
         id: 1,
         name: "فتوگرافی سیما طب"
       }
       this.resetErrors()
-    },
-    chooseImage(e) {
-      this.$refs.crop.setImage(e)
-    },
-    openChooseImage() {
-      this.$refs.image.value = null
-      this.$refs.image.click()
-    },
-    imaged(file) {
-      this.form.new = file
-    },
-    createUser() {
-      if (this.validateFrom()) {
-        this.$store.dispatch('admin/users/createUser', this.form)
-          .then(() => {
-            this.closeForm()
-          })
-      }
     },
     validateFrom() {
       this.resetErrors()
@@ -593,10 +570,6 @@ export default {
         this.errors.address = 'فیلد آدرس اجباری است'
         isValid = false
       }
-      if (!this.form.pass) {
-        this.errors.pass = 'فیلد پسورد اجباری است'
-        isValid = false
-      }
       if (this.has_surgery && !this.form.surgery) {
         this.errors.surgery = 'فیلد علت جراحی اجباری است'
         isValid = false
@@ -622,6 +595,30 @@ export default {
         surgery: '',
       }
     },
+    chooseImage(e) {
+      this.$refs.crop.setImage(e)
+    },
+    openChooseImage() {
+      this.$refs.image.value = null
+      this.$refs.image.click()
+    },
+    imaged(file) {
+      this.form.new = file
+    },
+    updateUser() {
+      if (this.validateFrom()) {
+        const data = {
+          ...this.form,
+        }
+        if (!this.form.pass) {
+          delete data.pass
+        }
+        this.$store.dispatch('users/updateUser', data)
+          .then(() => {
+            this.closeForm()
+          })
+      }
+    },
     getProvinces() {
       this.$store.dispatch('provinces/getList')
     },
@@ -637,23 +634,6 @@ export default {
     getUserGroups() {
       this.$store.dispatch('admin/userGroups/getUserGroups')
     },
-    checkNationalCode(code) {
-      const L = code.length;
-      if (L < 8 || parseInt(code, 10) === 0) {
-        return false
-      }
-      code = ('0000' + code).substr(L + 4 - 10);
-      if (parseInt(code.substr(3, 6), 10) === 0) {
-        return false
-      }
-      const c = parseInt(code.substr(9, 1), 10);
-      let s = 0;
-      for (let i = 0; i < 9; i++) {
-        s += parseInt(code.substr(i, 1), 10) * (10 - i);
-      }
-      s = s % 11;
-      return (s < 2 && c === s) || (s >= 2 && c === (11 - s));
-    }
   },
   computed: {
     show() {
@@ -679,36 +659,12 @@ export default {
     },
   },
   watch: {
-    userGroup(val) {
-      if (val) {
-        this.form.user_group_id = val.id
-      } else {
-        this.form.user_group_id = 1
-        this.userGroup = {
-          id: 1,
-          name: 'بیمار'
-        }
-      }
-    },
-    organization(val) {
-      if (val) {
-        this.form.organization_id = val.id
-      } else {
-        this.form.organization_id = this.org ? this.org.id : 1
-        this.organization = this.org ? this.org : {
-          id: 1,
-          name: "فتوگرافی سیما طب"
-        }
-      }
-    },
     province(item) {
       if (item) {
         this.form.province_id = item.id
         this.getCounties(item.id)
       } else {
         this.form.province_id = 0
-        this.province = null
-        this.county = null
         this.$store.commit('provinces/setCounties', [])
       }
     },
@@ -718,8 +674,6 @@ export default {
         this.getCities(item.id)
       } else {
         this.form.county_id = 0
-        this.county = null
-        this.city = null
         this.$store.commit('provinces/setCities', [])
       }
     },
