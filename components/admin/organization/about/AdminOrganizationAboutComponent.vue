@@ -192,7 +192,6 @@ export default {
     cropped(file) {
     },
     imaged(file) {
-      console.log(file)
       if (!file) return
       switch (this.index) {
         case 1:

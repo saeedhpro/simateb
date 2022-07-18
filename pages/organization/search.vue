@@ -535,7 +535,6 @@ export default {
     openPazireshModal(item) {
       this.item = item
       this.toggleShowPazireshModal()
-      console.log(item)
     },
     toggleShowPazireshModal() {
       this.openShowPazireshModal = !this.openShowPazireshModal

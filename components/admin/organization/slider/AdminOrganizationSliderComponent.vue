@@ -114,6 +114,7 @@ export default {
         sliders: this.images
       })
         .then(() => {
+          this.images = []
           this.getSliders()
         })
     }

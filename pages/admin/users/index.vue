@@ -121,7 +121,7 @@
                     </td>
                     <td class="text-center">{{ i.tel ? i.tel : '-' | persianDigit }}</td>
                     <td class="text-center">{{ i.user_group ? i.user_group.name : '-' | persianDigit }}</td>
-                    <td class="text-center">{{ i.birth ? i.birth : '-' | persianDigit }}</td>
+                    <td class="text-center">{{ i.age ? i.age : '-' | persianDigit }}</td>
                     <td class="text-center" style="color: #000000">
                       <span v-if="i.organization">
                         <nuxt-link :to="`/admin/organizations/${i.organization.id}`">{{

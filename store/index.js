@@ -15,15 +15,14 @@ export const actions = {
           this.$cookies.remove('access_token')
         }
       } catch (e) {
-        console.log(e, "err")
-            commit('login/setToken', null)
-            commit('login/setUser', null)
-            this.$cookies.remove('access_token')
-      }
-    } else {
         commit('login/setToken', null)
         commit('login/setUser', null)
         this.$cookies.remove('access_token')
+      }
+    } else {
+      commit('login/setToken', null)
+      commit('login/setUser', null)
+      this.$cookies.remove('access_token')
     }
     return Promise.resolve()
   }

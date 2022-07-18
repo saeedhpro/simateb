@@ -182,7 +182,6 @@ export default {
       this.$store.dispatch('files/getList', this.userId)
     },
     cropped(file) {
-      console.log(file)
     },
     imaged(file) {
       if (!file) return

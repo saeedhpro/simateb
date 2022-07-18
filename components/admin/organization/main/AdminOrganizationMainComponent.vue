@@ -92,7 +92,7 @@
               <td class="text-center">{{ i.tel ? i.tel : '-' | persianDigit }}</td>
               <td class="text-center"><span
                 class="text-center file-id">{{ i.file_id ? i.file_id : '-' | persianDigit }}</span></td>
-              <td class="text-center">{{ i.birth ? i.birth : '-' | persianDigit }}</td>
+              <td class="text-center">{{ i.age ? i.age : '-' | persianDigit }}</td>
               <td class="text-center">
                 {{ i.created ? $moment(i.created.Time).format('jYYYY/jM/jDD') : '-' | persianDigit }}
               </td>

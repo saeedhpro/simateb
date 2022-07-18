@@ -93,7 +93,7 @@
                     v-for="(i,n) in radiologyResultList"
                     :key="n"
                   >
-                    <img :src="i" alt="" >
+                    <img class="prescription-image" :src="i" alt="" >
                   </v-col>
                 </v-row>
               </v-container>
