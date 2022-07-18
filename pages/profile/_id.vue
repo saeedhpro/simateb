@@ -4,94 +4,10 @@
       <v-col
         cols="12"
       >
-        <div class="profile-details">
-          <v-row>
-            <v-col
-              cols="12"
-              md="6"
-            >
-              <v-row>
-                <v-col
-                  cols="12"
-                  md="4"
-                >
-                  <img
-                    class="profile-image"
-                    :src="user.logo ? user.logo : 'https://randomuser.me/api/portraits/men/88.jpg'">
-                </v-col>
-                <v-col
-                  cols="12"
-                  md="8"
-                >
-                  <div class="detail-box">
-                    <div class="name-box">
-                      <span>{{ `${user.fname} ${user.lname}` | persianDigit }}</span>
-                      <v-divider vertical/>
-                      <span class="file-id-box">
-                        <span>پرونده</span>
-                        <span class="file-id">{{ user.file_id ? user.file_id : '-' | persianDigit }}</span>
-                      </span>
-                    </div>
-                    <span>{{ user.tel | persianDigit }}</span>
-                    <span>{{ user.age | persianDigit }} سال</span>
-                  </div>
-                </v-col>
-              </v-row>
-            </v-col>
-            <v-col
-              cols="12"
-              md="6"
-            >
-              <div class="description-box">
-                <div class="title">توضیحات</div>
-                <div class="description">
-                  {{ user.description }}
-                </div>
-                <div class="action-box">
-                  <v-menu
-                    close-on-content-click
-                    offset-y
-                  >
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-btn
-                        icon
-                        v-bind="attrs"
-                        v-on="on"
-                        class="more-action-button"
-                      >
-                        <v-icon>
-                          mdi-dots-horizontal
-                        </v-icon>
-                      </v-btn>
-                    </template>
-                    <v-list>
-                      <v-list-item
-                        @click="remove"
-                      >
-                        <v-list-item-title>حذف کاربر</v-list-item-title>
-                      </v-list-item>
-                      <v-divider/>
-                    </v-list>
-                  </v-menu>
-                  <div
-                    @click="showMedicalHistory"
-                    class="action-button">
-                    <v-icon>
-                      mdi-card-account-details-outline
-                    </v-icon>
-                    <span>تاریخچه درمانی</span>
-                  </div>
-                  <div class="action-button" @click="showUpdate">
-                    <v-icon>
-                      mdi-pencil-outline
-                    </v-icon>
-                    <span>ویرایش اطلاعات</span>
-                  </div>
-                </div>
-              </div>
-            </v-col>
-          </v-row>
-        </div>
+        <show-user-derails-component
+          :user="user"
+          @updated="getUser"
+        />
       </v-col>
     </v-row>
     <v-row>
@@ -327,7 +243,6 @@
       </v-card>
     </v-dialog>
     <update-user-form-component
-      :is-admin="false"
       :item="user"
       :open="showUpdateModal"
       @close="closeUpdateModal"
@@ -351,12 +266,14 @@ import TreatmentComponent from "~/components/panel/profile/medical/TreatmentComp
 import PhotographyListComponent from "~/components/panel/profile/photography/PhotographyListComponent";
 import RadiologyListComponent from "~/components/panel/profile/radiology/RadiologyListComponent";
 import UpdateUserFormComponent from "~/components/panel/profile/user/UpdateUserFormComponent";
+import ShowUserDerailsComponent from "~/components/panel/profile/user/ShowUserDerailsComponent";
 
 export default {
   name: "profile.vue",
   layout: "panel",
   middleware: "auth",
   components: {
+    ShowUserDerailsComponent,
     UpdateUserFormComponent,
     RadiologyListComponent,
     PhotographyListComponent,
@@ -368,7 +285,7 @@ export default {
     AppointmentListComponent
   },
   mounted() {
-    this.getUser(this.$route.params.id)
+    this.getUser()
   },
   data() {
     return {
@@ -387,6 +304,7 @@ export default {
     closeUpdateModal() {
       this.getUser(this.$route.params.id)
       this.toggleShowUpdateModal()
+      this.item = null
     },
     toggleShowUpdateModal() {
       this.showUpdateModal = !this.showUpdateModal
@@ -423,8 +341,8 @@ export default {
         })
       return Promise.resolve()
     },
-    getUser(id) {
-      this.$store.dispatch('users/getUser', id)
+    getUser() {
+      this.$store.dispatch('users/getUser', this.$route.params.id)
     },
     remove() {
       this.showDelete = !this.showDelete

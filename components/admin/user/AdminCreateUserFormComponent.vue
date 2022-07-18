@@ -546,6 +546,25 @@ export default {
           })
       }
     },
+    resetErrors() {
+      this.errors = {
+        fname: '',
+        lname: '',
+        email: '',
+        user_group_id: '',
+        organization_id: '',
+        gender: '',
+        tel: '',
+        birth_date: '',
+        province_id: '',
+        county_id: '',
+        city_id: '',
+        address: '',
+        pass: '',
+        has_surgery: '',
+        surgery: '',
+      }
+    },
     validateFrom() {
       this.resetErrors()
       let isValid = true
@@ -565,8 +584,8 @@ export default {
         this.errors.user_group_id = 'فیلد گروه اجباری است'
         isValid = false
       }
-      if (!this.form.user_group_id) {
-        this.errors.user_group_id = 'فیلد گروه اجباری است'
+      if (!this.form.organization_id) {
+        this.errors.organization_id = 'فیلد موسسه اجباری است'
         isValid = false
       }
       if (!this.form.tel) {
@@ -602,25 +621,6 @@ export default {
         isValid = false
       }
       return isValid;
-    },
-    resetErrors() {
-      this.errors = {
-        fname: '',
-        lname: '',
-        email: '',
-        user_group_id: '',
-        organization_id: '',
-        gender: '',
-        tel: '',
-        birth_date: '',
-        province_id: '',
-        county_id: '',
-        city_id: '',
-        address: '',
-        pass: '',
-        has_surgery: '',
-        surgery: '',
-      }
     },
     getProvinces() {
       this.$store.dispatch('provinces/getList')

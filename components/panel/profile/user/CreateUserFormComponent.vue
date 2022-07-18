@@ -69,30 +69,34 @@
                     sm="6"
                     md="6"
                   >
-                    <div class="create-update-model-input-box">
-                      <label>نام</label>
-                      <input type="text" v-model="form.fname">
-                    </div>
+                    <custom-text-input
+                      :label="'نام'"
+                      :error="errors.fname"
+                      v-model="form.fname"
+                      @input="errors.fname = ''"
+                    />
                   </v-col>
                   <v-col
                     cols="12"
                     sm="6"
                     md="6"
                   >
-                    <div class="create-update-model-input-box">
-                      <label>نام خانوادگی</label>
-                      <input type="text" v-model="form.lname">
-                    </div>
+                    <custom-text-input
+                      :label="'نام خانوادگی'"
+                      :error="errors.lname"
+                      v-model="form.lname"
+                      @input="errors.lname = ''"
+                    />
                   </v-col>
                   <v-col
                     cols="12"
                     sm="6"
                     md="6"
                   >
-                    <div class="create-update-model-input-box">
-                      <label>توضیح</label>
-                      <input type="text" v-model="form.known_as">
-                    </div>
+                    <custom-text-input
+                      :label="'توضیح'"
+                      v-model="form.known_as"
+                    />
                   </v-col>
                   <v-col
                     cols="12"
@@ -103,6 +107,8 @@
                       <label>جنسیت</label>
                       <gender-switch-box-component
                         v-model="form.gender"
+                        :error="errors.gender"
+                        @input="errors.gender = ''"
                       />
                     </div>
                   </v-col>
@@ -114,50 +120,40 @@
                 cols="12"
                 sm="4"
                 md="4"
-                v-if="isAdmin"
               >
-                <div class="create-update-model-input-box">
-                  <label>گروه</label>
-                  <multiselect searchable clearOnSelect allowEmpty v-model="userGroup" placeholder="" label="name"
-                               track-by="name" :options="userGroups"
-                               :option-height="104" :show-labels="false">
-                    <template slot="singleLabel" slot-scope="props"><span
-                      class="option__desc"><span
-                      class="option__title">{{ `${props.option.name}` }}</span></span>
-                    </template>
-                    <template slot="option" slot-scope="props">
-                      <div class="option__desc"><span class="option__title">{{ props.option.name }}</span></div>
-                    </template>
-                  </multiselect>
-                </div>
-              </v-col>
-              <v-col
-                cols="12"
-                sm="4"
-                md="4"
-                v-if="isAdmin"
-              >
-                <div class="create-update-model-input-box">
-                  <label>موسسه</label>
-                  <multiselect searchable clearOnSelect allowEmpty v-model="organization" placeholder="" label="name"
-                               track-by="name" :options="organizations"
-                               :option-height="104" :show-labels="false">
-                    <template slot="singleLabel" slot-scope="props"><span
-                      class="option__desc"><span
-                      class="option__title">{{ `${props.option.name}` }}</span></span>
-                    </template>
-                    <template slot="option" slot-scope="props">
-                      <div class="option__desc"><span class="option__title">{{ props.option.name }}</span></div>
-                    </template>
-                  </multiselect>
-                </div>
+                <custom-text-input
+                  :label="'شماره موبایل'"
+                  :error="errors.tel"
+                  v-model="form.tel"
+                  @input="errors.tel = ''"
+                />
               </v-col>
               <v-col
                 cols="12"
                 sm="4"
                 md="4"
               >
-                <div class="create-update-model-input-box">
+                <custom-text-input
+                  :label="'شماره تماس'"
+                  v-model="form.tel1"
+                />
+              </v-col>
+              <v-col
+                cols="12"
+                sm="4"
+                md="4"
+              >
+                <custom-text-input
+                  :label="'کد ملی'"
+                  v-model="form.cardno"
+                />
+              </v-col>
+              <v-col
+                cols="12"
+                sm="4"
+                md="4"
+              >
+                <div class="create-update-model-input-box" :class="{'has-error': errors.birth_date}">
                   <label>تاریخ تولد</label>
                   <date-picker
                     v-model="form.birth_date"
@@ -170,6 +166,7 @@
                       <img src="/images/form/datepicker.svg">
                     </template>
                   </date-picker>
+                  <span class="create-update-modal-input-error" v-if="errors.birth_date">{{ errors.birth_date }}</span>
                 </div>
               </v-col>
               <v-col
@@ -177,10 +174,10 @@
                 sm="4"
                 md="4"
               >
-                <div class="create-update-model-input-box">
-                  <label>شماره پرونده</label>
-                  <input type="text" v-model="form.file_id">
-                </div>
+                <custom-text-input
+                  :label="'شماره پرونده'"
+                  :error="errors.file_id"
+                />
               </v-col>
             </v-row>
             <v-row>
@@ -189,30 +186,61 @@
                 sm="4"
                 md="4"
               >
-                <div class="create-update-model-input-box">
-                  <label>شماره موبایل</label>
-                  <input type="tel" v-model="form.tel">
-                </div>
+                <custom-multi-select
+                  v-model="province"
+                  :items="provinces"
+                  :error="errors.province_id"
+                  @input="errors.province_id = ''"
+                  label="استان"
+                />
               </v-col>
               <v-col
                 cols="12"
                 sm="4"
                 md="4"
               >
-                <div class="create-update-model-input-box">
-                  <label>شماره تماس</label>
-                  <input type="tel" v-model="form.tel1">
-                </div>
+                <custom-multi-select
+                  v-model="county"
+                  :items="counties"
+                  :error="errors.county_id"
+                  @input="errors.county_id = ''"
+                  label="شهرستان"
+                  :disabled="!province"
+                />
               </v-col>
               <v-col
                 cols="12"
                 sm="4"
                 md="4"
               >
-                <div class="create-update-model-input-box">
-                  <label>کد ملی</label>
-                  <input type="text" v-model="form.cardno">
-                </div>
+                <custom-multi-select
+                  v-model="city"
+                  :items="cities"
+                  :error="errors.city_id"
+                  @input="errors.city_id = ''"
+                  label="شهر"
+                  :disabled="!county"
+                />
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col
+                cols="12"
+              >
+                <custom-text-area-input
+                  :label="'آدرس'"
+                  :error="errors.address"
+                  v-model="form.address"
+                  @input="errors.address = ''"
+                />
+              </v-col>
+              <v-col
+                cols="12"
+              >
+                <custom-text-area-input
+                  :label="'شرح حال'"
+                  v-model="form.info"
+                />
               </v-col>
             </v-row>
             <v-row>
@@ -221,112 +249,36 @@
                 sm="4"
                 md="4"
               >
-                <div class="create-update-model-input-box">
-                  <label>استان</label>
-                  <multiselect searchable clearOnSelect allowEmpty v-model="province" placeholder="" label="name"
-                               track-by="name" :options="provinces"
-                               :option-height="104" :show-labels="false">
-                    <template slot="singleLabel" slot-scope="props"><span
-                      class="option__desc"><span
-                      class="option__title">{{ `${props.option.name}` }}</span></span>
-                    </template>
-                    <template slot="option" slot-scope="props">
-                      <div class="option__desc"><span class="option__title">{{ props.option.name }}</span></div>
-                    </template>
-                  </multiselect>
-                </div>
+                <custom-text-input
+                  :label="'معرف'"
+                  v-model="form.introducer"
+                />
               </v-col>
               <v-col
                 cols="12"
                 sm="4"
                 md="4"
               >
-                <div class="create-update-model-input-box">
-                  <label>شهرستان</label>
-                  <multiselect
-                    :disabled="!province"
-                    searchable clearOnSelect allowEmpty v-model="county" placeholder="" label="name"
-                    track-by="name" :options="counties"
-                    :option-height="104" :show-labels="false">
-                    <template slot="singleLabel" slot-scope="props"><span
-                      class="option__desc"><span
-                      class="option__title">{{ `${props.option.name}` }}</span></span>
-                    </template>
-                    <template slot="option" slot-scope="props">
-                      <div class="option__desc"><span class="option__title">{{ props.option.name }}</span></div>
-                    </template>
-                  </multiselect>
-                </div>
+                <custom-toggle-input
+                  :label="'سابقه جراحی'"
+                  :error="errors.has_surgery"
+                  v-model="form.has_surgery"
+                  @input="errors.has_surgery = ''"
+                  :off-label="`ندارد`"
+                  :on-label="`دارد`"
+                />
               </v-col>
               <v-col
                 cols="12"
-                sm="4"
-                md="4"
+                v-if="form.has_surgery"
               >
-                <div class="create-update-model-input-box">
-                  <label>شهر</label>
-                  <multiselect
-                    :disabled="!county"
-                    searchable clearOnSelect allowEmpty v-model="city" placeholder="" label="name"
-                    track-by="name" :options="cities"
-                    :option-height="104" :show-labels="false">
-                    <template slot="singleLabel" slot-scope="props"><span
-                      class="option__desc"><span
-                      class="option__title">{{ `${props.option.name}` }}</span></span>
-                    </template>
-                    <template slot="option" slot-scope="props">
-                      <div class="option__desc"><span class="option__title">{{ props.option.name }}</span></div>
-                    </template>
-                  </multiselect>
-                </div>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col
-                cols="12"
-              >
-                <div class="create-update-model-input-box">
-                  <label>آدرس</label>
-                  <textarea
-                    v-model="form.address"
-                    rows="3"
-                  ></textarea>
-                  <!--                  <span class="create-update-modal-error red&#45;&#45;text">این یک ارور است</span>-->
-                </div>
-              </v-col>
-              <v-col
-                cols="12"
-              >
-                <div class="create-update-model-input-box">
-                  <label>شرح حال</label>
-                  <textarea
-                    v-model="form.info"
-                    rows="3"
-                  ></textarea>
-                </div>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col
-                cols="12"
-                sm="4"
-                md="4"
-              >
-                <div class="create-update-model-input-box">
-                  <label>معرف</label>
-                  <input type="text" v-model="form.introducer">
-                </div>
-              </v-col>
-              <v-col
-                cols="12"
-                sm="4"
-                md="4"
-                v-if="isAdmin"
-              >
-                <div class="create-update-model-input-box">
-                  <label>رمز عبور</label>
-                  <input type="password" v-model="form.pass">
-                </div>
+                <custom-text-area-input
+                  :label="'علت جراحی'"
+                  :error="errors.surgery"
+                  v-model="form.surgery"
+                  @input="errors.surgery = ''"
+                  :rows="4"
+                />
               </v-col>
             </v-row>
           </v-container>
@@ -382,10 +334,17 @@
 <script>
 import CropImageComponent from "~/components/panel/global/CropImageComponent";
 import GenderSwitchBoxComponent from "~/components/panel/profile/user/GenderSwitchBoxComponent";
+import CustomTextInput from "~/components/custom/CustomTextInput";
+import CustomMultiSelect from "~/components/custom/CustomMultiSelect";
+import CustomTextAreaInput from "~/components/custom/CustomTextAreaInput";
+import CustomToggleInput from "~/components/custom/CustomToggleInput";
 
 export default {
   name: "CreateUserFormComponent",
-  components: {GenderSwitchBoxComponent, CropImageComponent},
+  components: {
+    CustomToggleInput,
+    CustomTextAreaInput, CustomMultiSelect, CustomTextInput, GenderSwitchBoxComponent, CropImageComponent
+  },
   props: {
     open: {
       type: Boolean,
@@ -420,6 +379,25 @@ export default {
         due_payment: '',
         pass: '',
         new: null,
+        has_surgery: false,
+        surgery: '',
+      },
+      errors: {
+        fname: '',
+        lname: '',
+        email: '',
+        user_group_id: '',
+        organization_id: '',
+        gender: '',
+        tel: '',
+        birth_date: '',
+        province_id: '',
+        county_id: '',
+        city_id: '',
+        address: '',
+        pass: '',
+        has_surgery: '',
+        surgery: '',
       },
       province: {
         id: 30,
@@ -435,8 +413,6 @@ export default {
         name: "همدان",
         county_id: 419,
       },
-      userGroup: null,
-      organization: null,
     }
   },
   mounted() {
@@ -455,6 +431,7 @@ export default {
         lname: '',
         email: '',
         user_group_id: 1,
+        organization_id: this.loginUser.organization ? this.loginUser.organization.id : 1,
         gender: '',
         tel: '',
         tel1: '',
@@ -471,10 +448,88 @@ export default {
         due_payment: '',
         pass: '',
         new: null,
+        has_surgery: false,
+        surgery: '',
       }
-      this.city = null
-      this.county = null
-      this.province = null
+      this.city = {
+        id: 1225,
+        name: "همدان",
+        county_id: 419,
+      }
+      this.county = {
+        id: 419,
+        name: "همدان",
+        province_id: 30,
+      }
+      this.province = {
+        id: 30,
+        name: "همدان",
+      }
+      this.resetErrors()
+    },
+    resetErrors() {
+      this.errors = {
+        fname: '',
+        lname: '',
+        email: '',
+        user_group_id: '',
+        organization_id: '',
+        gender: '',
+        tel: '',
+        birth_date: '',
+        province_id: '',
+        county_id: '',
+        city_id: '',
+        address: '',
+        pass: '',
+        has_surgery: '',
+        surgery: '',
+      }
+    },
+    validateFrom() {
+      this.resetErrors()
+      let isValid = true
+      if (!this.form.fname) {
+        this.errors.fname = 'فیلد نام اجباری است'
+        isValid = false
+      }
+      if (!this.form.lname) {
+        this.errors.lname = 'فیلد نام خانوادگی اجباری است'
+        isValid = false
+      }
+      if (!this.form.gender) {
+        this.errors.gender = 'فیلد جنسیت اجباری است'
+        isValid = false
+      }
+      if (!this.form.tel) {
+        this.errors.tel = 'فیلد شماره موبایل اجباری است'
+        isValid = false
+      }
+      if (!this.form.birth_date) {
+        this.errors.birth_date = 'فیلد تاریخ تولد اجباری است'
+        isValid = false
+      }
+      if (!this.form.province_id) {
+        this.errors.province_id = 'فیلد استان اجباری است'
+        isValid = false
+      }
+      if (!this.form.county_id) {
+        this.errors.county_id = 'فیلد شهرستان اجباری است'
+        isValid = false
+      }
+      if (!this.form.city_id) {
+        this.errors.city_id = 'فیلد شهر اجباری است'
+        isValid = false
+      }
+      if (!this.form.address) {
+        this.errors.address = 'فیلد آدرس اجباری است'
+        isValid = false
+      }
+      if (this.has_surgery && !this.form.surgery) {
+        this.errors.surgery = 'فیلد علت جراحی اجباری است'
+        isValid = false
+      }
+      return isValid;
     },
     chooseImage(e) {
       this.$refs.crop.setImage(e)
@@ -487,10 +542,12 @@ export default {
       this.form.new = file
     },
     createUser() {
-      this.$store.dispatch('users/createUser', this.form)
-        .finally(() => {
-          this.closeForm()
-        })
+      if (this.validateFrom()) {
+        this.$store.dispatch('users/createUser', this.form)
+          .then(() => {
+            this.closeForm()
+          })
+      }
     },
     getProvinces() {
       this.$store.dispatch('provinces/getList')
@@ -541,12 +598,6 @@ export default {
     cities() {
       return this.$store.getters['provinces/getCities']
     },
-    organizations() {
-      return this.$store.getters['admin/organizations/getOrganizations']
-    },
-    userGroups() {
-      return this.$store.getters['admin/userGroups/getUserGroups']
-    },
   },
   watch: {
     province(item) {
@@ -555,6 +606,8 @@ export default {
         this.getCounties(item.id)
       } else {
         this.form.province_id = 0
+        this.province = null
+        this.county = null
         this.$store.commit('provinces/setCounties', [])
       }
     },
@@ -564,6 +617,8 @@ export default {
         this.getCities(item.id)
       } else {
         this.form.county_id = 0
+        this.county = null
+        this.city = null
         this.$store.commit('provinces/setCities', [])
       }
     },

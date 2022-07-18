@@ -718,6 +718,12 @@ table {
         margin-left: 5px;
         margin-top: 2px;
         width: 100%;
+        &.label-description {
+          text-align: right;
+          font: normal normal normal 16px/28px IRANYekanRegular !important;
+          letter-spacing: 0;
+          color: #141432;
+        }
       }
       .value-box {
         text-align: right;

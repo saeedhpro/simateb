@@ -377,10 +377,13 @@ import GenderSwitchBoxComponent from "~/components/panel/profile/user/GenderSwit
 import CustomTextInput from "~/components/custom/CustomTextInput";
 import CustomMultiSelect from "~/components/custom/CustomMultiSelect";
 import CustomTextAreaInput from "~/components/custom/CustomTextAreaInput";
+import CustomToggleInput from "~/components/custom/CustomToggleInput";
 
 export default {
   name: "AdminUpdateUserFormComponent",
-  components: {CustomTextAreaInput, CustomMultiSelect, CustomTextInput, GenderSwitchBoxComponent, CropImageComponent},
+  components: {
+    CustomToggleInput,
+    CustomTextAreaInput, CustomMultiSelect, CustomTextInput, GenderSwitchBoxComponent, CropImageComponent},
   props: {
     open: {
       type: Boolean,
@@ -401,6 +404,7 @@ export default {
         lname: '',
         email: '',
         user_group_id: 1,
+        organization_id: this.item.organization ? this.item.organization.id : 1,
         gender: '',
         tel: '',
         tel1: '',
@@ -523,6 +527,25 @@ export default {
       }
       this.resetErrors()
     },
+    resetErrors() {
+      this.errors = {
+        fname: '',
+        lname: '',
+        email: '',
+        user_group_id: '',
+        organization_id: '',
+        gender: '',
+        tel: '',
+        birth_date: '',
+        province_id: '',
+        county_id: '',
+        city_id: '',
+        address: '',
+        pass: '',
+        has_surgery: '',
+        surgery: '',
+      }
+    },
     validateFrom() {
       this.resetErrors()
       let isValid = true
@@ -538,8 +561,8 @@ export default {
         this.errors.gender = 'فیلد جنسیت اجباری است'
         isValid = false
       }
-      if (!this.form.user_group_id) {
-        this.errors.user_group_id = 'فیلد گروه اجباری است'
+      if (!this.form.organization_id) {
+        this.errors.organization_id = 'فیلد سازمان اجباری است'
         isValid = false
       }
       if (!this.form.user_group_id) {
@@ -575,25 +598,6 @@ export default {
         isValid = false
       }
       return isValid;
-    },
-    resetErrors() {
-      this.errors = {
-        fname: '',
-        lname: '',
-        email: '',
-        user_group_id: '',
-        organization_id: '',
-        gender: '',
-        tel: '',
-        birth_date: '',
-        province_id: '',
-        county_id: '',
-        city_id: '',
-        address: '',
-        pass: '',
-        has_surgery: '',
-        surgery: '',
-      }
     },
     chooseImage(e) {
       this.$refs.crop.setImage(e)
@@ -659,12 +663,36 @@ export default {
     },
   },
   watch: {
+    userGroup(val) {
+      if (val) {
+        this.form.user_group_id = val.id
+      } else {
+        this.form.user_group_id = 1
+        this.userGroup = {
+          id: 1,
+          name: 'بیمار'
+        }
+      }
+    },
+    organization(val) {
+      if (val) {
+        this.form.organization_id = val.id
+      } else {
+        this.form.organization_id = this.org ? this.org.id : 1
+        this.organization = this.org ? this.org : {
+          id: 1,
+          name: "فتوگرافی سیما طب"
+        }
+      }
+    },
     province(item) {
       if (item) {
         this.form.province_id = item.id
         this.getCounties(item.id)
       } else {
         this.form.province_id = 0
+        this.province = null
+        this.county = null
         this.$store.commit('provinces/setCounties', [])
       }
     },
@@ -674,6 +702,8 @@ export default {
         this.getCities(item.id)
       } else {
         this.form.county_id = 0
+        this.county = null
+        this.city = null
         this.$store.commit('provinces/setCities', [])
       }
     },
