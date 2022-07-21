@@ -17,7 +17,7 @@
     >
       <template slot="singleLabel" slot-scope="props"><span
         class="option__desc"><span
-        class="option__title">{{ hasCustomLabel ? props.option.fname : `${props.option.fname} ${props.option.lname}` | toPersianNumber }}</span></span>
+        class="option__title">{{ hasCustomLabel ? `${props.option.fname} ${props.option.lname}` : props.option.name | toPersianNumber }}</span></span>
       </template>
       <template slot="option" slot-scope="props">
         <div class="option__desc"><span class="option__title">{{ hasCustomLabel ? `${props.option.fname} ${props.option.lname}` : props.option.name | toPersianNumber  }}</span></div>
