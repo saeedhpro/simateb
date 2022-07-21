@@ -171,7 +171,7 @@
                   <v-col>
                     <button
                       class="main-button"
-                      @click="createAppointment"
+                      @click="openAcceptModal"
                     >
                       ذخیره
                     </button>
@@ -183,6 +183,14 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <accept-create-appointment-modal
+      v-if="user"
+      :open="showAcceptModal"
+      :full-name="`${user.fname} ${user.lname}`"
+      :start-at="appointment.start_at"
+      @close="toggleAcceptModal"
+      @accept="createAppointment"
+    />
   </div>
 </template>
 
@@ -193,10 +201,12 @@ import CustomMultiSelect from "~/components/custom/CustomMultiSelect";
 import CustomTextInput from "~/components/custom/CustomTextInput";
 import CustomPriceInput from "~/components/custom/CustomPriceInput";
 import CustomTextAreaInput from "~/components/custom/CustomTextAreaInput";
+import AcceptCreateAppointmentModal from "~/components/panel/appointment/AppointmentForm/AcceptCreateAppointmentModal";
 
 export default {
   name: "CreateAppointmentFormComponent",
   components: {
+    AcceptCreateAppointmentModal,
     CustomTextAreaInput,
     CustomPriceInput,
     CustomTextInput,
@@ -230,6 +240,7 @@ export default {
         case_type: '',
       },
       user: null,
+      showAcceptModal: false,
     }
   },
   methods: {
@@ -286,11 +297,18 @@ export default {
     loading() {
       this.$emit('loading')
     },
-    createAppointment() {
+    openAcceptModal() {
       if (this.validateFrom()) {
-        this.loading()
+        this.toggleAcceptModal()
+      }
+    },
+    toggleAcceptModal() {
+      this.showAcceptModal = !this.showAcceptModal
+    },
+    createAppointment() {
+      this.toggleAcceptModal()
+      if (this.validateFrom()) {
         if (!this.appointment.user_id) {
-          this.loading()
           return
         }
         this.$store.dispatch('appointments/createAppointment', {
@@ -300,10 +318,9 @@ export default {
         })
           .then(() => {
             this.closeForm()
-            this.loading()
           })
       }
-    },
+    }
   },
   computed: {
     users() {
@@ -316,6 +333,7 @@ export default {
       return this.open;
     },
     isDoctor() {
+      if (!this.loginUser) return false;
       const profession_id = this.loginUser.organization.profession_id;
       return profession_id !== 1 && profession_id !== 2 && profession_id !== 3
     },

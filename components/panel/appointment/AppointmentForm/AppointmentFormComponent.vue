@@ -1059,6 +1059,7 @@ export default {
       return this.open;
     },
     isDoctor() {
+      if (!this.loginUser) return false;
       const profession_id = this.loginUser.organization.profession_id;
       return profession_id !== 1 && profession_id !== 2 && profession_id !== 3
     },

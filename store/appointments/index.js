@@ -49,7 +49,15 @@ export const actions = {
       })
   },
   getOrganizationAppointmentsList(ctx, data) {
-    return this.$axios.get(`/organizations/appointments?start=${data.start}&end=${data.end}&page=${data.page}`)
+    const d = Object.entries(data);
+    const arr = [];
+    for (let i = 0; i < d.length; i++) {
+      if (d[i][1]) {
+        arr.push(`${d[i][0]}=${d[i][1]}`)
+      }
+    }
+    ctx.commit('setList', [])
+    return this.$axios.get(`/organizations/appointments?${arr.join('&')}`)
       .then(res => {
         const data = res.data;
         ctx.commit('setList', data)

@@ -2,39 +2,9 @@
   <v-container
     fluid
   >
-    <v-row>
-      <v-col align-self="center">
-        <div class="page-header-box">
-          <nuxt-link to="/organization" class="page-header">
-            <img src="/images/pages/users.svg" alt="users">
-            <span class="title">
-              {{ isDoctor ? 'پذیرش' : 'ارسال نتایج' }}
-            </span>
-          </nuxt-link>
-          <nuxt-link to="/organization/search" class="page-header">
-            <img src="/images/pages/users.svg" alt="users">
-            <span class="title">جستجو</span>
-          </nuxt-link>
-
-          <v-divider inset/>
-          <div class="page-actions-secondary"
-               @click="isDoctor ? togglePazireshModal : () => {}"
-          >
-            <span class="title">
-              {{ today | toPersianDate('dddd DD MMMM') }}
-            </span>
-          </div>
-          <div
-            v-if="isDoctor"
-            class="page-actions"
-            @click="togglePazireshModal"
-          >
-            <img src="/images/pages/new-user.svg" alt="users">
-            <span class="title">پذیرش جدید</span>
-          </div>
-        </div>
-      </v-col>
-    </v-row>
+    <paziresh-link-box
+      @closePazireshModal="closePazireshModal"
+    />
     <v-row>
       <v-col
         cols="12"
@@ -341,24 +311,12 @@
         </v-card>
       </v-col>
     </v-row>
-    <create-appointment-form-component
-      :open="showPazireshModal"
-      @close="closePazireshModal"
-      @loading="toggleOverlay"
-    />
     <appointment-form-component
       :open="showPazireshModal"
       :item="item"
       @close="closePazireshModal"
-      @loading="toggleOverlay"
       :has-item="hasItem"
     />
-    <v-overlay :value="overlay">
-      <v-progress-circular
-        indeterminate
-        size="64"
-      ></v-progress-circular>
-    </v-overlay>
   </v-container>
 </template>
 
@@ -369,16 +327,18 @@ import CaseTypeCheckboxComponent from "~/components/panel/appointment/CaseTypeCh
 import AppointmentFormComponent from "~/components/panel/appointment/AppointmentForm/AppointmentFormComponent";
 import CreateAppointmentFormComponent
   from "~/components/panel/appointment/AppointmentForm/CreateAppointmentFormComponent";
+import PazireshLinkBox from "~/components/panel/orgnization/paziresh/PazireshLinkBox";
 
 export default {
   name: "search",
-  components: {CreateAppointmentFormComponent, AppointmentFormComponent, CaseTypeCheckboxComponent, DataTableComponent},
+  components: {
+    PazireshLinkBox,
+    CreateAppointmentFormComponent, AppointmentFormComponent, CaseTypeCheckboxComponent, DataTableComponent},
   layout: 'panel',
   data() {
     return {
       showPazireshModal: false,
       showFilterModal: false,
-      overlay: false,
       hasItem: false,
       item: null,
       selectedItems: [],
@@ -468,14 +428,8 @@ export default {
   },
   methods: {
     getAppointmentList() {
-      this.toggleOverlay()
       this.showFilterModal = false
       this.$store.dispatch('appointments/search', this.search)
-        .finally(() => {
-          setTimeout(() => {
-            this.toggleOverlay()
-          }, 50)
-        })
     },
     clearForm() {
       this.search = {
@@ -487,17 +441,7 @@ export default {
       }
     },
     closePazireshModal() {
-      this.togglePazireshModal()
-      this.hasItem = false
-      setTimeout(() => {
-        if (this.item) {
-          this.item = null
-        }
-      }, 100)
       this.getAppointmentList()
-    },
-    toggleOverlay() {
-      this.overlay = !this.overlay
     },
     toggleFilterModal() {
       this.showFilterModal = !this.showFilterModal
@@ -582,6 +526,7 @@ export default {
       return moment().format("YYYY/MM/DD")
     },
     isDoctor() {
+      if (!this.loginUser) return false;
       const profession_id = this.loginUser.organization.profession_id;
       return profession_id !== 1 && profession_id !== 2 && profession_id !== 3
     },

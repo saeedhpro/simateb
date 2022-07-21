@@ -2,39 +2,9 @@
   <v-container
     fluid
   >
-    <v-row>
-      <v-col align-self="center">
-        <div class="page-header-box">
-          <nuxt-link to="/organization" class="page-header">
-            <img src="/images/pages/users.svg" alt="users">
-            <span class="title">
-              {{ isDoctor ? 'پذیرش' : 'ارسال نتایج' }}
-            </span>
-          </nuxt-link>
-          <nuxt-link to="/organization/search" class="page-header">
-            <img src="/images/pages/users.svg" alt="users">
-            <span class="title">جستجو</span>
-          </nuxt-link>
-
-          <v-divider inset/>
-          <div class="page-actions-secondary"
-               @click="isDoctor ? () => togglePazireshModal() : () => {}"
-          >
-            <span class="title">
-              {{ today | toPersianDate('dddd DD MMMM') }}
-            </span>
-          </div>
-          <div
-            v-if="isDoctor"
-            class="page-actions"
-            @click="togglePazireshModal"
-          >
-            <img src="/images/pages/new-user.svg" alt="users">
-            <span class="title">پذیرش جدید</span>
-          </div>
-        </div>
-      </v-col>
-    </v-row>
+    <paziresh-link-box
+      @closePazireshModal="closePazireshModal"
+    />
     <v-row>
       <v-col
         cols="12"
@@ -42,24 +12,14 @@
         <v-card
           class="page-main-box"
         >
-          <v-row
+          <doctor-paziresh-header
             v-if="isDoctor"
-            class="search-box">
-            <v-col
-              cols="12"
-              sm="12"
-              md="12"
-            >
-              <div class="right-box justify-start align-center">
-                <span class="small-circle"></span>
-                برای امروز، <span class="number">{{ appointments.total_rows | toPersianNumber }}</span> مورد پذیرش ثبت
-                شده است
-              </div>
-            </v-col>
-          </v-row>
+            :total="appointments.total_rows"
+          />
           <v-row
             v-else
-            class="search-box">
+            class="search-box"
+          >
             <v-col
               cols="12"
               sm="12"
@@ -88,7 +48,7 @@
                 </button>
               </div>
             </v-col>
-            <v-spacer />
+            <v-spacer/>
             <v-col
               cols="12"
               sm="12"
@@ -110,7 +70,8 @@
                           d="M17.722,16.559l-4.711-4.711a7.094,7.094,0,0,0,1.582-4.535,7.327,7.327,0,1,0-2.777,5.729l4.711,4.711a.972.972,0,0,0,.629.247.844.844,0,0,0,.6-.247A.822.822,0,0,0,17.722,16.559ZM1.687,7.313a5.625,5.625,0,1,1,5.625,5.625A5.632,5.632,0,0,1,1.687,7.313Z"
                           transform="translate(0)"/>
                   </svg>
-                  <input class="search-input" v-model="search.q" type="text" ref="search-input" placeholder="جستجو">
+                  <input class="search-input" v-model="search.q" type="text" ref="search-input" placeholder="جستجو"
+                         @input="getAppointmentList">
                   <div @click="getAppointmentList" class="search-button">
                     <img src="/images/pages/search-button.svg">
                   </div>
@@ -208,7 +169,7 @@
                             >
                               <button
                                 class="second-button"
-                                @click="clearForm"
+                                @click="clearFilterForm"
                               >
                                 پاک کردن فرم
                               </button>
@@ -233,7 +194,7 @@
                             >
                               <button
                                 class="main-button"
-                                @click="getAppointmentList"
+                                @click="getAppointmentList(true)"
                               >
                                 جستجو
                               </button>
@@ -322,7 +283,7 @@
                         <img
                           :src="i.user && i.user.logo ? i.user.logo : 'https://randomuser.me/api/portraits/men/88.jpg'">
                         <span>
-                          <a @click="openPazireshModal(i)">{{
+                          <a @click="openAppointmentModal(i)">{{
                               i.user ? `${i.user.fname} ${i.user.lname}` : '-' | persianDigit
                             }}</a>
                         </span>
@@ -356,48 +317,44 @@
           </v-row>
         </v-card>
       </v-col>
+      <appointment-form-component
+        :open="showAppointmentModal"
+        :item="item"
+        @close="closeAppointmentModal"
+      />
     </v-row>
-    <create-appointment-form-component
-      :open="showPazireshModal"
-      @close="closePazireshModal"
-      @loading="toggleOverlay"
-    />
-    <appointment-form-component
-      :open="showAppointmentModal"
-      :item="item"
-      @close="closeAppointmentModal"
-      @loading="toggleOverlay"
-    />
-    <v-overlay :value="overlay">
-      <v-progress-circular
-        indeterminate
-        size="64"
-      ></v-progress-circular>
-    </v-overlay>
   </v-container>
 </template>
-
 <script>
-import moment from "jalali-moment";
-import DataTableComponent from "~/components/panel/global/DataTableComponent";
-import CaseTypeCheckboxComponent from "~/components/panel/appointment/CaseTypeCheckboxComponent";
+import PazireshLinkBox from "~/components/panel/orgnization/paziresh/PazireshLinkBox";
 import AppointmentFormComponent from "~/components/panel/appointment/AppointmentForm/AppointmentFormComponent";
-import CreateAppointmentFormComponent
-  from "~/components/panel/appointment/AppointmentForm/CreateAppointmentFormComponent";
+import DataTableComponent from "~/components/panel/global/DataTableComponent";
+import DoctorPazireshHeader from "~/components/panel/orgnization/paziresh/DoctorPazireshHeader";
 
 export default {
   name: "index",
-  components: {CreateAppointmentFormComponent, AppointmentFormComponent, CaseTypeCheckboxComponent, DataTableComponent},
+  components: {
+    DoctorPazireshHeader,
+    DataTableComponent,
+    AppointmentFormComponent,
+    PazireshLinkBox
+  },
   layout: 'panel',
+  mounted() {
+    this.paginate()
+    this.getUsers()
+    this.getCaseTypes()
+  },
   data() {
     return {
-      showPazireshModal: false,
-      showAppointmentModal: false,
-      overlay: false,
-      showFilterModal: false,
-      openShowPazireshModal: false,
-      item: null,
       selectedItems: [],
+      search: {
+        start: this.$moment().format("YYYY-MM-DD"),
+        end: this.$moment().format("YYYY-MM-DD"),
+        q: '',
+        status: '',
+        page: 1,
+      },
       actions: [
         {
           id: 0,
@@ -413,12 +370,9 @@ export default {
         }
       ],
       action: null,
-      search: {
-        page: 1,
-        start: this.$moment().format("YYYY-MM-DD"),
-        end: this.$moment().format("YYYY-MM-DD"),
-        q: '',
-      },
+      item: null,
+      showFilterModal: false,
+      showAppointmentModal: false,
       doctorHeaders: [
         '',
         'بیمار',
@@ -463,51 +417,37 @@ export default {
           title: 'عدم حضور',
           color: '#424242',
           background: '#F1F2F5'
+        },
+        {
+          id: 5,
+          title: 'در انتظار',
+          color: '#F5AC00',
+          background: '#FFF9EB'
         }
       ],
-      appointment: {
-        start_at: '',
-        tel: '',
-        cardno: '',
-        income: 0,
-        user_id: null,
-        case_type: '',
-        info: '',
-      },
-      user: null,
-      money: {
-        decimal: '.',
-        thousands: ',',
-        suffix: ' تومان',
-        prefix: '',
-        precision: 0,
-        masked: false /* doesn't work with directive */
-      },
     }
-  },
-  mounted() {
-    this.paginate()
-    this.getUsers()
-    this.getCaseTypes()
   },
   methods: {
     paginate(page = 1) {
       this.search.page = page
       this.getAppointmentList()
     },
-    getAppointmentList() {
-      this.toggleOverlay()
-      if (this.profession === 'photography' || this.profession === 'radiology' || this.profession === 'laboratory') {
-        this.search.start = ''
-        this.search.end = ''
+    getAppointmentList(filtered = false) {
+      if (!filtered) {
+       if (this.isDoctor) {
+         this.search.start = this.$moment().format("YYYY-MM-DD")
+         this.search.end = this.$moment().format("YYYY-MM-DD")
+       } else {
+         this.search.start = ''
+         this.search.end = ''
+       }
+      }
+      if (this.isDoctor) {
+        this.search.status = ''
+      } else {
+        this.search.status = '2'
       }
       this.$store.dispatch('appointments/getOrganizationAppointmentsList', this.search)
-        .finally(() => {
-          this.toggleOverlay()
-        })
-    },
-    toggleOverlay() {
-      this.overlay = !this.overlay
     },
     getUsers() {
       this.$store.dispatch('users/getUsers')
@@ -515,51 +455,35 @@ export default {
     getCaseTypes() {
       this.$store.dispatch('cases/getCaseTypes')
     },
-    openPazireshModal() {
-      this.togglePazireshModal()
+    doAction() {
+    },
+    toggleFilterModal() {
+      this.showFilterModal = !this.showFilterModal
+    },
+    closeFilterModal() {
+      this.toggleFilterModal()
     },
     openAppointmentModal(item) {
       this.item = item
       this.toggleAppointmentModal()
     },
-    createAppointment() {
-      this.toggleOverlay()
-      if (!this.appointment.user_id) {
-        this.toggleOverlay()
-        return
+    closeAppointmentModal() {
+      this.toggleAppointmentModal()
+      this.item = null
+    },
+    toggleAppointmentModal() {
+      this.showAppointmentModal = !this.showAppointmentModal
+    },
+    clearFilterForm() {
+      this.search = {
+        ...this.search,
+        start: '',
+        end: '',
+        q: '',
       }
-      this.$store.dispatch('appointments/createAppointment', {
-        ...this.appointment,
-        user_id: this.user.id,
-        income: parseFloat(this.appointment.income.split(' ')[0].split(',').join('')),
-      })
-        .then(() => {
-          this.togglePazireshModal()
-          this.clearPazireshForm()
-          this.getAppointmentList()
-        })
-        .finally(() => {
-          this.toggleOverlay()
-        })
-    },
-    clearPazireshForm() {
-      this.appointment = {
-        start_at: '',
-        tel: '',
-        cardno: '',
-        income: 0,
-        user_id: null,
-        case_type: '',
-        info: '',
-      }
-    },
-    customLabel(item) {
-      return item.fname
-    },
-    onChecked(item) {
-      this.appointment.case_type = item.checked ? item.name : ''
     },
     getCases(item) {
+      if (!this.loginUser) return '-'
       const profession_id = this.loginUser.organization.profession_id;
       if (profession_id === 1) {
         return item.photography_cases
@@ -571,54 +495,24 @@ export default {
         return '-'
       }
     },
-    doAction() {
-    },
-    closeFilterModal() {
-      this.clearForm()
-      this.toggleFilterModal()
-    },
-    clearForm() {
-      this.search = {
-        page: 1,
-        start: this.$moment().format("YYYY-MM-DD"),
-        end: this.$moment().format("YYYY-MM-DD"),
-        q: '',
-      }
-    },
-    toggleFilterModal() {
-      this.showFilterModal = !this.showFilterModal
-    },
     closePazireshModal() {
-      this.togglePazireshModal()
       this.getAppointmentList()
-    },
-    closeAppointmentModal() {
-      this.toggleAppointmentModal()
-      this.getAppointmentList()
-    },
-    togglePazireshModal() {
-      this.showPazireshModal = !this.showPazireshModal
-    },
-    toggleAppointmentModal() {
-      this.showAppointmentModal = !this.showAppointmentModal
-    },
-    openAddResultModal() {
-
     }
   },
   computed: {
+    mini() {
+      return this.$vuetify.breakpoint.mdAndDown
+    },
     loginUser() {
       return this.$store.getters['login/getUser']
     },
-    appointments() {
-      return this.$store.getters['appointments/getList']
-    },
-    today() {
-      return moment().format("YYYY/MM/DD")
-    },
     isDoctor() {
+      if (!this.loginUser) return false;
       const profession_id = this.loginUser.organization.profession_id;
       return profession_id !== 1 && profession_id !== 2 && profession_id !== 3
+    },
+    appointments() {
+      return this.$store.getters['appointments/getList']
     },
     profession() {
       const profession_id = this.loginUser.organization.profession_id;
@@ -665,15 +559,7 @@ export default {
         }
       }
     },
-    hasItem() {
-      return !!this.item
-    }
   },
-  watch: {
-    user() {
-      this.appointment.user_id = this.user.id
-    }
-  }
 }
 </script>
 
