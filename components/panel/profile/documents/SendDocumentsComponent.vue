@@ -42,6 +42,7 @@
       ref="crop"
       @changed="cropped"
       @imaged="imaged"
+      @newImage="openChooseImage"
     />
     <v-dialog
       v-model="showSendFileModal"

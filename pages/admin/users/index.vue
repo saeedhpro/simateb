@@ -5,7 +5,7 @@
     <v-row>
       <v-col align-self="center">
         <div class="page-header-box">
-          <div class="page-header">
+          <div class="page-header selected">
             <img src="/images/pages/user.svg" alt="users">
             <span class="title">
             کاربران
@@ -146,48 +146,11 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-dialog
-      v-model="showDelete"
-      max-width="680"
-    >
-      <v-card
-        class="accept-file-remove-model"
-      >
-        <button
-          class="close"
-          @click="toggleRemove"
-        >
-          <v-icon>mdi-close</v-icon>
-        </button>
-        <v-card-title class="accept-file-remove-title">
-          <span>حذف کاربران</span>
-        </v-card-title>
-
-        <v-card-text
-          class="accept-file-remove-text"
-        >
-          آیا از حذف کردن حذف کاربران اطمینان دارید؟<br/>
-          لطفا دقت کنید که پس از حذف، اطلاعات حذف کاربران قابل بازگشت نیست
-        </v-card-text>
-
-        <v-card-actions>
-          <button
-            class="action-button accept-button"
-            @click="toggleRemove"
-
-          >
-            خیر
-          </button>
-          <v-spacer></v-spacer>
-          <button
-            class="action-button red-button"
-            @click="remove"
-          >
-            بله، حذف کن
-          </button>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <admin-delete-users-component
+      :open="showDelete"
+      @close="toggleRemove"
+      @remove="remove"
+    />
     <send-sms-component
       :users="allUsers"
       :multiple="true"
@@ -205,10 +168,12 @@ import CropImageComponent from "~/components/panel/global/CropImageComponent";
 import CreateUserFormComponent from "~/components/panel/profile/user/CreateUserFormComponent";
 import AdminCreateUserFormComponent from "~/components/admin/user/AdminCreateUserFormComponent";
 import SendSmsComponent from "~/components/global/sms/SendSmsComponent";
+import AdminDeleteUsersComponent from "~/components/admin/global/AdminDeleteUsersComponent";
 
 export default {
   name: "index",
   components: {
+    AdminDeleteUsersComponent,
     SendSmsComponent,
     AdminCreateUserFormComponent, CreateUserFormComponent, CropImageComponent, DataTableComponent},
   layout: 'admin',

@@ -139,6 +139,7 @@
       ref="crop"
       @changed="cropped"
       @imaged="imaged"
+      @newImage="chooseImage(index)"
     />
     <input
       type="file"

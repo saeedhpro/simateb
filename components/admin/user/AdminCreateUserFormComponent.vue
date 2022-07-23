@@ -18,7 +18,7 @@
             >
               <v-icon>mdi-close</v-icon>
             </button>
-            <span>فرم اطلاعات بیمار</span>
+            <span>افزودن کاربر</span>
           </div>
           <v-spacer/>
           <div class="create-update-modal-regbox">
@@ -54,6 +54,7 @@
                     <crop-image-component
                       ref="crop"
                       @imaged="imaged"
+                      @newImage="openChooseImage"
                     />
                   </div>
                 </div>
@@ -179,7 +180,7 @@
                 sm="4"
                 md="4"
               >
-                <div class="create-update-model-input-box" :class="{'has-error': errors.birth_date}">
+                <div class="create-update-model-input-box">
                   <label>تاریخ تولد</label>
                   <date-picker
                     v-model="form.birth_date"
@@ -192,7 +193,6 @@
                       <img src="/images/form/datepicker.svg">
                     </template>
                   </date-picker>
-                  <span class="create-update-modal-input-error" v-if="errors.birth_date">{{ errors.birth_date }}</span>
                 </div>
               </v-col>
               <v-col
@@ -202,7 +202,7 @@
               >
                 <custom-text-input
                   :label="'شماره پرونده'"
-                  :error="errors.file_id"
+                  v-model="form.file_id"
                 />
               </v-col>
             </v-row>
@@ -255,9 +255,7 @@
               >
                 <custom-text-area-input
                   :label="'آدرس'"
-                  :error="errors.address"
                   v-model="form.address"
-                  @input="errors.address = ''"
                 />
               </v-col>
               <v-col
@@ -435,11 +433,9 @@ export default {
         organization_id: '',
         gender: '',
         tel: '',
-        birth_date: '',
         province_id: '',
         county_id: '',
         city_id: '',
-        address: '',
         pass: '',
         has_surgery: '',
         surgery: '',
@@ -555,11 +551,9 @@ export default {
         organization_id: '',
         gender: '',
         tel: '',
-        birth_date: '',
         province_id: '',
         county_id: '',
         city_id: '',
-        address: '',
         pass: '',
         has_surgery: '',
         surgery: '',
@@ -592,10 +586,6 @@ export default {
         this.errors.tel = 'فیلد شماره موبایل اجباری است'
         isValid = false
       }
-      if (!this.form.birth_date) {
-        this.errors.birth_date = 'فیلد تاریخ تولد اجباری است'
-        isValid = false
-      }
       if (!this.form.province_id) {
         this.errors.province_id = 'فیلد استان اجباری است'
         isValid = false
@@ -606,10 +596,6 @@ export default {
       }
       if (!this.form.city_id) {
         this.errors.city_id = 'فیلد شهر اجباری است'
-        isValid = false
-      }
-      if (!this.form.address) {
-        this.errors.address = 'فیلد آدرس اجباری است'
         isValid = false
       }
       if (!this.form.pass) {

@@ -151,6 +151,7 @@ export const actions = {
       })
   },
   getUser(ctx, id) {
+    ctx.commit('setUser', null)
     return this.$axios.get(`/users/${id}`)
       .then(res => {
         const data = res.data;

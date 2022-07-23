@@ -57,7 +57,7 @@
                 </button>
               </div>
             </v-col>
-            <v-spacer />
+            <v-spacer/>
             <v-col
               cols="12"
               sm="12"
@@ -79,7 +79,8 @@
                           d="M17.722,16.559l-4.711-4.711a7.094,7.094,0,0,0,1.582-4.535,7.327,7.327,0,1,0-2.777,5.729l4.711,4.711a.972.972,0,0,0,.629.247.844.844,0,0,0,.6-.247A.822.822,0,0,0,17.722,16.559ZM1.687,7.313a5.625,5.625,0,1,1,5.625,5.625A5.632,5.632,0,0,1,1.687,7.313Z"
                           transform="translate(0)"/>
                   </svg>
-                  <input class="search-input" v-model="search.q" type="text" ref="search-input" placeholder="جستجو" @input="getMessageList">
+                  <input class="search-input" v-model="search.q" type="text" ref="search-input" placeholder="جستجو"
+                         @input="getMessageList">
                   <div @click="getMessageList" class="search-button">
                     <img src="/images/pages/search-button.svg">
                   </div>
@@ -144,8 +145,10 @@
       :multiple="true"
       :selectedItems="selectedUsers"
       :open="showCreateModal"
+      :is-admin="true"
       @selected="itemSelected"
       @close="closeSmsForm"
+      @clear="clearSmsForm"
     />
   </v-container>
 </template>
@@ -239,6 +242,9 @@ export default {
       this.action = null
       this.toggleCreateModal()
       this.getMessageList()
+    },
+    clearSmsForm() {
+      this.selectedUsers = []
     },
     deleteMessages(ids) {
       this.$store.dispatch('admin/messages/deleteMessages', {

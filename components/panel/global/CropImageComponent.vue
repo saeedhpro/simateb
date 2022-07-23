@@ -21,7 +21,7 @@
             :guides="false"
             :view-mode="0"
             drag-mode="move"
-            :auto-crop-area="0.5"
+            :auto-crop-area="1"
             :min-container-width="250"
             :min-container-height="180"
             :background="true"
@@ -32,12 +32,23 @@
             :img-style="{ width: '400px', height: '400px' }"
             :center="false"
             :highlight="true"
+            :aspect-ratio="1"
           />
         </v-card-text>
         <v-card-actions>
-          <!-- <v-tooltip> -->
-          <v-icon color="blue" @click="cropImage">mdi-crop</v-icon>
-          <!-- </v-tooltip> -->
+          <v-btn
+            class="cancel-button"
+            color="blue darken-1 white--text" @click="cropImage"
+          >
+            برش
+          </v-btn>
+          <v-btn
+            class="cancel-button"
+            color="blue darken-1 white--text" @click="newImage"
+          >
+            تصویر جدید
+          </v-btn>
+<!--          <v-icon color="blue" @click="cropImage">mdi-crop</v-icon>-->
           <v-icon color="blue" dark @click="rotate('r');">mdi-rotate-right</v-icon>
           <v-icon color="blue" dark @click="rotate('l');">mdi-rotate-left</v-icon>
 
@@ -64,9 +75,11 @@ export default {
     value: {},
     pk: {default: "image_key"},
     dialogMaxWidth: {default: "600px"},
-    dialogMaxHeight: {default: "0.8vh"},
-    maxWidth: {default: 1920},
+    // dialogMaxHeight: {default: "0.8vh"},
+    dialogMaxHeight: {default: "600px"},
+    maxWidth: {default: 1200},
     maxHeight: {default: 1200},
+    aspectRatio: 16 / 9,
     // the URL of the blob image
     objectUrl: {default: ""}
   },
@@ -165,6 +178,9 @@ export default {
       } else {
         this.$refs.cropper.scale(-1 * scaleX, scaleY);
       }
+    },
+    newImage() {
+      this.$emit('newImage');
     }
   }
 }

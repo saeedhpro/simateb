@@ -41,7 +41,7 @@
                 </button>
               </div>
             </v-col>
-            <v-spacer />
+            <v-spacer v-if="!mini"/>
             <v-col
               cols="12"
               sm="12"
@@ -315,7 +315,6 @@
       :open="showPazireshModal"
       :item="item"
       @close="closePazireshModal"
-      :has-item="hasItem"
     />
   </v-container>
 </template>
@@ -333,7 +332,8 @@ export default {
   name: "search",
   components: {
     PazireshLinkBox,
-    CreateAppointmentFormComponent, AppointmentFormComponent, CaseTypeCheckboxComponent, DataTableComponent},
+    CreateAppointmentFormComponent, AppointmentFormComponent, CaseTypeCheckboxComponent, DataTableComponent
+  },
   layout: 'panel',
   data() {
     return {
@@ -362,7 +362,6 @@ export default {
         end: '',
         q: '',
         page: 1,
-        status: '2',
       },
       user: null,
       doctorHeaders: [
@@ -411,14 +410,6 @@ export default {
           background: '#F1F2F5'
         }
       ],
-      money: {
-        decimal: '.',
-        thousands: ',',
-        suffix: ' تومان',
-        prefix: '',
-        precision: 0,
-        masked: false /* doesn't work with directive */
-      }
     }
   },
   mounted() {
@@ -427,7 +418,7 @@ export default {
     this.getCaseTypes()
   },
   methods: {
-    getAppointmentList() {
+    getAppointmentList(filtered = false) {
       this.showFilterModal = false
       this.$store.dispatch('appointments/search', this.search)
     },
@@ -437,7 +428,6 @@ export default {
         start: '',
         end: '',
         q: '',
-        status: '2',
       }
     },
     closePazireshModal() {
@@ -530,6 +520,9 @@ export default {
       const profession_id = this.loginUser.organization.profession_id;
       return profession_id !== 1 && profession_id !== 2 && profession_id !== 3
     },
+    mini() {
+      return this.$vuetify.breakpoint.mdAndDown
+    }
   }
 }
 </script>

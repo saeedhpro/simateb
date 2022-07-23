@@ -56,6 +56,7 @@
       ref="crop"
       @changed="cropped"
       @imaged="imaged"
+      @newImage="openChooseImage"
     />
     <input
       type="file"

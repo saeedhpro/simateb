@@ -64,102 +64,20 @@
           </v-col>
         </v-row>
       </v-col>
-      <v-col
-        cols="12"
-      >
-        <v-dialog
-          v-model="showDelete"
-          max-width="680"
-        >
-          <v-card
-            class="accept-file-remove-model"
-          >
-            <button
-              class="close"
-              @click="remove"
-            >
-              <v-icon>mdi-close</v-icon>
-            </button>
-            <v-card-title class="accept-file-remove-title">
-              <span>حذف کاربر</span>
-            </v-card-title>
-
-            <v-card-text
-              class="accept-file-remove-text"
-            >
-              آیا از حذف کردن این کاربر اطمینان دارید؟<br/>
-              لطفا دقت کنید که پس از حذف، اطلاعات کاربر قابل بازگشت نیست
-            </v-card-text>
-
-            <v-card-actions>
-              <button
-                class="action-button accept-button"
-                @click="remove"
-
-              >
-                خیر
-              </button>
-              <v-spacer></v-spacer>
-              <button
-                class="action-button red-button"
-                @click="deleteUser"
-              >
-                بله، حذف کن
-              </button>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-
-        <div class="description-box">
-          <div class="action-box">
-            <v-menu
-              close-on-content-click
-              offset-y
-              v-if="canDelete"
-            >
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                  icon
-                  v-bind="attrs"
-                  v-on="on"
-                  class="more-action-button"
-                >
-                  <v-icon>
-                    mdi-dots-horizontal
-                  </v-icon>
-                </v-btn>
-              </template>
-              <v-list>
-                <v-list-item
-                  @click="remove"
-                >
-                  <v-list-item-title>حذف کاربر</v-list-item-title>
-                </v-list-item>
-                <v-divider/>
-              </v-list>
-            </v-menu>
-            <div
-              @click="showMedicalHistory"
-              class="action-button">
-              <v-icon>
-                mdi-card-account-details-outline
-              </v-icon>
-              <span>تاریخچه درمانی</span>
-            </div>
-            <div
-              class="action-button"
-              @click="showUpdate"
-            >
-              <v-icon>
-                mdi-pencil-outline
-              </v-icon>
-              <span>ویرایش اطلاعات</span>
-            </div>
-          </div>
-        </div>
-      </v-col>
+      <delete-user-modal-component
+        :open="showDelete"
+        @close="remove"
+        @remove="deleteUser"
+      />
     </v-row>
+    <admin-update-user-form-component
+      v-if="isAdmin"
+      :item="user"
+      :open="showUpdateModal"
+      @close="closeUpdateModal"
+    />
     <update-user-form-component
+      v-else
       :item="user"
       :open="showUpdateModal"
       @close="closeUpdateModal"
@@ -176,10 +94,14 @@
 <script>
 import UserMedicalHistoryComponent from "~/components/panel/profile/user/UserMedicalHistoryComponent";
 import UpdateUserFormComponent from "~/components/panel/profile/user/UpdateUserFormComponent";
+import AdminUpdateUserFormComponent from "~/components/admin/user/AdminUpdateUserFormComponent";
+import DeleteUserModalComponent from "~/components/global/delete/DeleteUserModalComponent";
 
 export default {
   name: "ShowUserDerailsComponent",
-  components: {UpdateUserFormComponent, UserMedicalHistoryComponent},
+  components: {
+    DeleteUserModalComponent,
+    AdminUpdateUserFormComponent, UpdateUserFormComponent, UserMedicalHistoryComponent},
   props: {
     user: {
       type: Object,
@@ -200,9 +122,7 @@ export default {
     deleteUser() {
       this.$store.dispatch('users/removeUser', this.user.id)
         .then(() => {
-          this.$router.push({
-            path: '/organization',
-          })
+          this.$router.go(-1)
         })
         .catch(err => {
 
@@ -232,13 +152,17 @@ export default {
   },
   computed: {
     canDelete() {
-      if (this.user.id === this.loginUser.id) {
+      if (this.user.id === this.loginUser.id || this.loginUser.user_group_id !== 2) {
         return false
       }
       return this.user.user_group_id !== 2;
     },
     loginUser() {
       return this.$store.getters['login/getUser']
+    },
+    isAdmin() {
+      if (!this.loginUser) return false
+      return this.loginUser.user_group_id === 2
     }
   },
 }

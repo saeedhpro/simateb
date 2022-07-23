@@ -247,12 +247,6 @@
       :open="showUpdateModal"
       @close="closeUpdateModal"
     />
-    <v-overlay :value="overlay">
-      <v-progress-circular
-        indeterminate
-        size="64"
-      ></v-progress-circular>
-    </v-overlay>
   </div>
 </template>
 
@@ -291,7 +285,6 @@ export default {
     return {
       tabs: null,
       mTabs: null,
-      overlay: false,
       showDelete: false,
       showHistoryModal: false,
       showUpdateModal: false,
@@ -309,9 +302,6 @@ export default {
     toggleShowUpdateModal() {
       this.showUpdateModal = !this.showUpdateModal
     },
-    toggleOverLay() {
-      this.overlay = !this.overlay
-    },
     showMedicalHistory() {
       this.getMedicalHistory()
       this.toggleHistoryModal()
@@ -323,23 +313,16 @@ export default {
       this.saveMedicalHistory()
     },
     saveMedicalHistory() {
-      this.toggleOverLay()
       this.$store.dispatch('users/createUserMedicalHistory', {
         ...this.medicalHistory,
         user_id: parseInt(this.$route.params.id),
       })
         .finally(() => {
           this.toggleHistoryModal()
-          this.toggleOverLay()
         })
     },
-    async getMedicalHistory() {
-      this.toggleOverLay()
-      this.$store.dispatch('users/getMedicalHistory', this.$route.params.id)
-        .finally(() => {
-          this.toggleOverLay()
-        })
-      return Promise.resolve()
+    getMedicalHistory() {
+      return this.$store.dispatch('users/getMedicalHistory', this.$route.params.id)
     },
     getUser() {
       this.$store.dispatch('users/getUser', this.$route.params.id)
@@ -350,9 +333,7 @@ export default {
     deleteUser() {
       this.$store.dispatch('users/removeUser', this.user.id)
         .then(() => {
-          this.$router.push({
-            path: '/organization',
-          })
+          this.$router.go(-1)
         })
         .catch(err => {
 

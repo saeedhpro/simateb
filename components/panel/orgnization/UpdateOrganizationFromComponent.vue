@@ -49,6 +49,7 @@
                     <crop-image-component
                       ref="crop"
                       @imaged="imaged"
+                      @newImage="openChooseImage"
                     />
                   </div>
                 </div>

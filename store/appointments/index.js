@@ -102,11 +102,22 @@ export const actions = {
       })
   },
   search(ctx, data) {
-    let route = `/appointments/search?start=${data.start}&end=${data.end}&q=${data.q}&page=${data.page}`
-    if (data.status) {
-      route += `&status=${data.status}`
+    ctx.commit('setList', {
+      data: [],
+      limit: 10,
+      page: 1,
+      sort: '',
+      total_rows: 0,
+      total_pages: 0
+    },)
+    const d = Object.entries(data);
+    const arr = [];
+    for (let i = 0; i < d.length; i++) {
+      if (d[i][1]) {
+        arr.push(`${d[i][0]}=${d[i][1]}`)
+      }
     }
-    return this.$axios.get(route)
+    return this.$axios.get(`/appointments/search?${arr.join('&')}`)
       .then(res => {
         const data = res.data;
         ctx.commit('setList', data)

@@ -543,6 +543,7 @@
       ref="crop"
       @changed="cropped"
       @imaged="imaged"
+      @newImage="Image"
     />
     <v-dialog
       v-model="showFile"

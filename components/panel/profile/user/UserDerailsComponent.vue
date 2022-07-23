@@ -133,6 +133,32 @@
       >
         <div class="description-box">
           <div class="action-box">
+            <v-menu
+              close-on-content-click
+              offset-y
+              v-if="canDelete"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  icon
+                  v-bind="attrs"
+                  v-on="on"
+                  class="more-action-button"
+                >
+                  <v-icon>
+                    mdi-dots-horizontal
+                  </v-icon>
+                </v-btn>
+              </template>
+              <v-list>
+                <v-list-item
+                  @click="remove"
+                >
+                  <v-list-item-title>حذف کاربر</v-list-item-title>
+                </v-list-item>
+                <v-divider/>
+              </v-list>
+            </v-menu>
             <div
               class="action-button"
               @click="showUpdate"
@@ -146,8 +172,13 @@
         </div>
       </v-col>
     </v-row>
+
+    <delete-user-modal-component
+      :open="showDelete"
+      @close="remove"
+      @remove="deleteUser"
+    />
     <update-user-form-component
-      :is-admin="false"
       :item="user"
       :open="showUpdateModal"
       @close="closeUpdateModal"
@@ -157,10 +188,11 @@
 
 <script>
 import UpdateUserFormComponent from "~/components/panel/profile/user/UpdateUserFormComponent";
+import DeleteUserModalComponent from "~/components/global/delete/DeleteUserModalComponent";
 
 export default {
   name: "UserDerailsComponent",
-  components: {UpdateUserFormComponent},
+  components: {DeleteUserModalComponent, UpdateUserFormComponent},
   props: {
     user: {
       type: Object,
@@ -170,6 +202,7 @@ export default {
   data() {
     return {
       showUpdateModal: false,
+      showDelete: false,
     }
   },
   methods: {
@@ -184,11 +217,29 @@ export default {
       this.toggleShowUpdateModal()
       this.item = null
     },
+    remove() {
+      this.showDelete = !this.showDelete
+    },
+    deleteUser() {
+      this.$store.dispatch('users/removeUser', this.user.id)
+        .then(() => {
+          this.$router.go(-1)
+        })
+        .catch(err => {
+
+        })
+    },
   },
   computed: {
     loginUser() {
       return this.$store.getters['login/getUser']
-    }
+    },
+    canDelete() {
+      if (this.user.id === this.loginUser.id || this.loginUser.user_group_id !== 2) {
+        return false
+      }
+      return this.user.user_group_id !== 2;
+    },
   },
 }
 </script>

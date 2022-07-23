@@ -1,127 +1,163 @@
 <template>
   <div>
-  <v-dialog
-    v-model="show"
-    persistent
-    max-width="1056px"
-  >
-    <v-card
-      class="create-update-modal"
+    <v-dialog
+      v-model="show"
+      persistent
+      max-width="1056px"
     >
-      <v-card-title
-        class="create-update-modal-title-box"
+      <v-card
+        class="create-update-modal"
       >
-        <div class="create-update-modal-title">
-          <button
-            @click="closeForm"
-            class="create-update-modal-close"
-          >
-            <v-icon>mdi-close</v-icon>
-          </button>
-          <span>فرم ارسال پیامک</span>
-        </div>
-        <v-spacer/>
-        <div class="create-update-modal-regbox">
-          ثبت در سیستم توسط: {{ `${loginUser.staff.lname} ${loginUser.staff.fname}` }}
-          ({{ loginUser.created | toRelativeDate }} {{
-            loginUser.created | toPersianDate('YYYY/MM/DD HH:mm:ss')
-          }})
-        </div>
-      </v-card-title>
-      <v-card-text>
-        <v-container>
-          <v-row>
-          </v-row>
-          <v-row>
-            <v-col
-              cols="12"
+        <v-card-title
+          class="create-update-modal-title-box"
+        >
+          <div class="create-update-modal-title">
+            <button
+              @click="closeForm"
+              class="create-update-modal-close"
             >
-              <div class="create-update-model-input-box">
-                <label>کاربران</label>
-                <multiselect
-                  v-model="selectedUsers"
-                  :options="users"
-                  :multiple="multiple"
-                  :close-on-select="false"
-                  :clear-on-select="false"
-                  :preserve-search="true"
-                  label="fname"
-                  track-by="fname"
-                  searchable
-                  placeholder=""
-                  :show-labels="false">
-                  <template slot="singleLabel" slot-scope="props"><span
-                    class="option__desc"><span
-                    class="option__title">{{ `${props.option.fname} ${props.option.lname}` }}</span></span>
-                  </template>
-                  <template slot="option" slot-scope="props">
-                    <div class="option__desc"><span
-                      class="option__title">{{ `${props.option.fname} ${props.option.lname}` }}</span></div>
-                  </template>
-                </multiselect>
-              </div>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col
-              cols="12"
-            >
-              <div class="create-update-model-input-box">
-                <label>متن پیامک</label>
-                <textarea
-                  v-model="form.msg"
-                  rows="4"
-                ></textarea>
-              </div>
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-card-text>
-      <v-card-actions>
-        <v-container>
-          <v-row>
-            <v-col
-              cols="12"
-              sm="3"
-              md="3"
-            >
-              <button
-                class="second-button"
-                @click="clearForm"
+              <v-icon>mdi-close</v-icon>
+            </button>
+            <span>فرم ارسال پیامک</span>
+          </div>
+          <v-spacer/>
+          <div class="create-update-modal-regbox">
+          </div>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+            </v-row>
+            <v-row>
+              <v-col
+                cols="12"
               >
-                پاک کردن فرم
-              </button>
-            </v-col>
-            <v-spacer/>
-            <v-col
-              cols="12"
-              sm="3"
-              md="3"
-            >
-              <button
-                class="second-button"
-                @click="closeForm"
+                <div class="create-update-model-input-box">
+                  <label>نوع ارسال</label>
+                  <multiselect
+                    v-model="type"
+                    :options="types"
+                    :multiple="false"
+                    :close-on-select="true"
+                    :clear-on-select="false"
+                    :preserve-search="true"
+                    label="name"
+                    track-by="name"
+                    placeholder=""
+                    :show-labels="false">
+                    <template slot="singleLabel" slot-scope="props"><span
+                      class="option__desc"><span
+                      class="option__title">{{ props.option.name }}</span></span>
+                    </template>
+                    <template slot="option" slot-scope="props">
+                      <div class="option__desc"><span
+                        class="option__title">{{ props.option.name }}</span></div>
+                    </template>
+                  </multiselect>
+                </div>
+              </v-col>
+              <v-col
+                cols="12"
+                v-if="type && type.id === 2"
               >
-                بستن
-              </button>
-            </v-col>
-            <v-col
-              cols="12"
-              sm="4"
-              md="4"
-            >
-              <button
-                class="main-button"
-                @click="toggleCreateModal"
+                <div class="create-update-model-input-box">
+                  <label>کاربران</label>
+                  <multiselect
+                    v-model="selectedUsers"
+                    :options="users"
+                    :multiple="multiple"
+                    :close-on-select="false"
+                    :clear-on-select="false"
+                    :preserve-search="true"
+                    label="fname"
+                    track-by="fname"
+                    searchable
+                    placeholder=""
+                    :show-labels="false">
+                    <template slot="singleLabel" slot-scope="props"><span
+                      class="option__desc"><span
+                      class="option__title">{{ `${props.option.fname} ${props.option.lname}` }}</span></span>
+                    </template>
+                    <template slot="option" slot-scope="props">
+                      <div class="option__desc"><span
+                        class="option__title">{{ `${props.option.fname} ${props.option.lname}` }}</span></div>
+                    </template>
+                  </multiselect>
+                </div>
+              </v-col>
+              <v-col
+                cols="12"
+                v-if="type && type.id === 1"
               >
-                ذخیره
-              </button>
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
+                <custom-text-input
+                  :label="'شماره'"
+                  :error="errors.phone_number"
+                  v-model="form.phone_number"
+                  @input="errors.phone_number = ''"
+                />
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col
+                cols="12"
+              >
+                <div class="create-update-model-input-box">
+                  <label>متن پیامک</label>
+                  <textarea
+                    v-model="form.msg"
+                    rows="4"
+                  ></textarea>
+                  <div class="sms-number">تعداد پیامک: <span>{{ smsNumber | toPersianNumber }}</span></div>
+                </div>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-container>
+            <v-row>
+              <v-col
+                cols="12"
+                sm="3"
+                md="3"
+              >
+                <button
+                  class="second-button"
+                  @click="clearForm"
+                >
+                  پاک کردن فرم
+                </button>
+              </v-col>
+              <v-spacer/>
+              <v-col
+                cols="12"
+                sm="3"
+                md="3"
+              >
+                <button
+                  class="second-button"
+                  @click="closeForm"
+                >
+                  بستن
+                </button>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="4"
+                md="4"
+              >
+                <button
+                  class="main-button"
+                  @click="toggleCreateModal"
+                >
+                  ذخیره
+                </button>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <v-dialog
       v-model="showCreateModal"
       max-width="680"
@@ -167,8 +203,11 @@
 </template>
 
 <script>
+import CustomTextInput from "~/components/custom/CustomTextInput";
+
 export default {
   name: "SendSmsComponent",
+  components: {CustomTextInput},
   props: {
     open: {
       type: Boolean,
@@ -179,6 +218,10 @@ export default {
       type: Boolean,
       default: true,
       required: true,
+    },
+    isAdmin: {
+      type: Boolean,
+      default: false,
     },
     selectedItems: {
       type: Array,
@@ -196,12 +239,37 @@ export default {
       form: {
         msg: '',
         numbers: [],
+        phone_number: '',
+      },
+      errors: {
+        phone_number: '',
+        msg: '',
+        numbers: '',
       },
       showCreateModal: false,
+      type: {
+        id: 1,
+        name: 'تک شماره'
+      },
+      types: [
+        {
+          id: 1,
+          name: 'تک شماره'
+        },
+        {
+          id: 2,
+          name: 'همه کاربران انتخاب شده'
+        },
+        {
+          id: 3,
+          name: 'همه کاربران'
+        },
+      ]
     }
   },
   methods: {
     closeForm() {
+      this.toggleCreateModal()
       this.$emit('close')
     },
     clearForm() {
@@ -212,8 +280,14 @@ export default {
       this.$emit('clear')
     },
     createMessage() {
-      this.toggleCreateModal()
-      this.$store.dispatch('messages/createMessage', this.form)
+      const data = {
+        ...this.form,
+        type: this.type.id,
+      }
+      if (this.isAdmin) {
+        data.organization_id = null
+      }
+      this.$store.dispatch('messages/createMessage', data)
         .then(() => {
           setTimeout(() => {
             this.clearForm()
@@ -239,12 +313,23 @@ export default {
     },
     loginUser() {
       return this.$store.getters['login/getUser']
-    }
+    },
+    smsNumber() {
+      return parseInt(Math.ceil(this.form.msg.length / 68))
+    },
   },
   watch: {
     selectedUsers(items) {
       this.form.numbers = items.map(i => i.tel)
-    }
+    },
+    type(val) {
+      if (!val) {
+        this.type = {
+          id: 1,
+          name: 'تک شماره'
+        }
+      }
+    },
   }
 }
 </script>

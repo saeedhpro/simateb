@@ -32,7 +32,7 @@
                     <td class="text-center">{{ n + 1 | persianDigit }}</td>
                     <td class="text-center">
                       <div class="table-row flex flex-row align-center justify-start">
-                        <span><nuxt-link :to="`/profile/${i.id}`">{{
+                        <span><nuxt-link :to="`/admin/profile/${i.id}`">{{
                             `${i.fname} ${i.lname}` | persianDigit
                           }}</nuxt-link></span>
                       </div>
@@ -81,7 +81,7 @@
                     <td class="text-center">{{ n + 1 | persianDigit }}</td>
                     <td class="text-center">
                       <div class="table-row flex flex-row align-center justify-start">
-                        <span><nuxt-link :to="`/profile/${i.id}`">{{
+                        <span><nuxt-link :to="`/admin/profile/${i.id}`">{{
                             `${i.fname} ${i.lname}` | persianDigit
                           }}</nuxt-link></span>
                       </div>
@@ -102,12 +102,6 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-overlay :value="overlay">
-      <v-progress-circular
-        indeterminate
-        size="64"
-      ></v-progress-circular>
-    </v-overlay>
   </v-container>
 </template>
 
@@ -121,7 +115,6 @@ export default {
   middleware: 'admin',
   data() {
     return {
-      overlay: false,
       onlineUserHeaders: [
         '',
         'نام کاربر',
@@ -139,15 +132,10 @@ export default {
     }
   },
   mounted() {
-    this.toggleOverLay()
     this.getOnlineUserList()
     this.getOnlinePatientList()
-    this.toggleOverLay()
   },
   methods: {
-    toggleOverLay() {
-      this.overlay = !this.overlay
-    },
     getOnlineUserList() {
       this.$store.dispatch('admin/users/getOnlineUsers')
     },
