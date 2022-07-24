@@ -543,7 +543,7 @@
       ref="crop"
       @changed="cropped"
       @imaged="imaged"
-      @newImage="Image"
+      @newImage="chooseImage"
     />
     <v-dialog
       v-model="showFile"

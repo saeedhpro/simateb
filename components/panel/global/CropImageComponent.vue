@@ -22,7 +22,7 @@
             :view-mode="0"
             drag-mode="move"
             :auto-crop-area="1"
-            :min-container-width="250"
+            :min-container-width="100"
             :min-container-height="180"
             :background="true"
             :rotatable="true"
@@ -30,7 +30,7 @@
             alt="Source Image"
             :modal="true"
             :img-style="{ width: '400px', height: '400px' }"
-            :center="false"
+            :center="true"
             :highlight="true"
             :aspect-ratio="1"
           />
