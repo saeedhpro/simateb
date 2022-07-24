@@ -50,10 +50,10 @@
                   </v-row>
                   <v-row style="width: 100%">
                     <v-col cols="6">
-                      <div class="label-box">شماره تماس:</div>
+                      <div class="label-box">مطب:</div>
                     </v-col>
                     <v-col cols="6">
-                      <div class="value-box">{{ user.tel1 ? user.tel1 : '-' | persianDigit }}</div>
+                      <div class="value-box">{{ user.organization ? user.organization.name : '-' | persianDigit }}</div>
                     </v-col>
                   </v-row>
                   <v-row style="width: 100%">
