@@ -100,6 +100,14 @@ export default {
       }
     },
   },
+  watch: {
+    relList() {
+      if (this.relList.length === 0) {
+        this.list = []
+        this.tempList = []
+      }
+    }
+  }
 }
 </script>
 

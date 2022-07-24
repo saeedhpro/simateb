@@ -34,6 +34,7 @@ export const actions = {
       })
   },
   getOrganization(ctx, id) {
+    ctx.commit('setOrganization', null)
     return this.$axios.get(`/organizations/${id}`)
       .then(res => {
         const data = res.data;

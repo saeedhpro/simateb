@@ -168,9 +168,7 @@
               >
                 <custom-text-area-input
                   :label="'دسته بندی مراجعات بیماران'"
-                  :error="errors.case_types"
                   v-model="organization.case_types"
-                  @input="errors.case_types = ''"
                 />
               </v-col>
             </v-row>
@@ -353,7 +351,6 @@ export default {
         name: '',
         profession_id: '',
         phone: '',
-        case_types: '',
       },
     }
   },
@@ -402,7 +399,6 @@ export default {
         name: '',
         profession_id: '',
         phone: '',
-        case_types: '',
       }
     },
     validateFrom() {
@@ -418,10 +414,6 @@ export default {
       }
       if (!this.organization.phone) {
         this.errors.phone = 'فیلد شماره تماس اجباری است'
-        isValid = false
-      }
-      if (!this.organization.case_types) {
-        this.errors.case_types = 'فیلد دسته بندی مراجعات بیماران اجباری است'
         isValid = false
       }
       return isValid;

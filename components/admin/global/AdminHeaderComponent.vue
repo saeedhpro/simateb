@@ -13,7 +13,6 @@
             <img :src="loginUser.logo" />
             <span class="user-full-name">{{ `${loginUser.fname} ${loginUser.lname}` | persianDigit}}</span>
             <v-menu
-              open-on-hover
               offset-y
             >
               <template v-slot:activator="{ on, attrs }">

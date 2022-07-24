@@ -13,11 +13,11 @@
         <img src="/images/pages/about.svg" alt="users">
         <span class="title">درباره موسسه</span>
       </nuxt-link>
-
-      <v-divider inset/>
+      <v-divider inset :style="{'margin-left': canSee ? '72px' : '0'}"/>
       <div class="page-actions"
            style="min-width: 220px"
            @click="toggleAddUserModal"
+           v-if="canSee"
       >
         <img src="/images/pages/new-user.svg" alt="users">
         <span class="title">افزودن بیمار جدید</span>
@@ -63,6 +63,11 @@ export default {
       return Promise.resolve()
     },
   },
+  computed: {
+    canSee() {
+      return this.$route.name !== 'admin-organizations-id-about'
+    },
+  }
 }
 </script>
 

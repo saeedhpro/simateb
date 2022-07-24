@@ -19,7 +19,7 @@
           <cropper
             ref="cropper"
             :guides="false"
-            :view-mode="1"
+            :view-mode="0"
             drag-mode="move"
             :auto-crop-area="2"
             :min-container-width="100"
