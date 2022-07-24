@@ -19,9 +19,9 @@
           <cropper
             ref="cropper"
             :guides="false"
-            :view-mode="0"
+            :view-mode="1"
             drag-mode="move"
-            :auto-crop-area="1"
+            :auto-crop-area="2"
             :min-container-width="100"
             :min-container-height="180"
             :background="true"
@@ -32,7 +32,8 @@
             :img-style="{ width: '400px', height: '400px' }"
             :center="true"
             :highlight="true"
-            :aspect-ratio="1"
+            :crop-box-resizable="true"
+            :scalable="true"
           />
         </v-card-text>
         <v-card-actions>
