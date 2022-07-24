@@ -172,7 +172,6 @@
         </div>
       </v-col>
     </v-row>
-
     <delete-user-modal-component
       :open="showDelete"
       @close="remove"

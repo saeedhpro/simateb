@@ -4,7 +4,7 @@
       <v-col
         cols="12"
       >
-        <show-user-derails-component
+        <user-derails-component
           :user="user"
           @updated="getUser"
         />
@@ -14,14 +14,14 @@
 </template>
 
 <script>
-import ShowUserDerailsComponent from "~/components/panel/profile/user/ShowUserDerailsComponent";
+import UserDerailsComponent from "~/components/panel/profile/user/UserDerailsComponent";
 
 export default {
   name: "profile.vue",
   layout: "admin",
   middleware: "admin",
   components: {
-    ShowUserDerailsComponent,
+    UserDerailsComponent,
   },
   mounted() {
     this.getUser()
