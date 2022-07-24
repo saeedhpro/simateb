@@ -430,8 +430,12 @@ export default {
     this.getUserGroups()
   },
   methods: {
-    closeForm() {
-      this.$emit('close')
+    closeForm(updated = false) {
+      if (updated) {
+        this.$emit('updated')
+      } else {
+        this.$emit('close')
+      }
       this.resetForm();
     },
     resetForm() {
@@ -555,7 +559,7 @@ export default {
       if (this.validateFrom()) {
         this.$store.dispatch('users/updateUser', this.form)
         .then(() => {
-          this.closeForm()
+          this.closeForm(true)
         })
       }
     },

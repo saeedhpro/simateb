@@ -172,17 +172,20 @@
         </div>
       </v-col>
     </v-row>
+    {{`isAdmin: ${isAdmin}`}}
     <admin-update-user-form-component
       v-if="isAdmin"
       :item="user"
       :open="showUpdateModal"
       @close="closeUpdateModal"
+      @updated="updatedUpdateModal"
     />
     <update-user-form-component
       v-else
       :item="user"
       :open="showUpdateModal"
       @close="closeUpdateModal"
+      @updated="updatedUpdateModal"
     />
     <user-medical-history-component
       v-if="user"
@@ -237,6 +240,10 @@ export default {
       this.showUpdateModal = !this.showUpdateModal
     },
     closeUpdateModal() {
+      this.toggleShowUpdateModal()
+      this.item = null
+    },
+    updatedUpdateModal() {
       this.$emit('updated');
       this.toggleShowUpdateModal()
       this.item = null

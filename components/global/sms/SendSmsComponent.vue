@@ -269,7 +269,7 @@ export default {
   },
   methods: {
     closeForm() {
-      this.toggleCreateModal()
+      this.showCreateModal = false
       this.$emit('close')
     },
     clearForm() {
