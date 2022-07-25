@@ -13,14 +13,14 @@
         <v-icon>mdi-close</v-icon>
       </button>
       <v-card-title class="accept-file-remove-title">
-        <span>حذف کاربران</span>
+        <span>حذف {{ title }}</span>
       </v-card-title>
 
       <v-card-text
         class="accept-file-remove-text"
       >
-        آیا از حذف کردن حذف کاربران اطمینان دارید؟<br/>
-        لطفا دقت کنید که پس از حذف، اطلاعات حذف کاربران قابل بازگشت نیست
+        آیا از حذف کردن {{ title }} اطمینان دارید؟<br/>
+        لطفا دقت کنید که پس از حذف، اطلاعات {{ title }} قابل بازگشت نیست
       </v-card-text>
 
       <v-card-actions>
@@ -51,6 +51,10 @@ export default {
       type: Boolean,
       default: false,
       required: true
+    },
+    title: {
+      type: String,
+      default: "کاربران"
     }
   },
   methods: {

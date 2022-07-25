@@ -23,7 +23,7 @@
                   v-model="selectedAll"
                 ></v-checkbox>
                 <div class="selected-count" v-if="selectedItems.length > 0">
-                  {{ selectedItems.length }}
+                  {{ selectedItems.length | persianDigit }}
                 </div>
                 <v-select
                   outlined
@@ -271,6 +271,12 @@
                     <td class="text-center">{{ (search.page - 1) * 10 + n + 1 | persianDigit }}</td>
                     <td class="text-center">
                       <div class="table-row flex flex-row align-center justify-start">
+                        <input type="checkbox"
+                               class="table-selectable-checkbox"
+                               v-model="selectedItems"
+                               :value="i"
+                               :ripple="false"
+                        />
                         <img
                           :src="i.user && i.user.logo ? i.user.logo : 'https://randomuser.me/api/portraits/men/88.jpg'">
                         <span>
@@ -285,12 +291,13 @@
                       </div>
                     </td>
                     <td class="text-center">{{ i.user && i.user.tel ? i.user.tel : '-' | persianDigit }}</td>
-                    <td class="text-center">{{ i.code ? i.code : '-' | persianDigit }}</td>
+                    <td class="text-center"><span class="file-id">{{ i.code ? i.code : '-' | persianDigit }}</span></td>
                     <td class="text-center">
                       {{ i.start_at | toRelativeDate }}
                       {{ i.start_at | toPersianDate('dddd DD MMMM') }}
                     </td>
                     <td class="text-center">{{ getCases(i) | persianDigit }}</td>
+                    <td class="text-center">{{ i.organization ? i.organization.name : '-' | persianDigit }}</td>
                     <td class="text-center">
                       <span
                         class="status-box"
@@ -316,6 +323,12 @@
       :item="item"
       @close="closePazireshModal"
     />
+    <admin-delete-users-component
+      :open="showDelete"
+      :title="`پذیرش ها`"
+      @close="toggleRemove"
+      @remove="remove"
+    />
   </v-container>
 </template>
 
@@ -327,10 +340,12 @@ import AppointmentFormComponent from "~/components/panel/appointment/Appointment
 import CreateAppointmentFormComponent
   from "~/components/panel/appointment/AppointmentForm/CreateAppointmentFormComponent";
 import PazireshLinkBox from "~/components/panel/orgnization/paziresh/PazireshLinkBox";
+import AdminDeleteUsersComponent from "~/components/admin/global/AdminDeleteUsersComponent";
 
 export default {
   name: "search",
   components: {
+    AdminDeleteUsersComponent,
     PazireshLinkBox,
     CreateAppointmentFormComponent, AppointmentFormComponent, CaseTypeCheckboxComponent, DataTableComponent
   },
@@ -339,6 +354,7 @@ export default {
     return {
       showPazireshModal: false,
       showFilterModal: false,
+      showDelete: false,
       hasItem: false,
       item: null,
       selectedItems: [],
@@ -382,6 +398,7 @@ export default {
         'کد پذیرش',
         'تاریخ ویزیت',
         'درخواست پزشک',
+        'پزشک',
         'وضعیت',
       ],
       statuses: [
@@ -459,6 +476,28 @@ export default {
       this.$store.dispatch('cases/getCaseTypes')
     },
     doAction() {
+      if (!this.action) return
+      switch (this.action) {
+        case 1:
+        case '1':
+          this.toggleRemove();
+          break;
+        case 2:
+        case '2':
+          this.toggleSmsModal();
+          break;
+      }
+    },
+    toggleRemove() {
+      this.showDelete = !this.showDelete
+    },
+    remove() {
+      this.deleteAppointments(this.selectedItems)
+      this.toggleRemove()
+    },
+    deleteAppointments(appointments) {
+      console.log(appointments)
+      // this.$store.dispatch('')
     },
     customLabel(item) {
       return item.fname
@@ -503,7 +542,7 @@ export default {
       set(bool) {
         if (bool) {
           this.selectedItems = []
-          this.selectedItems = this.appointments.data.map(i => i.id)
+          this.selectedItems = this.appointments.data.map(i => i)
         } else {
           this.selectedItems = []
         }

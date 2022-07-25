@@ -250,7 +250,7 @@ export default {
       }
     },
     remove() {
-      this.deleteUsers(this.selectedUsers)
+      this.deleteUsers(this.selectedUsers.map(i => i.id))
       this.toggleRemove()
     },
     paginate(page = 1) {
@@ -311,7 +311,7 @@ export default {
       set(bool) {
         if (bool) {
           this.selectedUsers = []
-          this.selectedUsers = this.users.data.map(i => i.id)
+          this.selectedUsers = this.users.data
         } else {
           this.selectedUsers = []
         }
