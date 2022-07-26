@@ -86,13 +86,39 @@
                           وضعیت فعلی:
                     </span>
                     <span
-                      v-if="appointment.status > 0"
+                      v-if="resulted"
+                      class="status-box resulted"
+                    >نتایج ارسال شده</span>
+                    <span
+                      v-else-if="waiting"
+                      class="status-box waiting"
+                    >در انتظار مراجعه</span>
+                    <span
+                      v-else
                       class="status-box"
                       :style="{
-                        'background-color': `${statuses[appointment.status - 1].background}`,
-                        'color': `${statuses[appointment.status - 1].color}`
-                      }"
+                          'background-color': `${statuses[appointment.status - 1].background}`,
+                          'color': `${statuses[appointment.status - 1].color}`
+                        }"
                     >{{ statuses[appointment.status - 1].title }}</span>
+                  </div>
+                  <div class="phone-box second d-flex flex-row align-center" style="width: 100%" v-if="admissioned">
+                    <span class="small" style="width: 50px" >
+                          کد اپ:
+                    </span>
+                    <span v-if="appointment.appcode">
+                      {{ appointment.appcode }}
+                    </span>
+                    <div class="d-flex flex-row align-center" style="width: 100%" v-else>
+                      <div>غیر فعال</div>
+                      <button
+                        class="main-button form-button mr-1"
+                        style="max-width: 180px"
+                        @click="doAction('appcode')"
+                      >
+                        ایجاد کد جدید
+                      </button>
+                    </div>
                   </div>
                 </div>
               </v-col>
@@ -263,7 +289,7 @@
               class="my-5"
             />
             <v-row
-              v-if="!isDoctor"
+              v-if="!isDoctor && admissioned"
             >
               <v-col
                 cols="12"
@@ -282,6 +308,7 @@
                 cols="12"
                 sm="4"
                 md="4"
+                v-if="!waiting"
               >
                 <button
                   @click="openAddResultModal"
@@ -321,7 +348,9 @@
         </v-card-text>
         <v-card-actions>
           <v-container>
-            <v-row>
+            <v-row
+              v-if="isDoctor"
+            >
               <v-col
                 cols="12"
                 sm="3"
@@ -351,13 +380,13 @@
               <v-col
                 cols="12"
                 sm="3"
-                v-if="!isDoctor && appointment.status === 2"
+                v-if="!isDoctor && waiting"
               >
                 <button
                   class="main-button form-button"
-                  @click="doAction('update')"
+                  @click="doAction('accepted')"
                 >
-                  ذخیره
+                  پذیرش شد
                 </button>
               </v-col>
               <v-col
@@ -414,6 +443,57 @@
                     </button>
                   </v-col>
                 </v-row>
+              </v-col>
+            </v-row>
+            <v-row
+              v-else
+            >
+              <v-col
+                cols="12"
+                sm="3"
+              >
+                <button
+                  class="canceled-button form-button"
+                  @click="doAction('canceled')"
+                >
+                  لغو پذیرش
+                </button>
+              </v-col>
+              <v-spacer/>
+              <v-col
+                cols="12"
+                sm="3"
+              >
+                <button
+                  class="second-button"
+                  @click="closeForm"
+                >
+                  بستن
+                </button>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="3"
+                v-if="waiting"
+              >
+                <button
+                  class="main-button form-button"
+                  @click="doAction('accepted')"
+                >
+                  پذیرش شد
+                </button>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="3"
+                v-if="admissioned"
+              >
+                <button
+                  class="send-button form-button"
+                  @click="doAction('result')"
+                >
+                   ارسال نتایج
+                </button>
               </v-col>
             </v-row>
           </v-container>
@@ -621,6 +701,12 @@ export default {
           title: 'عدم حضور',
           color: '#424242',
           background: '#F1F2F5'
+        },
+        {
+          id: 5,
+          title: 'در انتظار',
+          color: '#F5AC00',
+          background: '#FFF9EB'
         }
       ],
       appointment: {
@@ -633,6 +719,7 @@ export default {
         info: '',
         status: 0,
         user: null,
+        appcode: null,
       },
       money: {
         decimal: '.',
@@ -814,6 +901,7 @@ export default {
       this.appointment = {
         case_type: this.item.case_type,
         code: this.item.code,
+        appcode: this.item.appcode,
         created_at: this.item.created_at,
         end_at: this.item.end_at,
         future_prescription: this.item.future_prescription,
@@ -889,6 +977,18 @@ export default {
         case 'reserve':
           this.doReserve()
           break;
+        case 'accepted':
+          this.doAccepted()
+          break;
+        case 'canceled':
+          this.doCanceled()
+          break;
+        case 'result':
+          this.sendResult()
+          break;
+        case 'appcode':
+          this.createAppCode()
+          break;
       }
     },
     doUpdate() {
@@ -914,6 +1014,36 @@ export default {
           this.loading()
         })
     },
+    sendResult() {
+      if (this.newFiles.length === 0) {
+        return
+      }
+      if (!this.appointment.user_id) {
+        this.loading()
+        return
+      }
+      const data = {
+        id: this.appointment.id,
+        results: this.newFiles
+      }
+      this.$store.dispatch('appointments/sendAppointmentResults', data)
+        .then(() => {
+        })
+        .finally(() => {
+          this.closeForm()
+          this.loading()
+        })
+    },
+    createAppCode() {
+      if (this.appointment.appcode) {
+        this.loading()
+        return
+      }
+      this.$store.dispatch('appointments/createAppointmentAppCode', this.appointment.id)
+        .then((res) => {
+          this.appointment.appcode = res.data
+        })
+    },
     doAccept() {
       const data = {
         ...this.appointment,
@@ -926,6 +1056,20 @@ export default {
       delete data.photography
       this.$store.dispatch('appointments/acceptAppointment', data)
         .then(() => {
+          this.closeForm()
+          this.loading()
+        })
+    },
+    doAccepted() {
+      this.$store.dispatch('appointments/acceptedAppointment', this.appointment.id)
+        .then(() => {
+          this.closeForm()
+          this.loading()
+        })
+    },
+    doCancel() {
+      this.$store.dispatch('appointments/cancelAppointment', this.appointment)
+        .then(() => {
         })
         .catch(err => {
         })
@@ -934,8 +1078,8 @@ export default {
           this.loading()
         })
     },
-    doCancel() {
-      this.$store.dispatch('appointments/cancelAppointment', this.appointment)
+    doCanceled() {
+      this.$store.dispatch('appointments/canceledAppointment', this.appointment.id)
         .then(() => {
         })
         .catch(err => {
@@ -1099,6 +1243,32 @@ export default {
       }
       return 'فوتوگرافی';
     },
+    resulted() {
+      const profession_id = this.loginUser.organization.profession_id;
+      if (profession_id === 1) {
+        return this.appointment.p_admission_at !== null && this.appointment.p_result_at !== null
+      } else if (profession_id === 2) {
+        return this.appointment.l_admission_at !== null && this.appointment.l_result_at !== null
+      } else if (profession_id === 3) {
+        return this.appointment.r_admission_at !== null && this.appointment.r_result_at !== null
+      } else {
+        return false
+      }
+    },
+    admissioned() {
+      const profession_id = this.loginUser.organization.profession_id;
+      if (profession_id === 1) {
+        return this.appointment.p_admission_at !== null
+      } else if (profession_id === 2) {
+        return this.appointment.l_admission_at !== null
+      } else if (profession_id === 3) {
+        return this.appointment.r_admission_at !== null
+      }
+      return false;
+    },
+    waiting() {
+      return this.appointment.status === 2 && !this.admissioned && !this.resulted
+    }
   },
   watch: {
     user() {

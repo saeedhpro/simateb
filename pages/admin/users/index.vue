@@ -292,6 +292,7 @@ export default {
     closeSmsForm() {
       this.selectedUsers = []
       this.toggleSmsModal()
+      this.action = null
     }
   },
   computed: {

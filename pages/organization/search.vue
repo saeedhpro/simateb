@@ -63,7 +63,7 @@
                           d="M17.722,16.559l-4.711-4.711a7.094,7.094,0,0,0,1.582-4.535,7.327,7.327,0,1,0-2.777,5.729l4.711,4.711a.972.972,0,0,0,.629.247.844.844,0,0,0,.6-.247A.822.822,0,0,0,17.722,16.559ZM1.687,7.313a5.625,5.625,0,1,1,5.625,5.625A5.632,5.632,0,0,1,1.687,7.313Z"
                           transform="translate(0)"/>
                   </svg>
-                  <input class="search-input" v-model="search.q" type="text" ref="search-input" placeholder="جستجو">
+                  <input class="search-input" v-model="search.q" type="text" ref="search-input" placeholder="جستجو / کد پذیرش">
                   <div @click="getAppointmentList" class="search-button">
                     <img src="/images/pages/search-button.svg">
                   </div>
@@ -102,7 +102,7 @@
                               md="4"
                             >
                               <div class="create-update-model-input-box">
-                                <label>عبارت جستجو</label>
+                                <label>عبارت جستجو / کد پذیرش</label>
                                 <input type="text" v-model="search.q">
                               </div>
                             </v-col>
@@ -300,6 +300,15 @@
                     <td class="text-center">{{ i.organization ? i.organization.name : '-' | persianDigit }}</td>
                     <td class="text-center">
                       <span
+                        v-if="resulted(i)"
+                        class="status-box resulted"
+                      >نتایج ارسال شده</span>
+                      <span
+                        v-else-if="waiting(i)"
+                        class="status-box waiting"
+                      >در انتظار مراجعه</span>
+                      <span
+                        v-else
                         class="status-box"
                         :style="{
                           'background-color': `${statuses[i.status - 1].background}`,
@@ -329,6 +338,14 @@
       @close="toggleRemove"
       @remove="remove"
     />
+    <send-sms-component
+      :users="users"
+      :multiple="true"
+      :selectedItems="selectedUsers"
+      :open="showSmsModal"
+      @selected="itemSelected"
+      @close="closeSmsForm"
+    />
   </v-container>
 </template>
 
@@ -341,12 +358,14 @@ import CreateAppointmentFormComponent
   from "~/components/panel/appointment/AppointmentForm/CreateAppointmentFormComponent";
 import PazireshLinkBox from "~/components/panel/orgnization/paziresh/PazireshLinkBox";
 import AdminDeleteUsersComponent from "~/components/admin/global/AdminDeleteUsersComponent";
+import SendSmsComponent from "~/components/global/sms/SendSmsComponent";
 
 export default {
   name: "search",
   components: {
     AdminDeleteUsersComponent,
     PazireshLinkBox,
+    SendSmsComponent,
     CreateAppointmentFormComponent, AppointmentFormComponent, CaseTypeCheckboxComponent, DataTableComponent
   },
   layout: 'panel',
@@ -354,6 +373,7 @@ export default {
     return {
       showPazireshModal: false,
       showFilterModal: false,
+      showSmsModal: false,
       showDelete: false,
       hasItem: false,
       item: null,
@@ -425,6 +445,12 @@ export default {
           title: 'عدم حضور',
           color: '#424242',
           background: '#F1F2F5'
+        },
+        {
+          id: 5,
+          title: 'در انتظار',
+          color: '#F5AC00',
+          background: '#FFF9EB'
         }
       ],
     }
@@ -448,6 +474,8 @@ export default {
       }
     },
     closePazireshModal() {
+      this.togglePazireshModal()
+      this.item = null
       this.getAppointmentList()
     },
     toggleFilterModal() {
@@ -466,7 +494,6 @@ export default {
     },
     openItem(item) {
       this.item = item
-      this.hasItem = true
       this.togglePazireshModal()
     },
     getUsers() {
@@ -488,26 +515,41 @@ export default {
           break;
       }
     },
+    toggleSmsModal() {
+      this.showSmsModal = !this.showSmsModal
+    },
+    closeSmsForm() {
+      this.selectedItems = []
+      this.toggleSmsModal()
+      this.action = null
+    },
+    itemSelected(e) {
+      this.selectedItems = e
+    },
     toggleRemove() {
       this.showDelete = !this.showDelete
     },
     remove() {
-      this.deleteAppointments(this.selectedItems)
+      this.deleteAppointments(this.selectedItems.map(i => i.id))
       this.toggleRemove()
     },
-    deleteAppointments(appointments) {
-      console.log(appointments)
-      // this.$store.dispatch('')
+    deleteAppointments(ids) {
+      this.$store.dispatch('appointments/deleteAppointments', {
+        ids
+      })
+        .then(() => {
+          setTimeout(() => {
+            this.getAppointmentList()
+            this.action = null
+            this.selectedItems = []
+          }, 50)
+        })
     },
     customLabel(item) {
       return item.fname
     },
     onChecked(item) {
       this.appointment.case_type = item.checked ? item.name : ''
-    },
-    openPazireshModal(item) {
-      this.item = item
-      this.toggleShowPazireshModal()
     },
     toggleShowPazireshModal() {
       this.openShowPazireshModal = !this.openShowPazireshModal
@@ -524,6 +566,32 @@ export default {
         return '-'
       }
     },
+    resulted(appointment) {
+      const profession_id = this.loginUser.organization.profession_id;
+      if (profession_id === 1) {
+        return appointment.p_admission_at !== null && appointment.p_result_at !== null
+      } else if (profession_id === 2) {
+        return appointment.l_admission_at !== null && appointment.l_result_at !== null
+      } else if (profession_id === 3) {
+        return appointment.r_admission_at !== null && appointment.r_result_at !== null
+      } else {
+        return false
+      }
+    },
+    admissioned(appointment) {
+      const profession_id = this.loginUser.organization.profession_id;
+      if (profession_id === 1) {
+        return appointment.p_admission_at !== null
+      } else if (profession_id === 2) {
+        return appointment.l_admission_at !== null
+      } else if (profession_id === 3) {
+        return appointment.r_admission_at !== null
+      }
+      return false;
+    },
+    waiting(appointment) {
+      return appointment.status === 2 && !this.admissioned(appointment) && !this.resulted(appointment)
+    }
   },
   computed: {
     loginUser() {
@@ -547,6 +615,9 @@ export default {
           this.selectedItems = []
         }
       }
+    },
+    selectedUsers() {
+      return this.selectedItems.map(i => i.user)
     },
     appointments() {
       return this.$store.getters['appointments/getList']

@@ -42,6 +42,14 @@ button:disabled {
   color: #293366;
   padding: 4px 24px;
   border-radius: 6px;
+  &.resulted {
+    background-color: #2BC4A9;
+    color: #FFFFFF;
+  }
+  &.waiting {
+    background-color: #FFF9EB;
+    color: #F5AC00;
+  }
 }
 
 .open-drawer {
@@ -1262,6 +1270,19 @@ table {
 
 .red-button {
   background: #F44336 0 0 no-repeat padding-box;
+  color: #FFFFFF;
+}
+
+.canceled-button {
+  background: #FFFAFA 0 0 no-repeat padding-box;
+  color: #F44336;
+  border: 1px solid #F44336;
+  border-radius: 8px;
+}
+
+
+.send-button {
+  background: #388E3C 0 0 no-repeat padding-box;
   color: #FFFFFF;
 }
 

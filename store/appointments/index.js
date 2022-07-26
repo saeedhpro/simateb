@@ -136,8 +136,26 @@ export const actions = {
         return Promise.reject(err)
       })
   },
+  createAppointmentAppCode(ctx, id) {
+    return this.$axios.post(`/appointments/${id}/code`)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
   updateAppointment(ctx, data) {
     return this.$axios.put(`/appointments/${data.id}`, data)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  sendAppointmentResults(ctx, data) {
+    return this.$axios.post(`/appointments/${data.id}/result`, data)
       .then(res => {
         return Promise.resolve(res)
       })
@@ -154,6 +172,15 @@ export const actions = {
         return Promise.reject(err)
       })
   },
+  acceptedAppointment(ctx, id) {
+    return this.$axios.post(`/appointments/${id}/accepted`)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
   cancelAppointment(ctx, data) {
     return this.$axios.post(`/appointments/${data.id}/cancel`, data)
       .then(res => {
@@ -163,8 +190,26 @@ export const actions = {
         return Promise.reject(err)
       })
   },
+  canceledAppointment(ctx, id) {
+    return this.$axios.post(`/appointments/${id}/canceled`)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
   reserveAppointment(ctx, data) {
     return this.$axios.post(`/appointments/${data.id}/reserve`, data)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  deleteAppointments(ctx, data) {
+    return this.$axios.post(`/appointments/delete`, data)
       .then(res => {
         return Promise.resolve(res)
       })

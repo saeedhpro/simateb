@@ -386,6 +386,12 @@ export default {
           title: 'عدم حضور',
           color: '#424242',
           background: '#F1F2F5'
+        },
+        {
+          id: 5,
+          title: 'در انتظار',
+          color: '#F5AC00',
+          background: '#FFF9EB'
         }
       ],
       money: {
