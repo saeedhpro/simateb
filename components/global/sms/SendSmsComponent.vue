@@ -150,7 +150,7 @@
                   class="main-button"
                   @click="toggleCreateModal"
                 >
-                  ذخیره
+                  ارسال
                 </button>
               </v-col>
             </v-row>

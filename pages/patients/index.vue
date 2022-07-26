@@ -11,9 +11,10 @@
             بیماران
           </span>
           </div>
-          <v-divider inset/>
+          <v-divider inset :style="{'margin-left': isDoctor ? '72px' : '0'}"/>
           <div class="page-actions"
                @click="toggleCreateModal"
+               v-if="isDoctor"
           >
             <img src="/images/pages/new-user.svg" alt="users">
             <span class="title">بیمار جدید</span>
@@ -42,6 +43,16 @@
                   {{ selectedUsers.length | persianDigit }}
                 </div>
                 <v-select
+                  v-if="isDoctor"
+                  outlined
+                  :items="doctorActions"
+                  label="اقدام جمعی"
+                  item-value="id"
+                  item-text="label"
+                  v-model="action"
+                ></v-select>
+                <v-select
+                  v-else
                   outlined
                   :items="actions"
                   label="اقدام جمعی"
@@ -221,6 +232,7 @@
               cols="12"
             >
               <data-table-component
+                v-if="isDoctor"
                 :headers="headers"
                 :page="search.page"
                 :total="users.total_rows"
@@ -246,6 +258,48 @@
                     <td class="text-center">{{ i.tel ? i.tel : '-' | persianDigit }}</td>
                     <td class="text-center"><span
                       class="text-center file-id">{{ i.file_id ? i.file_id : '-' | persianDigit }}</span></td>
+                    <td class="text-center">{{ i.age ? i.age : '-' | persianDigit }}</td>
+                    <td class="text-center" v-if="i.created">
+                      {{ i.created | toRelativeDate }}
+                    </td>
+                    <td class="text-center" v-else>-</td>
+                    <td class="text-center" v-if="i.last_login">
+                      {{ i.last_login | toRelativeDate }}
+                    </td>
+                    <td class="text-center" v-else>-</td>
+                  </tr>
+                </template>
+                <template v-slot:notfound>
+                  <div v-if="users.total_rows === 0">اطلاعاتی یافت نشد</div>
+                </template>
+              </data-table-component>
+              <data-table-component
+                v-else
+                :headers="headers"
+                :page="search.page"
+                :total="users.total_rows"
+                @paginate="paginate"
+              >
+                <template v-slot:body>
+                  <tr v-for="(i, n) in users.data" :key="n">
+                    <td class="text-center">{{ (search.page - 1) * 10 + n + 1 | persianDigit }}</td>
+                    <td class="text-center">
+                      <div class="table-row flex flex-row align-center justify-start">
+                        <input type="checkbox"
+                               class="table-selectable-checkbox"
+                               v-model="selectedUsers"
+                               :value="i"
+                               :ripple="false"
+                        />
+                        <img :src="i.logo ? i.logo : 'https://randomuser.me/api/portraits/men/88.jpg'">
+                        <span><nuxt-link :to="`/profile/${i.id}`">{{
+                            `${i.fname} ${i.lname}` | persianDigit
+                          }}</nuxt-link></span>
+                      </div>
+                    </td>
+                    <td class="text-center">{{ i.tel ? i.tel : '-' | persianDigit }}</td>
+                    <td class="text-center"><span
+                      class="text-center">{{ i.organization ? i.organization.name : '-' | persianDigit }}</span></td>
                     <td class="text-center">{{ i.age ? i.age : '-' | persianDigit }}</td>
                     <td class="text-center" v-if="i.created">
                       {{ i.created | toRelativeDate }}
@@ -297,7 +351,8 @@ export default {
   name: "index",
   components: {
     SendSmsComponent,
-    AdminDeleteUsersComponent, CreateUserFormComponent, CropImageComponent, DataTableComponent},
+    AdminDeleteUsersComponent, CreateUserFormComponent, CropImageComponent, DataTableComponent
+  },
   layout: 'panel',
   middleware: 'auth',
   data() {
@@ -312,11 +367,20 @@ export default {
           label: 'ارسال پیامک'
         }
       ],
-      headers: [
+      doctorHeaders: [
         '',
         'بیمار',
         'موبایل',
         'پرونده',
+        'سن',
+        'ثبت در سیستم',
+        'آخرین ورود',
+      ],
+      headers: [
+        '',
+        'بیمار',
+        'موبایل',
+        'پزشک',
         'سن',
         'ثبت در سیستم',
         'آخرین ورود',
@@ -328,7 +392,7 @@ export default {
         start: '',
         end: '',
       },
-      actions: [
+      doctorActions: [
         {
           id: 0,
           label: 'اقدام جمعی'
@@ -336,6 +400,16 @@ export default {
         {
           id: 1,
           label: 'حذف کن'
+        },
+        {
+          id: 2,
+          label: 'ارسال پیامک'
+        }
+      ],
+      actions: [
+        {
+          id: 0,
+          label: 'اقدام جمعی'
         },
         {
           id: 2,
@@ -360,9 +434,11 @@ export default {
         case 1:
         case '1':
           this.toggleShowDelete()
+          break
         case 2:
         case '2':
           this.toggleShowSendSmsModal()
+          break
       }
     },
     paginate(page = 1) {
@@ -422,6 +498,7 @@ export default {
     },
     closeSendSmsFrom() {
       this.selectedUsers = []
+      this.action = null
       this.toggleShowSendSmsModal()
     },
     toggleShowSendSmsModal() {
@@ -453,7 +530,12 @@ export default {
     },
     mini() {
       return this.$vuetify.breakpoint.mdAndDown
-    }
+    },
+    isDoctor() {
+      if (!this.loginUser) return false;
+      const profession_id = this.loginUser.organization.profession_id;
+      return profession_id !== 1 && profession_id !== 2 && profession_id !== 3
+    },
   },
 }
 </script>

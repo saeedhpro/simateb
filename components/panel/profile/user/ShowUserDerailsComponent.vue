@@ -172,7 +172,6 @@
         </div>
       </v-col>
     </v-row>
-    {{`isAdmin: ${isAdmin}`}}
     <admin-update-user-form-component
       v-if="isAdmin"
       :item="user"

@@ -23,8 +23,8 @@
           <v-spacer/>
           <div class="create-update-modal-regbox">
             ثبت در سیستم توسط: {{ `${loginUser.lname} ${loginUser.fname}` }}
-            ({{ loginUser.created | toRelativeDate }} {{
-              loginUser.created | toPersianDate('YYYY/MM/DD HH:mm:ss')
+            ({{ $moment() | toRelativeDate }} {{
+              $moment() | toPersianDate('YYYY/MM/DD HH:mm:ss')
             }})
           </div>
         </v-card-title>
