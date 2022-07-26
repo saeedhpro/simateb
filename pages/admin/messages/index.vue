@@ -65,7 +65,7 @@
             >
               <div class="page-main-actions-left">
                 <div class="result-count">
-                  <span>{{ messages.total_rows | persianDigit }}</span>
+                  <span>{{ messages.total_rows ? messages.total_rows : 0 | toPersianNumber }}</span>
                   نتیجه
                 </div>
                 <div class="page-search-box">

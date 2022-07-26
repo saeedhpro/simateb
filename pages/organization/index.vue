@@ -30,7 +30,7 @@
                   v-model="selectedAll"
                 ></v-checkbox>
                 <div class="selected-count" v-if="selectedItems.length > 0">
-                  {{ selectedItems.length }}
+                  {{ selectedItems.length | persianDigit }}
                 </div>
                 <v-select
                   outlined
@@ -56,7 +56,7 @@
             >
               <div class="page-main-actions-left">
                 <div class="result-count">
-                  <span>{{ appointments.total_rows | persianDigit }}</span>
+                  <span>{{ appointments.total_rows ? appointments.total_rows : 0 | toPersianNumber }}</span>
                   نتیجه
                 </div>
                 <div class="page-search-box">
@@ -70,7 +70,7 @@
                           d="M17.722,16.559l-4.711-4.711a7.094,7.094,0,0,0,1.582-4.535,7.327,7.327,0,1,0-2.777,5.729l4.711,4.711a.972.972,0,0,0,.629.247.844.844,0,0,0,.6-.247A.822.822,0,0,0,17.722,16.559ZM1.687,7.313a5.625,5.625,0,1,1,5.625,5.625A5.632,5.632,0,0,1,1.687,7.313Z"
                           transform="translate(0)"/>
                   </svg>
-                  <input class="search-input" v-model="search.q" type="text" ref="search-input" placeholder="جستجو"
+                  <input class="search-input" v-model="search.q" type="text" ref="search-input" placeholder="جستجو / کد پذیرش"
                          @input="getAppointmentList">
                   <div @click="getAppointmentList" class="search-button">
                     <img src="/images/pages/search-button.svg">
@@ -110,7 +110,7 @@
                               md="4"
                             >
                               <div class="create-update-model-input-box">
-                                <label>عبارت جستجو</label>
+                                <label>عبارت جستجو / کد پذیرش</label>
                                 <input type="text" v-model="search.q">
                               </div>
                             </v-col>
@@ -280,6 +280,12 @@
                     <td class="text-center">{{ (search.page - 1) * 10 + n + 1 | persianDigit }}</td>
                     <td class="text-center">
                       <div class="table-row flex flex-row align-center justify-start">
+                        <input type="checkbox"
+                               class="table-selectable-checkbox"
+                               v-model="selectedItems"
+                               :value="i"
+                               :ripple="false"
+                        />
                         <img
                           :src="i.user && i.user.logo ? i.user.logo : 'https://randomuser.me/api/portraits/men/88.jpg'">
                         <span>
@@ -290,12 +296,13 @@
                       </div>
                     </td>
                     <td class="text-center">{{ i.user && i.user.tel ? i.user.tel : '-' | persianDigit }}</td>
-                    <td class="text-center">{{ i.code ? i.code : '-' | persianDigit }}</td>
+                    <td class="text-center"><span class="file-id">{{ i.code ? i.code : '-' | persianDigit }}</span></td>
                     <td class="text-center">
                       {{ i.start_at | toRelativeDate }}
                       {{ i.start_at | toPersianDate('dddd DD MMMM') }}
                     </td>
                     <td class="text-center">{{ getCases(i) | persianDigit }}</td>
+                    <td class="text-center">{{ i.organization ? i.organization.name : '-' | persianDigit }}</td>
                     <td class="text-center">
                       <span
                         class="status-box"
@@ -322,6 +329,20 @@
         :item="item"
         @close="closeAppointmentModal"
       />
+      <admin-delete-users-component
+        :open="showDelete"
+        :title="`پذیرش ها`"
+        @close="toggleRemove"
+        @remove="remove"
+      />
+      <send-sms-component
+        :users="users"
+        :multiple="true"
+        :selectedItems="selectedUsers"
+        :open="showSmsModal"
+        @selected="itemSelected"
+        @close="closeSmsForm"
+      />
     </v-row>
   </v-container>
 </template>
@@ -330,10 +351,14 @@ import PazireshLinkBox from "~/components/panel/orgnization/paziresh/PazireshLin
 import AppointmentFormComponent from "~/components/panel/appointment/AppointmentForm/AppointmentFormComponent";
 import DataTableComponent from "~/components/panel/global/DataTableComponent";
 import DoctorPazireshHeader from "~/components/panel/orgnization/paziresh/DoctorPazireshHeader";
+import AdminDeleteUsersComponent from "~/components/admin/global/AdminDeleteUsersComponent";
+import SendSmsComponent from "~/components/global/sms/SendSmsComponent";
 
 export default {
   name: "index",
   components: {
+    SendSmsComponent,
+    AdminDeleteUsersComponent,
     DoctorPazireshHeader,
     DataTableComponent,
     AppointmentFormComponent,
@@ -373,6 +398,8 @@ export default {
       item: null,
       showFilterModal: false,
       showAppointmentModal: false,
+      showDelete: false,
+      showSmsModal: false,
       doctorHeaders: [
         '',
         'بیمار',
@@ -391,6 +418,7 @@ export default {
         'کد پذیرش',
         'تاریخ ویزیت',
         'درخواست پزشک',
+        'پزشک',
         'وضعیت',
       ],
       statuses: [
@@ -434,13 +462,13 @@ export default {
     },
     getAppointmentList(filtered = false) {
       if (!filtered) {
-       if (this.isDoctor) {
-         this.search.start = this.$moment().format("YYYY-MM-DD")
-         this.search.end = this.$moment().format("YYYY-MM-DD")
-       } else {
-         this.search.start = ''
-         this.search.end = ''
-       }
+        if (this.isDoctor) {
+          this.search.start = this.$moment().format("YYYY-MM-DD")
+          this.search.end = this.$moment().format("YYYY-MM-DD")
+        } else {
+          this.search.start = ''
+          this.search.end = ''
+        }
       }
       if (this.isDoctor) {
         this.search.status = ''
@@ -456,6 +484,47 @@ export default {
       this.$store.dispatch('cases/getCaseTypes')
     },
     doAction() {
+      if (!this.action) return
+      switch (this.action) {
+        case 1:
+        case '1':
+          this.toggleRemove();
+          break;
+        case 2:
+        case '2':
+          this.toggleSmsModal();
+          break;
+      }
+    },
+    toggleSmsModal() {
+      this.showSmsModal = !this.showSmsModal
+    },
+    closeSmsForm() {
+      this.selectedItems = []
+      this.toggleSmsModal()
+      this.action = null
+    },
+    itemSelected(e) {
+      this.selectedItems = e
+    },
+    toggleRemove() {
+      this.showDelete = !this.showDelete
+    },
+    remove() {
+      this.deleteAppointments(this.selectedItems.map(i => i.id))
+      this.toggleRemove()
+    },
+    deleteAppointments(ids) {
+      this.$store.dispatch('appointments/deleteAppointments', {
+        ids
+      })
+        .then(() => {
+          setTimeout(() => {
+            this.getAppointmentList()
+            this.action = null
+            this.selectedItems = []
+          }, 50)
+        })
     },
     toggleFilterModal() {
       this.showFilterModal = !this.showFilterModal
@@ -553,11 +622,17 @@ export default {
       set(bool) {
         if (bool) {
           this.selectedItems = []
-          this.selectedItems = this.appointments.data.map(i => i.id)
+          this.selectedItems = this.appointments.data
         } else {
           this.selectedItems = []
         }
       }
+    },
+    selectedUsers() {
+      return this.selectedItems.map(i => i.user)
+    },
+    users() {
+      return this.$store.getters['users/getUsers']
     },
   },
 }

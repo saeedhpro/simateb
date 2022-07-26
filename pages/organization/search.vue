@@ -49,7 +49,7 @@
             >
               <div class="page-main-actions-left">
                 <div class="result-count">
-                  <span>{{ appointments.total_rows | persianDigit }}</span>
+                  <span>{{ appointments.total_rows ? appointments.total_rows : 0 | toPersianNumber }}</span>
                   نتیجه
                 </div>
                 <div class="page-search-box">
@@ -63,7 +63,7 @@
                           d="M17.722,16.559l-4.711-4.711a7.094,7.094,0,0,0,1.582-4.535,7.327,7.327,0,1,0-2.777,5.729l4.711,4.711a.972.972,0,0,0,.629.247.844.844,0,0,0,.6-.247A.822.822,0,0,0,17.722,16.559ZM1.687,7.313a5.625,5.625,0,1,1,5.625,5.625A5.632,5.632,0,0,1,1.687,7.313Z"
                           transform="translate(0)"/>
                   </svg>
-                  <input class="search-input" v-model="search.q" type="text" ref="search-input" placeholder="جستجو / کد پذیرش">
+                  <input class="search-input" v-model="search.q" type="text" ref="search-input" placeholder="جستجو / کد پذیرش" @input="getAppointmentList">
                   <div @click="getAppointmentList" class="search-button">
                     <img src="/images/pages/search-button.svg">
                   </div>
@@ -463,7 +463,14 @@ export default {
   methods: {
     getAppointmentList(filtered = false) {
       this.showFilterModal = false
-      this.$store.dispatch('appointments/search', this.search)
+      const data = {
+        ...this.search,
+      }
+      // if (!filtered) {
+      //   delete data.start
+      //   delete data.end
+      // }
+      this.$store.dispatch('appointments/search', data)
     },
     clearForm() {
       this.search = {
@@ -610,7 +617,7 @@ export default {
       set(bool) {
         if (bool) {
           this.selectedItems = []
-          this.selectedItems = this.appointments.data.map(i => i)
+          this.selectedItems = this.appointments.data
         } else {
           this.selectedItems = []
         }

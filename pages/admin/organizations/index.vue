@@ -37,7 +37,7 @@
             >
               <div class="page-main-actions-left">
                 <div class="result-count">
-                  <span>{{ organizations.total_rows | persianDigit }}</span>
+                  <span>{{ organizations.total_rows ? organizations.total_rows : 0 | toPersianNumber }}</span>
                   نتیجه
                 </div>
                 <div class="page-search-box">
