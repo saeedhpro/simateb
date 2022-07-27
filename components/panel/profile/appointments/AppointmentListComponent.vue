@@ -14,14 +14,30 @@
         :prescription="i.prescription"
         :radiology-cases="i.radiology_cases"
         :photography-cases="i.photography_cases"
+        :radiology-id="i.radiology_id"
+        :photography-id="i.photography_id"
+        :p-result-at="i.p_result_at"
+        :r-result-at="i.r_result_at"
+        :p-admission-at="i.p_admission_at"
+        :r-admission-at="i.r_admission_at"
         @updated="onUpdate(i)"
       />
+      <div
+        class="more-items"
+        v-if="list.total_rows > 10"
+      >
+        <v-pagination
+          dir="ltr"
+          v-model="page"
+          :length="list.total_pages"
+          :total-visible="5"
+        ></v-pagination>
+      </div>
     </div>
     <appointment-form-component
       :open="showUpdateModal"
       :item="item"
       @close="closeUpdateModal"
-      @loading="toggleOverlay"
     />
   </div>
 </template>
@@ -44,13 +60,15 @@ export default {
       page: 1,
       item: null,
       showUpdateModal: false,
-      overlay: false
     }
   },
   mounted() {
     this.getUserAppointmentsList(this.userId, this.page)
   },
   methods: {
+    paginate() {
+      this.getUserAppointmentsList(this.userId, this.page)
+    },
     getUserAppointmentsList(id, page) {
       this.$store.dispatch('appointments/getUserAppointmentsList', {
         id: id,
@@ -65,15 +83,18 @@ export default {
       this.showUpdateModal = !this.showUpdateModal
     },
     closeUpdateModal() {
+      this.getUserAppointmentsList(this.userId, 1)
       this.toggleShowUpdateModal()
-    },
-    toggleOverlay() {
-      this.overlay = !this.overlay
     },
   },
   computed: {
     list() {
       return this.$store.getters['appointments/getList']
+    }
+  },
+  watch: {
+    page() {
+      this.paginate()
     }
   }
 }

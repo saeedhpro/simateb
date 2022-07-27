@@ -4,141 +4,45 @@
   >
     <v-row>
       <v-col align-self="center">
+        <div class="etebar-box" v-if="showEtebar">
+          <div class="right-box">
+            <img src="/images/pages/alert.svg" alt="">
+            <div>اعتبار لازم برای ارسال پیام کوتاه در حال اتمام است</div>
+            <nuxt-link to="/messages/pay" class="page-actions second-button">
+              <img src="/images/pages/plus-out.svg" alt="organizations">
+              <span class="title">افزایش اعتبار</span>
+            </nuxt-link>
+          </div>
+          <div class="left-box">
+            <button
+              class="close"
+              @click="closeEtebar"
+            >
+              <v-icon>mdi-close</v-icon>
+            </button>
+          </div>
+        </div>
         <div class="page-header-box">
           <div class="page-header">
-            <img src="/images/pages/users.svg" alt="organizations">
+            <img src="/images/pages/sms.svg" alt="organizations">
             <span class="title">
             پیام ها
           </span>
           </div>
           <v-divider inset/>
-          <v-dialog
-            v-model="showCreateModal"
-            persistent
-            max-width="1056px"
-          >
-            <v-card
-              class="create-update-modal"
-            >
-              <v-card-title
-                class="create-update-modal-title-box"
-              >
-                <div class="create-update-modal-title">
-                  <button
-                    @click="closeForm"
-                    class="create-update-modal-close"
-                  >
-                    <v-icon>mdi-close</v-icon>
-                  </button>
-                  <span>فرم ارسال پیامک</span>
-                </div>
-                <v-spacer/>
-                <div class="create-update-modal-regbox">
-                  ثبت در سیستم توسط: {{ `${loginUser.staff.lname} ${loginUser.staff.fname}` }}
-                  ({{ loginUser.created | toRelativeDate }} {{
-                    loginUser.created | toPersianDate('YYYY/MM/DD HH:mm:ss')
-                  }})
-                </div>
-              </v-card-title>
-              <v-card-text>
-                <v-container>
-                  <v-row>
-                  </v-row>
-                  <v-row>
-                    <v-col
-                      cols="12"
-                    >
-                      <div class="create-update-model-input-box">
-                        <label>کاربران</label>
-                        <multiselect
-                          v-model="selectedUsers"
-                          :options="users"
-                          :multiple="true"
-                          :close-on-select="false"
-                          :clear-on-select="false"
-                          :preserve-search="true"
-                          label="fname"
-                          track-by="fname"
-                          searchable
-                          placeholder=""
-                          :show-labels="false">
-                          <template slot="singleLabel" slot-scope="props"><span
-                            class="option__desc"><span
-                            class="option__title">{{ `${props.option.fname} ${props.option.lname}` }}</span></span>
-                          </template>
-                          <template slot="option" slot-scope="props">
-                            <div class="option__desc"><span
-                              class="option__title">{{ `${props.option.fname} ${props.option.lname}` }}</span></div>
-                          </template>
-                        </multiselect>
-                      </div>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col
-                      cols="12"
-                    >
-                      <div class="create-update-model-input-box">
-                        <label>متن پیامک</label>
-                        <textarea
-                          v-model="form.msg"
-                          rows="4"
-                        >
-                        </textarea>
-                      </div>
-                    </v-col>
-                  </v-row>
-                </v-container>
-              </v-card-text>
-              <v-card-actions>
-                <v-container>
-                  <v-row>
-                    <v-col
-                      cols="12"
-                      sm="3"
-                      md="3"
-                    >
-                      <button
-                        class="second-button"
-                        @click="clearForm"
-                      >
-                        پاک کردن فرم
-                      </button>
-                    </v-col>
-                    <v-spacer/>
-                    <v-col
-                      cols="12"
-                      sm="3"
-                      md="3"
-                    >
-                      <button
-                        class="second-button"
-                        @click="closeForm"
-                      >
-                        بستن
-                      </button>
-                    </v-col>
-                    <v-col
-                      cols="12"
-                      sm="4"
-                      md="4"
-                    >
-                      <button
-                        class="main-button"
-                        @click="createMessage"
-                      >
-                        ذخیره
-                      </button>
-                    </v-col>
-                  </v-row>
-                </v-container>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
+          <div class="page-actions-secondary">
+            <span class="title-main">اعتبار:</span>
+            <span class="title-second">{{ loginUser.organization.sms_credit | toPersianCurrency('', 1) }}</span>
+            <span class="title-main">تومان</span>
+          </div>
+          <nuxt-link to="/messages/pay" class="page-actions second-button">
+            <img src="/images/pages/plus-out.svg" alt="organizations">
+            <span class="title">افزایش اعتبار</span>
+          </nuxt-link>
           <div class="page-actions"
                @click="toggleCreateModal"
           >
-            <img src="/images/pages/new-user.svg" alt="organizations">
+            <img src="/images/pages/plus.svg" alt="organizations">
             <span class="title">پیام جدید</span>
           </div>
         </div>
@@ -155,7 +59,7 @@
             <v-col
               cols="12"
               sm="12"
-              md="4"
+              md="3"
             >
               <div class="right-box">
                 <v-checkbox
@@ -180,7 +84,7 @@
                 </button>
               </div>
             </v-col>
-            <v-spacer />
+            <v-spacer/>
             <v-col
               cols="12"
               sm="12"
@@ -300,7 +204,7 @@
                             >
                               <button
                                 class="second-button"
-                                @click="clearForm"
+                                @click="clearFilterForm"
                               >پاک کردن فرم
                               </button>
                             </v-col>
@@ -356,7 +260,7 @@
                         <input type="checkbox"
                                class="table-selectable-checkbox"
                                v-model="selectedMessages"
-                               :value="i.id"
+                               :value="i"
                         />
                         <div class="mr-2">
                           <nuxt-link :to="`/profile/${i.user ? i.user.id : 1}`">{{
@@ -390,28 +294,40 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-overlay :value="overlay">
-      <v-progress-circular
-        indeterminate
-        size="64"
-      ></v-progress-circular>
-    </v-overlay>
+    <send-sms-component
+      :users="users"
+      :multiple="true"
+      :selectedItems="selectedUsers"
+      :open="showCreateModal"
+      @selected="itemSelected"
+      @close="closeSmsForm"
+      @clear="clearSmsForm"
+    />
+    <admin-delete-users-component
+      :open="showDelete"
+      :title="`پیام ها`"
+      @close="toggleRemove"
+      @remove="remove"
+    />
   </v-container>
 </template>
 
 <script>
 import DataTableComponent from "~/components/panel/global/DataTableComponent";
+import SendSmsComponent from "~/components/global/sms/SendSmsComponent";
+import AdminDeleteUsersComponent from "~/components/admin/global/AdminDeleteUsersComponent";
 
 export default {
   name: "index",
-  components: {DataTableComponent},
+  components: {AdminDeleteUsersComponent, DataTableComponent, SendSmsComponent},
   layout: "panel",
   middleware: "auth",
   data() {
     return {
-      overlay: false,
       showFilterModal: false,
       showCreateModal: false,
+      showDelete: false,
+      showEtebar: false,
       headers: [
         '',
         'دریافت کننده',
@@ -424,10 +340,8 @@ export default {
       search: {
         q: '',
         page: 1,
-      },
-      form: {
-        numbers: [],
-        msg: '',
+        start: '',
+        end: '',
       },
       action: null,
       selectedUsers: [],
@@ -447,6 +361,9 @@ export default {
   mounted() {
     this.paginate()
     this.getUsers()
+    if (this.loginUser) {
+      this.showEtebar = this.loginUser.organization.sms_credit < 1000
+    }
   },
   methods: {
     doAction() {
@@ -454,7 +371,7 @@ export default {
       switch (this.action) {
         case 1:
         case '1':
-          this.deleteMessages(this.selectedMessages)
+          this.toggleRemove()
       }
     },
     closeForm() {
@@ -473,62 +390,32 @@ export default {
       this.clearFilterForm()
       this.toggleFilterModal()
     },
+    closeEtebar() {
+      this.showEtebar = !this.showEtebar
+    },
+    toggleRemove() {
+      this.showDelete = !this.showDelete
+    },
     toggleFilterModal() {
       this.showFilterModal = !this.showFilterModal
     },
     toggleCreateModal() {
       this.showCreateModal = !this.showCreateModal
     },
-    openChooseImage() {
-
-    },
-    chooseImage() {
-
-    },
-    toggleOverlay() {
-      this.overlay = !this.overlay
-    },
     paginate(page = 1) {
       this.search.page = page
       this.getMessageList()
     },
     getMessageList() {
-      this.toggleOverlay()
-      this.showFilterModal = false
       this.$store.dispatch('messages/getList', this.search)
-        .finally(() => {
-          setTimeout(() => {
-            this.toggleOverlay()
-          }, 50)
-        })
     },
     getStatus(sent) {
       return sent ? 'ارسال شده' : 'ارسال نشد'
     },
-    clearForm() {
-      this.form = {
-        numbers: [],
-        msg: '',
-      }
-      this.selectedUsers = []
-    },
-    createMessage() {
-      this.toggleOverlay()
-      this.$store.dispatch('messages/createMessage', this.form)
-        .then(() => {
-          setTimeout(() => {
-            this.closeForm()
-            this.getMessageList()
-          }, 50)
-        })
-        .finally(() => {
-          setTimeout(() => {
-            this.toggleOverlay()
-          }, 50)
-        })
+    remove() {
+      this.deleteMessages(this.selectedMessages.map(i => i.id))
     },
     deleteMessages(ids) {
-      this.toggleOverlay()
       this.$store.dispatch('messages/deleteMessages', {
         ids
       })
@@ -537,17 +424,25 @@ export default {
             this.getMessageList()
             this.action = null
             this.selectedMessages = []
-          }, 50)
-        })
-        .finally(() => {
-          setTimeout(() => {
-            this.toggleOverlay()
+            this.toggleRemove()
           }, 50)
         })
     },
     getUsers() {
       this.$store.dispatch('users/getUsers')
-    }
+    },
+    itemSelected(e) {
+      this.selectedUsers = e
+    },
+    closeSmsForm() {
+      this.selectedUsers = []
+      this.action = null
+      this.toggleCreateModal()
+      this.getMessageList()
+    },
+    clearSmsForm() {
+      this.selectedUsers = []
+    },
   },
   computed: {
     messages() {
@@ -566,18 +461,13 @@ export default {
       set(bool) {
         if (bool) {
           this.selectedMessages = []
-          this.selectedMessages = this.messages.data.map(i => i.id)
+          this.selectedMessages = this.messages.data
         } else {
           this.selectedMessages = []
         }
       }
     },
   },
-  watch: {
-    selectedUsers(items) {
-      this.form.numbers = items.map(i => i.tel)
-    }
-  }
 }
 </script>
 

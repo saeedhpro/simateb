@@ -6,7 +6,7 @@
       <v-col
         cols="12"
         sm="12"
-        md="4"
+        md="3"
       >
         <div class="right-box">
           <v-checkbox

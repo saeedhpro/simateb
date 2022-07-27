@@ -25,7 +25,6 @@
     "vue-multiselect": "^2.1.6",
     "vue-persian-datetime-picker": "^2.10.4",
     "vue-persian-filters": "^0.2.5",
-    "vue-persian-input-digit": "^2.0.6",
     "vue-server-renderer": "^2.6.14",
     "vue-template-compiler": "^2.6.14",
     "vue-toastification": "^1.7.14",

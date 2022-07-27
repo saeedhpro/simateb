@@ -218,12 +218,6 @@ export default {
     toggleCreateModal() {
       this.showCreateModal = !this.showCreateModal
     },
-    openChooseImage() {
-
-    },
-    chooseImage() {
-
-    },
     paginate(page = 1) {
       this.search.page = page
       this.getMessageList()
@@ -279,7 +273,7 @@ export default {
       set(bool) {
         if (bool) {
           this.selectedMessages = []
-          this.selectedMessages = this.messages.data.map(i => i.id)
+          this.selectedMessages = this.messages.data
         } else {
           this.selectedMessages = []
         }

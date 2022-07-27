@@ -22,7 +22,7 @@
           <div class="page-actions-secondary"
                @click="togglePazireshModal"
           >
-            <span class="title">
+            <span class="title-main">
               {{ today | toPersianDate('dddd DD MMMM') }}
             </span>
           </div>

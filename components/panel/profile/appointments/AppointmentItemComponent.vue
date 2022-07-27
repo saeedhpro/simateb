@@ -33,6 +33,15 @@
                 <span><span class="circle"></span>{{ created_at | toPersianDate('YYYY/MM/DD') }}<span
                   class="circle"></span></span>
                 <span
+                  v-if="resulted"
+                  class="status-box resulted"
+                >نتایج ارسال شده</span>
+                <span
+                  v-else-if="waiting"
+                  class="status-box waiting"
+                >در انتظار مراجعه</span>
+                <span
+                  v-else
                   class="status-box"
                   :style="{
                   'background-color': `${statuses[status - 1].background}`,
@@ -120,6 +129,24 @@ export default {
     organizationId: {
       type: Number,
       required: true,
+    },
+    radiologyId: {
+      type: Number,
+    },
+    photographyId: {
+      type: Number,
+    },
+    pAdmissionAt: {
+      type: String,
+    },
+    pResultAt: {
+      type: String,
+    },
+    rAdmissionAt: {
+      type: String,
+    },
+    rResultAt: {
+      type: String,
     },
     status: {
       type: Number,
@@ -229,8 +256,31 @@ export default {
       return this.$store.getters['login/getUser']
     },
     forOrganization() {
-      return this.loginUser.organization_id === this.organizationId
+      const orgID = this.loginUser.organization_id
+      return orgID === this.organizationId || orgID === this.radiologyId || orgID === this.photographyId
     },
+    resulted() {
+      const profession_id = this.loginUser.organization.profession_id;
+      if (profession_id === 1) {
+        return this.pAdmissionAt !== null && this.pResultAt !== null
+      } else if (profession_id === 3) {
+        return this.rAdmissionAt !== null && this.rResultAt !== null
+      } else {
+        return false
+      }
+    },
+    admissioned() {
+      const profession_id = this.loginUser.organization.profession_id;
+      if (profession_id === 1) {
+        return this.pAdmissionAt !== null
+      } else if (profession_id === 3) {
+        return this.rAdmissionAt !== null
+      }
+      return false;
+    },
+    waiting() {
+      return this.status === 2 && !this.admissioned && !this.resulted
+    }
   }
 }
 </script>

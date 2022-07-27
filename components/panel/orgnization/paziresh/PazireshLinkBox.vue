@@ -17,7 +17,7 @@
         <div class="page-actions-secondary"
              @click="isDoctor ? () => togglePazireshModal() : () => {}"
         >
-            <span class="title">
+            <span class="title-main">
               {{ today | toPersianDate('dddd DD MMMM') }}
             </span>
         </div>

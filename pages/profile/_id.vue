@@ -4,7 +4,7 @@
       <v-col
         cols="12"
       >
-        <show-user-derails-component
+        <user-derails-component
           :user="user"
           @updated="getUser"
         />
@@ -261,12 +261,14 @@ import PhotographyListComponent from "~/components/panel/profile/photography/Pho
 import RadiologyListComponent from "~/components/panel/profile/radiology/RadiologyListComponent";
 import UpdateUserFormComponent from "~/components/panel/profile/user/UpdateUserFormComponent";
 import ShowUserDerailsComponent from "~/components/panel/profile/user/ShowUserDerailsComponent";
+import UserDerailsComponent from "~/components/panel/profile/user/UserDerailsComponent";
 
 export default {
   name: "profile.vue",
   layout: "panel",
   middleware: "auth",
   components: {
+    UserDerailsComponent,
     ShowUserDerailsComponent,
     UpdateUserFormComponent,
     RadiologyListComponent,

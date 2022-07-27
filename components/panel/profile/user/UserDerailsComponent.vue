@@ -177,10 +177,19 @@
       @close="remove"
       @remove="deleteUser"
     />
-    <update-user-form-component
+    <admin-update-user-form-component
+      v-if="isAdmin"
       :item="user"
       :open="showUpdateModal"
       @close="closeUpdateModal"
+      @updated="updatedUpdateModal"
+    />
+    <update-user-form-component
+      v-else
+      :item="user"
+      :open="showUpdateModal"
+      @close="closeUpdateModal"
+      @updated="updatedUpdateModal"
     />
   </div>
 </template>
@@ -188,10 +197,11 @@
 <script>
 import UpdateUserFormComponent from "~/components/panel/profile/user/UpdateUserFormComponent";
 import DeleteUserModalComponent from "~/components/global/delete/DeleteUserModalComponent";
+import AdminUpdateUserFormComponent from "~/components/admin/user/AdminUpdateUserFormComponent";
 
 export default {
   name: "UserDerailsComponent",
-  components: {DeleteUserModalComponent, UpdateUserFormComponent},
+  components: {AdminUpdateUserFormComponent, DeleteUserModalComponent, UpdateUserFormComponent},
   props: {
     user: {
       type: Object,
@@ -212,6 +222,11 @@ export default {
       this.showUpdateModal = !this.showUpdateModal
     },
     closeUpdateModal() {
+      this.$emit('updated');
+      this.toggleShowUpdateModal()
+      this.item = null
+    },
+    updatedUpdateModal() {
       this.$emit('updated');
       this.toggleShowUpdateModal()
       this.item = null
@@ -239,6 +254,10 @@ export default {
       }
       return this.user.user_group_id !== 2;
     },
+    isAdmin() {
+      if (!this.loginUser) return false
+      return this.loginUser.user_group_id === 2
+    }
   },
 }
 </script>
