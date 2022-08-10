@@ -38,7 +38,8 @@
             class="info-input"
             @input="changeInput"
             name="info"
-            :value="c"
+            :value="i"
+            :disabled="isPatient"
           >
 
       </textarea>
@@ -46,8 +47,8 @@
       </v-col>
       <v-col
         cols="12"
-        sm="8"
-        md="4"
+        :sm="isPatient ? 9 : 8"
+        :md="isPatient ? 5 : 4"
       >
         <div class="input-box">
           <label
@@ -60,9 +61,9 @@
             class="comment-input"
             @input="changeInput"
             name="comment"
-            :value="i"
+            :value="c"
+            :disabled="!isPatient"
           >
-
       </textarea>
         </div>
       </v-col>
@@ -70,6 +71,7 @@
         cols="12"
         sm="4"
         md="1"
+        v-if="!isPatient"
       >
         <v-dialog
           v-model="showDelete"
@@ -120,6 +122,13 @@
             mdi-delete-outline
           </v-icon>
         </button>
+      </v-col>
+      <v-col
+        cols="12"
+      >
+        <div class="d-flex justify-end">
+          <button class="main-button" :style="{maxWidth: '160px'}">ذخیره</button>
+        </div>
       </v-col>
     </v-row>
   </div>
@@ -180,6 +189,17 @@ export default {
         id: this.id,
         [e.target.name]: e.target.value,
       })
+    },
+  },
+  computed: {
+    loginUser() {
+      return this.$store.getters['login/getUser']
+    },
+    isPatient() {
+      if (this.loginUser) {
+        return this.loginUser.user_group_id === 1
+      }
+      return false
     }
   }
 }

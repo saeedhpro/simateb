@@ -213,7 +213,7 @@
                @click="createModal"
           >
             <img src="/images/pages/new-user.svg" alt="organizations">
-            <span class="title">پذیرش vip جدید</span>
+            <span class="title-main">پذیرش vip جدید</span>
           </div>
         </div>
       </v-col>
@@ -304,12 +304,6 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-overlay :value="overlay">
-      <v-progress-circular
-        indeterminate
-        size="64"
-      ></v-progress-circular>
-    </v-overlay>
   </v-container>
 </template>
 
@@ -331,18 +325,8 @@ export default {
     this.paginate()
   },
   methods: {
-    toggleOverlay() {
-      this.overlay = !this.overlay
-    },
     getScheduleList() {
-      this.toggleOverlay()
-      this.showFilterModal = false
       this.$store.dispatch('schedule/getList', this.search)
-        .finally(() => {
-          setTimeout(() => {
-            this.toggleOverlay()
-          }, 50)
-        })
     },
     paginate(page = 1) {
       this.search.page = page
@@ -361,12 +345,10 @@ export default {
     },
     removeItem() {
       if (!this.selectedItem) return
-      this.toggleOverlay()
       this.$store.dispatch('schedule/removeSchedule', this.selectedItem)
         .finally(() => {
           setTimeout(() => {
             this.toggleRemoveItemModal()
-            this.toggleOverlay()
             this.getScheduleList()
           }, 50)
         })
@@ -403,7 +385,6 @@ export default {
       }
     },
     createSchedule() {
-      this.toggleOverlay()
       const type = this.create ? 'schedule/createSchedule' : 'schedule/updateSchedule'
       this.$store.dispatch(type, {
         id: this.form.id,
@@ -417,11 +398,6 @@ export default {
             this.closeForm()
             this.showCreateModal = false
             this.getScheduleList()
-          }, 50)
-        })
-        .finally(() => {
-          setTimeout(() => {
-            this.toggleOverlay()
           }, 50)
         })
     },
@@ -452,7 +428,6 @@ export default {
   data() {
     return {
       moment: moment,
-      overlay: false,
       showCreateModal: false,
       showRemoveItemModal: false,
       create: false,

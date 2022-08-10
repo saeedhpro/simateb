@@ -213,7 +213,7 @@
                @click="createModal"
           >
             <img src="/images/pages/new-user.svg" alt="organizations">
-            <span class="title">علت مراجعه جدید</span>
+            <span class="title-main">علت مراجعه جدید</span>
           </div>
         </div>
       </v-col>
@@ -266,12 +266,6 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-overlay :value="overlay">
-      <v-progress-circular
-        indeterminate
-        size="64"
-      ></v-progress-circular>
-    </v-overlay>
   </v-container>
 </template>
 
@@ -288,18 +282,9 @@ export default {
     this.paginate()
   },
   methods: {
-    toggleOverlay() {
-      this.overlay = !this.overlay
-    },
     getCaseList() {
-      this.toggleOverlay()
       this.showFilterModal = false
       this.$store.dispatch('cases/getList', this.search)
-        .finally(() => {
-          setTimeout(() => {
-            this.toggleOverlay()
-          }, 50)
-        })
     },
     paginate(page = 1) {
       this.search.page = page
@@ -318,12 +303,10 @@ export default {
     },
     removeItem() {
       if (!this.selectedItem) return
-      this.toggleOverlay()
       this.$store.dispatch('cases/removeCaseType', this.selectedItem)
         .finally(() => {
           setTimeout(() => {
             this.toggleRemoveItemModal()
-            this.toggleOverlay()
             this.getCaseList()
           }, 50)
         })
@@ -362,7 +345,6 @@ export default {
       }
     },
     createCaseType() {
-      this.toggleOverlay()
       const type = this.create ? 'cases/createCaseType' : 'cases/updateCaseType'
       this.$store.dispatch(type, {
         id: this.form.id,
@@ -379,16 +361,10 @@ export default {
             this.getCaseList()
           }, 50)
         })
-        .finally(() => {
-          setTimeout(() => {
-            this.toggleOverlay()
-          }, 50)
-        })
     },
   },
   data() {
     return {
-      overlay: false,
       showCreateModal: false,
       showRemoveItemModal: false,
       create: false,

@@ -17,7 +17,7 @@
                v-if="isDoctor"
           >
             <img src="/images/pages/new-user.svg" alt="users">
-            <span class="title">بیمار جدید</span>
+            <span class="title-main">بیمار جدید</span>
           </div>
         </div>
       </v-col>

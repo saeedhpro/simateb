@@ -27,7 +27,7 @@
           @click="togglePazireshModal"
         >
           <img src="/images/pages/new-user.svg" alt="users">
-          <span class="title">پذیرش جدید</span>
+          <span class="title-main">پذیرش جدید</span>
         </div>
       </div>
     </v-col>

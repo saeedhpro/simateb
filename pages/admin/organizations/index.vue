@@ -16,7 +16,7 @@
                @click="toggleCreateModal"
           >
             <img src="/images/pages/new-user.svg" alt="organizations">
-            <span class="title">موسسه جدید</span>
+            <span class="title-main">موسسه جدید</span>
           </div>
         </div>
       </v-col>
@@ -186,7 +186,7 @@ export default {
         introducer: '',
         known_as: '',
         info: '',
-        due_payment: '',
+        due_payment: 0,
       },
       province: null,
       county: null,
@@ -259,7 +259,7 @@ export default {
         introducer: '',
         known_as: '',
         info: '',
-        due_payment: '',
+        due_payment: 0,
       }
     },
     createOrganization() {

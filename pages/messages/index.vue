@@ -43,7 +43,7 @@
                @click="toggleCreateModal"
           >
             <img src="/images/pages/plus.svg" alt="organizations">
-            <span class="title">پیام جدید</span>
+            <span class="title-main">پیام جدید</span>
           </div>
         </div>
       </v-col>

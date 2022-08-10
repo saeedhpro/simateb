@@ -20,7 +20,7 @@
                @click="toggleCreateModal"
           >
             <img src="/images/pages/new-user.svg" alt="users">
-            <span class="title">کاربر جدید</span>
+            <span class="title-main">کاربر جدید</span>
           </div>
         </div>
       </v-col>

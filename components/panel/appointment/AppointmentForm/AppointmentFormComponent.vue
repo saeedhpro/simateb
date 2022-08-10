@@ -22,6 +22,10 @@
             <span>فرم پذیرش</span>
           </div>
           <v-spacer/>
+          <div class="create-update-modal-edit-btn" @click="openEditModal">
+            <v-icon small> mdi-pencil</v-icon>
+            <span>ویرایش</span>
+          </div>
         </v-card-title>
         <v-card-text
           class="paziresh-form-box">
@@ -103,7 +107,7 @@
                     >{{ statuses[appointment.status - 1].title }}</span>
                   </div>
                   <div class="phone-box second d-flex flex-row align-center" style="width: 100%" v-if="admissioned">
-                    <span class="small" style="width: 50px" >
+                    <span class="small" style="width: 50px">
                           کد اپ:
                     </span>
                     <span v-if="appointment.appcode">
@@ -184,6 +188,7 @@
             <div v-else>
               <v-divider class="my-5"/>
               <v-row
+                v-if="appointment.prescription"
               >
                 <v-col
                   cols="12"
@@ -211,7 +216,9 @@
                 </v-col>
               </v-row>
               <v-divider
-                class="my-5"/>
+                class="my-5"
+                v-if="appointment.prescription"
+              />
               <v-row
               >
                 <v-col
@@ -408,41 +415,98 @@
                 md="4"
                 v-if="isDoctor"
               >
-                <v-row>
-                  <v-col>
+                <!--                <div class="paziresh-button">-->
+                <!--                  <div class="button-group" :class="{'open': showActions}">-->
+                <!--                    <button-->
+                <!--                      class="main-button form-button"-->
+                <!--                      @click="doAction('update')"-->
+                <!--                    >-->
+                <!--                      پذیرش شده-->
+                <!--                    </button>-->
+                <!--                    <v-btn-->
+                <!--                      icon-->
+                <!--                      class="menu-button"-->
+                <!--                      @click="toggleShowActions"-->
+                <!--                    >-->
+                <!--                      <v-icon color="#FFFFFF">mdi-chevron-down</v-icon>-->
+                <!--                    </v-btn>-->
+                <!--                  </div>-->
+                <!--                  <div class="paziresh-actions">-->
+                <!--                    <button-->
+                <!--                      class="main-button form-button"-->
+                <!--                      @click="doAction('accept')"-->
+                <!--                    >-->
+                <!--                      پذیرش-->
+                <!--                    </button>-->
+                <!--                    <button-->
+                <!--                      class="red-button form-button"-->
+                <!--                      @click="doAction('cancel')"-->
+                <!--                    >-->
+                <!--                      کنسل-->
+                <!--                    </button>-->
+                <!--                    <button-->
+                <!--                      class="reserve-button form-button"-->
+                <!--                      @click="doAction('reserve')"-->
+                <!--                    >-->
+                <!--                      رزرو-->
+                <!--                    </button>-->
+                <!--                    <button-->
+                <!--                      class="main-button form-button"-->
+                <!--                      @click="doAction('update')"-->
+                <!--                    >-->
+                <!--                      ذخیره-->
+                <!--                    </button>-->
+                <!--                  </div>-->
+                <!--                </div>-->
+                <v-menu offset-y>
+                  <template v-slot:activator="{ on, attrs }">
                     <button
-                      v-if="appointment.status === 1"
-                      class="main-button form-button"
-                      @click="doAction('accept')"
+                      class="action-bar main-button"
+                      v-bind="attrs"
+                      v-on="on"
                     >
-                      پذیرش
+                      <div class="action-bar-content">
+                        <div class="text-box">
+                          <span
+                            v-if="resulted"
+                            class="status-box resulted"
+                          >
+                            نتایج ارسال شده
+                          </span>
+                          <span
+                            v-else-if="waiting"
+                            class="status-box waiting"
+                          >
+                            در انتظار مراجعه
+                          </span>
+                          <span
+                            v-else
+                            class="status-box white--text"
+                          >
+                            {{ statuses[appointment.status - 1].title | toPersianNumber }}
+                          </span>
+                        </div>
+                        <div class="icon-box">
+                          <v-icon color="white">mdi-chevron-down</v-icon>
+                        </div>
+                      </div>
                     </button>
-                    <button
-                      v-else-if="appointment.status === 2"
-                      class="red-button form-button"
-                      @click="doAction('cancel')"
+                  </template>
+                  <v-list>
+                    <v-list-item
                     >
-                      کنسل
-                    </button>
-                    <button
-                      v-else-if="appointment.status === 3"
-                      class="reserve-button form-button"
-                      @click="doAction('reserve')"
+                      <v-list-item-title>{{ `item.title` }}</v-list-item-title>
+                    </v-list-item>
+                    <v-list-item
                     >
-                      رزرو
-                    </button>
-                  </v-col>
-                  <v-col
-                    v-if="appointment.status === 2"
-                  >
-                    <button
-                      class="main-button form-button"
-                      @click="doAction('update')"
+                      <v-list-item-title>{{ `item.title` }}</v-list-item-title>
+                    </v-list-item>
+                    <v-list-item
                     >
-                      ذخیره
-                    </button>
-                  </v-col>
-                </v-row>
+                      <v-list-item-title>{{ `item.title` }}</v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
               </v-col>
             </v-row>
             <v-row
@@ -492,7 +556,7 @@
                   class="send-button form-button"
                   @click="doAction('result')"
                 >
-                   ارسال نتایج
+                  ارسال نتایج
                 </button>
               </v-col>
             </v-row>
@@ -636,6 +700,13 @@
         :src="file"
       >
     </v-dialog>
+
+    <update-appointment-form-component
+      :open="showUpdateModal"
+      v-if="item"
+      :item="item"
+      @close="closeUpdateModal"
+    />
   </div>
 </template>
 
@@ -647,10 +718,13 @@ import DataTableComponent from "~/components/panel/global/DataTableComponent";
 import WireBoxComponent from "~/components/panel/appointment/AppointmentForm/WireBoxComponent";
 import ReferBoxComponent from "~/components/panel/appointment/AppointmentForm/ReferBoxComponent";
 import CropImageComponent from "~/components/panel/global/CropImageComponent";
+import UpdateAppointmentFormComponent
+  from "~/components/panel/appointment/AppointmentForm/UpdateAppointmentFormComponent";
 
 export default {
   name: "AppointmentFormComponent",
   components: {
+    UpdateAppointmentFormComponent,
     ReferBoxComponent,
     WireBoxComponent,
     DataTableComponent,
@@ -671,8 +745,9 @@ export default {
   },
   data() {
     return {
-      overlay: false,
       loaded: false,
+      showUpdateModal: false,
+      showActions: false,
       doctorPrescription: false,
       pType: 'prescription',
       file: null,
@@ -1176,6 +1251,20 @@ export default {
     },
     setRadiologyCases(cases) {
       this.appointment.radiology_cases = cases.join(',')
+    },
+    openEditModal() {
+      // this.$emit('openUpdate', this.item)
+      this.toggleUpdateModal()
+    },
+    toggleUpdateModal() {
+      this.showUpdateModal = !this.showUpdateModal
+    },
+    toggleShowActions() {
+      this.showActions = !this.showActions
+    },
+    closeUpdateModal() {
+      this.toggleUpdateModal()
+      this.closeForm()
     }
   },
   computed: {

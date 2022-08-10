@@ -70,7 +70,8 @@
                           d="M17.722,16.559l-4.711-4.711a7.094,7.094,0,0,0,1.582-4.535,7.327,7.327,0,1,0-2.777,5.729l4.711,4.711a.972.972,0,0,0,.629.247.844.844,0,0,0,.6-.247A.822.822,0,0,0,17.722,16.559ZM1.687,7.313a5.625,5.625,0,1,1,5.625,5.625A5.632,5.632,0,0,1,1.687,7.313Z"
                           transform="translate(0)"/>
                   </svg>
-                  <input class="search-input" v-model="search.q" type="text" ref="search-input" placeholder="جستجو / کد پذیرش"
+                  <input class="search-input" v-model="search.q" type="text" ref="search-input"
+                         placeholder="جستجو / کد پذیرش"
                          @input="getAppointmentList">
                   <div @click="getAppointmentList" class="search-button">
                     <img src="/images/pages/search-button.svg">
@@ -242,19 +243,40 @@
                     <td class="text-center">
                       <div
                         v-if="i.radiology"
-                        class="has-erja">
-                        <img src="/images/form/check2.svg">
+                        :class="getErjaClass(i, 3)"
+                        @click="openAppointmentModal(i)"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="14.286" viewBox="0 0 20 14.286">
+                          <path class="a"
+                                d="M52,97.429a1.423,1.423,0,0,1-.419,1.01L40.153,109.867a1.428,1.428,0,0,1-2.02,0l-5.714-5.714a1.428,1.428,0,1,1,2.02-2.02l4.7,4.706,10.42-10.42A1.427,1.427,0,0,1,52,97.429Z"
+                                transform="translate(-32 -96)"/>
+                        </svg>
                       </div>
                     </td>
                     <td class="text-center">
                       <div
                         v-if="i.photography"
-                        class="has-erja">
-                        <img src="/images/form/check2.svg">
+                        :class="getErjaClass(i, 1)"
+                        @click="openAppointmentModal(i)"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="14.286" viewBox="0 0 20 14.286">
+                          <path class="a"
+                                d="M52,97.429a1.423,1.423,0,0,1-.419,1.01L40.153,109.867a1.428,1.428,0,0,1-2.02,0l-5.714-5.714a1.428,1.428,0,1,1,2.02-2.02l4.7,4.706,10.42-10.42A1.427,1.427,0,0,1,52,97.429Z"
+                                transform="translate(-32 -96)"/>
+                        </svg>
                       </div>
                     </td>
                     <td class="text-center">
                       <span
+                        v-if="resulted(i)"
+                        class="status-box resulted"
+                      >نتایج ارسال شده</span>
+                      <span
+                        v-else-if="waiting(i)"
+                        class="status-box waiting"
+                      >در انتظار مراجعه</span>
+                      <span
+                        v-else
                         class="status-box"
                         :style="{
                           'background-color': `${statuses[i.status - 1].background}`,
@@ -305,6 +327,15 @@
                     <td class="text-center">{{ i.organization ? i.organization.name : '-' | persianDigit }}</td>
                     <td class="text-center">
                       <span
+                        v-if="resulted(i)"
+                        class="status-box resulted"
+                      >نتایج ارسال شده</span>
+                      <span
+                        v-else-if="waiting(i)"
+                        class="status-box waiting"
+                      >در انتظار مراجعه</span>
+                      <span
+                        v-else
                         class="status-box"
                         :style="{
                           'background-color': `${statuses[i.status - 1].background}`,
@@ -365,6 +396,7 @@ export default {
     PazireshLinkBox
   },
   layout: 'panel',
+  middleware: 'auth',
   mounted() {
     this.paginate()
     this.getUsers()
@@ -407,8 +439,8 @@ export default {
         'پرونده',
         'علت مراجعه',
         'ساعت',
-        'رادیولوژی',
-        'فوتوگرافی',
+        'ارجاع به رادیولوژی',
+        'ارجاع به فوتوگرافی',
         'وضعیت',
       ],
       headers: [
@@ -566,6 +598,39 @@ export default {
     },
     closePazireshModal() {
       this.getAppointmentList()
+    },
+    resulted(appointment, type) {
+      if (type === 1) {
+        return appointment.p_admission_at !== null && appointment.p_result_at !== null
+      } else if (type === 2) {
+        return appointment.l_admission_at !== null && appointment.l_result_at !== null
+      } else if (type === 3) {
+        return appointment.r_admission_at !== null && appointment.r_result_at !== null
+      } else {
+        return false
+      }
+    },
+    admissioned(appointment, type) {
+      if (type === 1) {
+        return appointment.p_admission_at !== null
+      } else if (type === 2) {
+        return appointment.l_admission_at !== null
+      } else if (type === 3) {
+        return appointment.r_admission_at !== null
+      }
+      return false;
+    },
+    waiting(appointment, type) {
+      return appointment.status === 2 && !this.admissioned(appointment, type) && !this.resulted(appointment, type)
+    },
+    getErjaClass(appointment, type) {
+      if (this.resulted(appointment, type)) {
+        return 'has-erja green-color'
+      } else if (this.admissioned(appointment, type)) {
+        return 'has-erja'
+      } else {
+        return 'has-erja black-color'
+      }
     }
   },
   computed: {

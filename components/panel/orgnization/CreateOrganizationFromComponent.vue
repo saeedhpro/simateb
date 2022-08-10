@@ -113,7 +113,7 @@
                 sm="6"
                 md="4"
               >
-                <custom-text-input
+                <custom-phone-number-input
                   :label="'شماره تماس ۱'"
                   :error="errors.phone"
                   v-model="organization.phone"
@@ -125,7 +125,7 @@
                 sm="6"
                 md="4"
               >
-                <custom-text-input
+                <custom-phone-number-input
                   :label="'شماره تماس ۲'"
                   v-model="organization.phone1"
                 />
@@ -289,10 +289,12 @@ import CustomTextInput from "~/components/custom/CustomTextInput";
 import CustomMultiSelect from "~/components/custom/CustomMultiSelect";
 import CustomPriceInput from "~/components/custom/CustomPriceInput";
 import CustomTextAreaInput from "~/components/custom/CustomTextAreaInput";
+import CustomPhoneNumberInput from "~/components/custom/CustomPhoneNumberInput";
 
 export default {
   name: "CreateOrganizationFromComponent",
   components: {
+    CustomPhoneNumberInput,
     CustomTextAreaInput,
     CustomPriceInput, CustomMultiSelect, CustomTextInput, RelOrganizationItemComponent, CropImageComponent
   },

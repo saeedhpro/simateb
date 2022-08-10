@@ -23,7 +23,7 @@
                @click="togglePazireshModal"
           >
             <img src="/images/pages/new-user.svg" alt="users">
-            <span class="title">پذیرش جدید</span>
+            <span class="title-main">پذیرش جدید</span>
           </div>
         </div>
       </v-col>
@@ -217,20 +217,12 @@
     <create-appointment-form-component
       :open="showPazireshModal"
       @close="closePazireshModal"
-      @loading="toggleOverlay"
     />
     <appointment-form-component
       :open="showAppointmentModal"
       :item="item"
       @close="closeAppointmentModal"
-      @loading="toggleOverlay"
     />
-    <v-overlay :value="overlay">
-      <v-progress-circular
-        indeterminate
-        size="64"
-      ></v-progress-circular>
-    </v-overlay>
   </v-container>
 </template>
 
@@ -263,7 +255,6 @@ export default {
       showCreateModal: false,
       showHour: false,
       showCaseType: false,
-      overlay: false,
       item: null,
       hasItem: false,
       most: 1,
@@ -416,7 +407,6 @@ export default {
   methods: {
     createAppointment() {
       if (!this.user) return
-      this.toggleOverlay()
       this.$store.dispatch('appointments/createAppointment', {
         ...this.appointment,
         user_id: this.user.id,
@@ -427,11 +417,6 @@ export default {
             this.togglePazireshModal()
             this.clearPazireshForm()
             this.getAppointmentList()
-          }, 50)
-        })
-        .finally(() => {
-          setTimeout(() => {
-            this.toggleOverlay()
           }, 50)
         })
     },
@@ -452,9 +437,6 @@ export default {
     closeAppointmentModal() {
       this.toggleAppointmentModal()
       this.getAppointmentList()
-    },
-    toggleOverlay() {
-      this.overlay = !this.overlay
     },
     clearPazireshForm() {
       this.appointment = {
@@ -481,7 +463,6 @@ export default {
       this.getAppointmentList()
     },
     getAppointmentList() {
-      this.toggleOverlay()
       this.calcDate()
       this.$store.dispatch('appointments/getQue', this.search)
         .finally(() => {
@@ -564,7 +545,6 @@ export default {
       this.durations = Math.ceil(d / duration)
     },
     calcList() {
-      this.overlay = true
       this.most = 5
       let list = this.que.ques;
       let list2 = Array(this.lastDay).fill(null).map(() => Array(0))
@@ -601,9 +581,6 @@ export default {
         this.most = 5
       }
       this.list = list2
-      setTimeout(() => {
-        this.overlay = false
-      }, 250)
     },
     onMonthChanged(month) {
       this.month = month

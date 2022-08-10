@@ -20,7 +20,7 @@
            v-if="canSee"
       >
         <img src="/images/pages/new-user.svg" alt="users">
-        <span class="title">افزودن بیمار جدید</span>
+        <span class="title-main">افزودن بیمار جدید</span>
       </div>
     </div>
     <admin-create-user-form-component

@@ -189,7 +189,7 @@
       :full-name="`${user.fname} ${user.lname}`"
       :start-at="appointment.start_at"
       @close="toggleAcceptModal"
-      @accept="createAppointment"
+      @accept="updateAppointment"
     />
   </div>
 </template>
@@ -206,7 +206,7 @@ import CustomNationalCodeInput from "~/components/custom/CustomNationalCodeInput
 import CustomPhoneNumberInput from "~/components/custom/CustomPhoneNumberInput";
 
 export default {
-  name: "CreateAppointmentFormComponent",
+  name: "UpdateAppointmentFormComponent",
   components: {
     CustomPhoneNumberInput,
     CustomNationalCodeInput,
@@ -224,11 +224,15 @@ export default {
       default: false,
       required: true,
     },
+    item: {
+      type: Object,
+    },
   },
   data() {
     return {
       appointment: {
-        start_at: this.$moment().format("YYYY/MM/DD HH:mm:ss"),
+        id: 0,
+        start_at: '',
         tel: '',
         cardno: '',
         income: 0,
@@ -247,6 +251,9 @@ export default {
       showAcceptModal: false,
     }
   },
+  mounted() {
+    this.resetForm()
+  },
   methods: {
     closeForm() {
       this.$emit('close')
@@ -254,16 +261,18 @@ export default {
     },
     resetForm() {
       this.appointment = {
-        start_at: this.$moment().format("YYYY/MM/DD HH:mm:ss"),
-        tel: '',
-        cardno: '',
-        income: 0,
-        user_id: null,
-        case_type: '',
-        info: '',
-        status: 0,
-        user: null,
+        id: this.item.id,
+        start_at: this.item.start_at,
+        tel: this.item.user.tel,
+        cardno: this.item.user.cardno,
+        income: this.item.user.income,
+        user_id: this.item.user.id,
+        case_type: this.item.case_type,
+        info: this.item.info,
+        status: this.item.status,
+        user: this.item.user,
       }
+      this.user = this.item.user
       this.resetErrors()
     },
     resetErrors() {
@@ -309,13 +318,13 @@ export default {
     toggleAcceptModal() {
       this.showAcceptModal = !this.showAcceptModal
     },
-    createAppointment() {
+    updateAppointment() {
       this.toggleAcceptModal()
       if (this.validateFrom()) {
         if (!this.appointment.user_id) {
           return
         }
-        this.$store.dispatch('appointments/createAppointment', {
+        this.$store.dispatch('appointments/updateAppointment', {
           ...this.appointment,
           user_id: this.user.id,
           income: parseFloat(this.appointment.income.split(' ')[0].split(',').join('')),

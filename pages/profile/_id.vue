@@ -4,7 +4,7 @@
       <v-col
         cols="12"
       >
-        <user-derails-component
+        <show-user-derails-component
           :user="user"
           @updated="getUser"
         />
@@ -61,7 +61,9 @@
         >
           <v-tabs-items v-model="tabs">
             <v-tab-item>
-              <appointment-list-component :user-id="user.id"/>
+              <appointment-list-component
+                :user-id="user.id"
+              />
             </v-tab-item>
             <v-tab-item v-if="canSee('radiology')">
               <radiology-list-component
@@ -74,10 +76,16 @@
               />
             </v-tab-item>
             <v-tab-item v-if="canSee('doctor')">
-              <send-documents-component :user-id="user.id"/>
+              <send-documents-component
+                :user-id="user.id"
+              />
             </v-tab-item>
             <v-tab-item v-if="canSee('doctor')">
-              <div class="hi">Salam 3</div>
+              <user-payment-component
+                :user-id="user.id"
+                :organization-id="user.organization_id"
+                :fullName="`${user.fname} ${user.lname}`"
+              />
             </v-tab-item>
           </v-tabs-items>
         </div>
@@ -262,12 +270,14 @@ import RadiologyListComponent from "~/components/panel/profile/radiology/Radiolo
 import UpdateUserFormComponent from "~/components/panel/profile/user/UpdateUserFormComponent";
 import ShowUserDerailsComponent from "~/components/panel/profile/user/ShowUserDerailsComponent";
 import UserDerailsComponent from "~/components/panel/profile/user/UserDerailsComponent";
+import UserPaymentComponent from "~/components/panel/profile/payments/UserPaymentComponent";
 
 export default {
   name: "profile.vue",
   layout: "panel",
   middleware: "auth",
   components: {
+    UserPaymentComponent,
     UserDerailsComponent,
     ShowUserDerailsComponent,
     UpdateUserFormComponent,

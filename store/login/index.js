@@ -20,9 +20,6 @@ export const actions = {
     return this.$axios.post('/auth/login', data)
       .then(res => {
         const data = res.data;
-        if (data.user.user_group_id === 1) {
-          throw NotFoundError
-        }
         ctx.commit('setToken', data.token)
         ctx.commit('setUser', data.user)
         this.$cookies.set('access_token', data.token)

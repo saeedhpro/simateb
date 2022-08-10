@@ -12,16 +12,16 @@
           <v-row>
             <v-col cols="12">
               <v-text-field
-              type="text"
-              placeholder="شماره همراه"
-              class="form-input"
-              background-color="#F5F5F5"
-              outlined
-              full-width
-              label="شماره همراه"
-              dir="ltr"
-              v-model="form.tel"
-              name="tel"
+                type="text"
+                placeholder="شماره همراه"
+                class="form-input"
+                background-color="#F5F5F5"
+                outlined
+                full-width
+                label="شماره همراه"
+                dir="ltr"
+                v-model="form.tel"
+                name="tel"
               >
                 <v-icon
                   slot="prepend-inner"
@@ -33,16 +33,16 @@
             </v-col>
             <v-col cols="12">
               <v-text-field
-              type="password"
-              placeholder="رمز عبور"
-              class="form-input"
-              background-color="#F5F5F5"
-              outlined
-              full-width
-              label="رمز عبور"
-              dir="ltr"
-              v-model="form.password"
-              name="password"
+                type="password"
+                placeholder="رمز عبور"
+                class="form-input"
+                background-color="#F5F5F5"
+                outlined
+                full-width
+                label="رمز عبور"
+                dir="ltr"
+                v-model="form.password"
+                name="password"
               >
                 <v-icon
                   slot="prepend-inner"
@@ -61,7 +61,7 @@
               </button>
             </v-col>
           </v-row>
-          <v-row >
+          <v-row>
             <v-col cols="12">
               <v-dialog
                 transition="dialog-bottom-transition"
@@ -73,8 +73,8 @@
                 </template>
                 <template v-slot:default="dialog">
                   <v-card
-                  outlined
-                  class="forget-box"
+                    outlined
+                    class="forget-box"
                   >
                     <v-card-text
                       class="forget-inner-box"
@@ -88,7 +88,8 @@
                       <img src="/images/login/logo.png">
                       <div class="forget-title">فـرامـوشـی رمـز عـبـور</div>
                       <div class="forget-text">
-                        در صورت فراموشی رمز عبور خود، لطفا با <span class="font-weight-bold">مدیریت سیماطب</span> ارتباط حاصل فرمایید <br> با تشکر
+                        در صورت فراموشی رمز عبور خود، لطفا با <span class="font-weight-bold">مدیریت سیماطب</span> ارتباط
+                        حاصل فرمایید <br> با تشکر
                       </div>
                       <button
                         @click.prevent="showForgetPasswordModal"
@@ -100,9 +101,6 @@
                   </v-card>
                 </template>
               </v-dialog>
-            </v-col>
-            <v-col cols="12">
-              <nuxt-link to="/patient/login" class="forget-password">ورود بیمار</nuxt-link>
             </v-col>
           </v-row>
         </form>
@@ -135,19 +133,19 @@ export default {
   methods: {
     login() {
       this.$store.dispatch('login/login', this.form)
-      .then(res => {
-        if (res.data.user.user_group_id === 1) {
-          throw NotFoundError
-        }
-        this.$toast.success("شما با موفقیت وارد شدید");
-        this.$router.push({
-          path: '/organization'
+        .then(res => {
+          if (res.data.user.user_group_id !== 1) {
+            throw NotFoundError
+          }
+          this.$toast.success("شما با موفقیت وارد شدید");
+          this.$router.push({
+            path: '/patient'
+          })
         })
-      })
-      .catch(err => {
-        this.$store.dispatch('login/exit')
-        this.$toast.error("کاربر یافت نشد!");
-      })
+        .catch(err => {
+          this.$store.dispatch('login/exit')
+          this.$toast.error("کاربر یافت نشد!");
+        })
     },
     showForgetPasswordModal() {
       this.showForgetModal = !this.showForgetModal
@@ -155,3 +153,7 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+
+</style>

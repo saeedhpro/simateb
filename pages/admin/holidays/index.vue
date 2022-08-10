@@ -217,7 +217,7 @@
                @click="createModal"
           >
             <img src="/images/pages/new-user.svg" alt="organizations">
-            <span class="title">تعطیلات جدید</span>
+            <span class="title-main">تعطیلات جدید</span>
           </div>
         </div>
       </v-col>
@@ -295,12 +295,6 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-overlay :value="overlay">
-      <v-progress-circular
-        indeterminate
-        size="64"
-      ></v-progress-circular>
-    </v-overlay>
   </v-container>
 </template>
 
@@ -315,7 +309,6 @@ export default {
   middleware: 'admin',
   data() {
     return {
-      overlay: false,
       showFilterModal: false,
       showCreateModal: false,
       showRemoveItemModal: false,
@@ -408,20 +401,12 @@ export default {
       }
       this.toggleCreateModal()
     },
-    toggleOverlay() {
-      this.overlay = !this.overlay
-    },
     paginate(page = 1) {
       this.search.page = page
       this.getHolidayList()
     },
     getHolidayList() {
-      this.toggleOverlay()
-      this.showFilterModal = false
       this.$store.dispatch('admin/holidays/getList', this.search)
-        .finally(() => {
-          this.toggleOverlay()
-        })
     },
     getStatus(sent) {
       return sent ? 'ارسال شده' : 'ارسال نشد'
@@ -435,7 +420,6 @@ export default {
       this.organization = null
     },
     createHoliday() {
-      this.toggleOverlay()
       const type = this.create ? 'admin/holidays/createHoliday' : 'admin/holidays/updateHoliday'
       this.$store.dispatch(type, this.form)
         .then(() => {
@@ -445,14 +429,8 @@ export default {
             this.getHolidayList()
           }, 100)
         })
-        .finally(() => {
-          setTimeout(() => {
-            this.toggleOverlay()
-          }, 100)
-        })
     },
     deleteHolidays(ids) {
-      this.toggleOverlay()
       this.$store.dispatch('admin/holidays/deleteHoliday', {
         ids
       })
@@ -461,11 +439,6 @@ export default {
             this.getHolidayList()
             this.action = null
             this.selectedHolidays = []
-          }, 50)
-        })
-        .finally(() => {
-          setTimeout(() => {
-            this.toggleOverlay()
           }, 50)
         })
     },
@@ -485,12 +458,10 @@ export default {
     },
     removeItem() {
       if (!this.selectedItem) return
-      this.toggleOverlay()
       this.$store.dispatch('admin/holidays/removeHoliday', this.selectedItem)
         .finally(() => {
           setTimeout(() => {
             this.toggleRemoveItemModal()
-            this.toggleOverlay()
             this.getHolidayList()
           }, 50)
         })

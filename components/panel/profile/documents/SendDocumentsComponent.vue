@@ -219,9 +219,9 @@ export default {
     sendFile() {
       this.$store.dispatch('files/createFile', this.form)
         .then(res => {
+          this.toggleShowSendFileModal()
+          this.getUserFiles()
         })
-      this.toggleShowSendFileModal()
-      this.getUserFiles()
     },
     closeForm() {
       this.toggleShowSendFileModal()

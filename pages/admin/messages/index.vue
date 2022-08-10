@@ -16,7 +16,7 @@
                @click="toggleCreateModal"
           >
             <img src="/images/pages/plus.svg" style="height: 40px; width: 40px" alt="">
-            <span class="title">پیام جدید</span>
+            <span class="title-main">پیام جدید</span>
           </div>
         </div>
       </v-col>

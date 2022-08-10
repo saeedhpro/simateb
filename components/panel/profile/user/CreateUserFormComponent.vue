@@ -122,7 +122,7 @@
                 sm="4"
                 md="4"
               >
-                <custom-text-input
+                <custom-phone-number-input
                   :label="'شماره موبایل'"
                   :error="errors.tel"
                   v-model="form.tel"
@@ -134,7 +134,7 @@
                 sm="4"
                 md="4"
               >
-                <custom-text-input
+                <custom-phone-number-input
                   :label="'شماره تماس'"
                   v-model="form.tel1"
                 />
@@ -144,7 +144,7 @@
                 sm="4"
                 md="4"
               >
-                <custom-text-input
+                <custom-national-code-input
                   :label="'کد ملی'"
                   v-model="form.cardno"
                 />
@@ -257,6 +257,16 @@
                 sm="4"
                 md="4"
               >
+                <custom-price-input
+                  :label="'هزینه درمان'"
+                  v-model="form.due_payment"
+                />
+              </v-col>
+              <v-col
+                cols="12"
+                sm="4"
+                md="4"
+              >
                 <custom-toggle-input
                   :label="'سابقه جراحی'"
                   :error="errors.has_surgery"
@@ -336,10 +346,16 @@ import CustomTextInput from "~/components/custom/CustomTextInput";
 import CustomMultiSelect from "~/components/custom/CustomMultiSelect";
 import CustomTextAreaInput from "~/components/custom/CustomTextAreaInput";
 import CustomToggleInput from "~/components/custom/CustomToggleInput";
+import CustomNationalCodeInput from "~/components/custom/CustomNationalCodeInput";
+import CustomPhoneNumberInput from "~/components/custom/CustomPhoneNumberInput";
+import CustomPriceInput from "~/components/custom/CustomPriceInput";
 
 export default {
   name: "CreateUserFormComponent",
   components: {
+    CustomPriceInput,
+    CustomPhoneNumberInput,
+    CustomNationalCodeInput,
     CustomToggleInput,
     CustomTextAreaInput, CustomMultiSelect, CustomTextInput, GenderSwitchBoxComponent, CropImageComponent
   },
@@ -374,7 +390,7 @@ export default {
         introducer: '',
         known_as: '',
         info: '',
-        due_payment: '',
+        due_payment: 0,
         pass: '',
         new: null,
         has_surgery: false,
@@ -441,7 +457,7 @@ export default {
         introducer: '',
         known_as: '',
         info: '',
-        due_payment: '',
+        due_payment: 0,
         pass: '',
         new: null,
         has_surgery: false,

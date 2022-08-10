@@ -161,6 +161,15 @@
             </v-menu>
             <div
               class="action-button"
+              @click="showMedicalHistory"
+            >
+              <v-icon>
+                mdi-card-account-details-outline
+              </v-icon>
+              <span>تاریخجه درمان</span>
+            </div>
+            <div
+              class="action-button"
               @click="showUpdate"
             >
               <v-icon>

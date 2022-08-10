@@ -12,7 +12,7 @@
 
 <script>
 export default {
-  name: "CustomNationalCodeInput",
+  name: "CustomPhoneNumberInput",
   props: {
     label: {
       type: String,
@@ -37,26 +37,20 @@ export default {
     }
   },
   methods: {
-    checkNationalCode(code) {
-      const L = code.length;
-      if (L < 8 || parseInt(code, 10) === 0) {
+    checkPhoneNumber(number) {
+      if (number.length === 11) {
+        const regex = RegExp('09[\\d]{9}')
+        return regex.test(number);
+      } else if (number.length === 13) {
+        const regex = RegExp('\\+989[\\d]{9}')
+        return regex.test(number);
+      } else {
         return false
       }
-      code = ('0000' + code).substr(L + 4 - 10);
-      if (parseInt(code.substr(3, 6), 10) === 0) {
-        return false
-      }
-      const c = parseInt(code.substr(9, 1), 10);
-      let s = 0;
-      for (let i = 0; i < 9; i++) {
-        s += parseInt(code.substr(i, 1), 10) * (10 - i);
-      }
-      s = s % 11;
-      return (s < 2 && c === s) || (s >= 2 && c === (11 - s));
     },
     check() {
       if (this.data.length > 0) {
-        if (this.checkNationalCode(this.data)) {
+        if (this.checkPhoneNumber(this.data)) {
           this.status = 'valid'
         } else {
           this.status = 'invalid'
@@ -79,7 +73,7 @@ export default {
   watch: {
     data() {
       if (this.data.length > 6) {
-        if (this.checkNationalCode(this.data)) {
+        if (this.checkPhoneNumber(this.data)) {
           this.status = 'valid'
         } else {
           this.status = 'invalid'

@@ -26,6 +26,7 @@ export const state = () => ({
   },
   user: null,
   users: [],
+  userFiles: [],
   medicalHistory: null,
   photographyList: {
     data: [],
@@ -69,6 +70,9 @@ export const mutations = {
   },
   setRadiologyList(state, list) {
     state.radiologyList = list
+  },
+  setUserFiles(state, userFiles) {
+    state.userFiles = userFiles
   },
 }
 
@@ -133,6 +137,17 @@ export const actions = {
       .then(res => {
         const data = res.data;
         ctx.commit('setUsers', data)
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  getUserFiles(ctx, data) {
+    return this.$axios.get(`/files/${data.id}`)
+      .then(res => {
+        const data = res.data;
+        ctx.commit('setUserFiles', data)
         return Promise.resolve(res)
       })
       .catch(err => {
@@ -335,5 +350,8 @@ export const getters = {
   },
   radiologyList(state) {
     return state.radiologyList
+  },
+  userFiles(state) {
+    return state.userFiles
   },
 }

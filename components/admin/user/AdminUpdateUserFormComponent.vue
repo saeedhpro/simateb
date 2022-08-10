@@ -149,7 +149,7 @@
                 sm="4"
                 md="4"
               >
-                <custom-text-input
+                <custom-phone-number-input
                   :label="'شماره موبایل'"
                   :error="errors.tel"
                   v-model="form.tel"
@@ -161,7 +161,7 @@
                 sm="4"
                 md="4"
               >
-                <custom-text-input
+                <custom-phone-number-input
                   :label="'شماره تماس'"
                   v-model="form.tel1"
                 />
@@ -171,7 +171,7 @@
                 sm="4"
                 md="4"
               >
-                <custom-text-input
+                <custom-national-code-input
                   :label="'کد ملی'"
                   v-model="form.cardno"
                 />
@@ -377,10 +377,14 @@ import CustomTextInput from "~/components/custom/CustomTextInput";
 import CustomMultiSelect from "~/components/custom/CustomMultiSelect";
 import CustomTextAreaInput from "~/components/custom/CustomTextAreaInput";
 import CustomToggleInput from "~/components/custom/CustomToggleInput";
+import CustomNationalCodeInput from "~/components/custom/CustomNationalCodeInput";
+import CustomPhoneNumberInput from "~/components/custom/CustomPhoneNumberInput";
 
 export default {
   name: "AdminUpdateUserFormComponent",
   components: {
+    CustomPhoneNumberInput,
+    CustomNationalCodeInput,
     CustomToggleInput,
     CustomTextAreaInput, CustomMultiSelect, CustomTextInput, GenderSwitchBoxComponent, CropImageComponent},
   props: {
@@ -417,7 +421,7 @@ export default {
         introducer: '',
         known_as: '',
         info: '',
-        due_payment: '',
+        due_payment: 0,
         pass: '',
         new: null,
         has_surgery: false,

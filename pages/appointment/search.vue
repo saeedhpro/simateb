@@ -278,14 +278,7 @@
     <create-appointment-form-component
       :open="showPazireshModal"
       @close="closePazireshModal"
-      @loading="toggleOverlay"
     />
-    <v-overlay :value="overlay">
-      <v-progress-circular
-        indeterminate
-        size="64"
-      ></v-progress-circular>
-    </v-overlay>
   </v-container>
 </template>
 
@@ -304,7 +297,6 @@ export default {
   middleware: 'auth',
   data() {
     return {
-      overlay: false,
       showFilterModal: false,
       showPazireshModal: false,
       selectedItems: [],
@@ -414,9 +406,6 @@ export default {
         case_type: '',
       }
     },
-    toggleOverlay() {
-      this.overlay = !this.overlay
-    },
     toggleFilterModal() {
       this.showFilterModal = !this.showFilterModal
     },
@@ -440,32 +429,15 @@ export default {
       this.getAppointmentList()
     },
     getAppointmentList(load = true) {
-      if (load) {
-        this.toggleOverlay()
-        this.showFilterModal = false
-      }
       this.$store.dispatch('appointments/search', this.search)
-        .finally(() => {
-          setTimeout(() => {
-            if (load) {
-              this.toggleOverlay()
-            }
-          }, 50)
-        })
     },
     createAppointment() {
-      this.toggleOverlay()
       this.$store.dispatch('appointments/createAppointment', this.appointment)
         .then(() => {
           setTimeout(() => {
             this.togglePazireshModal()
             this.clearPazireshForm()
             this.getAppointmentList()
-          }, 50)
-        })
-        .finally(() => {
-          setTimeout(() => {
-            this.toggleOverlay()
           }, 50)
         })
     },
