@@ -2392,6 +2392,15 @@ table {
       letter-spacing: 0;
       color: #141432;
       padding: 8px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      direction: rtl;
+
+      img {
+        height: 30px;
+      }
     }
 
     .ortho-cases-item {
@@ -2431,6 +2440,7 @@ table {
   font: normal normal bold 16px/28px IRANYekanRegular !important;
   letter-spacing: 0;
   color: #212945;
+  height: 100%;
 
   .radiology-form-item-header {
     text-align: center;
@@ -2452,7 +2462,39 @@ table {
     .col {
       padding: 0;
     }
-
+    .selected-items {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      &.start {
+        justify-content: flex-start;
+        .selected-items-box {
+          margin-left: 40px;
+        }
+      }
+      .selected-items-box {
+        width: 100%;
+        max-width: 200px;
+        .selected-items-row {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: center;
+          height: 20px;
+          &.top {
+            border-bottom: 1px solid #757575;
+          }
+          .left, .right {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+          }
+        }
+      }
+    }
     .radio-item-second {
       margin-left: 35px;
       display: flex;
@@ -3183,7 +3225,24 @@ table {
     justify-content: flex-start;
   }
 }
+.action-bar-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 
+  background: #FAFAFA 0 0 no-repeat padding-box;
+  border-bottom: 1px solid #757575;
+  text-align: center;
+  font: normal normal normal 16px/28px IRANYekanRegular !important;
+  letter-spacing: 0;
+  color: #000000;
+  padding: 8px 28px;
+  width: 100%;
+  &:last-child {
+    border-bottom: none;
+  }
+}
 .action-bar {
   height: 46px;
   padding: 0 10px !important;

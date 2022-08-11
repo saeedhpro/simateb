@@ -151,7 +151,7 @@
                           <v-col
                             cols="12"
                             md="6"
-                            >
+                          >
                             <v-checkbox
                               v-model="cases"
                               label="Lateral Oblique:"
@@ -162,7 +162,7 @@
                           <v-col
                             cols="12"
                             md="3"
-                            >
+                          >
                             <v-checkbox
                               v-model="cases"
                               label="L"
@@ -173,7 +173,7 @@
                           <v-col
                             cols="12"
                             md="3"
-                            >
+                          >
                             <v-checkbox
                               v-model="cases"
                               label="R"
@@ -200,12 +200,26 @@
                       cols="12"
                     >
                       <div class="radio-item">
-                        <v-checkbox
-                          v-model="cases"
-                          label="Periapical (Parallel)"
-                          value="INTRA_Periapical (Parallel)"
-                          color="#5063FF"
-                        />
+                        <div class="selected-items">
+                          <v-checkbox
+                            v-model="cases"
+                            label="Periapical (Parallel)"
+                            value="INTRA_Periapical (Parallel)"
+                            color="#5063FF"
+                          />
+                          <div class="selected-items-box">
+                            <div class="selected-items-row top">
+                              <div class="left">{{ selectedLeftTopDents.join(',') | persianDigit }}</div>
+                              <v-divider vertical/>
+                              <div class="right">{{ selectedRightTopDents.join(',') | persianDigit }}</div>
+                            </div>
+                            <div class="selected-items-row">
+                              <div class="left">{{ selectedLeftBottomDents.join(',') | persianDigit }}</div>
+                              <v-divider vertical/>
+                              <div class="right">{{ selectedRightBottomDents.join(',') | persianDigit }}</div>
+                            </div>
+                          </div>
+                        </div>
                         <button class="radio-select-button" @click="showSelectDent('Periapical')">انتخاب</button>
                       </div>
                     </v-col>
@@ -322,7 +336,161 @@
               </v-col>
             </v-row>
             <v-row>
-
+              <v-col
+                cols="12"
+              >
+                <div class="radiology-form-item">
+                  <v-row>
+                    <v-col
+                      cols="12"
+                      md="6"
+                    >
+                      <v-row>
+                        <v-col
+                          cols="12"
+                        >
+                          <div class="radio-item">
+                            <v-checkbox
+                              v-model="cases"
+                              label="CBCT"
+                              value="CBCT"
+                              color="#5063FF"
+                            />
+                            <div class="radio-item-second">
+                              <v-row>
+                                <v-col
+                                  cols="12"
+                                >
+                                  <v-checkbox
+                                    v-model="cases"
+                                    label="Maxilla"
+                                    value="CBCT_Maxilla"
+                                    color="#5063FF"
+                                  />
+                                </v-col>
+                                <v-col
+                                  cols="12"
+                                >
+                                  <v-checkbox
+                                    v-model="cases"
+                                    label="Mandible"
+                                    value="CBCT_Mandible"
+                                    color="#5063FF"
+                                  />
+                                </v-col>
+                              </v-row>
+                            </div>
+                          </div>
+                        </v-col>
+                        <v-col
+                          cols="12"
+                        >
+                          <div class="radio-item">
+                            <div class="selected-items start">
+                              <v-checkbox
+                                v-model="cases"
+                                label="Implant"
+                                value="Implant"
+                                color="#5063FF"
+                              />
+                              <div class="selected-items-box">
+                                <div class="selected-items-row top">
+                                  <div class="left">{{ selectedCBCTLeftTopDents.join(',') | persianDigit }}</div>
+                                  <v-divider vertical/>
+                                  <div class="right">{{ selectedCBCTRightTopDents.join(',') | persianDigit }}</div>
+                                </div>
+                                <div class="selected-items-row">
+                                  <div class="left">{{ selectedCBCTLeftBottomDents.join(',') | persianDigit }}</div>
+                                  <v-divider vertical/>
+                                  <div class="right">{{ selectedCBCTRightBottomDents.join(',') | persianDigit }}</div>
+                                </div>
+                              </div>
+                            </div>
+                            <button class="radio-select-button" @click="showSelectDent('CBCT')">انتخاب</button>
+                          </div>
+                        </v-col>
+                      </v-row>
+                    </v-col>
+                    <v-col
+                      cols="12"
+                      md="6"
+                    >
+                      <v-row>
+                        <v-col
+                          cols="12"
+                        >
+                          <div class="radio-item">
+                            <v-checkbox
+                              v-model="cases"
+                              label="Impacted tooth"
+                              value="CBCT_Impacted tooth"
+                              color="#5063FF"
+                            />
+                          </div>
+                        </v-col>
+                        <v-col
+                          cols="12"
+                        >
+                          <div class="radio-item">
+                            <v-checkbox
+                              v-model="cases"
+                              label="Paranasal sinus and nasal fossa"
+                              value="CBCT_Paranasal sinus and nasal fossa"
+                              color="#5063FF"
+                            />
+                          </div>
+                        </v-col>
+                        <v-col>
+                          <div class="radio-item">
+                            <v-checkbox
+                              v-model="cases"
+                              label="TMJ"
+                              value="CBCT_TMJ"
+                              color="#5063FF"
+                            />
+                            <div class="radio-item-second">
+                              <v-row>
+                                <v-col
+                                  cols="12"
+                                >
+                                  <v-checkbox
+                                    v-model="cases"
+                                    label="L"
+                                    value="CBCT_L"
+                                    color="#5063FF"
+                                  />
+                                </v-col>
+                                <v-col
+                                  cols="12"
+                                >
+                                  <v-checkbox
+                                    v-model="cases"
+                                    label="R"
+                                    value="CBCT_R"
+                                    color="#5063FF"
+                                  />
+                                </v-col>
+                              </v-row>
+                            </div>
+                          </div>
+                        </v-col>
+                        <v-col
+                          cols="12"
+                        >
+                          <div class="radio-item">
+                            <v-checkbox
+                              v-model="cases"
+                              label="Lesion"
+                              value="CBCT_Lesion"
+                              color="#5063FF"
+                            />
+                          </div>
+                        </v-col>
+                      </v-row>
+                    </v-col>
+                  </v-row>
+                </div>
+              </v-col>
             </v-row>
           </v-container>
         </v-card-text>
@@ -409,7 +577,7 @@
                     :class="{'selected': inList(`${type}_${i}`)}"
                   >
                     <img
-                      @click="onDentClicked(`${type}_${i}`)"
+                      @click="onDentClicked(`${type}_${i}`, type, i)"
                       :src="`/images/dents/${i}.png`"
                     >
                   </div>
@@ -426,7 +594,7 @@
                     :class="{'selected': inList(`${type}_${i + 16}`)}"
                   >
                     <img
-                      @click="onDentClicked(`${type}_${i + 16}`)"
+                      @click="onDentClicked(`${type}_${i + 16}`,  type,i + 16)"
                       :src="`/images/dents/${i + 16}.png`"
                     >
                   </div>
@@ -460,7 +628,7 @@ export default {
       required: true,
     },
   },
-  mounted () {
+  mounted() {
     this.cases = this.items
   },
   data() {
@@ -470,6 +638,15 @@ export default {
       periapical: null,
       showDentModal: false,
       dents: [],
+      selectedDents: [],
+      selectedRightTopDents: [],
+      selectedLeftTopDents: [],
+      selectedRightBottomDents: [],
+      selectedLeftBottomDents: [],
+      selectedCBCTRightTopDents: [],
+      selectedCBCTLeftTopDents: [],
+      selectedCBCTRightBottomDents: [],
+      selectedCBCTLeftBottomDents: []
     }
   },
   methods: {
@@ -493,12 +670,62 @@ export default {
     inList(item) {
       return this.cases.find(i => i == item)
     },
-    onDentClicked(item) {
+    onDentClicked(item, type = 'Periapical', index) {
       const i = this.cases.find(i => i == item)
       if (i) {
         this.cases = this.cases.filter(i => i != item)
+        if (type === 'Periapical') {
+          if (index < 9) {
+            this.selectedRightTopDents = this.selectedRightTopDents.filter(i => i != index).sort()
+          } else if (index < 17) {
+            this.selectedLeftTopDents = this.selectedLeftTopDents.filter(i => i != index - 8).sort()
+          } else if (index < 25) {
+            this.selectedRightBottomDents = this.selectedRightBottomDents.filter(i => i != index - 16).sort()
+          } else {
+            this.selectedLeftBottomDents = this.selectedLeftBottomDents.filter(i => i != index - 24).sort()
+          }
+        } else {
+          if (index < 9) {
+            this.selectedCBCTRightTopDents = this.selectedCBCTRightTopDents.filter(i => i != index).sort()
+          } else if (index < 17) {
+            this.selectedCBCTLeftTopDents = this.selectedCBCTLeftTopDents.filter(i => i != index - 8).sort()
+          } else if (index < 25) {
+            this.selectedCBCTRightBottomDents = this.selectedCBCTRightBottomDents.filter(i => i != index - 16).sort()
+          } else {
+            this.selectedCBCTLeftBottomDents = this.selectedCBCTLeftBottomDents.filter(i => i != index - 24).sort()
+          }
+        }
       } else {
         this.cases.push(item)
+        if (type === 'Periapical') {
+          if (index < 9) {
+            this.selectedRightTopDents.push(index)
+            this.selectedRightTopDents.sort()
+          } else if (index < 17) {
+            this.selectedLeftTopDents.push(index - 8)
+            this.selectedLeftTopDents.sort((a, b) => a > b ? -1 : 1)
+          } else if (index < 25) {
+            this.selectedRightBottomDents.push(index - 16)
+            this.selectedRightBottomDents.sort()
+          } else {
+            this.selectedLeftBottomDents.push(index - 24)
+            this.selectedLeftBottomDents.sort().sort((a, b) => a > b ? -1 : 1)
+          }
+        } else {
+          if (index < 9) {
+            this.selectedCBCTRightTopDents.push(index)
+            this.selectedCBCTRightTopDents.sort()
+          } else if (index < 17) {
+            this.selectedCBCTLeftTopDents.push(index - 8)
+            this.selectedCBCTLeftTopDents.sort((a, b) => a > b ? -1 : 1)
+          } else if (index < 25) {
+            this.selectedCBCTRightBottomDents.push(index - 16)
+            this.selectedCBCTRightBottomDents.sort()
+          } else {
+            this.selectedCBCTLeftBottomDents.push(index - 24)
+            this.selectedCBCTLeftBottomDents.sort().sort((a, b) => a > b ? -1 : 1)
+          }
+        }
       }
     },
   },

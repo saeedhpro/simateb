@@ -334,7 +334,7 @@ export default {
       actions: [
         {
           id: 0,
-          label: 'اقدام جمعی'
+          label: 'تنظیمات'
         },
         {
           id: 1,

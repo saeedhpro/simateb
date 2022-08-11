@@ -11,7 +11,7 @@ export default {
   name: "CustomRadioBox",
   props: {
     label: String,
-    value: Boolean,
+    value: [Boolean, Number],
     rtl: Boolean,
   },
   methods: {

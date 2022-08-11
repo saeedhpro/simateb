@@ -212,8 +212,8 @@
           <div class="page-actions"
                @click="createModal"
           >
-            <img src="/images/pages/new-user.svg" alt="organizations">
-            <span class="title-main">علت مراجعه جدید</span>
+            <img src="/images/pages/plus.svg" alt="organizations">
+            <span class="title-main">افزودن</span>
           </div>
         </div>
       </v-col>
@@ -239,7 +239,9 @@
                   <tr v-for="(i, n) in cases.data" :key="n">
                     <td class="text-center">{{ (search.page - 1) * 10 + n + 1 | persianDigit }}</td>
                     <td class="text-center">
-                      {{ i.name ? i.name : '-' | toPersianNumber }}
+                      <span class="file-id">
+                        {{ i.name ? i.name : '-' | toPersianNumber }}
+                      </span>
                     </td>
                     <td class="text-center">{{ i.duration | persianDigit }}</td>
                     <td class="text-center">{{ i.limitation | persianDigit }}</td>

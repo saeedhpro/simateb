@@ -92,6 +92,7 @@
                       <div class="ortho-case-list">
                         <div class="ortho-case-list-header">
                           نیم رخ
+                          <img src="/images/form/half.png" alt="">
                         </div>
                         <div
                           v-for="(i,n) in half"
@@ -100,7 +101,7 @@
                           <v-checkbox
                             v-model="cases"
                             :label="i"
-                            :value="`half_${i}`"
+                            :value="`نیمرخ - ${i}`"
                             color="#5063FF"
                           />
                         </div>
@@ -113,6 +114,7 @@
                       <div class="ortho-case-list">
                         <div class="ortho-case-list-header">
                           روبرو
+                          <img src="/images/form/front.png" alt="">
                         </div>
                         <div
                           v-for="(i,n) in front"
@@ -121,7 +123,7 @@
                           <v-checkbox
                             v-model="cases"
                             :label="i"
-                            :value="`front_${i}`"
+                            :value="`روبرو - ${i}`"
                             color="#5063FF"
                           />
                         </div>
@@ -135,6 +137,7 @@
                       <div class="ortho-case-list">
                         <div class="ortho-case-list-header">
                           سه رخ
+                          <img src="/images/form/thriple.png" alt="">
                         </div>
                         <div
                           v-for="(i,n) in three"
@@ -143,7 +146,7 @@
                           <v-checkbox
                             v-model="cases"
                             :label="i"
-                            :value="`three_${i}`"
+                            :value="`سه رخ - ${i}`"
                             color="#5063FF"
                           />
                         </div>

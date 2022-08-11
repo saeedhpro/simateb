@@ -212,8 +212,8 @@
           <div class="page-actions"
                @click="createModal"
           >
-            <img src="/images/pages/new-user.svg" alt="organizations">
-            <span class="title-main">پذیرش vip جدید</span>
+            <img src="/images/pages/plus.svg" alt="organizations">
+            <span class="title-main">افزودن</span>
           </div>
         </div>
       </v-col>
@@ -275,7 +275,9 @@
                   <tr v-for="(i, n) in schedules.data" :key="n">
                     <td class="text-center">{{ (search.page - 1) * 10 + n + 1 | persianDigit }}</td>
                     <td class="text-center">
-                      {{ i.start_at | toPersianDate('YYYY/MM/DD dddd') }}
+                      <span class="file-id">
+                        {{ i.start_at | toPersianDate('YYYY/MM/DD dddd') }}
+                      </span>
                     </td>
                     <td class="text-center">
                       {{ i.start_at | toPersianDate('HH:mm:ss') }}
@@ -501,7 +503,6 @@ export default {
         },
       ],
       year: 1398,
-      years: [],
     }
   },
   computed: {
@@ -510,6 +511,15 @@ export default {
     },
     loginUser() {
       return this.$store.getters['login/getUser']
+    },
+
+    years() {
+      const years = [];
+      const year = parseInt(this.$moment().format("jYYYY")) + 10;
+      for (let i = 1398; i < year; i++) {
+        years.push(i)
+      }
+      return years
     }
   }
 }

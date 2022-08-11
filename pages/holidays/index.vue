@@ -198,8 +198,8 @@
           <div class="page-actions"
                @click="createModal"
           >
-            <img src="/images/pages/new-user.svg" alt="organizations">
-            <span class="title-main">تعطیلات جدید</span>
+            <img src="/images/pages/plus.svg" alt="organizations">
+            <span class="title-main">افزودن</span>
           </div>
         </div>
       </v-col>
@@ -250,7 +250,9 @@
                   <tr v-for="(i, n) in holidays.data" :key="n">
                     <td class="text-center">{{ (search.page - 1) * 10 + n + 1 | persianDigit }}</td>
                     <td class="text-center">
-                      {{ i.hdate ? $moment(i.hdate).format("jYYYY/jMM/jDD") : '-' | toPersianNumber }}
+                      <span class="file-id main">
+                        {{ i.hdate ? $moment(i.hdate).format("jYYYY/jMM/jDD") : '-' | toPersianNumber }}
+                      </span>
                     </td>
                     <td class="text-center">{{ i.title ? i.title : '-' | persianDigit }}</td>
                     <td class="text-center">{{ i.organization ? i.organization.name : '-' | persianDigit }}</td>

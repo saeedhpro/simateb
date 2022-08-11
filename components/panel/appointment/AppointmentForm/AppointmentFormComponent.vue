@@ -415,49 +415,6 @@
                 md="4"
                 v-if="isDoctor"
               >
-                <!--                <div class="paziresh-button">-->
-                <!--                  <div class="button-group" :class="{'open': showActions}">-->
-                <!--                    <button-->
-                <!--                      class="main-button form-button"-->
-                <!--                      @click="doAction('update')"-->
-                <!--                    >-->
-                <!--                      پذیرش شده-->
-                <!--                    </button>-->
-                <!--                    <v-btn-->
-                <!--                      icon-->
-                <!--                      class="menu-button"-->
-                <!--                      @click="toggleShowActions"-->
-                <!--                    >-->
-                <!--                      <v-icon color="#FFFFFF">mdi-chevron-down</v-icon>-->
-                <!--                    </v-btn>-->
-                <!--                  </div>-->
-                <!--                  <div class="paziresh-actions">-->
-                <!--                    <button-->
-                <!--                      class="main-button form-button"-->
-                <!--                      @click="doAction('accept')"-->
-                <!--                    >-->
-                <!--                      پذیرش-->
-                <!--                    </button>-->
-                <!--                    <button-->
-                <!--                      class="red-button form-button"-->
-                <!--                      @click="doAction('cancel')"-->
-                <!--                    >-->
-                <!--                      کنسل-->
-                <!--                    </button>-->
-                <!--                    <button-->
-                <!--                      class="reserve-button form-button"-->
-                <!--                      @click="doAction('reserve')"-->
-                <!--                    >-->
-                <!--                      رزرو-->
-                <!--                    </button>-->
-                <!--                    <button-->
-                <!--                      class="main-button form-button"-->
-                <!--                      @click="doAction('update')"-->
-                <!--                    >-->
-                <!--                      ذخیره-->
-                <!--                    </button>-->
-                <!--                  </div>-->
-                <!--                </div>-->
                 <v-menu offset-y>
                   <template v-slot:activator="{ on, attrs }">
                     <button
@@ -469,19 +426,16 @@
                         <div class="text-box">
                           <span
                             v-if="resulted"
-                            class="status-box resulted"
                           >
                             نتایج ارسال شده
                           </span>
                           <span
                             v-else-if="waiting"
-                            class="status-box waiting"
                           >
                             در انتظار مراجعه
                           </span>
                           <span
                             v-else
-                            class="status-box white--text"
                           >
                             {{ statuses[appointment.status - 1].title | toPersianNumber }}
                           </span>
@@ -492,20 +446,30 @@
                       </div>
                     </button>
                   </template>
-                  <v-list>
-                    <v-list-item
+                    <button
+                      class="action-bar-button"
+                      @click="doAction('accept')"
                     >
-                      <v-list-item-title>{{ `item.title` }}</v-list-item-title>
-                    </v-list-item>
-                    <v-list-item
+                      پذیرش
+                    </button>
+                    <button
+                      class="action-bar-button"
+                      @click="doAction('cancel')"
                     >
-                      <v-list-item-title>{{ `item.title` }}</v-list-item-title>
-                    </v-list-item>
-                    <v-list-item
+                      کنسل
+                    </button>
+                    <button
+                      class="action-bar-button"
+                      @click="doAction('reserve')"
                     >
-                      <v-list-item-title>{{ `item.title` }}</v-list-item-title>
-                    </v-list-item>
-                  </v-list>
+                      رزرو
+                    </button>
+                    <button
+                      class="action-bar-button"
+                      @click="doAction('update')"
+                    >
+                      ذخیره
+                    </button>
                 </v-menu>
               </v-col>
             </v-row>
