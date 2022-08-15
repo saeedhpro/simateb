@@ -223,6 +223,14 @@
       :item="item"
       @close="closeAppointmentModal"
     />
+    <work-hour-component
+      :open="showWorkHour"
+      :start="workHour.start"
+      :end="workHour.end"
+      :organizationId="workHour.organization_id"
+      @close="closeShowWorkHour"
+      v-if="showWorkHour"
+    />
   </v-container>
 </template>
 
@@ -235,10 +243,12 @@ import CaseTypeCheckboxComponent from "~/components/panel/appointment/CaseTypeCh
 import AppointmentFormComponent from "~/components/panel/appointment/AppointmentForm/AppointmentFormComponent";
 import CreateAppointmentFormComponent
   from "~/components/panel/appointment/AppointmentForm/CreateAppointmentFormComponent";
+import WorkHourComponent from "~/components/panel/appointment/WorkHourComponent";
 
 export default {
   name: "index",
   components: {
+    WorkHourComponent,
     CreateAppointmentFormComponent,
     TableAppointmentNoneComponent,
     TableAppointmentComponent,
@@ -257,6 +267,7 @@ export default {
       showCaseType: false,
       item: null,
       hasItem: false,
+      showWorkHour: false,
       most: 1,
       durations: 10,
       selectedItems: [],
@@ -403,8 +414,15 @@ export default {
     this.getHolidays()
     this.getAppointmentList()
     this.getUsers()
+    this.getOrganizationWorkHour()
   },
   methods: {
+    getOrganizationWorkHour() {
+      const organization = this.loginUser.organization
+      if (organization){
+        this.$store.dispatch('organizations/getOrganizationWorkHour', organization.id)
+      }
+    },
     createAppointment() {
       if (!this.user) return
       this.$store.dispatch('appointments/createAppointment', {
@@ -512,7 +530,17 @@ export default {
             path: '/cases'
           })
           break;
+        case 4:
+          this.toggleShowWorkHour()
+          break;
       }
+    },
+    toggleShowWorkHour() {
+      this.showWorkHour = !this.showWorkHour
+    },
+    closeShowWorkHour() {
+      this.toggleShowWorkHour()
+      this.action = null
     },
     customLabel(item) {
       return item.fname
@@ -524,7 +552,7 @@ export default {
       return moment.from(`${this.year}/${this.month}/${day}`, "fa", "YYYY/MM/DD").locale("fa").format("dddd");
     },
     getTime(day) {
-      const wh = this.que.work_hour
+      const wh = this.workHour
       const start = wh.start
       const end = wh.end
       let duration = this.que.default_duration
@@ -534,7 +562,10 @@ export default {
       return moment(start, "HH:mm:ss").add((day - 1) * duration, "minutes").format("HH:mm:ss")
     },
     calcDurations() {
-      const wh = this.que.work_hour
+      if (!this.workHour) {
+        return
+      }
+      const wh = this.workHour
       const start = wh.start
       const end = wh.end
       let duration = this.que.default_duration
@@ -606,6 +637,9 @@ export default {
     },
     cases() {
       return this.$store.getters['cases/getCaseTypes']
+    },
+    workHour() {
+      return this.$store.getters['organizations/getOrganizationWorkHour']
     },
     selectedAll: {
       get() {

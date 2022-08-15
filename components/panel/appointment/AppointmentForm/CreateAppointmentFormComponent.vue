@@ -378,11 +378,18 @@ export default {
     },
   },
   watch: {
-    user() {
-      this.appointment.file_id = this.user.file_id
-      this.appointment.cardno = this.user.cardno
-      this.appointment.user_id = this.user.id
-      this.appointment.tel = this.user.tel
+    user(val) {
+      if (val) {
+        this.appointment.file_id = this.user.file_id
+        this.appointment.cardno = this.user.cardno
+        this.appointment.user_id = this.user.id
+        this.appointment.tel = this.user.tel
+      } else {
+        this.appointment.file_id = ''
+        this.appointment.cardno = ''
+        this.appointment.user_id = null
+        this.appointment.tel = ''
+      }
     },
   }
 }
