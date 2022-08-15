@@ -111,7 +111,7 @@
                           کد اپ:
                     </span>
                     <span v-if="appointment.appcode">
-                      {{ appointment.appcode }}
+                      {{ appointment.appcode | persianDigit }}
                     </span>
                     <div class="d-flex flex-row align-center" style="width: 100%" v-else>
                       <div>غیر فعال</div>
