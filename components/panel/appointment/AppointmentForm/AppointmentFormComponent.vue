@@ -1037,7 +1037,6 @@ export default {
       }
       const data = {
         ...this.appointment,
-        status: 2,
         results: this.newFiles
       }
       delete data.staff
