@@ -186,7 +186,7 @@
     <accept-create-appointment-modal
       v-if="user"
       :open="showAcceptModal"
-      :full-name="`${user.fname} ${user.lname}`"
+      :full-name="`${user.gender ? user.gender.toLowerCase() === 'male' ? 'آقای ' : 'خانم ' : ''}${user.fname} ${user.lname}`"
       :start-at="appointment.start_at"
       @close="toggleAcceptModal"
       @accept="createAppointment"
@@ -228,7 +228,7 @@ export default {
   data() {
     return {
       appointment: {
-        start_at: this.$moment().format("YYYY/MM/DD HH:mm:ss"),
+        start_at: this.$moment().locale("fa").format("YYYY/MM/DD HH:mm:ss"),
         tel: '',
         cardno: '',
         income: 0,
@@ -254,7 +254,7 @@ export default {
     },
     resetForm() {
       this.appointment = {
-        start_at: this.$moment().format("YYYY/MM/DD HH:mm:ss"),
+        start_at: this.$moment().locale("fa").format("YYYY/MM/DD HH:mm:ss"),
         tel: '',
         cardno: '',
         income: 0,

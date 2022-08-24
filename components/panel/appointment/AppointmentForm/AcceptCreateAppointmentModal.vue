@@ -17,11 +17,14 @@
       </v-card-title>
 
       <v-card-text
-        class="accept-file-remove-text"
+        class="accept-file-remove-text d-flex flex-column align-center justify-center"
       >
-        <span>آیا از رزرو وقت برای </span> <span class="font-weight-bold">{{ fullName | toPersianNumber }}</span>
-        <span>در روز </span> <span class="blue-color">{{ getDayName | toPersianNumber }} </span>
-        <span>ساعت </span> <span class="blue-color">{{ getTime | toPersianNumber }} </span>
+        <span>آیا از رزرو وقت برای </span>
+        <span>
+          <span class="font-weight-bold blue-color">{{ fullName | toPersianNumber }}</span>
+          <span>در روز </span> <span class="blue-color">{{ getDayName | toPersianNumber }} </span>
+          <span>ساعت </span> <span class="blue-color">{{ getTime | toPersianNumber }} </span>
+        </span>
         <span>اطمینان دارید؟ </span>
       </v-card-text>
 
@@ -84,11 +87,11 @@ export default {
     },
     getDayName() {
       if (!this.startAt) return ""
-      return this.$moment(this.startAt).format("dddd")
+      return this.$moment(this.startAt).locale("fa").format("dddd")
     },
     getTime() {
       if (!this.startAt) return ""
-      return this.$moment(this.startAt).format("HH:mm:ss")
+      return this.$moment(this.startAt).locale("fa").format("HH:mm:ss")
     }
   }
 }

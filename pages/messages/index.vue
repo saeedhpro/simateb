@@ -277,7 +277,7 @@
                       }}
                     </td>
                     <td class="text-center">
-                      {{ i.created ? $moment(i.created).format("YYYY/MM/DD HH:mm:ss") : '-' | toRelativeDate }}
+                      {{ i.created ? $moment(i.created).locale("fa").format("YYYY/MM/DD HH:mm:ss") : '-' | toRelativeDate }}
                     </td>
                     <td class="text-center"><span class="message"
                                                   :class="{'message-sent': i.sent, 'message-not-sent': !i.sent}">{{

@@ -6,7 +6,7 @@
         <span class="appcode-number">{{ appointment.code | toPersianNumber }}</span>
       </span>
       <span class="time-box">{{
-          appointment.p_result_at ? $moment(appointment.p_result_at).format("jYYYY/jMM/jDD") : '' | toPersianNumber
+          appointment.p_result_at ? $moment(appointment.p_result_at).locale("fa").format("jYYYY/jMM/jDD") : '' | toPersianNumber
         }}</span>
     </div>
     <div class="images-box">

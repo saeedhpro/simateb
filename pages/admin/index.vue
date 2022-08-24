@@ -40,7 +40,7 @@
                     <td class="text-center">{{ i.tel | persianDigit }}</td>
                     <td class="text-center">{{ i.user_group ? i.user_group.name : '-' | persianDigit }}</td>
                     <td class="text-center">
-                      {{ i.last_login ? $moment(i.last_login).format("YYYY/MM/DD HH:mm:ss") : '-' | toRelativeDate }}
+                      {{ i.last_login ? $moment(i.last_login).locale("fa").format("YYYY/MM/DD HH:mm:ss") : '-' | toRelativeDate }}
                     </td>
                   </tr>
                 </template>
@@ -89,7 +89,7 @@
                     <td class="text-center">{{ i.tel | persianDigit }}</td>
                     <td class="text-center">{{ i.user_group ? i.user_group.name : '-' | persianDigit }}</td>
                     <td class="text-center">
-                      {{ i.last_login ? $moment(i.last_login).format("YYYY/MM/DD HH:mm:ss") : '-' | toRelativeDate }}
+                      {{ i.last_login ? $moment(i.last_login).locale("fa").format("YYYY/MM/DD HH:mm:ss") : '-' | toRelativeDate }}
                     </td>
                   </tr>
                 </template>

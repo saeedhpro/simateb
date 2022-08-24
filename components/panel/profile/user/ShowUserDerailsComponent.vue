@@ -85,7 +85,7 @@
                     </v-col>
                     <v-col cols="6">
                       <div class="value-box">{{
-                          user.birth_date ? $moment(user.birth_date).format("jYYYY/jMM/jDD") : '-' | persianDigit
+                          user.birth_date ? $moment(user.birth_date).locale("fa").format("jYYYY/jMM/jDD") : '-' | persianDigit
                         }}
                       </div>
                     </v-col>

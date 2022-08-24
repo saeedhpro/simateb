@@ -251,7 +251,7 @@
                     <td class="text-center">{{ (search.page - 1) * 10 + n + 1 | persianDigit }}</td>
                     <td class="text-center">
                       <span class="file-id main">
-                        {{ i.hdate ? $moment(i.hdate).format("jYYYY/jMM/jDD") : '-' | toPersianNumber }}
+                        {{ i.hdate ? $moment(i.hdate).locale("fa").format("jYYYY/jMM/jDD") : '-' | toPersianNumber }}
                       </span>
                     </td>
                     <td class="text-center">{{ i.title ? i.title : '-' | persianDigit }}</td>
@@ -325,7 +325,7 @@ export default {
   },
   methods: {
     getYear() {
-      this.year = parseInt(this.$moment().format("jYYYY"))
+      this.year = parseInt(this.$moment().locale("fa").format("jYYYY"))
       this.changeYear()
     },
     changeYear() {
@@ -378,7 +378,7 @@ export default {
       this.form = {
         id: holiday.id,
         title: holiday.title,
-        hdate: this.$moment(holiday.hdate).format("YYYY-MM-DD"),
+        hdate: this.$moment(holiday.hdate).locale("fa").format("YYYY-MM-DD"),
       }
       this.toggleCreateModal()
     },
@@ -468,7 +468,7 @@ export default {
     },
     years() {
       const years = [];
-      const year = parseInt(this.$moment().format("jYYYY")) + 10;
+      const year = parseInt(this.$moment().locale("fa").format("jYYYY")) + 10;
       for (let i = 1398; i < year; i++) {
         years.push(i)
       }

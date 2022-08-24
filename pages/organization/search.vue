@@ -235,7 +235,7 @@
                     <td class="text-center"><span class="file-id">{{ i.user && i.user.file_id ? i.user.file_id : '-' | persianDigit }}</span></td>
                     <td class="text-center">{{ i.user && i.case_type ? i.case_type : '-' | persianDigit }}</td>
                     <td class="text-center">
-                      {{ $moment(i.start_at).format("HH:mm") | toPersianNumber }}
+                      {{ $moment(i.start_at).locale("fa").format("HH:mm") | toPersianNumber }}
                     </td>
                     <td class="text-center">
                       <div

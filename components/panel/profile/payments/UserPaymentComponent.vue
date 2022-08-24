@@ -105,7 +105,7 @@
                       </div>
                     </td>
                     <td class="text-center">
-                      {{ i.created ? $moment(i.created).format('jYYYY/jM/jDD HH:mm:ss') : '-' | persianDigit }}
+                      {{ i.created ? $moment(i.created).locale("fa").format('jYYYY/jM/jDD HH:mm:ss') : '-' | persianDigit }}
                     </td>
                     <td class="text-center">
                       {{ i.amount | persianDigit }}
@@ -453,7 +453,7 @@ export default {
       showCreateModal: false,
       form: {
         user_id: this.userId,
-        created: this.$moment().format('YYYY/MM/DD HH:mm:ss'),
+        created: this.$moment().locale("fa").format('YYYY/MM/DD HH:mm:ss'),
         amount: 0,
         paytype: 4,
         paid_for: 1,
@@ -514,7 +514,7 @@ export default {
     clearForm() {
       this.form = {
         user_id: this.userId,
-        created: this.$moment().format('YYYY/MM/DD HH:mm:ss'),
+        created: this.$moment().locale("fa").format('YYYY/MM/DD HH:mm:ss'),
         amount: 0,
         paytype: 4,
         paid_for: 1,

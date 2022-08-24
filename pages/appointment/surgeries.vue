@@ -563,7 +563,7 @@ export default {
           if (s < 10) {
             s = `0${s}`
           }
-          if (this.$moment(list[j].start_at).format("jYYYY/jMM/jDD") === `${yearMonth}/${s}`) {
+          if (this.$moment(list[j].start_at).locale("fa").format("jYYYY/jMM/jDD") === `${yearMonth}/${s}`) {
             list2[i].push(list[j])
           }
         }

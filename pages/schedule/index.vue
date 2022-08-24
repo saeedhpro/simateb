@@ -515,7 +515,7 @@ export default {
 
     years() {
       const years = [];
-      const year = parseInt(this.$moment().format("jYYYY")) + 10;
+      const year = parseInt(this.$moment().locale("fa").format("jYYYY")) + 10;
       for (let i = 1398; i < year; i++) {
         years.push(i)
       }
