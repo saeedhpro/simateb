@@ -1082,6 +1082,16 @@ export default {
           this.appointment.appcode = res.data
         })
     },
+    createCode() {
+      if (this.appointment.code) {
+        this.loading()
+        return
+      }
+      this.$store.dispatch('appointments/createAppointmentCode', this.appointment.id)
+        .then((res) => {
+          this.appointment.code = res.data
+        })
+    },
     doAccept() {
       const data = {
         ...this.appointment,
@@ -1193,9 +1203,11 @@ export default {
       switch (item.type) {
         case 'photography':
           this.appointment.photography_id = item.val
+          this.createCode()
           break;
         case 'radiology':
           this.appointment.radiology_id = item.val
+          this.createCode()
           break;
       }
     },

@@ -137,6 +137,15 @@ export const actions = {
       })
   },
   createAppointmentAppCode(ctx, id) {
+    return this.$axios.post(`/appointments/${id}/appcode`)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  createAppointmentCode(ctx, id) {
     return this.$axios.post(`/appointments/${id}/code`)
       .then(res => {
         return Promise.resolve(res)
