@@ -228,7 +228,7 @@ export default {
   data() {
     return {
       appointment: {
-        start_at: this.$moment().locale("fa").format("YYYY/MM/DD HH:mm:ss"),
+        start_at: this.$moment().format("YYYY/MM/DD HH:mm:ss"),
         tel: '',
         cardno: '',
         income: 0,
@@ -254,7 +254,7 @@ export default {
     },
     resetForm() {
       this.appointment = {
-        start_at: this.$moment().locale("fa").format("YYYY/MM/DD HH:mm:ss"),
+        start_at: this.$moment().format("YYYY/MM/DD HH:mm:ss"),
         tel: '',
         cardno: '',
         income: 0,

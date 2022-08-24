@@ -238,7 +238,7 @@
                     <td class="text-center">{{ i.user && i.user.file_id ? i.user.file_id : '-' | persianDigit }}</td>
                     <td class="text-center">{{ i.user && i.case_type ? i.case_type : '-' | persianDigit }}</td>
                     <td class="text-center">
-                      {{ $moment(i.start_at).locale("fa").format("HH:mm") | toPersianNumber }}
+                      {{ $moment(i.start_at).format("HH:mm") | toPersianNumber }}
                     </td>
                     <td class="text-center">
                       <div
@@ -406,8 +406,8 @@ export default {
     return {
       selectedItems: [],
       search: {
-        start: this.$moment().locale("fa").format("YYYY-MM-DD"),
-        end: this.$moment().locale("fa").format("YYYY-MM-DD"),
+        start: this.$moment().format("YYYY-MM-DD"),
+        end: this.$moment().format("YYYY-MM-DD"),
         q: '',
         status: '',
         page: 1,
@@ -495,8 +495,8 @@ export default {
     getAppointmentList(filtered = false) {
       if (!filtered) {
         if (this.isDoctor) {
-          this.search.start = this.$moment().locale("fa").format("YYYY-MM-DD")
-          this.search.end = this.$moment().locale("fa").format("YYYY-MM-DD")
+          this.search.start = this.$moment().format("YYYY-MM-DD")
+          this.search.end = this.$moment().format("YYYY-MM-DD")
         } else {
           this.search.start = ''
           this.search.end = ''

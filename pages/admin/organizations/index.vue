@@ -90,7 +90,7 @@
                     <td class="text-center">{{ i.profession ? i.profession.name : '-' | persianDigit }}</td>
                     <td class="text-center">{{ `${i.sms_credit} (${i.sms_price})` | persianDigit }}</td>
                     <td class="text-center">
-<!--                      {{ i.created_at ? $moment(i.created_at).locale("fa").format('jYYYY/jM/jDD') : '-' | persianDigit }}-->
+<!--                      {{ i.created_at ? $moment(i.created_at).format('jYYYY/jM/jDD') : '-' | persianDigit }}-->
                       {{ i.staff ? `${i.staff.organization.name}` : '-' | persianDigit }}
                     </td>
                     <td class="text-center">{{

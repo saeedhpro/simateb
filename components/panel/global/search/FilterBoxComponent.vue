@@ -140,8 +140,8 @@ export default {
     return {
       search: {
         page: 1,
-        start: this.$moment().locale("fa").format("YYYY-MM-DD"),
-        end: this.$moment().locale("fa").format("YYYY-MM-DD"),
+        start: this.$moment().format("YYYY-MM-DD"),
+        end: this.$moment().format("YYYY-MM-DD"),
         q: '',
       },
     }
@@ -156,8 +156,8 @@ export default {
     clearForm() {
       this.search = {
         page: 1,
-        start: this.$moment().locale("fa").format("YYYY-MM-DD"),
-        end: this.$moment().locale("fa").format("YYYY-MM-DD"),
+        start: this.$moment().format("YYYY-MM-DD"),
+        end: this.$moment().format("YYYY-MM-DD"),
         q: '',
       }
     },

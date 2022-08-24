@@ -328,7 +328,10 @@ export default {
   },
   methods: {
     getScheduleList() {
-      this.$store.dispatch('schedule/getList', this.search)
+      this.$store.dispatch('schedule/getList', {
+        ...this.search,
+        year: this.year,
+      })
     },
     paginate(page = 1) {
       this.search.page = page
@@ -515,7 +518,7 @@ export default {
 
     years() {
       const years = [];
-      const year = parseInt(this.$moment().locale("fa").format("jYYYY")) + 10;
+      const year = parseInt(this.$moment().format("jYYYY")) + 10;
       for (let i = 1398; i < year; i++) {
         years.push(i)
       }
