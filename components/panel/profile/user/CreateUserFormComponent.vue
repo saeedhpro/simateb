@@ -21,12 +21,6 @@
             <span>افزودن کاربر</span>
           </div>
           <v-spacer/>
-          <div class="create-update-modal-regbox">
-            ثبت در سیستم توسط: {{ `${loginUser.lname} ${loginUser.fname}` }}
-            ({{ $moment().locale("fa") | toRelativeDate }} {{
-              $moment().locale("fa") | toPersianDate('YYYY/MM/DD HH:mm:ss')
-            }})
-          </div>
         </v-card-title>
         <v-card-text>
           <v-container>

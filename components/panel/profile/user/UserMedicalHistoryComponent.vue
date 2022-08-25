@@ -21,7 +21,7 @@
         </div>
         <v-spacer/>
         <div class="create-update-modal-regbox">
-          {{ `${loginUser.fname} ${loginUser.staff.lname}` }}
+          {{ `${user.fname} ${user.staff.lname}` }}
         </div>
       </v-card-title>
       <v-card-text>
@@ -177,9 +177,6 @@ export default {
         console.log(val)
       }
     },
-    loginUser() {
-      return this.$store.getters['login/getUser']
-    },
     medicalHistory: {
       get() {
         return this.$store.getters['users/getMedicalHistory']
@@ -192,6 +189,14 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+.medical-tab {
+  transition: all 0.3s ease-in-out;
+  &.v-tab--active, &:hover {
+    background: #F6F7FF 0 0 no-repeat padding-box;
+    border: 1px solid #5063FF;
+    transition: all 0.3s ease-in-out;
+    outline: none !important;
+  }
+}
 </style>

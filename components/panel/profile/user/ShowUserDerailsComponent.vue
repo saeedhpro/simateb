@@ -303,6 +303,18 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 
+.description-box {
+  .action-button {
+    transition: all .3s ease-in-out;
+    &:hover {
+      background: #F6F7FF 0 0 no-repeat padding-box !important;
+      box-shadow: 0 12px 16px rgb(80 99 255 / 16%) !important;
+      border: 1px solid #5063FF !important;
+      outline: none !important;
+      transition: all .3s ease-in-out;
+    }
+  }
+}
 </style>

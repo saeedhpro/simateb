@@ -935,15 +935,14 @@ table {
         img {
           margin-left: 10px;
         }
-
-        &:hover {
+        &:hover, &.v-tab--active {
           background: #F6F7FF 0 0 no-repeat padding-box;
           box-shadow: 0 12px 16px #5063FF28;
           border: 1px solid #5063FF;
           color: #5063FF !important;
           transition: all .4s ease;
           -webkit-transition: all .4s ease;
-
+          outline: none !important;
         }
       }
     }
