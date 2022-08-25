@@ -550,7 +550,7 @@ export default {
     },
     getToday(day) {
       console.log(this.$moment.utc(moment.from(`${this.year}/${this.month}/${day}`, "UTC", "jYYYY/jMM/jDD").format("jYYYY/jMM/jDD")).locale("fa").format("dddd"))
-      return moment.from(`${this.year}/${this.month}/${day}`, "UTC", "jYYYY/jMM/jDD").locale("fa").format("dddd");
+      return moment.from(`${this.year}/${this.month}/${day}`, "fa", "jYYYY/jMM/jDD").locale("fa").format("dddd");
     },
     getTime(day) {
       const wh = this.workHour
