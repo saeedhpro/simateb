@@ -35,7 +35,7 @@
                   <date-picker
                     v-model="appointment.start_at"
                     format="YYYY-MM-DD HH:mm:ss"
-                    display-format="HH:mm:ss jYYYY/jMM/jDD"
+                    display-format="HH:mm:ss --- jYYYY/jMM/jDD"
                     editable
                     class="date-picker"
                     type="datetime"
@@ -264,6 +264,7 @@ export default {
         status: 0,
         user: null,
       }
+      this.user = null
       this.resetErrors()
     },
     resetErrors() {

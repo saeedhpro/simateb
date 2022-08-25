@@ -221,7 +221,7 @@
                 @paginate="paginate"
               >
                 <template v-slot:body>
-                  <tr v-for="(i, n) in appointments.data" :key="n">
+                  <tr v-for="(i, n) in appointments.data" :key="n" :class="{'waiting': waiting(i)}">
                     <td class="text-center">{{ (search.page - 1) * 10 + n + 1 | persianDigit }}</td>
                     <td class="text-center">
                       <div class="table-row flex flex-row align-center justify-start">
@@ -235,7 +235,9 @@
                       </div>
                     </td>
                     <td class="text-center">{{ i.user && i.user.tel ? i.user.tel : '-' | persianDigit }}</td>
-                    <td class="text-center">{{ i.user && i.user.file_id ? i.user.file_id : '-' | persianDigit }}</td>
+                    <td class="text-center">
+                      <span class="file-id cursor-pointer" @click="openAppointmentModal(i)">{{ i.user && i.user.file_id ? i.user.file_id : '-' | persianDigit }}</span>
+                    </td>
                     <td class="text-center">{{ i.user && i.case_type ? i.case_type : '-' | persianDigit }}</td>
                     <td class="text-center">
                       {{ $moment.utc(i.start_at).locale("fa").format("HH:mm") | toPersianNumber }}
@@ -298,7 +300,7 @@
                 @paginate="paginate"
               >
                 <template v-slot:body>
-                  <tr v-for="(i, n) in appointments.data" :key="n">
+                  <tr v-for="(i, n) in appointments.data" :key="n" :class="{'waiting': waiting(i)}">
                     <td class="text-center">{{ (search.page - 1) * 10 + n + 1 | persianDigit }}</td>
                     <td class="text-center">
                       <div class="table-row flex flex-row align-center justify-start">
@@ -572,6 +574,9 @@ export default {
     },
     closeAppointmentModal() {
       this.toggleAppointmentModal()
+      if (this.item) {
+        this.getAppointmentList()
+      }
       this.item = null
     },
     toggleAppointmentModal() {

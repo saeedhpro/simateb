@@ -212,7 +212,7 @@
                 @paginate="paginate"
               >
                 <template v-slot:body>
-                  <tr v-for="(i, n) in appointments.data" :key="n">
+                  <tr v-for="(i, n) in appointments.data" :key="n" :class="{'waiting': waiting(i)}">
                     <td class="text-center">{{ (search.page - 1) * 10 + n + 1 | persianDigit }}</td>
                     <td class="text-center">
                       <div class="table-row flex flex-row align-center justify-start">
@@ -265,6 +265,15 @@
                     </td>
                     <td class="text-center">
                       <span
+                        v-if="resulted(i)"
+                        class="status-box resulted"
+                      >نتایج ارسال شده</span>
+                      <span
+                        v-else-if="waiting(i)"
+                        class="status-box waiting"
+                      >در انتظار مراجعه</span>
+                      <span
+                        v-else
                         class="status-box"
                         :style="{
                           'background-color': `${statuses[i.status - 1].background}`,
@@ -286,7 +295,7 @@
                 @paginate="paginate"
               >
                 <template v-slot:body>
-                  <tr v-for="(i, n) in appointments.data" :key="n">
+                  <tr v-for="(i, n) in appointments.data" :key="n" :class="{'waiting': waiting(i)}">
                     <td class="text-center">{{ (search.page - 1) * 10 + n + 1 | persianDigit }}</td>
                     <td class="text-center">
                       <div class="table-row flex flex-row align-center justify-start">
@@ -617,30 +626,6 @@ export default {
     },
     waiting(appointment) {
       return appointment.status === 2 && !this.admissioned(appointment) && !this.resulted(appointment)
-    },
-    isResulted(appointment, type) {
-      if (type === 1) {
-        return appointment.p_admission_at !== null && appointment.p_result_at !== null
-      } else if (type === 2) {
-        return appointment.l_admission_at !== null && appointment.l_result_at !== null
-      } else if (type === 3) {
-        return appointment.r_admission_at !== null && appointment.r_result_at !== null
-      } else {
-        return false
-      }
-    },
-    isAdmissioned(appointment, type) {
-      if (type === 1) {
-        return appointment.p_admission_at !== null
-      } else if (type === 2) {
-        return appointment.l_admission_at !== null
-      } else if (type === 3) {
-        return appointment.r_admission_at !== null
-      }
-      return false;
-    },
-    isWaiting(appointment, type) {
-      return appointment.status === 2 && !this.admissioned(appointment, type) && !this.resulted(appointment, type)
     },
     getErjaClass(appointment, type) {
       if (this.resulted(appointment, type)) {
