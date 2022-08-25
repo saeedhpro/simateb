@@ -247,6 +247,7 @@ export default {
       this.showDelete = !this.showDelete
     },
     removeNext() {
+      this.showDelete = false
       this.showNextDelete = !this.showNextDelete
     },
     deleteUser() {
