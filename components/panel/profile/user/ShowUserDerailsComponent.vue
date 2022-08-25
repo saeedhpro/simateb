@@ -166,7 +166,7 @@
               <v-icon>
                 mdi-card-account-details-outline
               </v-icon>
-              <span>تاریخجه درمان</span>
+              <span>تاریخچه درمان</span>
             </div>
             <div
               class="action-button"
@@ -201,6 +201,16 @@
       :user="user"
       @close="toggleHistoryModal"
     />
+    <delete-user-modal-component
+      :open="showNextDelete"
+      @remove="deleteUser"
+      @close="removeNext"
+    />
+    <alert-delete-user-modal-component
+      :open="showDelete"
+      @remove="removeNext"
+      @close="remove"
+    />
   </div>
 </template>
 
@@ -209,12 +219,15 @@ import UserMedicalHistoryComponent from "~/components/panel/profile/user/UserMed
 import UpdateUserFormComponent from "~/components/panel/profile/user/UpdateUserFormComponent";
 import AdminUpdateUserFormComponent from "~/components/admin/user/AdminUpdateUserFormComponent";
 import DeleteUserModalComponent from "~/components/global/delete/DeleteUserModalComponent";
+import AlertDeleteUserModalComponent from "~/components/global/alert/AlertDeleteUserModalComponent";
 
 export default {
   name: "ShowUserDerailsComponent",
   components: {
     DeleteUserModalComponent,
-    AdminUpdateUserFormComponent, UpdateUserFormComponent, UserMedicalHistoryComponent},
+    AlertDeleteUserModalComponent,
+    AdminUpdateUserFormComponent, UpdateUserFormComponent, UserMedicalHistoryComponent
+  },
   props: {
     user: {
       type: Object,
@@ -224,6 +237,7 @@ export default {
   data() {
     return {
       showDelete: false,
+      showNextDelete: false,
       showHistoryModal: false,
       showUpdateModal: false,
     }
@@ -231,6 +245,9 @@ export default {
   methods: {
     remove() {
       this.showDelete = !this.showDelete
+    },
+    removeNext() {
+      this.showNextDelete = !this.showNextDelete
     },
     deleteUser() {
       this.$store.dispatch('users/removeUser', this.user.id)

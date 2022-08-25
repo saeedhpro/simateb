@@ -104,8 +104,8 @@
                           }}</span>
                       </div>
                     </td>
-                    <td class="text-center">
-                      {{ i.created ? $moment(i.created).format('jYYYY/jM/jDD HH:mm:ss') : '-' | persianDigit }}
+                    <td class="text-center dir-ltr">
+                      {{ i.created ? $moment.utc(i.created).locale("fa").format('jYYYY/jM/jDD HH:mm:ss') : '-' | persianDigit }}
                     </td>
                     <td class="text-center">
                       {{ i.amount | persianDigit }}

@@ -91,165 +91,6 @@
         </div>
       </v-col>
     </v-row>
-    <v-dialog
-      v-model="showHistoryModal"
-      persistent
-      max-width="1056px"
-    >
-      <v-card
-        class="create-update-modal medical"
-      >
-        <v-card-title
-          class="create-update-modal-title-box"
-        >
-          <div class="create-update-modal-title">
-            <button
-              @click="toggleHistoryModal"
-              class="create-update-modal-close"
-            >
-              <v-icon>mdi-close</v-icon>
-            </button>
-            <span>تاریخچه درمان</span>
-          </div>
-          <v-spacer/>
-          <div class="create-update-modal-regbox">
-            {{ `${loginUser.fname} ${loginUser.staff.lname}` }}
-          </div>
-        </v-card-title>
-        <v-card-text>
-          <v-container>
-            <v-row>
-              <v-col
-                cols="12"
-              >
-                <v-tabs
-                  v-model="mTabs"
-                  centered
-                  class="medical-tabs-header dir-ltr"
-                >
-                  <v-tab
-                    class="medical-tab"
-                  >
-                    Medical Condition
-                  </v-tab>
-                  <v-tab
-                    class="medical-tab"
-                  >
-                    Dental Examination
-                  </v-tab>
-                  <v-tab
-                    class="medical-tab"
-                  >
-                    Occlusal Examination
-                  </v-tab>
-                  <v-tab
-                    class="medical-tab"
-                  >
-                    Treatment
-                  </v-tab>
-                </v-tabs>
-                <div
-                  class="medical-tabs-box"
-                >
-                  <v-tabs-items v-model="mTabs">
-                    <v-tab-item>
-                      <medical-condition-component @changed="onChanged" :histories="medicalHistory"/>
-                    </v-tab-item>
-                    <v-tab-item>
-                      <dental-examination-component @changed="onChanged" :histories="medicalHistory"/>
-                    </v-tab-item>
-                    <v-tab-item>
-                      <occlusal-examination-component @changed="onChanged" :histories="medicalHistory"/>
-                    </v-tab-item>
-                    <v-tab-item>
-                      <treatment-component @changed="onChanged" :histories="medicalHistory"/>
-                    </v-tab-item>
-                  </v-tabs-items>
-                </div>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col
-                cols="12"
-              ></v-col>
-            </v-row>
-          </v-container>
-        </v-card-text>
-        <v-card-actions>
-          <v-container>
-            <v-row>
-              <v-spacer/>
-              <v-col
-                cols="12"
-                sm="3"
-                md="3"
-              >
-                <button
-                  class="second-button"
-                  @click="toggleHistoryModal"
-                >
-                  بستن
-                </button>
-              </v-col>
-              <v-col
-                cols="12"
-                sm="4"
-                md="4"
-              >
-                <button
-                  class="main-button"
-                  @click="updateMedicalHistory"
-                >
-                  ذخیره
-                </button>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-    <v-dialog
-      v-model="showDelete"
-      max-width="680"
-    >
-      <v-card
-        class="accept-file-remove-model"
-      >
-        <button
-          class="close"
-          @click="remove"
-        >
-          <v-icon>mdi-close</v-icon>
-        </button>
-        <v-card-title class="accept-file-remove-title">
-          <span>حذف کاربر</span>
-        </v-card-title>
-
-        <v-card-text
-          class="accept-file-remove-text"
-        >
-          آیا از حذف کردن این کاربر اطمینان دارید؟<br/>
-          لطفا دقت کنید که پس از حذف، اطلاعات کاربر قابل بازگشت نیست
-        </v-card-text>
-
-        <v-card-actions>
-          <button
-            class="action-button accept-button"
-            @click="remove"
-
-          >
-            خیر
-          </button>
-          <v-spacer></v-spacer>
-          <button
-            class="action-button red-button"
-            @click="deleteUser"
-          >
-            بله، حذف کن
-          </button>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
     <update-user-form-component
       :item="user"
       :open="showUpdateModal"
@@ -271,12 +112,14 @@ import UpdateUserFormComponent from "~/components/panel/profile/user/UpdateUserF
 import ShowUserDerailsComponent from "~/components/panel/profile/user/ShowUserDerailsComponent";
 import UserDerailsComponent from "~/components/panel/profile/user/UserDerailsComponent";
 import UserPaymentComponent from "~/components/panel/profile/payments/UserPaymentComponent";
+import DeleteUserModalComponent from "~/components/global/delete/DeleteUserModalComponent";
 
 export default {
   name: "profile.vue",
   layout: "panel",
   middleware: "auth",
   components: {
+    DeleteUserModalComponent,
     UserPaymentComponent,
     UserDerailsComponent,
     ShowUserDerailsComponent,

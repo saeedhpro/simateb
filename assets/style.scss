@@ -5,6 +5,14 @@ html, main {
   background: #F1F2F5 0 0 no-repeat padding-box;
 }
 
+.dir-rtl {
+  direction: rtl !important;
+}
+
+.dir-ltr {
+  direction: ltr !important;
+}
+
 * {
   font-family: IRANYekanRegular;
 }

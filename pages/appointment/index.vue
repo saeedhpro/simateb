@@ -559,7 +559,7 @@ export default {
       if (duration === 0) {
         duration = 20
       }
-      return moment(start, "HH:mm:ss").add((day - 1) * duration, "minutes").format("HH:mm:ss")
+      return moment.utc(start, "HH:mm:ss").locale("fa").add((day - 1) * duration, "minutes").format("HH:mm:ss")
     },
     calcDurations() {
       if (!this.workHour) {
@@ -572,7 +572,7 @@ export default {
       if (duration === 0) {
         duration = 20
       }
-      const d = moment.duration(moment(end, "HH:mm:ss").diff(moment(start, "HH:mm:ss"))).asMinutes()
+      const d = moment.duration(moment.utc(end, "HH:mm:ss").locale("fa").diff(moment.utc(start, "HH:mm:ss").locale("fa"))).asMinutes()
       this.durations = Math.ceil(d / duration)
     },
     calcList() {

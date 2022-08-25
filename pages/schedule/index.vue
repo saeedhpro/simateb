@@ -276,11 +276,11 @@
                     <td class="text-center">{{ (search.page - 1) * 10 + n + 1 | persianDigit }}</td>
                     <td class="text-center">
                       <span class="file-id">
-                        {{ i.start_at | toPersianDate('YYYY/MM/DD dddd') }}
+                        {{ $moment.utc(i.start_at).locale("fa").format("jYYYY/jMM/jDD HH:mm:ss") | toPersianDate('YYYY/MM/DD dddd') }}
                       </span>
                     </td>
                     <td class="text-center">
-                      {{ i.start_at | toPersianDate('HH:mm:ss') }}
+                      {{ $moment.utc(i.start_at).locale("fa").format("jYYYY/jMM/jDD HH:mm:ss") | toPersianDate('HH:mm:ss') }}
                     </td>
                     <td class="text-center">{{ i.count | persianDigit }}</td>
                     <td class="text-center flex flex-row justify-space-around align-center">

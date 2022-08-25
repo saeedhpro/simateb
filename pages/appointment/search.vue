@@ -251,9 +251,9 @@
                     </td>
                     <td class="text-center">{{ i.user && i.user.tel ? i.user.tel : '-' | persianDigit }}</td>
                     <td class="text-center">{{ i.user && i.user.file_id ? i.user.file_id : '-' | persianDigit }}</td>
-                    <td class="text-center">{{ $moment(i.start_at).format('jYYYY/jM/jDD') | persianDigit }}</td>
+                    <td class="text-center">{{ $moment.utc(i.start_at).locale("fa").format('jYYYY/jM/jDD') | persianDigit }}</td>
                     <td class="text-center">
-                      {{ $moment(i.start_at).format('HH:mm:ss') | persianDigit }}
+                      {{ $moment.utc(i.start_at).locale("fa").format('HH:mm:ss') | persianDigit }}
                     </td>
                     <td class="text-center">
                       <span

@@ -77,7 +77,7 @@
                     <span class="small">
                           تاریخ ویزیت:
                     </span>
-                    <span>{{ appointment.start_at | toPersianDate('dddd - DD MMMM') }}</span>
+                    <span>{{ $moment.utc(appointment.start_at).locale("fa").format("YYYY/MM/DD HH:mm:ss") | toPersianDate('dddd - DD MMMM') }}</span>
                   </div>
                   <div class="phone-box second">
                     <span class="small">

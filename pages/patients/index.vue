@@ -247,7 +247,6 @@
                                class="table-selectable-checkbox"
                                v-model="selectedUsers"
                                :value="i"
-                               :ripple="false"
                         />
                         <img :src="i.logo ? i.logo : 'https://randomuser.me/api/portraits/men/88.jpg'">
                         <span><nuxt-link :to="`/profile/${i.id}`">{{
@@ -260,11 +259,11 @@
                       class="text-center file-id">{{ i.file_id ? i.file_id : '-' | persianDigit }}</span></td>
                     <td class="text-center">{{ i.age ? i.age : '-' | persianDigit }}</td>
                     <td class="text-center" v-if="i.created">
-                      {{ i.created | toRelativeDate }}
+                      {{ $moment.utc(i.created).locale("fa").format("YYYY/MM/DD HH:mm:ss") | toRelativeDate }}
                     </td>
                     <td class="text-center" v-else>-</td>
                     <td class="text-center" v-if="i.last_login">
-                      {{ i.last_login | toRelativeDate }}
+                      {{ $moment.utc(i.last_login).locale("fa").format("YYYY/MM/DD HH:mm:ss")| toRelativeDate }}
                     </td>
                     <td class="text-center" v-else>-</td>
                   </tr>
@@ -302,11 +301,11 @@
                       class="text-center">{{ i.organization ? i.organization.name : '-' | persianDigit }}</span></td>
                     <td class="text-center">{{ i.age ? i.age : '-' | persianDigit }}</td>
                     <td class="text-center" v-if="i.created">
-                      {{ i.created | toRelativeDate }}
+                      {{ $moment.utc(i.created).locale("fa").format("YYYY/MM/DD HH:mm:ss") | toRelativeDate }}
                     </td>
                     <td class="text-center" v-else>-</td>
                     <td class="text-center" v-if="i.last_login">
-                      {{ i.last_login | toRelativeDate }}
+                      {{ $moment.utc(i.last_login).locale("fa").format("YYYY/MM/DD HH:mm:ss") | toRelativeDate }}
                     </td>
                     <td class="text-center" v-else>-</td>
                   </tr>

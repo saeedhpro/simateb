@@ -29,9 +29,16 @@
               md="6"
             >
               <div class="time-box">
-                <span>{{ created_at | toRelativeDate }}</span>
-                <span><span class="circle"></span>{{ created_at | toPersianDate('YYYY/MM/DD') }}<span
-                  class="circle"></span></span>
+                <span>
+                  {{
+                    $moment.utc(created_at).locale("fa").format("YYYY/MM/DD HH:mm:ss") | toRelativeDate
+                  }}
+                </span>
+                <span>
+                  <span class="circle"/>
+                  {{ $moment.utc(created_at).locale("fa").format("YYYY/MM/DD HH:mm:ss") | toPersianDate('YYYY/MM/DD') }}
+                  <span class="circle"/>
+                </span>
                 <span
                   v-if="resulted"
                   class="status-box resulted"
@@ -102,7 +109,7 @@
                     v-for="(i,n) in radiologyResultList"
                     :key="n"
                   >
-                    <img class="prescription-image" :src="i" alt="" >
+                    <img class="prescription-image" :src="i" alt="">
                   </v-col>
                 </v-row>
               </v-container>
