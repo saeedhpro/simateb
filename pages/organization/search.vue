@@ -510,8 +510,10 @@ export default {
     },
     closePazireshModal() {
       this.showPazireshModal = false
+      if (this.item) {
+        this.getAppointmentList()
+      }
       this.item = null
-      this.getAppointmentList()
     },
     toggleFilterModal() {
       this.showFilterModal = !this.showFilterModal
