@@ -218,6 +218,7 @@
                               <v-divider vertical/>
                               <div class="right">{{ selectedRightBottomDents.join(',') | persianDigit }}</div>
                             </div>
+                            <div class="remove-dents" @click="removeDents('Periapical')"><v-icon>mdi-close</v-icon></div>
                           </div>
                         </div>
                         <button class="radio-select-button" @click="showSelectDent('Periapical')">انتخاب</button>
@@ -404,6 +405,7 @@
                                   <v-divider vertical/>
                                   <div class="right">{{ selectedCBCTRightBottomDents.join(',') | persianDigit }}</div>
                                 </div>
+                                <div class="remove-dents" @click="removeDents('CBCT')"><v-icon>mdi-close</v-icon></div>
                               </div>
                             </div>
                             <button class="radio-select-button" @click="showSelectDent('CBCT')">انتخاب</button>
@@ -728,6 +730,35 @@ export default {
         }
       }
     },
+    removeDents(type) {
+      if(type === 'Periapical') {
+        let values = this.selectedRightTopDents.map(i => `${type}_${i}`)
+        this.cases = this.cases.filter(i => !values.includes(i))
+        this.selectedRightTopDents = []
+        values = this.selectedLeftTopDents.map(i => `${type}_${i}`)
+        this.cases = this.cases.filter(i => !values.includes(i))
+        this.selectedLeftTopDents = []
+        values = this.selectedRightBottomDents.map(i => `${type}_${i}`)
+        this.cases = this.cases.filter(i => !values.includes(i))
+        this.selectedRightBottomDents = []
+        values = this.selectedLeftBottomDents.map(i => `${type}_${i}`)
+        this.cases = this.cases.filter(i => !values.includes(i))
+        this.selectedLeftBottomDents = []
+      } else {
+        let values = this.selectedCBCTRightTopDents.map(i => `${type}_${i}`)
+        this.cases = this.cases.filter(i => !values.includes(i))
+        this.selectedCBCTRightTopDents = []
+        values = this.selectedCBCTLeftTopDents.map(i => `${type}_${i}`)
+        this.cases = this.cases.filter(i => !values.includes(i))
+        this.selectedCBCTLeftTopDents = []
+        values = this.selectedCBCTRightBottomDents.map(i => `${type}_${i}`)
+        this.cases = this.cases.filter(i => !values.includes(i))
+        this.selectedCBCTRightBottomDents = []
+        values = this.selectedCBCTLeftBottomDents.map(i => `${type}_${i}`)
+        this.cases = this.cases.filter(i => !values.includes(i))
+        this.selectedCBCTLeftBottomDents = []
+      }
+    }
   },
   computed: {
     show() {
@@ -742,6 +773,15 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+.selected-items-box {
+  position: relative;
+  padding-right: 10px;
+  .remove-dents {
+    position: absolute;
+    right: -10px;
+    top: 7px;
+    cursor: pointer;
+  }
+}
 </style>

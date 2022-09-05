@@ -236,7 +236,9 @@
                     </td>
                     <td class="text-center">{{ i.user && i.user.tel ? i.user.tel : '-' | persianDigit }}</td>
                     <td class="text-center">
-                      <span class="file-id cursor-pointer" @click="openAppointmentModal(i)">{{ i.user && i.user.file_id ? i.user.file_id : '-' | persianDigit }}</span>
+                      <span class="file-id cursor-pointer" @click="openAppointmentModal(i)">{{
+                          i.user && i.user.file_id ? i.user.file_id : '-' | persianDigit
+                        }}</span>
                     </td>
                     <td class="text-center">{{ i.user && i.case_type ? i.case_type : '-' | persianDigit }}</td>
                     <td class="text-center">
@@ -323,7 +325,9 @@
                     <td class="text-center"><span class="file-id">{{ i.code ? i.code : '-' | persianDigit }}</span></td>
                     <td class="text-center">
                       {{ $moment.utc(i.start_at).locale("fa").format("YYYY/MM/DD HH:mm:ss") | toRelativeDate }}
-                      {{ $moment.utc(i.start_at).locale("fa").format("YYYY/MM/DD HH:mm:ss") | toPersianDate('dddd DD MMMM') }}
+                      {{
+                        $moment.utc(i.start_at).locale("fa").format("YYYY/MM/DD HH:mm:ss") | toPersianDate('dddd DD MMMM')
+                      }}
                     </td>
                     <td class="text-center">{{ getCases(i) | persianDigit }}</td>
                     <td class="text-center">{{ i.organization ? i.organization.name : '-' | persianDigit }}</td>

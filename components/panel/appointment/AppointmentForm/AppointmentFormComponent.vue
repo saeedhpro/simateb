@@ -61,6 +61,12 @@
                         <span>{{ appointment.user ? `${appointment.user.tel}` : '-' | persianDigit }}</span>
                       </div>
                       <div class="phone-box second">
+                        <span class="small">شماره پرونده: </span>
+                        <span class="file-id">{{
+                            appointment.file_id ? appointment.file_id : '-' | persianDigit
+                          }}</span>
+                      </div>
+                      <div class="phone-box second">
                         <span class="small">کد پذیرش: </span>
                         <span>{{ appointment.user ? `${appointment.code}` : '-' | persianDigit }}</span>
                       </div>
@@ -77,13 +83,31 @@
                     <span class="small">
                           تاریخ ویزیت:
                     </span>
-                    <span>{{ $moment.utc(appointment.start_at).locale("fa").format("YYYY/MM/DD HH:mm:ss") | toPersianDate('dddd - DD MMMM') }}</span>
+                    <span>{{
+                        $moment.utc(appointment.start_at).locale("fa").format("YYYY/MM/DD HH:mm:ss") | toPersianDate('dddd - DD MMMM')
+                      }}</span>
                   </div>
-                  <div class="phone-box second">
+                  <div class="phone-box second" v-if="!isDoctor">
                     <span class="small">
                           پزشک:
                     </span>
                     <span>{{ appointment.organization ? appointment.organization.name : '-' | persianDigit }}</span>
+                  </div>
+                  <div class="phone-box second" v-else>
+                    <span class="small">
+                          ساعت:
+                    </span>
+                    <span>{{
+                        $moment.utc(appointment.start_at).locale("fa").format("HH:mm") | persianDigit
+                      }}</span>
+                  </div>
+                  <div class="phone-box second">
+                    <span class="small">
+                          علت مراجعه:
+                    </span>
+                    <span class="file-id">{{
+                        appointment.case_type ? appointment.case_type : '-' | persianDigit
+                      }}</span>
                   </div>
                   <div class="phone-box second">
                     <span class="small">
@@ -296,6 +320,47 @@
               class="my-5"
             />
             <v-row
+              v-if="isDoctor && resulted"
+            >
+              <v-col
+                cols="12"
+                sm="4"
+                md="2"
+              >
+                <div class="detail-box">
+                  <div class="phone-box">
+                    <span class="small">
+                      نتایج:
+                    </span>
+                  </div>
+                </div>
+              </v-col>
+              <v-col
+                cols="12"
+              >
+                <v-row>
+                  <v-col
+                    cols="12"
+                    sm="4"
+                    md="3"
+                    v-for="(r,n) in results"
+                    :key="n"
+                  >
+                    <img @click="openShowResult(r)" class="result-img" :src="r" alt=""/>
+                  </v-col>
+                  <v-col
+                    cols="12"
+                    sm="4"
+                    md="3"
+                    v-for="(r,n) in newFiles"
+                    :key="n + 1000"
+                  >
+                    <img @click="openShowResult(r)" class="result-img" :src="r" alt=""/>
+                  </v-col>
+                </v-row>
+              </v-col>
+            </v-row>
+            <v-row
               v-if="!isDoctor && admissioned"
             >
               <v-col
@@ -446,30 +511,30 @@
                       </div>
                     </button>
                   </template>
-                    <button
-                      class="action-bar-button"
-                      @click="doAction('accept')"
-                    >
-                      پذیرش
-                    </button>
-                    <button
-                      class="action-bar-button"
-                      @click="doAction('cancel')"
-                    >
-                      کنسل
-                    </button>
-                    <button
-                      class="action-bar-button"
-                      @click="doAction('reserve')"
-                    >
-                      رزرو
-                    </button>
-                    <button
-                      class="action-bar-button"
-                      @click="doAction('update')"
-                    >
-                      ذخیره
-                    </button>
+                  <button
+                    class="action-bar-button"
+                    @click="doAction('accept')"
+                  >
+                    پذیرش
+                  </button>
+                  <button
+                    class="action-bar-button"
+                    @click="doAction('cancel')"
+                  >
+                    کنسل
+                  </button>
+                  <button
+                    class="action-bar-button"
+                    @click="doAction('reserve')"
+                  >
+                    رزرو
+                  </button>
+                  <button
+                    class="action-bar-button"
+                    @click="doAction('update')"
+                  >
+                    ذخیره
+                  </button>
                 </v-menu>
               </v-col>
             </v-row>
@@ -900,6 +965,11 @@ export default {
       newFiles: [],
     }
   },
+  mounted() {
+    if (this.item && this.resulted) {
+      this.getResults()
+    }
+  },
   methods: {
     getResults() {
       this.$store.dispatch('appointments/getAppointmentResults', {
@@ -1316,7 +1386,9 @@ export default {
       } else if (profession_id === 3) {
         return this.appointment.r_admission_at !== null && this.appointment.r_result_at !== null
       } else {
-        return false
+        return (this.appointment.r_admission_at !== null && this.appointment.r_result_at !== null) ||
+          (this.appointment.l_admission_at !== null && this.appointment.l_result_at !== null) ||
+          (this.appointment.p_admission_at !== null && this.appointment.p_result_at !== null)
       }
     },
     admissioned() {

@@ -220,7 +220,6 @@
                                class="table-selectable-checkbox"
                                v-model="selectedItems"
                                :value="i"
-                               :ripple="false"
                         />
                         <img
                           :src="i.user && i.user.logo ? i.user.logo : 'https://randomuser.me/api/portraits/men/88.jpg'">
@@ -232,7 +231,8 @@
                       </div>
                     </td>
                     <td class="text-center">{{ i.user && i.user.tel ? i.user.tel : '-' | persianDigit }}</td>
-                    <td class="text-center"><span class="file-id">{{ i.user && i.user.file_id ? i.user.file_id : '-' | persianDigit }}</span></td>
+                    <td class="text-center"><span
+                      class="file-id">{{ i.user && i.user.file_id ? i.user.file_id : '-' | persianDigit }}</span></td>
                     <td class="text-center">{{ i.user && i.case_type ? i.case_type : '-' | persianDigit }}</td>
                     <td class="text-center">
                       {{ $moment.utc(i.start_at).locale("fa").format("HH:mm") | toPersianNumber }}
@@ -321,8 +321,10 @@
                     <td class="text-center">{{ i.user && i.user.tel ? i.user.tel : '-' | persianDigit }}</td>
                     <td class="text-center"><span class="file-id">{{ i.code ? i.code : '-' | persianDigit }}</span></td>
                     <td class="text-center">
-                      {{ $moment.utc(i.start_at).locale("fa").format("jYYYY/jMM/jDD HH:mm:ss") | toRelativeDate }}
-                      {{ $moment.utc(i.start_at).locale("fa").format("jYYYY/jMM/jDD HH:mm:ss") | toPersianDate('dddd DD MMMM') }}
+                      {{ $moment.utc(i.start_at).locale("fa").format("YYYY/MM/DD HH:mm:ss") | toRelativeDate }}
+                      {{
+                        $moment.utc(i.start_at).locale("fa").format("YYYY/MM/DD HH:mm:ss") | toPersianDate('dddd DD MMMM')
+                      }}
                     </td>
                     <td class="text-center">{{ getCases(i) | persianDigit }}</td>
                     <td class="text-center">{{ i.organization ? i.organization.name : '-' | persianDigit }}</td>
@@ -603,7 +605,7 @@ export default {
         return '-'
       }
     },
-    resulted(appointment) {
+    resulted(appointment, type) {
       const profession_id = this.loginUser.organization.profession_id;
       if (profession_id === 1) {
         return appointment.p_admission_at !== null && appointment.p_result_at !== null
@@ -612,7 +614,16 @@ export default {
       } else if (profession_id === 3) {
         return appointment.r_admission_at !== null && appointment.r_result_at !== null
       } else {
-        return false
+        switch (type) {
+          case 1:
+            return appointment.p_admission_at !== null && appointment.p_result_at !== null
+          case 2:
+            return appointment.l_admission_at !== null && appointment.l_result_at !== null
+          case 3:
+            return appointment.r_admission_at !== null && appointment.r_result_at !== null
+          default:
+            return false;
+        }
       }
     },
     admissioned(appointment) {
