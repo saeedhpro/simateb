@@ -172,6 +172,7 @@
                       >
                         <div
                           class="header-date"
+                          @click.native="openPazireshModal(`${year}/${month}/${i} ${getTime(i)}`)"
                         >
                           {{ getToday(i) }}
                           {{ i | toPersianNumber }}
