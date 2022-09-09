@@ -202,6 +202,7 @@
                           :day="j"
                           :month="month"
                           :year="year"
+                          @click.native="openPazireshModal(`${year}/${month}/${j} ${getTime(i)}`)"
                         />
                       </td>
                     </tr>
@@ -215,7 +216,9 @@
       </v-col>
     </v-row>
     <create-appointment-form-component
+      v-if="showPazireshModal"
       :open="showPazireshModal"
+      :init-time="initTime"
       @close="closePazireshModal"
     />
     <appointment-form-component
@@ -265,6 +268,7 @@ export default {
       showCreateModal: false,
       showHour: false,
       showCaseType: false,
+      initTime: '',
       item: null,
       hasItem: false,
       showWorkHour: false,
@@ -438,8 +442,12 @@ export default {
           }, 50)
         })
     },
+    openPazireshModal(i) {
+      this.initTime = moment.from(i, "fa", "jYYYY/jMM/jDD HH:mm:ss").locale("en").format("YYYY/MM/DD HH:mm:ss")
+      this.showPazireshModal = true
+    },
     toggleCreateModal() {
-      this.showCreateModal = !this.showCreateModal
+      this.showPazireshModal = !this.showPazireshModal
     },
     openItem(item) {
       this.item = item

@@ -224,11 +224,15 @@ export default {
       default: false,
       required: true,
     },
+    initTime: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
       appointment: {
-        start_at: this.$moment().format("YYYY/MM/DD HH:mm:ss"),
+        start_at: this.initTime ? this.initTime : this.$moment().format("YYYY/MM/DD HH:mm:ss"),
         tel: '',
         cardno: '',
         income: 0,
