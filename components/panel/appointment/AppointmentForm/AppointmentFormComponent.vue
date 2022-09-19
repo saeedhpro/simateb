@@ -427,13 +427,25 @@
                 cols="12"
                 sm="3"
                 md="3"
+                v-if="appointment.status === 0"
               >
                 <button
                   class="second-button"
                   @click="resetForm"
-                  v-if="appointment.status === 0"
                 >
                   پاک کردن فرم
+                </button>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="3"
+                md="3"
+              >
+                <button
+                  class="red-button action-button"
+                  @click="showRemoveAppointment"
+                >
+                  حذف
                 </button>
               </v-col>
               <v-spacer/>
@@ -1310,6 +1322,21 @@ export default {
     closeUpdateModal() {
       this.toggleUpdateModal()
       this.closeForm()
+    },
+    showRemoveAppointment() {
+      this.showDeleteApp = true
+    },
+    cancelRemoveAppointment() {
+      this.showDeleteApp = false
+    },
+    removeAppointment() {
+      this.$store.dispatch('appointments/removeAppointment', this.appointment.id)
+        .then(() => {
+          this.$emit('remove')
+        })
+        .finally(() => {
+          this.showDeleteApp = true
+        })
     }
   },
   computed: {
