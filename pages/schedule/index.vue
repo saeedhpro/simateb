@@ -228,8 +228,8 @@
           <v-row class="search-box">
             <v-col
               cols="12"
-              sm="4"
-              md="2"
+              sm="3"
+              md="1"
             >
               <div class="right-box">
                 <v-select
@@ -245,8 +245,8 @@
             </v-col>
             <v-col
               cols="12"
-              sm="4"
-              md="2"
+              sm="3"
+              md="1"
             >
               <div class="right-box">
                 <v-select
@@ -275,14 +275,16 @@
                   <tr v-for="(i, n) in schedules.data" :key="n">
                     <td class="text-center">{{ (search.page - 1) * 10 + n + 1 | persianDigit }}</td>
                     <td class="text-center">
-                      <span class="file-id">
-                        {{ $moment.utc(i.start_at).locale("fa").format("jYYYY/jMM/jDD HH:mm:ss") | toPersianDate('YYYY/MM/DD dddd') }}
+                      <span class="file-id vip">
+                        {{ $moment.utc(i.start_at).locale("fa").format("jYYYY/jMM/jDD HH:mm:ss") | toPersianDate('YYYY/MM/DD') }}
                       </span>
                     </td>
                     <td class="text-center">
                       {{ $moment.utc(i.start_at).locale("fa").format("jYYYY/jMM/jDD HH:mm:ss") | toPersianDate('HH:mm:ss') }}
                     </td>
                     <td class="text-center">{{ i.count | persianDigit }}</td>
+                    <td class="text-center">{{ i.site | persianDigit }}</td>
+                    <td class="text-center">{{ i.app | persianDigit }}</td>
                     <td class="text-center flex flex-row justify-space-around align-center">
                       <button @click="editSchedule(i)" class="action-buttons">
                         <v-icon size="16">mdi-pencil-outline</v-icon>
@@ -365,6 +367,8 @@ export default {
         start_at: schedule.start_at,
         end_at: schedule.end_at,
         count: schedule.count,
+        site: schedule.site,
+        app: schedule.app,
         organization_id: schedule.organization_id,
       }
       this.toggleCreateModal()
@@ -396,6 +400,8 @@ export default {
         start_at: this.form.start_at,
         end_at: this.form.end_at,
         count: parseInt(this.form.count),
+        site: parseInt(this.form.site),
+        app: parseInt(this.form.app),
         organization_id: this.form.organization_id ? parseInt(this.form.organization_id) : parseInt(this.loginUser.organization_id),
       })
         .then(() => {
@@ -440,7 +446,9 @@ export default {
         '',
         'تاریخ',
         'ساعت',
-        'تعداد',
+        'ظرفیت Doctor',
+        'ظرفیت Site',
+        'ظرفیت App',
         'عملیات',
       ],
       search: {
@@ -451,6 +459,8 @@ export default {
         start_at: '',
         end_at: '',
         count: 0,
+        site: 0,
+        app: 0,
         organization_id: null,
       },
       lastDay: 0,
