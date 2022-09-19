@@ -222,6 +222,7 @@
       :open="showAppointmentModal"
       :item="item"
       @close="closeAppointmentModal"
+      @remove="getAppointmentList"
     />
   </v-container>
 </template>

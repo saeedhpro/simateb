@@ -361,6 +361,7 @@
       :open="showPazireshModal"
       :item="item"
       @close="closePazireshModal"
+      @remove="getAppointmentList"
     />
     <admin-delete-users-component
       :open="showDelete"

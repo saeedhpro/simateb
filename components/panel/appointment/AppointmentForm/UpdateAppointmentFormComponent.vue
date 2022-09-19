@@ -387,11 +387,13 @@ export default {
     },
   },
   watch: {
-    user() {
-      this.appointment.file_id = this.user.file_id
-      this.appointment.cardno = this.user.cardno
-      this.appointment.user_id = this.user.id
-      this.appointment.tel = this.user.tel
+    user(user) {
+      if (user) {
+        this.appointment.file_id = this.user.file_id
+        this.appointment.cardno = this.user.cardno
+        this.appointment.user_id = this.user.id
+        this.appointment.tel = this.user.tel
+      }
     },
   }
 }

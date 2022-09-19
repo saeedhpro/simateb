@@ -1535,6 +1535,18 @@ table {
   width: 100%;
 }
 
+.remove-button {
+  border: 1px solid #F44336;
+  border-radius: 8px;
+  text-align: center;
+  font: normal normal normal 16px/28px IRANYekanRegular !important;
+  letter-spacing: 0;
+  padding: 8px 28px;
+  width: 100%;
+  background: #F44336 0 0 no-repeat padding-box;
+  color: #FFFFFF;
+}
+
 .main-button {
   background: #5063FF 0 0 no-repeat padding-box !important;
   border-radius: 8px !important;
@@ -1897,6 +1909,7 @@ table {
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
   }
 }
 
