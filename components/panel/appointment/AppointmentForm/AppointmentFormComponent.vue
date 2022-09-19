@@ -425,8 +425,8 @@
             >
               <v-col
                 cols="12"
-                sm="3"
-                md="3"
+                sm="2"
+                md="2"
                 v-if="appointment.status === 0"
               >
                 <button
@@ -438,11 +438,11 @@
               </v-col>
               <v-col
                 cols="12"
-                sm="3"
-                md="3"
+                sm="2"
+                md="2"
               >
                 <button
-                  class="red-button action-button"
+                  class="remove-button"
                   @click="showRemoveAppointment"
                 >
                   حذف
@@ -748,6 +748,13 @@
       :item="item"
       @close="closeUpdateModal"
     />
+
+    <delete-user-modal-component
+      :title="'پذیرش'"
+      :open="showDeleteApp"
+      @close="cancelRemoveAppointment"
+      @remove="removeAppointment"
+    />
   </div>
 </template>
 
@@ -761,10 +768,12 @@ import ReferBoxComponent from "~/components/panel/appointment/AppointmentForm/Re
 import CropImageComponent from "~/components/panel/global/CropImageComponent";
 import UpdateAppointmentFormComponent
   from "~/components/panel/appointment/AppointmentForm/UpdateAppointmentFormComponent";
+import DeleteUserModalComponent from "~/components/global/delete/DeleteUserModalComponent";
 
 export default {
   name: "AppointmentFormComponent",
   components: {
+    DeleteUserModalComponent,
     UpdateAppointmentFormComponent,
     ReferBoxComponent,
     WireBoxComponent,
@@ -792,6 +801,7 @@ export default {
       doctorPrescription: false,
       pType: 'prescription',
       file: null,
+      showDeleteApp: false,
       showFile: false,
       statuses: [
         {
@@ -1330,8 +1340,11 @@ export default {
       this.showDeleteApp = false
     },
     removeAppointment() {
-      this.$store.dispatch('appointments/removeAppointment', this.appointment.id)
+      this.$store.dispatch('appointments/deleteAppointments', {
+        ids: [this.appointment.id]
+      })
         .then(() => {
+          this.closeForm()
           this.$emit('remove')
         })
         .finally(() => {

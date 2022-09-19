@@ -172,7 +172,7 @@
                       >
                         <div
                           class="header-date"
-                          @click.native="openPazireshModal(`${year}/${month}/${i} ${getTime(i)}`)"
+                          @click="openPazireshModal(`${year}/${month}/${i} ${getTime(i)}`)"
                         >
                           {{ getToday(i) }}
                           {{ i | toPersianNumber }}
@@ -226,6 +226,7 @@
       :open="showAppointmentModal"
       :item="item"
       @close="closeAppointmentModal"
+      @remove="getAppointmentList"
     />
     <work-hour-component
       :open="showWorkHour"

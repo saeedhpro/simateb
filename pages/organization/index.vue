@@ -365,6 +365,7 @@
         :open="showAppointmentModal"
         :item="item"
         @close="closeAppointmentModal"
+        @remove="paginate"
       />
       <admin-delete-users-component
         :open="showDelete"

@@ -38,6 +38,7 @@
       :open="showUpdateModal"
       :item="item"
       @close="closeUpdateModal"
+      @remove="paginate"
     />
   </div>
 </template>
@@ -66,8 +67,9 @@ export default {
     this.getUserAppointmentsList(this.userId, this.page)
   },
   methods: {
-    paginate() {
-      this.getUserAppointmentsList(this.userId, this.page)
+    paginate(page) {
+      this.page = page
+      this.getUserAppointmentsList(this.userId, page)
     },
     getUserAppointmentsList(id, page) {
       this.$store.dispatch('appointments/getUserAppointmentsList', {
