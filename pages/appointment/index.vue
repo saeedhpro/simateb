@@ -10,7 +10,7 @@
             <span class="title">جدول نوبت دهی</span>
           </nuxt-link>
           <nuxt-link to="/appointment/search" class="page-header">
-            <img src="/images/pages/users.svg" alt="users">
+            <img src="/images/pages/search-icon.svg" alt="users">
             <span class="title">جستجو نوبت ها</span>
           </nuxt-link>
           <nuxt-link to="/appointment/surgeries" class="page-header">
@@ -38,8 +38,8 @@
           <v-row class="search-box">
             <v-col
               cols="12"
-              sm="4"
-              md="2"
+              sm="2"
+              md="1"
             >
               <div class="right-box">
                 <v-select
@@ -55,8 +55,8 @@
             </v-col>
             <v-col
               cols="12"
-              sm="4"
-              md="2"
+              sm="2"
+              md="1"
             >
               <div class="right-box">
                 <v-select
@@ -72,8 +72,8 @@
             </v-col>
             <v-col
               cols="12"
-              sm="4"
-              md="2"
+              sm="3"
+              md="1"
             >
               <div class="right-box">
                 <div class="mt-4 tafkik">نمایش به تفکیک:</div>
@@ -81,8 +81,8 @@
             </v-col>
             <v-col
               cols="12"
-              sm="4"
-              md="2"
+              sm="3"
+              md="1"
             >
               <div class="right-box">
                 <button
@@ -96,8 +96,8 @@
             </v-col>
             <v-col
               cols="12"
-              sm="4"
-              md="2"
+              sm="3"
+              md="1"
             >
               <div class="right-box">
                 <button
@@ -109,6 +109,7 @@
                 </button>
               </div>
             </v-col>
+            <v-spacer v-if="!mini" />
             <v-col
               cols="12"
               sm="4"
@@ -172,6 +173,7 @@
                       >
                         <div
                           class="header-date"
+                          :class="{'is-today': isToday(i)}"
                           @click="openPazireshModal(`${year}/${month}/${i} ${getTime(i)}`)"
                         >
                           {{ getToday(i) }}
@@ -190,6 +192,7 @@
                       >
                         <table-appointment-component
                           v-if="list[j - 1] && list[j - 1][i - 1]"
+                          :class="{'is-today': isToday(j)}"
                           :item="list[j - 1][i - 1]"
                           :day="j"
                           :month="month"
@@ -198,6 +201,7 @@
                         />
                         <table-appointment-none-component
                           v-else
+                          :class="{'is-today': isToday(j)}"
                           :start-at="getTime(i)"
                           :show-hour="showHour"
                           :day="j"
@@ -560,6 +564,11 @@ export default {
     },
     getToday(day) {
       return moment.from(`${this.year}/${this.month}/${day}`, "fa", "jYYYY/jMM/jDD").locale("fa").format("dddd");
+    },
+    isToday(day) {
+      const d = moment.from(`${this.year}/${this.month}/${day}`, "fa", "jYYYY/jMM/jDD").locale("en").format("YYYY/MM/DD");
+      const now = moment().locale("en").format("YYYY/MM/DD");
+      return d.normalize() === now.normalize()
     },
     getTime(day) {
       const wh = this.workHour

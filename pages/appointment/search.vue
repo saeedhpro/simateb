@@ -10,7 +10,7 @@
             <span class="title">جدول نوبت دهی</span>
           </nuxt-link>
           <nuxt-link to="/appointment/search" class="page-header">
-            <img src="/images/pages/users.svg" alt="users">
+            <img src="/images/pages/search-icon.svg" alt="users">
             <span class="title">جستجو نوبت ها</span>
           </nuxt-link>
           <nuxt-link to="/appointment/surgeries" class="page-header">
