@@ -1345,6 +1345,7 @@ export default {
       })
         .then(() => {
           this.closeForm()
+          this.showDeleteApp = false
           this.$emit('remove')
         })
         .finally(() => {
