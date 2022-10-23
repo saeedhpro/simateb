@@ -12,6 +12,9 @@ export const mutations = {
   },
   setUser(state, user) {
     state.user = user
+  },
+  setOrganizationCases(state, cases) {
+    state.user.organization.case_type = cases
   }
 }
 
@@ -39,7 +42,7 @@ export const actions = {
     ctx.commit('setUser', null)
     this.$axios.setHeader('Authorization', `Bearer`)
     this.$cookies.set('access_token', null)
-  }
+  },
 }
 
 export const getters = {

@@ -72,6 +72,16 @@ export const actions = {
         return Promise.reject(err)
       })
   },
+  updateOrganizationCases(ctx, data) {
+    return this.$axios.put(`/organizations/${data.id}/cases`, data)
+      .then(res => {
+        ctx.commit('login/setOrganizationCases', data.cases);
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
   updateOrganizationWorkHour(ctx, data) {
     return this.$axios.put(`/organizations/${data.organization_id}/work`, data)
       .then(res => {

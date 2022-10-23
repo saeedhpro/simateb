@@ -12,203 +12,12 @@
           </span>
           </div>
           <v-divider inset/>
-          <v-dialog
-            v-model="showCreateModal"
-            max-width="1056px"
-            persistent
+          <div class="page-actions second-button"
+               @click="openCasesModal"
           >
-            <v-card
-              class="create-update-modal"
-            >
-              <v-card-title
-                class="create-update-modal-title-box"
-              >
-                <div class="create-update-modal-title">
-                  <button
-                    @click="closeForm"
-                    class="create-update-modal-close"
-                  >
-                    <v-icon>mdi-close</v-icon>
-                  </button>
-                  <span>فرم ایجاد نوبت دهی اینترنتی (VIP)</span>
-                </div>
-                <v-spacer/>
-                <div class="create-update-modal-regbox">
-                  ثبت در سیستم توسط: {{ `${loginUser.staff.lname} ${loginUser.staff.fname}` }}
-                  ({{ loginUser.created | toRelativeDate }} {{
-                    loginUser.created | toPersianDate('YYYY/MM/DD HH:mm:ss')
-                  }})
-                </div>
-              </v-card-title>
-              <v-card-text>
-                <v-container>
-                  <v-row>
-                    <v-col
-                      cols="12"
-                      sm="6"
-                      md="6"
-                    >
-                      <div class="create-update-model-input-box">
-                        <label>عنوان</label>
-                        <input type="text" v-model="form.name">
-                      </div>
-                    </v-col>
-                    <v-col
-                      cols="12"
-                      sm="6"
-                      md="6"
-                    >
-                      <div class="create-update-model-input-box">
-                        <label>مدت زمان ویزیت (دقیقه)</label>
-                        <input type="number" v-model="form.duration">
-                      </div>
-                    </v-col>
-                    <v-col
-                      cols="12"
-                      sm="6"
-                      md="6"
-                    >
-                      <div class="create-update-model-input-box">
-                        <custom-radio-box
-                          v-model="form.is_limited"
-                          label="دارای محدودیت"
-                          :rtl="true"
-                        />
-                      </div>
-                    </v-col>
-                    <v-col
-                      cols="12"
-                      sm="6"
-                      md="6"
-                      v-if="form.is_limited"
-                    >
-                      <div class="create-update-model-input-box">
-                        <label>میزان محدودیت (در صورت تمایل)</label>
-                        <input type="number" v-model="form.limitation">
-                      </div>
-                    </v-col>
-                  </v-row>
-                </v-container>
-              </v-card-text>
-              <v-card-actions>
-                <v-container>
-                  <v-row>
-                    <v-col
-                      cols="12"
-                      sm="3"
-                      md="3"
-                    >
-                      <button
-                        class="second-button"
-                        @click="clearForm"
-                      >
-                        پاک کردن فرم
-                      </button>
-                    </v-col>
-                    <v-spacer/>
-                    <v-col
-                      cols="12"
-                      sm="3"
-                      md="3"
-                    >
-                      <button
-                        class="second-button"
-                        @click="closeForm"
-                      >
-                        بستن
-                      </button>
-                    </v-col>
-                    <v-col
-                      cols="12"
-                      sm="4"
-                      md="4"
-                    >
-                      <button
-                        class="main-button"
-                        @click="createSchedule"
-                      >
-                        ذخیره
-                      </button>
-                    </v-col>
-                  </v-row>
-                </v-container>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
-          <v-dialog
-            v-model="showRemoveItemModal"
-            max-width="648px"
-            persistent
-          >
-            <v-card
-              class="create-update-modal"
-            >
-              <v-card-title
-                class="create-update-modal-title-box"
-              >
-                <div class="create-update-modal-title">
-                  <button
-                    @click="cancelRemoveItem"
-                    class="create-update-modal-close"
-                  >
-                    <v-icon>mdi-close</v-icon>
-                  </button>
-                </div>
-                <v-spacer/>
-              </v-card-title>
-              <v-card-text>
-                <v-container>
-                  <v-row>
-                    <v-col
-                      cols="12"
-                      sm="12"
-                      md="12"
-                    >
-                      <div class="create-update-model-input-title">عنوان</div>
-                    </v-col>
-                    <v-col
-                      cols="12"
-                      sm="12"
-                      md="12"
-                    >
-                      <div class="create-update-model-input-description">آیا از حذف کردن این پذیرش vip اطمینان دارید؟
-                      </div>
-                    </v-col>
-                  </v-row>
-                </v-container>
-              </v-card-text>
-              <v-card-actions>
-                <v-container>
-                  <v-row>
-                    <v-col
-                      cols="12"
-                      sm="6"
-                      md="6"
-                    >
-                      <button
-                        class="second-false-button"
-                        @click="cancelRemoveItem"
-                      >
-                        خیر
-                      </button>
-                    </v-col>
-                    <v-col
-                      cols="12"
-                      sm="6"
-                      md="6"
-                    >
-                      <button
-                        class="main-false-button"
-                        @click="removeItem"
-                      >
-                        بله، حذف کن
-                      </button>
-                    </v-col>
-                  </v-row>
-                </v-container>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
+            <img src="/images/pages/plus-out.svg" alt="organizations">
+            <span class="title">خدمات</span>
+          </div>
           <div class="page-actions"
                @click="createModal"
           >
@@ -276,11 +85,15 @@
                     <td class="text-center">{{ (search.page - 1) * 10 + n + 1 | persianDigit }}</td>
                     <td class="text-center">
                       <span class="file-id vip">
-                        {{ $moment.utc(i.start_at).locale("fa").format("jYYYY/jMM/jDD HH:mm:ss") | toPersianDate('YYYY/MM/DD') }}
+                        {{
+                          $moment.utc(i.start_at).locale("fa").format("jYYYY/jMM/jDD HH:mm:ss") | toPersianDate('YYYY/MM/DD')
+                        }}
                       </span>
                     </td>
                     <td class="text-center">
-                      {{ $moment.utc(i.start_at).locale("fa").format("jYYYY/jMM/jDD HH:mm:ss") | toPersianDate('HH:mm:ss') }}
+                      {{
+                        $moment.utc(i.start_at).locale("fa").format("jYYYY/jMM/jDD HH:mm:ss") | toPersianDate('HH:mm:ss')
+                      }}
                     </td>
                     <td class="text-center">{{ i.count | persianDigit }}</td>
                     <td class="text-center">{{ i.site | persianDigit }}</td>
@@ -308,6 +121,294 @@
         </v-card>
       </v-col>
     </v-row>
+    <v-dialog
+      v-model="showCreateModal"
+      max-width="1056px"
+      persistent
+    >
+      <v-card
+        class="create-update-modal"
+      >
+        <v-card-title
+          class="create-update-modal-title-box"
+        >
+          <div class="create-update-modal-title">
+            <button
+              @click="closeForm"
+              class="create-update-modal-close"
+            >
+              <v-icon>mdi-close</v-icon>
+            </button>
+            <span>فرم ایجاد نوبت دهی اینترنتی (VIP)</span>
+          </div>
+          <v-spacer/>
+          <div class="create-update-modal-regbox">
+            ثبت در سیستم توسط: {{ `${loginUser.staff.lname} ${loginUser.staff.fname}` }}
+            ({{ loginUser.created | toRelativeDate }} {{
+              loginUser.created | toPersianDate('YYYY/MM/DD HH:mm:ss')
+            }})
+          </div>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col
+                cols="12"
+                sm="6"
+                md="6"
+              >
+                <div class="create-update-model-input-box">
+                  <label>عنوان</label>
+                  <input type="text" v-model="form.name">
+                </div>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="6"
+                md="6"
+              >
+                <div class="create-update-model-input-box">
+                  <label>مدت زمان ویزیت (دقیقه)</label>
+                  <input type="number" v-model="form.duration">
+                </div>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="6"
+                md="6"
+              >
+                <div class="create-update-model-input-box">
+                  <custom-radio-box
+                    v-model="form.is_limited"
+                    label="دارای محدودیت"
+                    :rtl="true"
+                  />
+                </div>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="6"
+                md="6"
+                v-if="form.is_limited"
+              >
+                <div class="create-update-model-input-box">
+                  <label>میزان محدودیت (در صورت تمایل)</label>
+                  <input type="number" v-model="form.limitation">
+                </div>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-container>
+            <v-row>
+              <v-col
+                cols="12"
+                sm="3"
+                md="3"
+              >
+                <button
+                  class="second-button"
+                  @click="clearForm"
+                >
+                  پاک کردن فرم
+                </button>
+              </v-col>
+              <v-spacer/>
+              <v-col
+                cols="12"
+                sm="3"
+                md="3"
+              >
+                <button
+                  class="second-button"
+                  @click="closeForm"
+                >
+                  بستن
+                </button>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="4"
+                md="4"
+              >
+                <button
+                  class="main-button"
+                  @click="createSchedule"
+                >
+                  ذخیره
+                </button>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog
+      v-model="showRemoveItemModal"
+      max-width="648px"
+      persistent
+    >
+      <v-card
+        class="create-update-modal"
+      >
+        <v-card-title
+          class="create-update-modal-title-box"
+        >
+          <div class="create-update-modal-title">
+            <button
+              @click="cancelRemoveItem"
+              class="create-update-modal-close"
+            >
+              <v-icon>mdi-close</v-icon>
+            </button>
+          </div>
+          <v-spacer/>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col
+                cols="12"
+                sm="12"
+                md="12"
+              >
+                <div class="create-update-model-input-title">عنوان</div>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="12"
+                md="12"
+              >
+                <div class="create-update-model-input-description">آیا از حذف کردن این پذیرش vip اطمینان دارید؟
+                </div>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-container>
+            <v-row>
+              <v-col
+                cols="12"
+                sm="6"
+                md="6"
+              >
+                <button
+                  class="second-false-button"
+                  @click="cancelRemoveItem"
+                >
+                  خیر
+                </button>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="6"
+                md="6"
+              >
+                <button
+                  class="main-false-button"
+                  @click="removeItem"
+                >
+                  بله، حذف کن
+                </button>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog
+      v-model="showCasesModal"
+      max-width="1056px"
+      persistent
+    >
+      <v-card
+        class="create-update-modal"
+      >
+        <v-card-title
+          class="create-update-modal-title-box"
+        >
+          <div class="create-update-modal-title">
+            <button
+              @click="closeCasesModal"
+              class="create-update-modal-close"
+            >
+              <v-icon>mdi-close</v-icon>
+            </button>
+            <span>خدمات</span>
+          </div>
+          <v-spacer/>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <div class="inline-input-btn">
+              <div class="create-update-model-input-box d-inline-flex">
+                <label>عنوان خدمت</label>
+                <input type="text" v-model="case_type">
+              </div>
+              <div class="page-actions second-button inline-btn"
+                   @click="addCaseType"
+              >
+                <img src="/images/pages/plus-out.svg" alt="organizations">
+                <span class="title">{{ editCT ? 'ویرایش' : 'افزودن' }}</span>
+              </div>
+            </div>
+            <v-divider class="mt-4"/>
+            <div class="case-type-list">
+              <div class="case-type-item" v-for="(c, i) in case_types" :key="i">
+                <div class="case-item-name">
+                  {{ c | toPersianNumber }}
+                </div>
+                <div class="case-actions text-center flex flex-row justify-space-around align-center">
+                  <button @click="editCaseType(c, i)" class="action-buttons">
+                    <v-icon size="16">mdi-pencil-outline</v-icon>
+                    <span>ویرایش</span>
+                  </button>
+                  <button
+                    @click="showRemoveCaseType(c)"
+                    class="action-buttons">
+                    <v-icon size="16">mdi-trash-can-outline</v-icon>
+                    <span>حذف</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-container>
+            <v-row>
+              <v-spacer/>
+              <v-col
+                cols="12"
+                sm="3"
+                md="3"
+              >
+                <button
+                  class="second-button"
+                  @click="closeCasesModal"
+                >
+                  بستن
+                </button>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="4"
+                md="4"
+              >
+                <button
+                  class="main-button"
+                  @click="saveCases"
+                >
+                  ذخیره
+                </button>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -327,8 +428,21 @@ export default {
     this.year = year
     this.month = month
     this.paginate()
+    this.setCases()
   },
   methods: {
+    setCases() {
+      const cases = this.loginUser.organization.case_types;
+      this.case_types = cases.split(",")
+    },
+    showRemoveCaseType(c) {
+      this.case_types = this.case_types.filter(i => i != c)
+    },
+    editCaseType(c, i) {
+      this.case_type = c
+      this.editCT = true
+      this.editCTI = i
+    },
     getScheduleList() {
       this.$store.dispatch('schedule/getList', {
         ...this.search,
@@ -435,13 +549,51 @@ export default {
         end,
       }
     },
+    openCasesModal() {
+      this.showCasesModal = true
+    },
+    closeCasesModal() {
+      this.showCasesModal = false
+      this.case_type = ''
+      this.setCases()
+    },
+    addCaseType() {
+      if (!this.case_type) return
+      if (!this.editCT) {
+        this.case_types.push(this.case_type)
+        this.case_type = ''
+      } else {
+        this.case_types[this.editCTI] = this.case_type
+        this.case_type = ''
+        this.editCT = false
+        this.editCTI = 0
+      }
+    },
+    saveCases() {
+      this.$store.dispatch('organizations/updateOrganizationCases', {
+        id: this.loginUser.organization.id,
+        cases: this.case_types.join(",")
+      })
+        .catch(err => {
+          console.log(err)
+          this.setCases()
+        })
+        .finally(() => {
+          this.showCasesModal = false
+        })
+    }
   },
   data() {
     return {
       moment: moment,
       showCreateModal: false,
+      showCasesModal: false,
       showRemoveItemModal: false,
       create: false,
+      editCT: false,
+      editCTI: 0,
+      case_type: '',
+      case_types: [],
       headers: [
         '',
         'تاریخ',
@@ -538,6 +690,53 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.case-type-list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
 
+  .case-type-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+
+    .case-item-name {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-start;
+      margin: 5px;
+      padding: 5px;
+      width: 100%;
+    }
+
+    .case-actions {
+      width: 230px;
+    }
+  }
+}
+
+.inline-input-btn {
+  display: flex;
+  align-items: flex-end;
+  flex-direction: row;
+}
+
+.inline-btn {
+  max-width: 200px;
+  min-width: 100px;
+  margin-right: 10px;
+}
+
+.case-item-name {
+  background: #E6E6E6 0 0 no-repeat padding-box;
+  border-radius: 8px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+}
 </style>
