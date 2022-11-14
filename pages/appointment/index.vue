@@ -583,7 +583,7 @@ export default {
       this.appointment.case_type = item.checked ? item.name : ''
     },
     getToday(day) {
-      return moment.from(`${this.year}/${this.month}/${day}`, "fa", "jYYYY/jMM/jDD").local("fa").format("dddd");
+      return moment.from(`${this.year}/${this.month}/${day}`, "fa", "jYYYY/jMM/jDD").locale("fa").format("dddd");
     },
     isToday(day) {
       const d = moment.from(`${this.year}/${this.month}/${day}`, "fa", "jYYYY/jMM/jDD").locale("en").format("YYYY/MM/DD");
