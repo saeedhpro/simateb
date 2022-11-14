@@ -262,7 +262,7 @@ export default {
     resetForm() {
       this.appointment = {
         id: this.item.id,
-        start_at: this.item.start_at,
+        start_at: this.$moment.utc(this.item.start_at).local().format("YYYY/MM/DD HH:mm:ss"),
         tel: this.item.user.tel,
         cardno: this.item.user.cardno,
         income: this.item.user.income,
