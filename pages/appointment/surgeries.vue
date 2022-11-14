@@ -496,7 +496,7 @@ export default {
       }
     },
     isBetween(date, start, end) {
-      return moment(date, "YYYY/MM/DD HH:mm:ss").locale("fa")
+      return moment(date, "YYYY/MM/DD HH:mm:ss").local()
         .isBetween(moment(start, "YYYY/MM/DD HH:mm:ss"),
           moment(end, "YYYY/MM/DD HH:mm:ss"))
     },
@@ -537,7 +537,7 @@ export default {
       return d.normalize() === now.normalize()
     },
     getToday(day) {
-      return moment.from(`${this.year}/${this.month}/${day}`, "fa", "YYYY/MM/DD").locale("fa").format("dddd");
+      return moment.from(`${this.year}/${this.month}/${day}`, "fa", "YYYY/MM/DD").local().format("dddd");
     },
     getTime(day) {
       const wh = this.que.work_hour

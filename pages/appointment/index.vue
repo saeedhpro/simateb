@@ -469,7 +469,7 @@ export default {
         })
     },
     openPazireshModal(i) {
-      this.initTime = moment.from(i, "fa", "jYYYY/jMM/jDD HH:mm:ss").locale("en").format("YYYY/MM/DD HH:mm:ss")
+      this.initTime = moment.from(i, "fa", "jYYYY/jMM/jDD HH:mm:ss").locale("en").local().format("YYYY/MM/DD HH:mm:ss")
       this.showPazireshModal = true
     },
     toggleCreateModal() {
@@ -537,7 +537,7 @@ export default {
       }
     },
     isBetween(date, start, end) {
-      return moment(date, "YYYY/MM/DD HH:mm:ss").locale("fa")
+      return moment(date, "YYYY/MM/DD HH:mm:ss").local()
         .isBetween(moment(start, "YYYY/MM/DD HH:mm:ss"),
           moment(end, "YYYY/MM/DD HH:mm:ss"))
     },
@@ -583,7 +583,7 @@ export default {
       this.appointment.case_type = item.checked ? item.name : ''
     },
     getToday(day) {
-      return moment.from(`${this.year}/${this.month}/${day}`, "fa", "jYYYY/jMM/jDD").locale("fa").format("dddd");
+      return moment.from(`${this.year}/${this.month}/${day}`, "fa", "jYYYY/jMM/jDD").local().format("dddd");
     },
     isToday(day) {
       const d = moment.from(`${this.year}/${this.month}/${day}`, "fa", "jYYYY/jMM/jDD").locale("en").format("YYYY/MM/DD");
@@ -598,7 +598,7 @@ export default {
       if (duration === 0) {
         duration = 20
       }
-      return moment.utc(start, "HH:mm:ss").locale("fa").add((day - 1) * duration, "minutes").format("HH:mm:ss")
+      return moment.utc(start, "HH:mm:ss").local().add((day - 1) * duration, "minutes").format("HH:mm:ss")
     },
     calcDurations() {
       if (!this.workHour) {
@@ -611,7 +611,7 @@ export default {
       if (duration === 0) {
         duration = 20
       }
-      const d = moment.duration(moment.utc(end, "HH:mm:ss").locale("fa").diff(moment.utc(start, "HH:mm:ss").locale("fa"))).asMinutes()
+      const d = moment.duration(moment.utc(end, "HH:mm:ss").local().diff(moment.utc(start, "HH:mm:ss").local())).asMinutes()
       this.durations = Math.ceil(d / duration)
     },
     calcList() {
@@ -665,6 +665,9 @@ export default {
     }
   },
   computed: {
+    mini() {
+      return this.$vuetify.breakpoint.mdAndDown
+    },
     loginUser() {
       return this.$store.getters['login/getUser']
     },

@@ -86,13 +86,13 @@
                     <td class="text-center">
                       <span class="file-id vip">
                         {{
-                          $moment.utc(i.start_at).locale("fa").format("jYYYY/jMM/jDD HH:mm:ss") | toPersianDate('YYYY/MM/DD')
+                          $moment.utc(i.start_at).local().format("jYYYY/jMM/jDD HH:mm:ss") | toPersianDate('YYYY/MM/DD')
                         }}
                       </span>
                     </td>
                     <td class="text-center">
                       {{
-                        $moment.utc(i.start_at).locale("fa").format("jYYYY/jMM/jDD HH:mm:ss") | toPersianDate('HH:mm:ss')
+                        $moment.utc(i.start_at).local().format("jYYYY/jMM/jDD HH:mm:ss") | toPersianDate('HH:mm:ss')
                       }}
                     </td>
                     <td class="text-center">{{ i.count | persianDigit }}</td>
@@ -423,8 +423,8 @@ export default {
   middleware: "auth",
   components: {CustomRadioBox, DataTableComponent},
   mounted() {
-    const year = parseInt(moment().locale("fa").format("jYYYY"))
-    const month = parseInt(moment().locale("fa").format("jMM"))
+    const year = parseInt(moment().local().format("jYYYY"))
+    const month = parseInt(moment().local().format("jMM"))
     this.year = year
     this.month = month
     this.paginate()

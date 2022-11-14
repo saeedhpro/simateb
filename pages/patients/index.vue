@@ -259,11 +259,11 @@
                       class="text-center file-id">{{ i.file_id ? i.file_id : '-' | persianDigit }}</span></td>
                     <td class="text-center">{{ i.age ? i.age : '-' | persianDigit }}</td>
                     <td class="text-center" v-if="i.created">
-                      {{ $moment.utc(i.created).locale("fa").format("YYYY/MM/DD HH:mm:ss") | toRelativeDate }}
+                      {{ $moment.utc(i.created).local().format("YYYY/MM/DD HH:mm:ss") | toRelativeDate }}
                     </td>
                     <td class="text-center" v-else>-</td>
                     <td class="text-center" v-if="i.last_login">
-                      {{ $moment.utc(i.last_login).locale("fa").format("YYYY/MM/DD HH:mm:ss")| toRelativeDate }}
+                      {{ $moment.utc(i.last_login).local().format("YYYY/MM/DD HH:mm:ss")| toRelativeDate }}
                     </td>
                     <td class="text-center" v-else>-</td>
                   </tr>
@@ -301,11 +301,11 @@
                       class="text-center">{{ i.organization ? i.organization.name : '-' | persianDigit }}</span></td>
                     <td class="text-center">{{ i.age ? i.age : '-' | persianDigit }}</td>
                     <td class="text-center" v-if="i.created">
-                      {{ $moment.utc(i.created).locale("fa").format("YYYY/MM/DD HH:mm:ss") | toRelativeDate }}
+                      {{ $moment.utc(i.created).local().format("YYYY/MM/DD HH:mm:ss") | toRelativeDate }}
                     </td>
                     <td class="text-center" v-else>-</td>
                     <td class="text-center" v-if="i.last_login">
-                      {{ $moment.utc(i.last_login).locale("fa").format("YYYY/MM/DD HH:mm:ss") | toRelativeDate }}
+                      {{ $moment.utc(i.last_login).local().format("YYYY/MM/DD HH:mm:ss") | toRelativeDate }}
                     </td>
                     <td class="text-center" v-else>-</td>
                   </tr>

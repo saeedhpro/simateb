@@ -232,7 +232,7 @@ export default {
   data() {
     return {
       appointment: {
-        start_at: this.initTime ? this.initTime : this.$moment().format("YYYY/MM/DD HH:mm:ss"),
+        start_at: this.initTime ? this.initTime : this.$moment.utc().local().format("jYYYY/jMM/jDD HH:mm:ss"),
         tel: '',
         cardno: '',
         income: 0,
@@ -250,6 +250,9 @@ export default {
       user: null,
       showAcceptModal: false,
     }
+  },
+  mounted() {
+    console.log(this.initTime, "iii")
   },
   methods: {
     closeForm() {

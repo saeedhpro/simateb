@@ -31,12 +31,12 @@
               <div class="time-box">
                 <span>
                   {{
-                    $moment.utc(created_at).locale("fa").format("YYYY/MM/DD HH:mm:ss") | toRelativeDate
+                    $moment.utc(created_at).local().format("YYYY/MM/DD HH:mm:ss") | toRelativeDate
                   }}
                 </span>
                 <span>
                   <span class="circle"/>
-                  {{ $moment.utc(created_at).locale("fa").format("YYYY/MM/DD HH:mm:ss") | toPersianDate('YYYY/MM/DD') }}
+                  {{ $moment.utc(created_at).local().format("YYYY/MM/DD HH:mm:ss") | toPersianDate('YYYY/MM/DD') }}
                   <span class="circle"/>
                 </span>
                 <span

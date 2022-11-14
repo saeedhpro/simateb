@@ -130,10 +130,10 @@
                       </span>
                       <span v-else>-</span>
                     <td class="text-center">
-                      {{ i.created ? $moment.utc(i.created).locale("fa").format('jYYYY/jM/jDD') : '-' | persianDigit }}
+                      {{ i.created ? $moment.utc(i.created).local().format('jYYYY/jM/jDD') : '-' | persianDigit }}
                     </td>
                     <td class="text-center">
-                      {{ i.last_login ? $moment.utc(i.last_login).locale("fa").format('jYYYY/jM/jDD') : '-' | persianDigit }}
+                      {{ i.last_login ? $moment.utc(i.last_login).local().format('jYYYY/jM/jDD') : '-' | persianDigit }}
                     </td>
                   </tr>
                 </template>
