@@ -164,6 +164,9 @@
                 <custom-phone-number-input
                   :label="'شماره تماس'"
                   v-model="form.tel1"
+                  :check-value="false"
+                  :error="errors.tel1"
+                  @input="errors.tel1 = ''"
                 />
               </v-col>
               <v-col
@@ -435,6 +438,7 @@ export default {
         organization_id: '',
         gender: '',
         tel: '',
+        tel1: '',
         province_id: '',
         county_id: '',
         city_id: '',
@@ -442,20 +446,9 @@ export default {
         has_surgery: '',
         surgery: '',
       },
-      city: this.item.city ? this.item.city : {
-        id: 1225,
-        name: "همدان",
-        county_id: 419,
-      },
-      county: this.item.county ? this.item.county : {
-        id: 419,
-        name: "همدان",
-        province_id: 30,
-      },
-      province: this.item.province ? this.item.province : {
-        id: 30,
-        name: "همدان",
-      },
+      city: null,
+      county: null,
+      province: null,
       userGroup: this.item.user_group ? this.item.user_group : {
         id: 1,
         name: 'بیمار'
@@ -469,6 +462,22 @@ export default {
   mounted() {
     this.resetForm()
     this.getProvinces()
+    .then(() => {
+      this.city = this.item.city ? this.item.city : {
+        id: 1225,
+        name: "همدان",
+        county_id: 419,
+      }
+        this.county = this.item.county ? this.item.county : {
+        id: 419,
+        name: "همدان",
+        province_id: 30,
+      }
+        this.province = this.item.province ? this.item.province : {
+          id: 30,
+          name: "همدان",
+        }
+    })
     this.getOrganizations()
     this.getUserGroups()
   },
@@ -547,6 +556,7 @@ export default {
         pass: '',
         has_surgery: '',
         surgery: '',
+        tel1: '',
       }
     },
     validateFrom() {
@@ -574,6 +584,10 @@ export default {
       }
       if (!this.form.tel) {
         this.errors.tel = 'فیلد شماره موبایل اجباری است'
+        isValid = false
+      }
+      if (this.form.tel1 && !this.$checkPhoneNumber(this.form.tel1, true)) {
+        this.errors.tel1 = 'شماره تماس صحیح نیست'
         isValid = false
       }
       if (!this.form.province_id) {
@@ -619,7 +633,7 @@ export default {
       }
     },
     getProvinces() {
-      this.$store.dispatch('provinces/getList')
+      return this.$store.dispatch('provinces/getList')
     },
     getCounties(id) {
       this.$store.dispatch('provinces/getCounties', id)

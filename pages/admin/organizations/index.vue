@@ -305,43 +305,7 @@ export default {
         }
       }
     },
-    provinces() {
-      return this.$store.getters['provinces/getList']
-    },
-    counties() {
-      return this.$store.getters['provinces/getCounties']
-    },
-    cities() {
-      return this.$store.getters['provinces/getCities']
-    }
   },
-  watch: {
-    province(item) {
-      if (item) {
-        this.form.province_id = item.id
-        this.getCounties(item.id)
-      } else {
-        this.form.province_id = 0
-        this.$store.commit('provinces/setCounties', [])
-      }
-    },
-    county(item) {
-      if (item) {
-        this.form.county_id = item.id
-        this.getCities(item.id)
-      } else {
-        this.form.county_id = 0
-        this.$store.commit('provinces/setCities', [])
-      }
-    },
-    city(item) {
-      if (item) {
-        this.form.city_id = item.id
-      } else {
-        this.form.city_id = 0
-      }
-    },
-  }
 }
 </script>
 

@@ -181,7 +181,7 @@
       :item="user"
       :open="showUpdateModal"
       @close="closeUpdateModal"
-      @updated="closeUpdateModal"
+      @updated="updatedUpdateModal"
     />
   </div>
 </template>

@@ -30,6 +30,10 @@ export default {
       type: [String, Object, Number],
       default: "",
     },
+    checkValue: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
@@ -49,6 +53,10 @@ export default {
       }
     },
     check() {
+      if (!this.checkValue) {
+        this.status = 'none'
+        return
+      }
       if (this.data.length > 0) {
         if (this.checkPhoneNumber(this.data)) {
           this.status = 'valid'
@@ -72,6 +80,10 @@ export default {
   },
   watch: {
     data() {
+      if (!this.checkValue) {
+        this.status = 'none'
+        return
+      }
       if (this.data.length > 6) {
         if (this.checkPhoneNumber(this.data)) {
           this.status = 'valid'

@@ -30,7 +30,11 @@ export const mutations = {
 
 export const actions = {
   getList(ctx, data) {
-    return this.$axios.get(`/admin/users?page=${data.page}&q=${data.q}`)
+    let group = "&groups=1,2,3,4,5"
+    if (data.groups) {
+      group=`&groups=${data.groups.join(",")}`
+    }
+    return this.$axios.get(`/admin/users?page=${data.page}&q=${data.q}${group}`)
       .then(res => {
         const data = res.data;
         ctx.commit('setList', data)

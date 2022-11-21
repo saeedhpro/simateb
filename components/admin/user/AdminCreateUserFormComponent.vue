@@ -157,6 +157,9 @@
                 <custom-phone-number-input
                   :label="'شماره تماس'"
                   v-model="form.tel1"
+                  :check-value="false"
+                  :error="errors.tel1"
+                  @input="errors.tel1 = ''"
                 />
               </v-col>
               <v-col
@@ -437,6 +440,7 @@ export default {
         pass: '',
         has_surgery: '',
         surgery: '',
+        tel1: '',
       },
       province: {
         id: 30,
@@ -555,6 +559,7 @@ export default {
         pass: '',
         has_surgery: '',
         surgery: '',
+        tel1: '',
       }
     },
     validateFrom() {
@@ -586,6 +591,10 @@ export default {
       }
       if (!this.form.province_id) {
         this.errors.province_id = 'فیلد استان اجباری است'
+        isValid = false
+      }
+      if (this.form.tel1 && !this.$checkPhoneNumber(this.form.tel1, true)) {
+        this.errors.tel1 = 'شماره تماس صحیح نیست'
         isValid = false
       }
       if (!this.form.county_id) {

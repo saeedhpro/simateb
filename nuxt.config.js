@@ -25,6 +25,7 @@ export default {
   plugins: [
     '~/plugins/axios.js',
     '~/plugins/filter.js',
+    '~/plugins/functions.js',
     {src: '~/plugins/datepicker.js', ssr: false},
     {src: '~/plugins/multiselect.js', ssr: false},
     {src: '~/plugins/money.js', ssr: false},
