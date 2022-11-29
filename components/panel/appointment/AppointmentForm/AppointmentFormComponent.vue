@@ -63,7 +63,7 @@
                       <div class="phone-box second">
                         <span class="small">شماره پرونده: </span>
                         <span class="file-id">{{
-                            appointment.file_id ? appointment.file_id : '-' | persianDigit
+                            appointment.user && appointment.user.file_id ? appointment.user.file_id : '-' | persianDigit
                           }}</span>
                       </div>
                       <div class="phone-box second">
@@ -84,7 +84,7 @@
                           تاریخ ویزیت:
                     </span>
                     <span>{{
-                        $moment.utc(appointment.start_at).locale("fa").format("YYYY/MM/DD HH:mm:ss") | toPersianDate('dddd - DD MMMM')
+                        $moment.utc(appointment.start_at).local(true) | toPersianDate('dddd - DD MMMM')
                       }}</span>
                   </div>
                   <div class="phone-box second" v-if="!isDoctor">
@@ -99,7 +99,7 @@
                     </span>
                     <span>
                       {{
-                        $moment.utc(appointment.start_at).local().format("HH:mm") | persianDigit
+                        $moment.utc(appointment.start_at).local(true).format("HH:mm") | persianDigit
                       }}</span>
                   </div>
                   <div class="phone-box second">
@@ -538,6 +538,12 @@
                   </button>
                   <button
                     class="action-bar-button"
+                    @click="doAction('waiting')"
+                  >
+                    در انتظار
+                  </button>
+                  <button
+                    class="action-bar-button"
                     @click="doAction('reserve')"
                   >
                     رزرو
@@ -748,6 +754,7 @@
       v-if="item"
       :item="item"
       @close="closeUpdateModal"
+      @done="doneUpdateModal"
     />
 
     <delete-user-modal-component
@@ -989,9 +996,6 @@ export default {
     }
   },
   mounted() {
-    if (this.item) {
-      console.log(this.item," itme ")
-    }
     if (this.item && this.resulted) {
       this.getResults()
     }
@@ -1024,6 +1028,10 @@ export default {
     },
     closeForm() {
       this.$emit('close')
+      this.resetForm();
+    },
+    done() {
+      this.$emit('done')
       this.resetForm();
     },
     resetForm() {
@@ -1124,6 +1132,9 @@ export default {
         case 'appcode':
           this.createAppCode()
           break;
+        case 'waiting':
+          this.doWaiting()
+          break;
       }
     },
     doUpdate() {
@@ -1144,7 +1155,7 @@ export default {
         .then(() => {
         })
         .finally(() => {
-          this.closeForm()
+          this.done()
           this.loading()
         })
     },
@@ -1164,7 +1175,7 @@ export default {
         .then(() => {
         })
         .finally(() => {
-          this.closeForm()
+          this.done()
           this.loading()
         })
     },
@@ -1200,14 +1211,14 @@ export default {
       delete data.photography
       this.$store.dispatch('appointments/acceptAppointment', data)
         .then(() => {
-          this.closeForm()
+          this.done()
           this.loading()
         })
     },
     doAccepted() {
       this.$store.dispatch('appointments/acceptedAppointment', this.appointment.id)
         .then(() => {
-          this.closeForm()
+          this.done()
           this.loading()
         })
     },
@@ -1218,7 +1229,7 @@ export default {
         .catch(err => {
         })
         .finally(() => {
-          this.closeForm()
+          this.done()
           this.loading()
         })
     },
@@ -1229,7 +1240,7 @@ export default {
         .catch(err => {
         })
         .finally(() => {
-          this.closeForm()
+          this.done()
           this.loading()
         })
     },
@@ -1249,9 +1260,13 @@ export default {
         .catch(err => {
         })
         .finally(() => {
-          this.closeForm()
+          this.done()
           this.loading()
         })
+    },
+    doWaiting() {
+      this.done()
+      this.loading()
     },
     openAddResultModal() {
       this.$refs.image.value = null
@@ -1335,7 +1350,10 @@ export default {
     },
     closeUpdateModal() {
       this.toggleUpdateModal()
-      this.closeForm()
+    },
+    doneUpdateModal() {
+      this.toggleUpdateModal()
+      this.done()
     },
     showRemoveAppointment() {
       this.showDeleteApp = true

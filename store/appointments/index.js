@@ -71,7 +71,7 @@ export const actions = {
     return this.$axios.get(`/appointments/${id}`)
       .then(res => {
         const data = res.data;
-        ctx.commit('setUser', data)
+        ctx.commit('setAppointment', data)
         return Promise.resolve(res)
       })
       .catch(err => {

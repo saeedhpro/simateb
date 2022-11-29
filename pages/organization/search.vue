@@ -361,6 +361,7 @@
       :open="showPazireshModal"
       :item="item"
       @close="closePazireshModal"
+      @done="doneAppointmentModal"
       @remove="getAppointmentList"
     />
     <admin-delete-users-component
@@ -513,6 +514,10 @@ export default {
     },
     closePazireshModal() {
       this.showPazireshModal = false
+      this.item = null
+    },
+    doneAppointmentModal() {
+      this.toggleAppointmentModal()
       if (this.item) {
         this.getAppointmentList()
       }

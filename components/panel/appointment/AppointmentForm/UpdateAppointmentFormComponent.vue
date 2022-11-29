@@ -34,8 +34,8 @@
                   <label>تاریخ و ساعت پذیرش</label>
                   <date-picker
                     v-model="appointment.start_at"
-                    format="YYYY-MM-DD HH:mm:ss"
-                    display-format="HH:mm:ss --- jYYYY/jMM/jDD"
+                    format="YYYY-MM-DD HH:mm"
+                    display-format="HH:mm --- jYYYY/jMM/jDD"
                     editable
                     class="date-picker"
                     type="datetime"
@@ -259,10 +259,14 @@ export default {
       this.$emit('close')
       this.resetForm();
     },
+    done() {
+      this.$emit('done')
+      this.resetForm();
+    },
     resetForm() {
       this.appointment = {
         id: this.item.id,
-        start_at: this.$moment.utc(this.item.start_at).local().format("YYYY/MM/DD HH:mm:ss"),
+        start_at: this.item.start_at,
         tel: this.item.user.tel,
         cardno: this.item.user.cardno,
         income: this.item.user.income,
@@ -330,7 +334,7 @@ export default {
           income: parseFloat(this.appointment.income.split(' ')[0].split(',').join('')),
         })
           .then(() => {
-            this.closeForm()
+            this.done()
           })
       }
     }

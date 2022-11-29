@@ -34,8 +34,8 @@
                   <label>تاریخ و ساعت پذیرش</label>
                   <date-picker
                     v-model="appointment.start_at"
-                    format="YYYY-MM-DD HH:mm:ss"
-                    display-format="HH:mm:ss --- jYYYY/jMM/jDD"
+                    format="YYYY-MM-DD HH:mm"
+                    display-format="HH:mm --- jYYYY/jMM/jDD"
                     editable
                     class="date-picker"
                     type="datetime"
@@ -232,7 +232,7 @@ export default {
   data() {
     return {
       appointment: {
-        start_at: this.initTime ? this.initTime : this.$moment.utc().local().format("jYYYY/jMM/jDD HH:mm:ss"),
+        start_at: this.initTime ? this.$moment(this.initTime).local(true).format("YYYY/MM/DD HH:mm") : this.$moment().local(true).format("YYYY/MM/DD HH:mm"),
         tel: '',
         cardno: '',
         income: 0,
@@ -399,6 +399,32 @@ export default {
         this.appointment.tel = ''
       }
     },
+    'appointment.file_id'(file_id) {
+      if (file_id) {
+        const user = this.users.find(u => {
+          return u.file_id == file_id
+        })
+        if (user) {
+          this.user = user
+          this.appointment.file_id = user.file_id
+          this.appointment.cardno = user.cardno
+          this.appointment.user_id = user.id
+          this.appointment.tel = user.tel
+        } else {
+          this.user = null
+          this.appointment.file_id = ''
+          this.appointment.cardno = ''
+          this.appointment.user_id = null
+          this.appointment.tel = ''
+        }
+      } else {
+        this.user = null
+        this.appointment.file_id = ''
+        this.appointment.cardno = ''
+        this.appointment.user_id = null
+        this.appointment.tel = ''
+      }
+    }
   }
 }
 </script>

@@ -52,7 +52,7 @@ export default {
       return this.item.user ? `${this.item.user.fname} ${this.item.user.lname}` : ''
     },
     startAt() {
-      return this.$moment.utc(this.item.start_at).local().format("HH:mm")
+      return this.$moment.utc(this.item.start_at).local(true).format("HH:mm")
     },
     caseType() {
       return this.item.case_type || ''

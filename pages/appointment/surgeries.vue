@@ -636,6 +636,9 @@ export default {
         }
       }
     },
+    mini() {
+      return this.$vuetify.breakpoint.mdAndDown
+    }
   },
 }
 </script>

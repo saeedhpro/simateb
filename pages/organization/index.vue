@@ -242,7 +242,7 @@
                     </td>
                     <td class="text-center">{{ i.user && i.case_type ? i.case_type : '-' | persianDigit }}</td>
                     <td class="text-center">
-                      {{ $moment.utc(i.start_at).local().format("HH:mm") | toPersianNumber }}
+                      {{ $moment.utc(i.start_at).local(true).format("HH:mm") | toPersianNumber }}
                     </td>
                     <td class="text-center">
                       <div
@@ -324,9 +324,9 @@
                     <td class="text-center">{{ i.user && i.user.tel ? i.user.tel : '-' | persianDigit }}</td>
                     <td class="text-center"><span class="file-id">{{ i.code ? i.code : '-' | persianDigit }}</span></td>
                     <td class="text-center">
-                      {{ $moment.utc(i.start_at).local().format("YYYY/MM/DD HH:mm:ss") | toRelativeDate }}
+                      {{ $moment.utc(i.start_at).local(true).format("YYYY/MM/DD HH:mm:ss") | toRelativeDate }}
                       {{
-                        $moment.utc(i.start_at).local().format("YYYY/MM/DD HH:mm:ss") | toPersianDate('dddd DD MMMM')
+                        $moment.utc(i.start_at).local(true).format("YYYY/MM/DD HH:mm:ss") | toPersianDate('dddd DD MMMM')
                       }}
                     </td>
                     <td class="text-center">{{ getCases(i) | persianDigit }}</td>
@@ -365,6 +365,7 @@
         :open="showAppointmentModal"
         :item="item"
         @close="closeAppointmentModal"
+        @done="doneAppointmentModal"
         @remove="paginate"
       />
       <admin-delete-users-component
@@ -578,6 +579,10 @@ export default {
       this.toggleAppointmentModal()
     },
     closeAppointmentModal() {
+      this.toggleAppointmentModal()
+      this.item = null
+    },
+    doneAppointmentModal() {
       this.toggleAppointmentModal()
       if (this.item) {
         this.getAppointmentList()
