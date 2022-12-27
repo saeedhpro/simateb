@@ -14,7 +14,17 @@
             <span class="title">جستجو نوبت ها</span>
           </nuxt-link>
           <nuxt-link to="/appointment/surgeries" class="page-header">
-            <img src="/images/pages/users.svg" alt="users">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
+              <defs>
+                <style>.a.index,.b.index{fill:#5063ff;}.a.index{opacity:.12;}.b.index{opacity:1;}</style>
+              </defs>
+              <g transform="translate(-1316 -132)">
+                <rect class="a index" width="40" height="40" rx="20" transform="translate(1316 132)"/>
+                <path class="b index"
+                      d="M6.04,12.414l-.3,1.76a.385.385,0,0,0,.56.407l1.575-.834,1.575.834a.389.389,0,0,0,.564-.407L9.7,12.414l1.277-1.245a.387.387,0,0,0-.213-.661l-1.76-.258-.792-1.6a.386.386,0,0,0-.693,0l-.787,1.6-1.765.257a.391.391,0,0,0-.214.661ZM13.5,2.25H12.094V.844A.838.838,0,0,0,11.282,0a.893.893,0,0,0-.875.844V2.25H5.344V.844a.844.844,0,0,0-1.687,0V2.25H2.25A2.25,2.25,0,0,0,0,4.5V15.75A2.25,2.25,0,0,0,2.25,18H13.5a2.25,2.25,0,0,0,2.25-2.25V4.5A2.251,2.251,0,0,0,13.5,2.25Zm.563,13.5a.563.563,0,0,1-.562.563H2.25a.563.563,0,0,1-.562-.562v-9H14.063Z"
+                      transform="translate(1328.125 143)"/>
+              </g>
+            </svg>
             <span class="title">جدول جراحی</span>
           </nuxt-link>
 
@@ -124,7 +134,7 @@
                     <path class="a"
                           d="M6.747,34.753h8.5a.75.75,0,0,0,0-1.5h-8.5a.75.75,0,0,0,0,1.5ZM1.5,43a1,1,0,1,0,1,1A1,1,0,0,0,1.5,43Zm13.748-4.75h-8.5a.75.75,0,1,0,0,1.5h8.5a.75.75,0,1,0,0-1.5Zm0,5h-9.5a.75.75,0,1,0,0,1.5h9.5a.75.75,0,1,0,0-1.5Zm-11.556-11L1.969,34.163l-.691-.691A.75.75,0,1,0,.217,34.532l1.25,1.25a.729.729,0,0,0,.5.221h.02a.75.75,0,0,0,.538-.248l2.25-2.5a.751.751,0,0,0-.056-1.06A.717.717,0,0,0,3.691,32.252Zm0,5L1.969,39.163l-.691-.691A.75.75,0,0,0,.217,39.532l1.25,1.25a.729.729,0,0,0,.5.221h.02a.75.75,0,0,0,.538-.248l2.25-2.5a.751.751,0,0,0-.056-1.06A.718.718,0,0,0,3.691,37.25Z"
                           transform="translate(0.003 -32.004)"/>
-                  </svg>می
+                  </svg>
                   علل مراجعه
                 </button>
               </div>
@@ -193,7 +203,7 @@
                       >
                         <div
                           class="header-date"
-                          :class="{'is-today': isToday(i)}"
+                          :class="{'is-today': isToday(i), 'is-friday': isFriday(i)}"
                           @click="openPazireshModal(`${year}/${month}/${i} ${getTime(i)}`)"
                         >
                           {{ getToday(i) }}
@@ -212,7 +222,7 @@
                       >
                         <table-appointment-component
                           v-if="list[j - 1] && list[j - 1][i - 1]"
-                          :class="{'is-today': isToday(j)}"
+                          :class="{'is-today': isToday(j), 'is-friday': isFriday(j)}"
                           :item="list[j - 1][i - 1]"
                           :day="j"
                           :month="month"
@@ -221,7 +231,7 @@
                         />
                         <table-appointment-none-component
                           v-else
-                          :class="{'is-today': isToday(j)}"
+                          :class="{'is-today': isToday(j), 'is-friday': isFriday(j)}"
                           :start-at="getTime(i)"
                           :show-hour="showHour"
                           :day="j"
@@ -305,6 +315,7 @@ export default {
       search: {
         start: '',
         end: '',
+        case_type: '',
         page: 1,
       },
       user: null,
@@ -445,6 +456,7 @@ export default {
     this.getAppointmentList()
     this.getUsers()
     this.getOrganizationWorkHour()
+    this.getCaseTypes()
   },
   methods: {
     getOrganizationWorkHour() {
@@ -534,6 +546,7 @@ export default {
       this.search = {
         start,
         end,
+        case_type: ''
       }
     },
     isBetween(date, start, end) {
@@ -545,7 +558,7 @@ export default {
       this.$store.dispatch('users/getUsers')
     },
     getCaseTypes() {
-      this.$store.dispatch('cases/getCaseTypes')
+      this.$store.dispatch('cases/getCaseTypes', {type: 1})
     },
     doAction() {
       switch (this.action) {
@@ -589,6 +602,10 @@ export default {
       const d = moment.from(`${this.year}/${this.month}/${day}`, "fa", "jYYYY/jMM/jDD").locale("en").format("YYYY/MM/DD");
       const now = moment().locale("en").format("YYYY/MM/DD");
       return d.normalize() === now.normalize()
+    },
+    isFriday(day) {
+      const d = moment.from(`${this.year}/${this.month}/${day}`, "fa", "jYYYY/jMM/jDD");
+      return d.weekday() == 6
     },
     getTime(day) {
       const wh = this.workHour

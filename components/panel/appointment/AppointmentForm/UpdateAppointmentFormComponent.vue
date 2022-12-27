@@ -39,6 +39,8 @@
                     editable
                     class="date-picker"
                     type="datetime"
+                    :jump-minute="15"
+                    :round-minute="true"
                   >
                     <template v-slot:label>
                       <img src="/images/form/datepicker.svg">

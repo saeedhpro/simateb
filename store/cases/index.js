@@ -26,7 +26,11 @@ export const mutations = {
 
 export const actions = {
   getList(ctx, data) {
-    return this.$axios.get(`/organizations/cases?page=${data.page}`)
+    let url = `/organizations/cases?page=${data.page}`
+    if (data.type && data.type > 0) {
+      url += `&type=${data.type}`
+    }
+    return this.$axios.get(url)
       .then(res => {
         const data = res.data;
         ctx.commit('setList', data)
@@ -37,7 +41,11 @@ export const actions = {
       })
   },
   getCaseTypes(ctx, data) {
-    return this.$axios.get(`/organizations/cases`)
+    let url = `/organizations/cases`
+    if (data.type && data.type > 0) {
+      url += `?type=${data.type}`
+    }
+    return this.$axios.get(url)
       .then(res => {
         const data = res.data;
         ctx.commit('setCaseTypes', data)

@@ -86,14 +86,27 @@
                     <td class="text-center">
                       <span class="file-id vip">
                         {{
-                          $moment.utc(i.start_at).local().format("jYYYY/jMM/jDD HH:mm:ss") | toPersianDate('YYYY/MM/DD')
+                          i.start_at | toPersianDate('YYYY/MM/DD')
                         }}
                       </span>
                     </td>
                     <td class="text-center">
-                      {{
-                        $moment.utc(i.start_at).local().format("jYYYY/jMM/jDD HH:mm:ss") | toPersianDate('HH:mm:ss')
-                      }}
+                      <span>
+                        از
+                      </span>
+                      <span>
+                        {{
+                          $moment(i.start_at, "YYYY/MM/DD HH:mm:ss").format("HH:mm") | persianDigit
+                        }}
+                      </span>
+                      <span>
+                        تا
+                      </span>
+                      <span>
+                        {{
+                          $moment(i.end_at, "YYYY/MM/DD HH:mm:ss").format("HH:mm") | persianDigit
+                        }}
+                      </span>
                     </td>
                     <td class="text-center">{{ i.count | persianDigit }}</td>
                     <td class="text-center">{{ i.site | persianDigit }}</td>
@@ -142,24 +155,27 @@
             <span>فرم ایجاد نوبت دهی اینترنتی (VIP)</span>
           </div>
           <v-spacer/>
-          <div class="create-update-modal-regbox">
-            ثبت در سیستم توسط: {{ `${loginUser.staff.lname} ${loginUser.staff.fname}` }}
-            ({{ loginUser.created | toRelativeDate }} {{
-              loginUser.created | toPersianDate('YYYY/MM/DD HH:mm:ss')
-            }})
-          </div>
         </v-card-title>
         <v-card-text>
           <v-container>
             <v-row>
               <v-col
                 cols="12"
-                sm="6"
-                md="6"
               >
                 <div class="create-update-model-input-box">
-                  <label>عنوان</label>
-                  <input type="text" v-model="form.name">
+                  <label>تاریخ</label>
+                  <date-picker
+                    v-model="form.date"
+                    format="YYYY-MM-DD"
+                    display-format="jYYYY/jMM/jDD"
+                    editable
+                    class="date-picker"
+                    type="date"
+                  >
+                    <template v-slot:label>
+                      <img src="/images/form/datepicker.svg">
+                    </template>
+                  </date-picker>
                 </div>
               </v-col>
               <v-col
@@ -168,8 +184,21 @@
                 md="6"
               >
                 <div class="create-update-model-input-box">
-                  <label>مدت زمان ویزیت (دقیقه)</label>
-                  <input type="number" v-model="form.duration">
+                  <label>زمان شروع</label>
+                  <date-picker
+                    v-model="form.start"
+                    format="HH:mm:ss"
+                    display-format="HH:mm:ss"
+                    editable
+                    class="date-picker"
+                    :jump-minute="15"
+                    :round-minute="true"
+                    type="time"
+                  >
+                    <template v-slot:label>
+                      <img src="/images/form/datepicker.svg">
+                    </template>
+                  </date-picker>
                 </div>
               </v-col>
               <v-col
@@ -178,22 +207,51 @@
                 md="6"
               >
                 <div class="create-update-model-input-box">
-                  <custom-radio-box
-                    v-model="form.is_limited"
-                    label="دارای محدودیت"
-                    :rtl="true"
-                  />
+                  <label>زمان پایان</label>
+                  <date-picker
+                    v-model="form.end"
+                    format="HH:mm:ss"
+                    display-format="HH:mm:ss"
+                    editable
+                    class="date-picker"
+                    :jump-minute="15"
+                    :round-minute="true"
+                    type="time"
+                  >
+                    <template v-slot:label>
+                      <img src="/images/form/datepicker.svg">
+                    </template>
+                  </date-picker>
                 </div>
               </v-col>
               <v-col
                 cols="12"
                 sm="6"
                 md="6"
-                v-if="form.is_limited"
               >
                 <div class="create-update-model-input-box">
-                  <label>میزان محدودیت (در صورت تمایل)</label>
-                  <input type="number" v-model="form.limitation">
+                  <label>ظرفیت Doctor</label>
+                  <input type="number" v-model="form.count">
+                </div>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="6"
+                md="6"
+              >
+                <div class="create-update-model-input-box">
+                  <label>ظرفیت Site</label>
+                  <input type="number" v-model="form.site">
+                </div>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="6"
+                md="6"
+              >
+                <div class="create-update-model-input-box">
+                  <label>ظرفیت App</label>
+                  <input type="number" v-model="form.app">
                 </div>
               </v-col>
             </v-row>
@@ -273,7 +331,7 @@
                 sm="12"
                 md="12"
               >
-                <div class="create-update-model-input-title">عنوان</div>
+                <div class="create-update-model-input-title">حذف پذیرش</div>
               </v-col>
               <v-col
                 cols="12"
@@ -475,11 +533,16 @@ export default {
         })
     },
     editSchedule(schedule) {
+      const start = this.$moment(schedule.start_at, "YYYY/MM/DD HH:mm:ss");
+      const end = this.$moment(schedule.end_at,"YYYY/MM/DD HH:mm:ss");
       this.create = false
       this.form = {
         id: schedule.id,
-        start_at: schedule.start_at,
-        end_at: schedule.end_at,
+        date: start.format("YYYY/MM/DD"),
+        start_at: start.format("YYYY/MM/DD HH:mm:ss"),
+        end_at: end.format("YYYY/MM/DD HH:mm:ss"),
+        start: start.format("HH:mm:ss"),
+        end: end.format("HH:mm:ss"),
         count: schedule.count,
         site: schedule.site,
         app: schedule.app,
@@ -504,6 +567,8 @@ export default {
         start_at: '',
         end_at: '',
         count: 0,
+        site: 0,
+        app: 0,
         organization_id: null,
       }
     },
@@ -607,6 +672,9 @@ export default {
         page: 1,
       },
       form: {
+        date: '',
+        start: '08:00:00',
+        end: '10:00:00',
         id: null,
         start_at: '',
         end_at: '',
@@ -685,6 +753,14 @@ export default {
         years.push(i)
       }
       return years
+    }
+  },
+  watch: {
+    'form.start'() {
+      this.form.start_at = `${this.form.date} ${this.form.start}`
+    },
+    'form.end'() {
+      this.form.end_at = `${this.form.date} ${this.form.end}`
     }
   }
 }

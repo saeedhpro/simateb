@@ -213,7 +213,7 @@
             <div v-else>
               <v-divider class="my-5"/>
               <v-row
-                v-if="appointment.prescription"
+                v-if="appointment.future_prescription"
               >
                 <v-col
                   cols="12"
@@ -235,7 +235,7 @@
                 >
                   <div class="detail-box">
                     <div class="phone-box">
-                      <span>{{ appointment.prescription }}</span>
+                      <span>{{ appointment.future_prescription }}</span>
                     </div>
                   </div>
                 </v-col>
@@ -252,6 +252,12 @@
                   md="6"
                 >
                   <div class="flex flex-row align-items-center justify-space-between show-flex">
+                    <v-btn
+                      icon
+                      @click="getLastPrescriptions"
+                    >
+                      <v-icon>mdi-dots-vertical</v-icon>
+                    </v-btn>
                     <div class="detail-box d-inline-flex">
                       <div class="phone-box">
                           <span class="small">
@@ -259,6 +265,7 @@
                           </span>
                       </div>
                     </div>
+                    <v-spacer></v-spacer>
                     <button @click="openDoctorPrescriptionModal('prescription')" class="add-more-button">
                       <v-icon>mdi-plus</v-icon>
                       اضافه کردن
@@ -286,7 +293,7 @@
                           </span>
                       </div>
                     </div>
-                    <button @click="openDoctorPrescriptionModal('future_prescription')" class="add-more-button">
+                    <button @click="openDoctorPrescriptionModal('future_prescription_list')" class="add-more-button">
                       <v-icon>mdi-plus</v-icon>
                       اضافه کردن
                     </button>
@@ -294,7 +301,7 @@
                   <div class="mt-2 create-update-model-input-box">
                       <textarea
                         class="prescription-textarea"
-                        v-model="appointment.future_prescription"
+                        v-model="appointment.future_prescription_list"
                         rows="5"
                       ></textarea>
                   </div>
@@ -723,6 +730,88 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-dialog
+      v-model="showPrescriptionList"
+      persistent
+      max-width="1056px"
+    >
+      <v-card
+        class="create-update-modal"
+      >
+        <v-card-title
+          class="create-update-modal-title-box"
+        >
+          <div class="create-update-modal-title">
+            <button
+              @click="showPrescriptionList = false"
+              class="create-update-modal-close"
+            >
+              <v-icon>mdi-close</v-icon>
+            </button>
+            <span>لیست اقدامات قبلی</span>
+          </div>
+          <v-spacer/>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row
+            >
+              <v-col
+                cols="12"
+              >
+                <data-table-component
+                  :headers="headers"
+                  :page="1"
+                  :total="prescriptionList.length"
+                  @paginate="() => {}"
+                >
+                  <template v-slot:body>
+                    <tr  v-for="(p,i) in prescriptionListReverse" :key="i">
+                      <td class="text-center">{{ i + 1 | persianDigit }}</td>
+                      <td class="text-center">
+                        <span class="file-id">
+                          {{
+                            p.prescription | persianDigit
+                          }}
+                        </span>
+                      </td>
+                      <td class="text-center">
+                        <span class="file-id">
+                          {{
+                            p.created_at | toPersianDate('jYYYY/jMM/jDD')
+                          }}
+                        </span>
+                      </td>
+                    </tr>
+                  </template>
+                  <template v-slot:notfound>
+                    <div v-if="prescriptionList.length === 0">اطلاعاتی یافت نشد</div>
+                  </template>
+                </data-table-component>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-container>
+            <v-row>
+              <v-col
+                cols="12"
+                sm="3"
+                md="3"
+              >
+                <button
+                  class="second-button"
+                  @click="showPrescriptionList = false"
+                >
+                  بستن
+                </button>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <input
       type="file"
       ref="image"
@@ -806,6 +895,7 @@ export default {
       loaded: false,
       showUpdateModal: false,
       showActions: false,
+      showPrescriptionList: false,
       doctorPrescription: false,
       pType: 'prescription',
       file: null,
@@ -854,6 +944,7 @@ export default {
         status: 0,
         user: null,
         appcode: null,
+        future_prescription_list: '',
       },
       money: {
         decimal: '.',
@@ -993,6 +1084,12 @@ export default {
         },
       ],
       newFiles: [],
+      prescriptionList: [],
+      headers: [
+        '',
+        'اقدام',
+        'تاریخ',
+      ],
     }
   },
   mounted() {
@@ -1048,6 +1145,7 @@ export default {
         created_at: this.item.created_at,
         end_at: this.item.end_at,
         future_prescription: this.item.future_prescription,
+        future_prescription_list: '',
         id: this.item.id,
         income: this.item.income,
         info: this.item.info,
@@ -1104,6 +1202,13 @@ export default {
     },
     loading() {
       this.$emit('loading')
+    },
+    getLastPrescriptions() {
+      this.$store.dispatch('appointments/getLastPrescriptions', this.appointment.id)
+      .then(res => {
+        this.prescriptionList = res.data
+        this.showPrescriptionList = true
+      })
     },
     doAction(action = 'accept') {
       this.loading()
@@ -1199,6 +1304,17 @@ export default {
           this.appointment.code = res.data
         })
     },
+    clearCode() {
+      if (!this.appointment.code) {
+        this.loading()
+        return
+      }
+      // Todo
+      // this.$store.dispatch('appointments/clearAppointmentCode', this.appointment.id)
+      //   .then((res) => {
+      //     this.appointment.code = ''
+      //   })
+    },
     doAccept() {
       const data = {
         ...this.appointment,
@@ -1214,12 +1330,18 @@ export default {
           this.done()
           this.loading()
         })
+        .finally(() => {
+          this.$emit('close')
+        })
     },
     doAccepted() {
       this.$store.dispatch('appointments/acceptedAppointment', this.appointment.id)
         .then(() => {
           this.done()
           this.loading()
+        })
+        .finally(() => {
+          this.$emit('close')
         })
     },
     doCancel() {
@@ -1278,8 +1400,8 @@ export default {
           this.pType = 'prescription'
           this.toggleDoctorPrescription()
           break
-        case 'future_prescription':
-          this.pType = 'future_prescription'
+        case 'future_prescription_list':
+          this.pType = 'future_prescription_list'
           this.toggleDoctorPrescription()
           break
       }
@@ -1299,14 +1421,14 @@ export default {
           array.push(item)
         }
         this.appointment.prescription = array.length === 1 ? array.join('') : array.join(' - ')
-      } else if ((this.pType === 'future_prescription')) {
-        const array = this.appointment.future_prescription.trim().split(' - ')
+      } else if ((this.pType === 'future_prescription_list')) {
+        const array = this.appointment.future_prescription_list.trim().split(' - ')
         if (array[0] === '') {
           array[0] = item
         } else {
           array.push(item)
         }
-        this.appointment.future_prescription = array.length === 1 ? array.join('') : array.join(' - ')
+        this.appointment.future_prescription_list = array.length === 1 ? array.join('') : array.join(' - ')
       }
       this.toggleDoctorPrescription()
     },
@@ -1376,6 +1498,9 @@ export default {
     }
   },
   computed: {
+    prescriptionListReverse() {
+      return this.prescriptionList.reverse()
+    },
     results() {
       return this.$store.getters['appointments/getResults']
     },

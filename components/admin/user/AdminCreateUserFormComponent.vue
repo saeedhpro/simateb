@@ -185,6 +185,8 @@
                     display-format="jYYYY/jMM/jDD"
                     editable
                     class="date-picker"
+                    :jump-minute="15"
+                    :round-minute="true"
                   >
                     <template v-slot:label>
                       <img src="/images/form/datepicker.svg">

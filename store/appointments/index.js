@@ -78,6 +78,15 @@ export const actions = {
         return Promise.reject(err)
       })
   },
+  getLastPrescriptions(ctx, id) {
+    return this.$axios.get(`/appointments/${id}/prescriptions`)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
   getAppointmentResults(ctx, data) {
     ctx.commit('setResults', [])
     return this.$axios.get(`/appointments/${data.id}/results?type=${data.type}`)
@@ -91,7 +100,7 @@ export const actions = {
       })
   },
   getQue(ctx, data) {
-    return this.$axios.get(`/appointments/que?start=${data.start}&end=${data.end}`)
+    return this.$axios.get(`/appointments/que?start=${data.start}&end=${data.end}&ct=${data.case_type}`)
       .then(res => {
         const data = res.data;
         ctx.commit('setQue', data)

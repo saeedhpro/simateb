@@ -21,6 +21,8 @@
               item-text="name"
               v-model="selectedItem"
               class="refer-item-select"
+              :error="notSelected"
+              :clearable="true"
             ></v-select>
             <v-select
               v-if="type === 'photography'"
@@ -31,6 +33,8 @@
               item-text="name"
               v-model="selectedItem"
               class="refer-item-select"
+              :error="notSelected"
+              :clearable="true"
             ></v-select>
           </v-col>
           <v-col
@@ -117,6 +121,7 @@ export default {
       selectedItem: null,
       showRadiologyFrom: false,
       showPhotographyFrom: false,
+      notSelected: false,
       msg: '',
     }
   },
@@ -133,7 +138,10 @@ export default {
       })
     },
     openPhotographyFrom() {
-      if (!this.selectedItem) return
+      if (!this.selectedItem) {
+        this.notSelected = true
+        return
+      }
       this.toggleShowPhotographyFrom()
     },
     closePhotographyFrom() {
@@ -146,7 +154,10 @@ export default {
       this.showPhotographyFrom = !this.showPhotographyFrom
     },
     openRadiologyFrom() {
-      if (!this.selectedItem) return
+      if (!this.selectedItem) {
+        this.notSelected = true
+        return
+      }
       this.toggleShowRadiologyFrom()
     },
     toggleShowRadiologyFrom() {

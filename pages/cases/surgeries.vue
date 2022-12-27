@@ -343,7 +343,7 @@ export default {
         duration: 0,
         is_limited: false,
         limitation: 0,
-        type: 1,
+        type: 2,
         organization_id: null,
       }
     },
@@ -355,7 +355,7 @@ export default {
         is_limited: this.form.is_limited,
         duration: parseInt(this.form.duration),
         limitation: parseInt(this.form.limitation),
-        type: 1,
+        type: 2,
         organization_id: this.form.organization_id ? parseInt(this.form.organization_id) : parseInt(this.loginUser.organization_id),
       })
         .then(() => {
@@ -381,6 +381,7 @@ export default {
       ],
       search: {
         page: 1,
+        type: 2,
       },
       form: {
         id: null,

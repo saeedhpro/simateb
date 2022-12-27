@@ -13,7 +13,7 @@
         >
           <div class="create-update-modal-title">
             <button
-              @click="closeForm"
+              @click="closeForm(false)"
               class="create-update-modal-close"
             >
               <v-icon>mdi-close</v-icon>
@@ -192,6 +192,8 @@
                     display-format="jYYYY/jMM/jDD"
                     editable
                     class="date-picker"
+                    :jump-minute="15"
+                    :round-minute="true"
                   >
                     <template v-slot:label>
                       <img src="/images/form/datepicker.svg">
@@ -348,7 +350,7 @@
               >
                 <button
                   class="second-button"
-                  @click="closeForm"
+                  @click="closeForm(false)"
                 >
                   بستن
                 </button>

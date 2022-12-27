@@ -112,7 +112,7 @@
       @close="toggleShowDelete"
       @remove="remove"
     />
-    <admin-update-user-form-component
+    <update-user-form-component
       v-if="item"
       :open="showEditUser"
       :item="item"
@@ -133,12 +133,12 @@
 import DataTableComponent from "~/components/panel/global/DataTableComponent";
 import AdminDeleteUsersComponent from "~/components/admin/global/AdminDeleteUsersComponent";
 import SendSmsComponent from "~/components/global/sms/SendSmsComponent";
-import AdminUpdateUserFormComponent from "~/components/admin/user/AdminUpdateUserFormComponent";
+import UpdateUserFormComponent from "~/components/panel/profile/user/UpdateUserFormComponent";
 
 export default {
   name: "AdminOrganizationMainComponent",
   components: {
-    AdminUpdateUserFormComponent,
+    UpdateUserFormComponent,
     AdminDeleteUsersComponent,
     DataTableComponent,
     SendSmsComponent,
@@ -206,7 +206,7 @@ export default {
       }
     },
     closeEditUserModal() {
-      this.toggleEditUserModal()
+      this.showEditUser = false
       this.item = null
       this.paginate(this.page)
     },

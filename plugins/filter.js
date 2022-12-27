@@ -13,12 +13,13 @@ export default function persianDigit (value) {
     8: '۸',
     9: '۹'
   }
-
   let result = value ? value.toString() : ''
+  if (value === 0) {
+    result = value.toString()
+  }
   for (let i = 0; i <= 9; i++) {
     result = result.replace(new RegExp(`${i}`, 'g'), persian[i])
   }
-  value = result
   return result
 }
 let VPlugin = {

@@ -18,7 +18,7 @@
             >
               <v-icon>mdi-close</v-icon>
             </button>
-            <span>افزودن کاربر</span>
+            <span>افزودن بیمار</span>
           </div>
           <v-spacer/>
         </v-card-title>

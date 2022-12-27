@@ -23,7 +23,7 @@
         <span class="title-main">افزودن بیمار جدید</span>
       </div>
     </div>
-    <admin-create-user-form-component
+    <create-user-form-component
       v-if="organization"
       :open="showAddUserModal"
       :org="organization"
@@ -33,10 +33,10 @@
 </template>
 
 <script>
-import AdminCreateUserFormComponent from "~/components/admin/user/AdminCreateUserFormComponent";
+import CreateUserFormComponent from "~/components/panel/profile/user/CreateUserFormComponent";
 export default {
   name: "AdminOrganizationHeaderComponent",
-  components: {AdminCreateUserFormComponent},
+  components: {CreateUserFormComponent},
   props: {
     organization: {
       type: Object,

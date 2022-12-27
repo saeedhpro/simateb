@@ -13,12 +13,12 @@
         >
           <div class="create-update-modal-title">
             <button
-              @click="closeForm"
+              @click="closeForm(false)"
               class="create-update-modal-close"
             >
               <v-icon>mdi-close</v-icon>
             </button>
-            <span>ویرایش کاربر</span>
+            <span>ویرایش بیمار</span>
           </div>
           <v-spacer/>
           <div class="create-update-modal-regbox">
@@ -318,7 +318,7 @@
               >
                 <button
                   class="second-button"
-                  @click="closeForm"
+                  @click="closeForm(false)"
                 >
                   بستن
                 </button>
@@ -453,6 +453,7 @@ export default {
         this.$emit('updated')
       } else {
         this.$emit('close')
+        console.log('close')
       }
       this.resetForm();
     },

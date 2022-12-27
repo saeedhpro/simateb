@@ -4,7 +4,7 @@
   >
     <v-row>
       <v-col align-self="center">
-        <div class="page-header-box">
+        <div class="page-header-box surgeries">
           <nuxt-link to="/appointment" class="page-header">
             <img src="/images/pages/users.svg" alt="users">
             <span class="title">جدول نوبت دهی</span>
@@ -14,7 +14,17 @@
             <span class="title">جستجو نوبت ها</span>
           </nuxt-link>
           <nuxt-link to="/appointment/surgeries" class="page-header">
-            <img src="/images/pages/users.svg" alt="users">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
+              <defs>
+                <style>.a.surgeries,.b.surgeries{fill:#388E3C;}.a.surgeries{opacity:.12;}.b.surgeries{opacity:1;}</style>
+              </defs>
+              <g transform="translate(-1316 -132)">
+                <rect class="a surgeries" width="40" height="40" rx="20" transform="translate(1316 132)"/>
+                <path class="b surgeries"
+                      d="M6.04,12.414l-.3,1.76a.385.385,0,0,0,.56.407l1.575-.834,1.575.834a.389.389,0,0,0,.564-.407L9.7,12.414l1.277-1.245a.387.387,0,0,0-.213-.661l-1.76-.258-.792-1.6a.386.386,0,0,0-.693,0l-.787,1.6-1.765.257a.391.391,0,0,0-.214.661ZM13.5,2.25H12.094V.844A.838.838,0,0,0,11.282,0a.893.893,0,0,0-.875.844V2.25H5.344V.844a.844.844,0,0,0-1.687,0V2.25H2.25A2.25,2.25,0,0,0,0,4.5V15.75A2.25,2.25,0,0,0,2.25,18H13.5a2.25,2.25,0,0,0,2.25-2.25V4.5A2.251,2.251,0,0,0,13.5,2.25Zm.563,13.5a.563.563,0,0,1-.562.563H2.25a.563.563,0,0,1-.562-.562v-9H14.063Z"
+                      transform="translate(1328.125 143)"/>
+              </g>
+            </svg>
             <span class="title">جدول جراحی</span>
           </nuxt-link>
 
@@ -86,10 +96,20 @@
             >
               <div class="right-box">
                 <button
+                  :class="{'active': showHour}"
                   class="show-button"
                   @click="toggleShowHour"
                 >
-                  <img src="/images/form/clock.svg">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+                    <defs>
+                      <style>.a {
+                        fill: #424242;
+                      }</style>
+                    </defs>
+                    <path class="a"
+                          d="M2.1,0a3,3,0,0,0-3,3A2.977,2.977,0,0,0-.427,4.606L4.133.806A2.879,2.879,0,0,0,2.1,0Zm10,0a2.981,2.981,0,0,0-2.033.806l4.559,3.8A2.765,2.765,0,0,0,15.1,3,2.983,2.983,0,0,0,12.1,0ZM7.128,2A7,7,0,0,0,1.679,13.387L.348,14.718A.75.75,0,1,0,1.408,15.78l1.331-1.331a6.984,6.984,0,0,0,8.776,0l1.331,1.331a.75.75,0,1,0,1.062-1.061l-1.331-1.331A7,7,0,0,0,7.128,2Zm0,12.5a5.5,5.5,0,1,1,5.5-5.5A5.506,5.506,0,0,1,7.128,14.5Zm.75-5.375V5.75a.75.75,0,0,0-1.5,0V9.5a.75.75,0,0,0,.3.6l2,1.5a.676.676,0,0,0,.422.15A.75.75,0,0,0,9.551,10.4Z"
+                          transform="translate(0.9)"/>
+                  </svg>
                   ساعت
                 </button>
               </div>
@@ -102,9 +122,19 @@
               <div class="right-box">
                 <button
                   class="show-button"
+                  :class="{'active': showCaseType}"
                   @click="toggleShowCaseType"
                 >
-                  <img src="/images/form/list.svg">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="13" viewBox="0 0 16 13">
+                    <defs>
+                      <style>.a {
+                        fill: #424242;
+                      }</style>
+                    </defs>
+                    <path class="a"
+                          d="M6.747,34.753h8.5a.75.75,0,0,0,0-1.5h-8.5a.75.75,0,0,0,0,1.5ZM1.5,43a1,1,0,1,0,1,1A1,1,0,0,0,1.5,43Zm13.748-4.75h-8.5a.75.75,0,1,0,0,1.5h8.5a.75.75,0,1,0,0-1.5Zm0,5h-9.5a.75.75,0,1,0,0,1.5h9.5a.75.75,0,1,0,0-1.5Zm-11.556-11L1.969,34.163l-.691-.691A.75.75,0,1,0,.217,34.532l1.25,1.25a.729.729,0,0,0,.5.221h.02a.75.75,0,0,0,.538-.248l2.25-2.5a.751.751,0,0,0-.056-1.06A.717.717,0,0,0,3.691,32.252Zm0,5L1.969,39.163l-.691-.691A.75.75,0,0,0,.217,39.532l1.25,1.25a.729.729,0,0,0,.5.221h.02a.75.75,0,0,0,.538-.248l2.25-2.5a.751.751,0,0,0-.056-1.06A.718.718,0,0,0,3.691,37.25Z"
+                          transform="translate(0.003 -32.004)"/>
+                  </svg>
                   علل مراجعه
                 </button>
               </div>
@@ -133,7 +163,7 @@
               <div>
                 <v-simple-table
                   fixed-header
-                  class="appointment-table"
+                  class="appointment-table surgeries"
                 >
                   <template v-slot:default>
                     <thead
@@ -150,7 +180,7 @@
                         >
                           <div
                             class="header-case-type"
-                            v-for="(l,n) in que.limits"
+                            v-for="(l,n) in que.limits.filter(i => i.name == 'جراحی')"
                             :key="n"
                           >
                             <div>
@@ -173,7 +203,7 @@
                       >
                         <div
                           class="header-date"
-                          :class="{'is-today': isToday(i)}"
+                          :class="{'is-today': isToday(i), 'is-friday': isFriday(i)}"
                           @click="openPazireshModal(`${year}/${month}/${i} ${getTime(i)}`)"
                         >
                           {{ getToday(i) }}
@@ -192,7 +222,7 @@
                       >
                         <table-appointment-component
                           v-if="list[j - 1] && list[j - 1][i - 1]"
-                          :class="{'is-today': isToday(j)}"
+                          :class="{'is-today': isToday(j), 'is-friday': isFriday(j), 'surgeries': true}"
                           :item="list[j - 1][i - 1]"
                           :day="j"
                           :month="month"
@@ -201,7 +231,7 @@
                         />
                         <table-appointment-none-component
                           v-else
-                          :class="{'is-today': isToday(j)}"
+                          :class="{'is-today': isToday(j), 'is-friday': isFriday(j), 'surgeries': true}"
                           :start-at="getTime(i)"
                           :show-hour="showHour"
                           :day="j"
@@ -271,6 +301,7 @@ export default {
       search: {
         start: '',
         end: '',
+        case_type: 'جراحی',
         page: 1,
       },
       user: null,
@@ -344,14 +375,6 @@ export default {
           label: 'اقدام جمعی'
         },
         {
-          id: 1,
-          label: 'روزهای تعطیل'
-        },
-        {
-          id: 2,
-          label: 'برنامه نوبت دهی vip'
-        },
-        {
           id: 3,
           label: 'تنظیمات علل مراجعه'
         },
@@ -410,12 +433,14 @@ export default {
     this.getHolidays()
     this.getAppointmentList()
     this.getUsers()
+    this.getCaseTypes()
   },
   methods: {
     createAppointment() {
       if (!this.user) return
       this.$store.dispatch('appointments/createAppointment', {
         ...this.appointment,
+        case_type: 'جراحی',
         user_id: this.user.id,
         income: parseFloat(this.appointment.income.split(' ')[0].split(',').join('')),
       })
@@ -493,6 +518,7 @@ export default {
       this.search = {
         start,
         end,
+        case_type: 'جراحی'
       }
     },
     isBetween(date, start, end) {
@@ -504,7 +530,9 @@ export default {
       this.$store.dispatch('users/getUsers')
     },
     getCaseTypes() {
-      this.$store.dispatch('cases/getCaseTypes')
+      this.$store.dispatch('cases/getCaseTypes', {
+        type: 2,
+      })
     },
     doAction() {
       switch (this.action) {
@@ -520,7 +548,7 @@ export default {
           break;
         case 3:
           this.$router.push({
-            path: '/cases'
+            path: '/cases/surgeries'
           })
           break;
       }
@@ -535,6 +563,10 @@ export default {
       const d = moment.from(`${this.year}/${this.month}/${day}`, "fa", "jYYYY/jMM/jDD").locale("en").format("YYYY/MM/DD");
       const now = moment().locale("en").format("YYYY/MM/DD");
       return d.normalize() === now.normalize()
+    },
+    isFriday(day) {
+      const d = moment.from(`${this.year}/${this.month}/${day}`, "fa", "jYYYY/jMM/jDD");
+      return d.weekday() == 6
     },
     getToday(day) {
       return moment.from(`${this.year}/${this.month}/${day}`, "fa", "YYYY/MM/DD").local().format("dddd");
