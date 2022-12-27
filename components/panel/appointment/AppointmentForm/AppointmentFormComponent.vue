@@ -68,7 +68,7 @@
                       </div>
                       <div class="phone-box second">
                         <span class="small">کد پذیرش: </span>
-                        <span>{{ appointment.user ? `${appointment.code}` : '-' | persianDigit }}</span>
+                        <span>{{ showCode ? `${appointment.code}` : '-' | persianDigit }}</span>
                       </div>
                     </div>
                   </v-col>
@@ -1294,27 +1294,6 @@ export default {
           this.appointment.appcode = res.data
         })
     },
-    createCode() {
-      if (this.appointment.code) {
-        this.loading()
-        return
-      }
-      this.$store.dispatch('appointments/createAppointmentCode', this.appointment.id)
-        .then((res) => {
-          this.appointment.code = res.data
-        })
-    },
-    clearCode() {
-      if (!this.appointment.code) {
-        this.loading()
-        return
-      }
-      // Todo
-      // this.$store.dispatch('appointments/clearAppointmentCode', this.appointment.id)
-      //   .then((res) => {
-      //     this.appointment.code = ''
-      //   })
-    },
     doAccept() {
       const data = {
         ...this.appointment,
@@ -1436,11 +1415,9 @@ export default {
       switch (item.type) {
         case 'photography':
           this.appointment.photography_id = item.val
-          this.createCode()
           break;
         case 'radiology':
           this.appointment.radiology_id = item.val
-          this.createCode()
           break;
       }
     },
@@ -1498,6 +1475,9 @@ export default {
     }
   },
   computed: {
+    showCode() {
+      return this.appointment.photography_id || this.appointment.radiology_id
+    },
     prescriptionListReverse() {
       return this.prescriptionList.reverse()
     },
