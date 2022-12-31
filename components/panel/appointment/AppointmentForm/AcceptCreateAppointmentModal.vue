@@ -87,11 +87,11 @@ export default {
     },
     getDayName() {
       if (!this.startAt) return ""
-      return this.$moment.utc(this.startAt).local().format("dddd")
+      return this.$moment(this.startAt).locale("fa").format("dddd")
     },
     getTime() {
       if (!this.startAt) return ""
-      return this.$moment.utc(this.startAt).format("HH:mm:ss")
+      return this.$moment(this.startAt).locale("fa").format("HH:mm:ss")
     }
   }
 }

@@ -1192,7 +1192,7 @@ export default {
       this.$store.dispatch('users/getUsers')
     },
     getCaseTypes() {
-      this.$store.dispatch('cases/getCaseTypes')
+      this.$store.dispatch('cases/getCaseTypes', {})
     },
     customLabel(item) {
       return item.fname
