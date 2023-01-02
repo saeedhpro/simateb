@@ -117,6 +117,7 @@
       :open="showEditUser"
       :item="item"
       @close="closeEditUserModal"
+      @updated="updatedEditUserModal"
     />
     <send-sms-component
       :users="allUsers"
@@ -208,6 +209,10 @@ export default {
     closeEditUserModal() {
       this.showEditUser = false
       this.item = null
+    },
+    updatedEditUserModal() {
+      this.showEditUser = false
+      this.item = null
       this.paginate(this.page)
     },
     editUser(item) {
@@ -242,6 +247,13 @@ export default {
       this.$store.dispatch('users/deleteUsers', {
         ids
       })
+        .then(() => {
+          this.$toast.success('با موفقیت انجام شد');
+          this.closeForm(true)
+        })
+        .catch(err => {
+          this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
+        })
     },
   },
   computed: {

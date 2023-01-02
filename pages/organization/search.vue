@@ -523,6 +523,9 @@ export default {
       }
       this.item = null
     },
+    toggleAppointmentModal() {
+      this.showPazireshModal = !this.showPazireshModal
+    },
     toggleFilterModal() {
       this.showFilterModal = !this.showFilterModal
     },

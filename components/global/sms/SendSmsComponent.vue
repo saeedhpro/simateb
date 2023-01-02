@@ -289,10 +289,14 @@ export default {
       }
       this.$store.dispatch('messages/createMessage', data)
         .then(() => {
+          this.$toast.success('با موفقیت انجام شد');
           setTimeout(() => {
             this.clearForm()
             this.closeForm()
           }, 50)
+        })
+        .catch(err => {
+          this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
         })
     },
     toggleCreateModal() {

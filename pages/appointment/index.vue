@@ -255,12 +255,14 @@
       :open="showPazireshModal"
       :init-time="initTime"
       @close="closePazireshModal"
+      @created="createdPazireshModal"
     />
     <appointment-form-component
       :open="showAppointmentModal"
       :item="item"
       @close="closeAppointmentModal"
       @remove="getAppointmentList"
+      @done="doAppointment"
     />
     <work-hour-component
       :open="showWorkHour"
@@ -473,11 +475,15 @@ export default {
         income: parseFloat(this.appointment.income.split(' ')[0].split(',').join('')),
       })
         .then(() => {
+          this.$toast.success('با موفقیت انجام شد');
           setTimeout(() => {
             this.togglePazireshModal()
             this.clearPazireshForm()
             this.getAppointmentList()
           }, 50)
+        })
+        .catch(err => {
+          this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
         })
     },
     openPazireshModal(i) {
@@ -496,9 +502,16 @@ export default {
     },
     closePazireshModal() {
       this.togglePazireshModal()
+    },
+    createdPazireshModal() {
+      this.togglePazireshModal()
       this.getAppointmentList()
     },
     closeAppointmentModal() {
+      this.toggleAppointmentModal()
+      // this.getAppointmentList()
+    },
+    doAppointment() {
       this.toggleAppointmentModal()
       this.getAppointmentList()
     },

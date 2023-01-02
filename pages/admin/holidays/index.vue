@@ -423,11 +423,15 @@ export default {
       const type = this.create ? 'admin/holidays/createHoliday' : 'admin/holidays/updateHoliday'
       this.$store.dispatch(type, this.form)
         .then(() => {
+          this.$toast.success('با موفقیت انجام شد');
           setTimeout(() => {
             this.closeForm()
             this.showCreateModal = false
             this.getHolidayList()
           }, 100)
+        })
+        .catch(err => {
+          this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
         })
     },
     deleteHolidays(ids) {
@@ -435,11 +439,15 @@ export default {
         ids
       })
         .then(() => {
+          this.$toast.success('با موفقیت انجام شد');
           setTimeout(() => {
             this.getHolidayList()
             this.action = null
             this.selectedHolidays = []
           }, 50)
+        })
+        .catch(err => {
+          this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
         })
     },
     getAllOrganizations() {
@@ -459,6 +467,12 @@ export default {
     removeItem() {
       if (!this.selectedItem) return
       this.$store.dispatch('admin/holidays/removeHoliday', this.selectedItem)
+        .then(() => {
+          this.$toast.success('با موفقیت انجام شد');
+        })
+        .catch(err => {
+          this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
+        })
         .finally(() => {
           setTimeout(() => {
             this.toggleRemoveItemModal()

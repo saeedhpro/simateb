@@ -1,5 +1,5 @@
 <template>
-  <div class="appointment-form-component">
+  <div class="appointment-form-component" v-if="show">
     <v-dialog
       v-model="show"
       persistent
@@ -54,7 +54,7 @@
                             appointment.user ? `${appointment.user.fname} ${appointment.user.lname}` : '-' | persianDigit
                           }}</span>
                         <span class="small">
-                          {{ `(${appointment.user ? appointment.user.age : '-'} سال)` }}
+                          {{ `(${appointment.user && appointment.user.age > 0 ? appointment.user.age : '-'} سال)` }}
                         </span>
                       </div>
                       <div class="phone-box second">
@@ -555,12 +555,12 @@
                   >
                     رزرو
                   </button>
-                  <button
-                    class="action-bar-button"
-                    @click="doAction('update')"
-                  >
-                    ذخیره
-                  </button>
+<!--                  <button-->
+<!--                    class="action-bar-button"-->
+<!--                    @click="doAction('update')"-->
+<!--                  >-->
+<!--                    ذخیره-->
+<!--                  </button>-->
                 </v-menu>
               </v-col>
             </v-row>
@@ -1138,6 +1138,9 @@ export default {
       this.loaded = true
     },
     setAppointment() {
+      if (!this.item) {
+        return
+      }
       this.appointment = {
         case_type: this.item.case_type,
         code: this.item.code,
@@ -1306,8 +1309,12 @@ export default {
       delete data.photography
       this.$store.dispatch('appointments/acceptAppointment', data)
         .then(() => {
+          this.$toast.success('با موفقیت انجام شد');
           this.done()
           this.loading()
+        })
+        .catch(err => {
+          this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
         })
         .finally(() => {
           this.$emit('close')
@@ -1316,8 +1323,12 @@ export default {
     doAccepted() {
       this.$store.dispatch('appointments/acceptedAppointment', this.appointment.id)
         .then(() => {
+          this.$toast.success('با موفقیت انجام شد');
           this.done()
           this.loading()
+        })
+        .catch(err => {
+          this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
         })
         .finally(() => {
           this.$emit('close')
@@ -1326,8 +1337,10 @@ export default {
     doCancel() {
       this.$store.dispatch('appointments/cancelAppointment', this.appointment)
         .then(() => {
+          this.$toast.success('با موفقیت انجام شد');
         })
         .catch(err => {
+          this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
         })
         .finally(() => {
           this.done()
@@ -1337,8 +1350,10 @@ export default {
     doCanceled() {
       this.$store.dispatch('appointments/canceledAppointment', this.appointment.id)
         .then(() => {
+          this.$toast.success('با موفقیت انجام شد');
         })
         .catch(err => {
+          this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
         })
         .finally(() => {
           this.done()
@@ -1357,8 +1372,10 @@ export default {
       delete data.photography
       this.$store.dispatch('appointments/reserveAppointment', data)
         .then(() => {
+          this.$toast.success('با موفقیت انجام شد');
         })
         .catch(err => {
+          this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
         })
         .finally(() => {
           this.done()
@@ -1368,6 +1385,7 @@ export default {
     doWaiting() {
       this.done()
       this.loading()
+      this.$toast.success('با موفقیت انجام شد');
     },
     openAddResultModal() {
       this.$refs.image.value = null
@@ -1468,6 +1486,10 @@ export default {
           this.closeForm()
           this.showDeleteApp = false
           this.$emit('remove')
+          this.$toast.success('با موفقیت انجام شد');
+        })
+        .catch(err => {
+          this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
         })
         .finally(() => {
           this.showDeleteApp = true

@@ -286,13 +286,19 @@ export default {
     validateFrom() {
       this.resetErrors()
       let isValid = true
+      let error = ''
       if (!this.appointment.start_at) {
         this.errors.start_at = 'فیلد تاریخ و ساعت پذیرش اجباری است'
+        error = 'فیلد تاریخ و ساعت پذیرش اجباری است'
         isValid = false
       }
       if (!this.appointment.user_id) {
         this.errors.user_id = 'فیلد بیمار اجباری است'
+        error = 'فیلد بیمار اجباری است'
         isValid = false
+      }
+      if (!isValid) {
+        this.$toast.error(error);
       }
       return isValid;
     },
@@ -331,7 +337,12 @@ export default {
           income: parseFloat(this.appointment.income.split(' ')[0].split(',').join('')),
         })
           .then(() => {
-            this.closeForm()
+            this.$toast.success('با موفقیت انجام شد');
+            this.$emit('created')
+            this.resetForm();
+          })
+          .catch(err => {
+            this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
           })
       }
     }

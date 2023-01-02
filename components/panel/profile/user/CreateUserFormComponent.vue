@@ -42,7 +42,7 @@
                     >
                     <img
                       class="full-height"
-                      :src="this.form.new ? this.form.new : '/images/pages/img.svg'"
+                      :src="form.new ? form.new : '/images/pages/img.svg'"
                       @click="openChooseImage"
                     >
                     <crop-image-component
@@ -189,6 +189,7 @@
                   :error="errors.province_id"
                   @input="errors.province_id = ''"
                   label="استان"
+                  @change="changeProvince"
                 />
               </v-col>
               <v-col
@@ -203,6 +204,7 @@
                   @input="errors.county_id = ''"
                   label="شهرستان"
                   :disabled="!province"
+                  @change="changeCounty"
                 />
               </v-col>
               <v-col
@@ -217,6 +219,7 @@
                   @input="errors.city_id = ''"
                   label="شهر"
                   :disabled="!county"
+                  @change="changeCity"
                 />
               </v-col>
             </v-row>
@@ -366,6 +369,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    hasDefault: {
+      type: Boolean,
+      default: false,
+    },
+    org: {
+      type: Object,
+      default: null,
+    },
   },
   data() {
     return {
@@ -374,6 +385,7 @@ export default {
         lname: '',
         email: '',
         user_group_id: 1,
+        organization_id: this.org ? this.org.id : this.loginUser.organization ? this.loginUser.organization.id : 1,
         gender: '',
         tel: '',
         tel1: '',
@@ -387,7 +399,7 @@ export default {
         introducer: '',
         known_as: '',
         info: '',
-        due_payment: 0,
+        due_payment: '0',
         pass: '',
         new: null,
         has_surgery: false,
@@ -407,6 +419,7 @@ export default {
         pass: '',
         has_surgery: '',
         surgery: '',
+        tel1: '',
       },
       province: {
         id: 30,
@@ -440,7 +453,7 @@ export default {
         lname: '',
         email: '',
         user_group_id: 1,
-        organization_id: this.loginUser.organization ? this.loginUser.organization.id : 1,
+        organization_id: this.org ? this.org : this.loginUser.organization ? this.loginUser.organization.id : 1,
         gender: '',
         tel: '',
         tel1: '',
@@ -454,7 +467,7 @@ export default {
         introducer: '',
         known_as: '',
         info: '',
-        due_payment: 0,
+        due_payment: '0',
         pass: '',
         new: null,
         has_surgery: false,
@@ -473,6 +486,10 @@ export default {
       this.province = {
         id: 30,
         name: "همدان",
+      }
+      this.organization = this.org ? this.org : this.loginUser.organization ? this.loginUser.organization : {
+        id: 1,
+        name: "فتوگرافی سیما طب"
       }
       this.resetErrors()
     },
@@ -497,41 +514,60 @@ export default {
     validateFrom() {
       this.resetErrors()
       let isValid = true
+      let error = ""
       if (!this.form.fname) {
         this.errors.fname = 'فیلد نام اجباری است'
+        error = 'فیلد نام اجباری است'
         isValid = false
       }
       if (!this.form.lname) {
         this.errors.lname = 'فیلد نام خانوادگی اجباری است'
+        error = 'فیلد نام خانوادگی اجباری است'
         isValid = false
       }
       if (!this.form.gender) {
         this.errors.gender = 'فیلد جنسیت اجباری است'
+        error = 'فیلد جنسیت اجباری است'
         isValid = false
       }
       if (!this.form.tel) {
         this.errors.tel = 'فیلد شماره موبایل اجباری است'
+        error = 'فیلد شماره موبایل اجباری است'
         isValid = false
       }
       if (!this.form.province_id) {
         this.errors.province_id = 'فیلد استان اجباری است'
+        error = 'فیلد استان اجباری است'
         isValid = false
       }
       if (!this.form.county_id) {
         this.errors.county_id = 'فیلد شهرستان اجباری است'
+        error = 'فیلد شهرستان اجباری است'
         isValid = false
       }
       if (!this.form.city_id) {
         this.errors.city_id = 'فیلد شهر اجباری است'
+        error = 'فیلد شهر اجباری است'
         isValid = false
       }
       if (this.form.tel1 && !this.$checkPhoneNumber(this.form.tel1, true)) {
         this.errors.tel1 = 'شماره تماس صحیح نیست'
+        error = 'شماره تماس صحیح نیست'
         isValid = false
       }
       if (this.has_surgery && !this.form.surgery) {
         this.errors.surgery = 'فیلد علت جراحی اجباری است'
+        error = 'فیلد علت جراحی اجباری است'
         isValid = false
+      }
+      let p = parseInt(this.form.due_payment.replaceAll(',', '').split(' ')[0])
+      if (p < 0 || p > 2147483647) {
+        this.errors.due_payment = 'مبلغ هزینه جراحی باید بین 0 و 2147483647 باشد'
+        error = 'مبلغ هزینه جراحی باید بین 0 و 2147483647 باشد'
+        isValid = false
+      }
+      if (!isValid) {
+        this.$toast.error(error)
       }
       return isValid;
     },
@@ -547,9 +583,17 @@ export default {
     },
     createUser() {
       if (this.validateFrom()) {
-        this.$store.dispatch('users/createUser', this.form)
+        const data = {
+          ...this.form,
+          due_payment: parseInt(this.form.due_payment.replaceAll(',', '').split(' ')[0])
+        }
+        this.$store.dispatch('users/createUser', data)
           .then(() => {
-            this.closeForm()
+            this.$toast.success('با موفقیت انجام شد');
+            this.closeForm(true)
+          })
+          .catch(err => {
+            this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
           })
       }
     },
@@ -584,6 +628,43 @@ export default {
       }
       s = s % 11;
       return (s < 2 && c === s) || (s >= 2 && c === (11 - s));
+    },
+    changeProvince(item) {
+      if (item) {
+        this.getCounties(item.id)
+        this.form.province_id = item.id
+        this.county = null
+        this.city = null
+      } else {
+        this.province = null
+        this.county = null
+        this.city = null
+        this.form.province_id = 0
+        this.$store.commit('provinces/setCounties', [])
+      }
+      this.province = item
+    },
+    changeCounty(item) {
+      if (item) {
+        this.getCities(item.id)
+        this.form.county_id = item.id
+        this.city = null
+      } else {
+        this.county = null
+        this.city = null
+        this.form.county_id = 0
+        this.$store.commit('provinces/setCities', [])
+      }
+      this.county = item
+    },
+    changeCity(item) {
+      if (item) {
+        this.city = item
+        this.form.city_id = item.id
+      } else {
+        this.city = null
+        this.form.city_id = 0
+      }
     }
   },
   computed: {
@@ -604,33 +685,26 @@ export default {
     },
   },
   watch: {
-    province(item) {
-      if (item) {
-        this.form.province_id = item.id
-        this.getCounties(item.id)
+    userGroup(val) {
+      if (val) {
+        this.form.user_group_id = val.id
       } else {
-        this.form.province_id = 0
-        this.province = null
-        this.county = null
-        this.$store.commit('provinces/setCounties', [])
+        this.form.user_group_id = 1
+        this.userGroup = {
+          id: 1,
+          name: 'بیمار'
+        }
       }
     },
-    county(item) {
-      if (item) {
-        this.form.county_id = item.id
-        this.getCities(item.id)
+    organization(val) {
+      if (val) {
+        this.form.organization_id = val.id
       } else {
-        this.form.county_id = 0
-        this.county = null
-        this.city = null
-        this.$store.commit('provinces/setCities', [])
-      }
-    },
-    city(item) {
-      if (item) {
-        this.form.city_id = item.id
-      } else {
-        this.form.city_id = 0
+        this.form.organization_id = this.org ? this.org.id : 1
+        this.organization = this.org ? this.org : {
+          id: 1,
+          name: "فتوگرافی سیما طب"
+        }
       }
     },
   }

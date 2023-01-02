@@ -186,7 +186,7 @@ export default {
         introducer: '',
         known_as: '',
         info: '',
-        due_payment: 0,
+        due_payment: '0',
       },
       province: null,
       county: null,
@@ -259,7 +259,7 @@ export default {
         introducer: '',
         known_as: '',
         info: '',
-        due_payment: 0,
+        due_payment: '0',
       }
     },
     createOrganization() {

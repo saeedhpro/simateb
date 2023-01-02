@@ -246,11 +246,15 @@ export default {
         ids
       })
         .then(() => {
+          this.$toast.success('با موفقیت انجام شد');
           setTimeout(() => {
             this.getMessageList()
             this.action = null
             this.selectedMessages = []
           }, 50)
+        })
+        .catch(err => {
+          this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
         })
     },
     getUsers() {

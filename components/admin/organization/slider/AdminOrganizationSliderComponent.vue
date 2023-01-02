@@ -3,7 +3,7 @@
     class="page-main-box"
   >
     <v-row
-      v-if="images.length > 0"
+      v-if="images.length > 0 || deleted"
     >
       <v-col
       >
@@ -36,6 +36,13 @@
         <div
           class="organization-slider-image"
         >
+          <v-btn
+            icon
+            @click="removeImage(s)"
+            class="remove-image"
+          >
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
           <img :src="s" alt="">
         </div>
       </v-col>
@@ -48,6 +55,13 @@
         <div
           class="organization-slider-image"
         >
+          <v-btn
+            icon
+            @click="removeSlider(s)"
+            class="remove-image"
+          >
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
           <img :src="s" alt="">
         </div>
       </v-col>
@@ -90,11 +104,19 @@ export default {
   data() {
     return {
       images: [],
+      sliders: [],
+      deleted: false,
     }
   },
   methods: {
     getSliders() {
       this.$store.dispatch('admin/organizations/getSliders', this.organization.id)
+      .then(res => {
+        const data = res.data;
+        this.sliders = [
+          ...data,
+        ]
+      })
     },
     openChooseImage() {
       this.$refs.file.value = null
@@ -109,25 +131,35 @@ export default {
       if (!file) return
       this.images.push(file)
     },
+    removeSlider(slider) {
+      this.deleted = true
+      this.sliders = this.sliders.filter(i => i != slider)
+    },
+    removeImage(slider) {
+      this.images = this.images.filter(i => i == slider)
+    },
     save() {
       this.$store.dispatch('admin/organizations/addSliders', {
         id: this.organization.id,
-        sliders: this.images
+        sliders: this.images,
+        old_sliders: this.sliders,
+        deleted: this.deleted,
       })
         .then(() => {
           this.images = []
-          this.getSliders()
+          this.$toast.success('با موفقیت انجام شد');
         })
-    }
-  },
-  computed: {
-    sliders() {
-      return this.$store.getters['admin/organizations/getSliders']
+      .catch(e => {
+        this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
+      })
+      .finally(() => {
+        this.getSliders()
+      })
     }
   },
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="appointment-form-component">
+  <div class="appointment-form-component" v-if="show">
     <v-dialog
       v-model="show"
       persistent
@@ -330,13 +330,25 @@ export default {
         if (!this.appointment.user_id) {
           return
         }
+        let start = this.appointment.start_at
+        if (start.match(RegExp(/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]T[0-9][0-9]:[0-9][0-9]:[0-9][0-9]Z/gm))) {
+          start = start.replace('T', ' ')
+          start = start.replace('Z', '')
+          start = start.substring(0, start.length - 3)
+        }
+        console.log(start)
         this.$store.dispatch('appointments/updateAppointment', {
           ...this.appointment,
           user_id: this.user.id,
+          start_at: start,
           income: parseFloat(this.appointment.income.split(' ')[0].split(',').join('')),
         })
           .then(() => {
+            this.$toast.success('با موفقیت انجام شد');
             this.done()
+          })
+          .catch(err => {
+            this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
           })
       }
     }

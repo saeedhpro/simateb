@@ -285,7 +285,11 @@ export default {
             this.action = null
             this.selectedUsers = []
           }, 50)
+          this.$toast.success('با موفقیت انجام شد');
         })
+      .catch(err => {
+        this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
+      })
     },
     itemSelected(e) {
       this.selectedUsers = e

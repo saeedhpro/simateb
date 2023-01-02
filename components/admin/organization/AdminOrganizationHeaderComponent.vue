@@ -28,6 +28,7 @@
       :open="showAddUserModal"
       :org="organization"
       @close="closeAddUserModal"
+      :has-default="true"
     />
   </div>
 </template>

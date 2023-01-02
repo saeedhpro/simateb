@@ -406,17 +406,24 @@ export default {
     validateFrom() {
       this.resetErrors()
       let isValid = true
+      let error = ''
       if (!this.organization.name) {
         this.errors.name = 'فیلد نام اجباری است'
+        error = 'فیلد نام اجباری است'
         isValid = false
       }
       if (!this.organization.profession_id) {
         this.errors.profession_id = 'فیلد تخصص اجباری است'
+        error = 'فیلد تخصص اجباری است'
         isValid = false
       }
       if (!this.organization.phone) {
         this.errors.phone = 'فیلد شماره تماس اجباری است'
+        error = 'فیلد شماره تماس اجباری است'
         isValid = false
+      }
+      if (!isValid) {
+        this.$toast.error(error)
       }
       return isValid;
     },
@@ -439,7 +446,11 @@ export default {
         delete data.logo
         this.$store.dispatch('admin/organizations/updateOrganization', data)
           .then(() => {
-            this.closeForm()
+            this.$toast.success('با موفقیت انجام شد');
+            this.closeForm(true)
+          })
+          .catch(err => {
+            this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
           })
       }
     },

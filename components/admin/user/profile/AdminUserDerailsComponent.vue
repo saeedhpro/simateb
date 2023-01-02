@@ -228,10 +228,11 @@ export default {
     deleteUser() {
       this.$store.dispatch('users/removeUser', this.user.id)
         .then(() => {
+          this.$toast.success('با موفقیت انجام شد');
           this.$router.go(-1)
         })
         .catch(err => {
-
+          this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
         })
     },
   },

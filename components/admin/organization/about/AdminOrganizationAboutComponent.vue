@@ -29,14 +29,28 @@
           </div>
           <div class="create-update-model-input-box">
             <label>عکس یک</label>
-            <div class="about-org-img" @click="chooseImage(1)">
+            <div class="about-org-img">
               <div class="image-box" v-if="new1">
+                <v-btn
+                  icon
+                  @click="removeImage('new1')"
+                  class="remove-image"
+                >
+                  <v-icon>mdi-close</v-icon>
+                </v-btn>
                 <img :src="new1" alt="">
               </div>
-              <div class="image-box" v-else-if="organization.image1">
-                <img :src="organization.image1" alt="">
+              <div class="image-box" v-else-if="image1">
+                <v-btn
+                  icon
+                  @click="removeImage('image1')"
+                  class="remove-image"
+                >
+                  <v-icon>mdi-close</v-icon>
+                </v-btn>
+                <img :src="image1" alt="">
               </div>
-              <div class="plus-box" v-else>
+              <div class="plus-box" v-else  @click="chooseImage(1)">
                 <img src="/images/pages/circle-plus.svg" alt="">
                 <div class="choose-image">افزودن تصویر</div>
               </div>
@@ -59,14 +73,28 @@
           </div>
           <div class="create-update-model-input-box">
             <label>عکس دو</label>
-            <div class="about-org-img" @click="chooseImage(2)">
+            <div class="about-org-img">
               <div class="image-box" v-if="new2">
+                <v-btn
+                  icon
+                  @click="removeImage('new2')"
+                  class="remove-image"
+                >
+                  <v-icon>mdi-close</v-icon>
+                </v-btn>
                 <img :src="new2" alt="">
               </div>
-              <div class="image-box" v-else-if="organization.image2">
-                <img :src="organization.image2" alt="">
+              <div class="image-box" v-else-if="image2">
+                <v-btn
+                  icon
+                  @click="removeImage('image2')"
+                  class="remove-image"
+                >
+                  <v-icon>mdi-close</v-icon>
+                </v-btn>
+                <img :src="image2" alt="">
               </div>
-              <div class="plus-box" v-else>
+              <div class="plus-box" v-else  @click="chooseImage(2)">
                 <img src="/images/pages/circle-plus.svg" alt="">
                 <div class="choose-image">افزودن تصویر</div>
               </div>
@@ -89,14 +117,28 @@
           </div>
           <div class="create-update-model-input-box">
             <label>عکس سه</label>
-            <div class="about-org-img" @click="chooseImage(3)">
+            <div class="about-org-img" >
               <div class="image-box" v-if="new3">
+                <v-btn
+                  icon
+                  @click="removeImage('new3')"
+                  class="remove-image"
+                >
+                  <v-icon>mdi-close</v-icon>
+                </v-btn>
                 <img :src="new3" alt="">
               </div>
-              <div class="image-box" v-else-if="organization.image3">
-                <img :src="organization.image3" alt="">
+              <div class="image-box" v-else-if="image3">
+                <v-btn
+                  icon
+                  @click="removeImage('image3')"
+                  class="remove-image"
+                >
+                  <v-icon>mdi-close</v-icon>
+                </v-btn>
+                <img :src="image3" alt="">
               </div>
-              <div class="plus-box" v-else>
+              <div class="plus-box" v-else @click="chooseImage(3)">
                 <img src="/images/pages/circle-plus.svg" alt="">
                 <div class="choose-image">افزودن تصویر</div>
               </div>
@@ -119,14 +161,28 @@
           </div>
           <div class="create-update-model-input-box">
             <label>عکس چهار</label>
-            <div class="about-org-img" @click="chooseImage(4)">
+            <div class="about-org-img">
               <div class="image-box" v-if="new4">
+                <v-btn
+                  icon
+                  @click="removeImage('new4')"
+                  class="remove-image"
+                >
+                  <v-icon>mdi-close</v-icon>
+                </v-btn>
                 <img :src="new4" alt="">
               </div>
-              <div class="image-box" v-else-if="organization.image4">
-                <img :src="organization.image4" alt="">
+              <div class="image-box" v-else-if="image4">
+                <v-btn
+                  icon
+                  @click="removeImage('image4')"
+                  class="remove-image"
+                >
+                  <v-icon>mdi-close</v-icon>
+                </v-btn>
+                <img :src="image4" alt="">
               </div>
-              <div class="plus-box" v-else>
+              <div class="plus-box" v-else @click="chooseImage(4)">
                 <img src="/images/pages/circle-plus.svg" alt="">
                 <div class="choose-image">افزودن تصویر</div>
               </div>
@@ -215,6 +271,10 @@ export default {
         text2: this.text2 ? this.text2 : this.organization.text2,
         text3: this.text3 ? this.text3 : this.organization.text3,
         text4: this.text4 ? this.text4 : this.organization.text4,
+        image1: this.image1,
+        image2: this.image2,
+        image3: this.image3,
+        image4: this.image4,
         new1: this.new1,
         new2: this.new2,
         new3: this.new3,
@@ -222,6 +282,40 @@ export default {
         id: this.organization.id,
       }
       this.$store.dispatch('organizations/updateOrganizationAbout', data)
+      .then(() => {
+        this.$toast.success('با موفقیت انجام شد');
+      })
+      .catch(err => {
+        this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
+      })
+    },
+    removeImage(index) {
+      switch (index) {
+        case "new1":
+          this.new1 = ''
+          break
+        case "new2":
+          this.new2 = ''
+          break
+        case "new3":
+          this.new3 = ''
+          break
+        case "new4":
+          this.new4 = ''
+          break
+        case "image1":
+          this.image1 = ''
+          break
+        case "image2":
+          this.image2 = ''
+          break
+        case "image3":
+          this.image3 = ''
+          break
+        case "image4":
+          this.image4 = ''
+          break
+      }
     }
   }
 }
