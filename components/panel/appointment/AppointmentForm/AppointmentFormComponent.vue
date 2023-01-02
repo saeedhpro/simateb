@@ -1261,6 +1261,10 @@ export default {
       delete data.photography
       this.$store.dispatch('appointments/updateAppointment', data)
         .then(() => {
+          this.$toast.success('با موفقیت انجام شد');
+        })
+        .catch(err => {
+          this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
         })
         .finally(() => {
           this.done()
@@ -1281,6 +1285,10 @@ export default {
       }
       this.$store.dispatch('appointments/sendAppointmentResults', data)
         .then(() => {
+          this.$toast.success('با موفقیت انجام شد');
+        })
+        .catch(err => {
+          this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
         })
         .finally(() => {
           this.done()

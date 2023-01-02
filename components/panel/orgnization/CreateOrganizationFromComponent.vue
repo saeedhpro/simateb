@@ -439,11 +439,11 @@ export default {
         delete data.logo
         this.$store.dispatch('admin/organizations/createOrganization', data)
           .then(() => {
-            this.$toast.success("با موفقیت ثبت شد");
+            this.$toast.success("با موفقیت انجام شد");
             this.closeForm()
           })
           .catch(err => {
-            this.$toast.error("متاسفانه خطایی رخ داده است");
+            this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
           })
       }
     },

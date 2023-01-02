@@ -221,6 +221,10 @@ export default {
         .then(res => {
           this.toggleShowSendFileModal()
           this.getUserFiles()
+          this.$toast.success('با موفقیت انجام شد');
+        })
+        .catch(err => {
+          this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
         })
     },
     closeForm() {

@@ -573,6 +573,10 @@ export default {
           this.getUserPayments()
           this.action = null
           this.selectedPayments = []
+          this.$toast.success('با موفقیت انجام شد');
+        })
+        .catch(err => {
+          this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
         })
     },
     createPayment() {
@@ -584,33 +588,44 @@ export default {
         }
         this.$store.dispatch('payments/createPayment', data)
           .then(res => {
-            console.log(res)
+            this.$toast.success('با موفقیت انجام شد');
             this.clearForm()
             this.toggleCreateModal()
             this.paginate()
+          })
+          .catch(err => {
+            this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
           })
       }
     },
     validate() {
       let validated = true
       const amount = this.form.amount.split(' ')[0].split(',').join('')
+      let error = ''
       if (!amount) {
         this.errors.amount = 'فیلد مبلغ الزامی است!'
+        error = 'فیلد مبلغ الزامی است!'
         validated = false
       }
       if (amount < 1000) {
         this.errors.amount = 'مبلغ باید بیشتر از ۱۰۰۰ تومان باشد!'
+        error = 'مبلغ باید بیشتر از ۱۰۰۰ تومان باشد!'
         validated = false
       }
       if (this.form.paytype === 3) {
         if (!this.form.check_bank) {
           this.errors.check_bank = 'فیلد بانک الزامی است!'
+          error = 'فیلد بانک الزامی است!'
           validated = false
         }
         if (!this.form.check_num) {
           this.errors.check_num = 'فیلد شماره چک الزامی است!'
+          error = 'فیلد شماره چک الزامی است!'
           validated = false
         }
+      }
+      if (!validated) {
+        this.$toast.error(error)
       }
       return validated
     },
