@@ -32,11 +32,27 @@ export default {
   methods: {
     remove(id) {
       this.$store.dispatch('files/removeFile', id)
-      this.$emit('refresh')
+      .then(() => {
+        this.$toast.success('با موفقیت انجام شد');
+      })
+        .catch(err => {
+          this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
+        })
+      setTimeout(() => {
+        this.$emit('refresh')
+      }, 250)
     },
     onChange(data) {
       this.$store.dispatch('files/updateFile', data)
-      this.$emit('refresh')
+        .then(() => {
+          this.$toast.success('با موفقیت انجام شد');
+        })
+        .catch(err => {
+          this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
+        })
+      setTimeout(() => {
+        this.$emit('refresh')
+      }, 250)
     }
   },
 }

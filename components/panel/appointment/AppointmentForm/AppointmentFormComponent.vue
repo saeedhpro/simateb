@@ -50,11 +50,11 @@
                   >
                     <div class="detail-box">
                       <div class="name-box">
-                        <span>{{
+                        <nuxt-link :to="appointment.user ? `/profile/${appointment.user.id}` : '#'">{{
                             appointment.user ? `${appointment.user.fname} ${appointment.user.lname}` : '-' | persianDigit
-                          }}</span>
-                        <span class="small">
-                          {{ `(${appointment.user && appointment.user.age > 0 ? appointment.user.age : '-'} سال)` }}
+                          }}</nuxt-link>
+                        <span class="small" v-if="appointment.user && appointment.user.age > 0">
+                          {{ `(${appointment.user.age} سال)` }}
                         </span>
                       </div>
                       <div class="phone-box second">
@@ -1148,7 +1148,7 @@ export default {
         created_at: this.item.created_at,
         end_at: this.item.end_at,
         future_prescription: this.item.future_prescription,
-        future_prescription_list: '',
+        future_prescription_list: this.item.future_prescription,
         id: this.item.id,
         income: this.item.income,
         info: this.item.info,
@@ -1325,7 +1325,6 @@ export default {
           this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
         })
         .finally(() => {
-          this.$emit('close')
         })
     },
     doAccepted() {
@@ -1391,9 +1390,23 @@ export default {
         })
     },
     doWaiting() {
-      this.done()
-      this.loading()
-      this.$toast.success('با موفقیت انجام شد');
+      const data = {
+        id: this.appointment.id,
+        waiting: !this.appointment.waiting
+      }
+      this.$store.dispatch('appointments/doWaiting', data)
+        .then(() => {
+          this.done()
+          this.loading()
+          this.$toast.success('با موفقیت انجام شد');
+        })
+        .catch(err => {
+          this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
+        })
+        .finally(() => {
+          this.done()
+          this.loading()
+        })
     },
     openAddResultModal() {
       this.$refs.image.value = null
@@ -1601,7 +1614,7 @@ export default {
       return false;
     },
     waiting() {
-      return this.appointment.status === 2 && !this.admissioned && !this.resulted
+      return this.appointment.waiting
     }
   },
   watch: {

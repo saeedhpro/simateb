@@ -34,6 +34,7 @@
     <create-appointment-form-component
       :open="showPazireshModal"
       @close="closePazireshModal"
+      @created="createdPazireshModal"
     />
   </v-row>
 </template>
@@ -58,6 +59,10 @@ export default {
     closePazireshModal() {
       this.togglePazireshModal()
       this.$emit('closePazireshModal')
+    },
+    createdPazireshModal() {
+      this.togglePazireshModal()
+      this.$emit('createdPazireshModal')
     }
   },
   computed: {

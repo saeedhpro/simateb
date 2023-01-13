@@ -4,6 +4,7 @@
   >
     <paziresh-link-box
       @closePazireshModal="closePazireshModal"
+      @createdPazireshModal="createdPazireshModal"
     />
     <v-row>
       <v-col
@@ -236,9 +237,9 @@
                     </td>
                     <td class="text-center">{{ i.user && i.user.tel ? i.user.tel : '-' | persianDigit }}</td>
                     <td class="text-center">
-                      <span class="file-id cursor-pointer" @click="openAppointmentModal(i)">{{
+                      <nuxt-link :to="i.user ? `/profile/${i.user.id}` : '#'" class="file-id cursor-pointer" @click="openAppointmentModal(i)">{{
                           i.user && i.user.file_id ? i.user.file_id : '-' | persianDigit
-                        }}</span>
+                        }}</nuxt-link>
                     </td>
                     <td class="text-center">{{ i.user && i.case_type ? i.case_type : '-' | persianDigit }}</td>
                     <td class="text-center">
@@ -322,7 +323,7 @@
                       </div>
                     </td>
                     <td class="text-center">{{ i.user && i.user.tel ? i.user.tel : '-' | persianDigit }}</td>
-                    <td class="text-center"><span class="file-id">{{ i.code ? i.code : '-' | persianDigit }}</span></td>
+                    <td class="text-center"><nuxt-link :to="i.user ? `/profile/${i.user.id}` : '#'"  class="file-id">{{ i.code ? i.code : '-' | persianDigit }}</nuxt-link></td>
                     <td class="text-center">
                       {{ $moment.utc(i.start_at).local(true).format("YYYY/MM/DD HH:mm:ss") | toRelativeDate }}
                       {{
@@ -614,6 +615,9 @@ export default {
       }
     },
     closePazireshModal() {
+      // this.getAppointmentList()
+    },
+    createdPazireshModal() {
       this.getAppointmentList()
     },
     resulted(appointment, type) {
@@ -637,8 +641,8 @@ export default {
       }
       return false;
     },
-    waiting(appointment, type) {
-      return appointment.status === 2 && !this.admissioned(appointment, type) && !this.resulted(appointment, type)
+    waiting(appointment) {
+      return appointment.waiting
     },
     getErjaClass(appointment, type) {
       if (this.resulted(appointment, type)) {

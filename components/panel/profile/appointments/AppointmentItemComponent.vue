@@ -182,6 +182,10 @@ export default {
     photographyCases: {
       type: String,
       required: true,
+    },
+    waiting: {
+      type: Boolean,
+      default: false,
     }
   },
   data() {
@@ -236,6 +240,9 @@ export default {
         .then((res) => {
           this.radiologyResultList = res.data
         })
+        .catch(err => {
+          console.log(err, "error")
+        })
       type = "photography"
       this.$store.dispatch('appointments/getAppointmentResults', {
         id: this.id,
@@ -244,6 +251,9 @@ export default {
         .then((res) => {
           this.photographyResultList = res.data
         })
+      .catch(err => {
+        console.log(err, "error")
+      })
     },
     openUpdateModal() {
       this.$emit('updated')
@@ -284,9 +294,6 @@ export default {
         return this.rAdmissionAt !== null
       }
       return false;
-    },
-    waiting() {
-      return this.status === 2 && !this.admissioned && !this.resulted
     }
   }
 }

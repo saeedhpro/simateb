@@ -32,7 +32,7 @@
                       <div class="value-box">{{ `${user.fname} ${user.lname}` | persianDigit }}</div>
                     </v-col>
                   </v-row>
-                  <v-row style="width: 100%">
+                  <v-row style="width: 100%" v-if="user.age > 0">
                     <v-col cols="6">
                       <div class="label-box">سن:</div>
                     </v-col>

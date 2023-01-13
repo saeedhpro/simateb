@@ -35,6 +35,7 @@
       </div>
     </div>
     <files-list-component
+      v-if="!loading"
       :files="fileList"
       @refresh="getUserFiles"
     />
@@ -175,12 +176,19 @@ export default {
       },
       newFiles: [],
       show: false,
+      loading: false,
       showSendFileModal: false,
     }
   },
   methods: {
     getUserFiles() {
+      this.loading = true
       this.$store.dispatch('files/getList', this.userId)
+      .finally(() => {
+        setTimeout(() => {
+          this.loading = false
+        }, 250)
+      })
     },
     cropped(file) {
     },

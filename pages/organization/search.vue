@@ -647,7 +647,7 @@ export default {
       return false;
     },
     waiting(appointment) {
-      return appointment.status === 2 && !this.admissioned(appointment) && !this.resulted(appointment)
+      return appointment.waiting
     },
     getErjaClass(appointment, type) {
       if (this.resulted(appointment, type)) {

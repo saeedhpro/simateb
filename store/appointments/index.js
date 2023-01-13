@@ -226,6 +226,15 @@ export const actions = {
         return Promise.reject(err)
       })
   },
+  doWaiting(ctx, data) {
+    return this.$axios.post(`/appointments/${data.id}/waiting`, data)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
   deleteAppointments(ctx, data) {
     return this.$axios.post(`/appointments/delete`, data)
       .then(res => {

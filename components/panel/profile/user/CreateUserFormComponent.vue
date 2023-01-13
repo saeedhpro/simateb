@@ -1,5 +1,5 @@
 <template>
-  <div class="create-user-form-component">
+  <div class="create-user-form-component" v-if="show">
     <v-dialog
       v-model="show"
       persistent
@@ -385,7 +385,7 @@ export default {
         lname: '',
         email: '',
         user_group_id: 1,
-        organization_id: this.org ? this.org.id : this.loginUser.organization ? this.loginUser.organization.id : 1,
+        organization_id: this.org ? this.org.id : this.loginUser && this.loginUser.organization ? this.loginUser.organization.id : 1,
         gender: '',
         tel: '',
         tel1: '',

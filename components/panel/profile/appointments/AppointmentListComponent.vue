@@ -1,6 +1,6 @@
 <template>
   <div class="profile-appointment-list-component">
-    <div class="appointments-box">
+    <div class="appointments-box" v-if="!loading">
       <appointment-item-component
         v-for="(i,n) in list.data"
         :key="n"
@@ -20,6 +20,7 @@
         :r-result-at="i.r_result_at"
         :p-admission-at="i.p_admission_at"
         :r-admission-at="i.r_admission_at"
+        :waiting="i.waiting"
         @updated="onUpdate(i)"
       />
       <div
@@ -39,6 +40,7 @@
       :item="item"
       @close="closeUpdateModal"
       @remove="paginate"
+      @done="doneUpdateModal"
     />
   </div>
 </template>
@@ -61,20 +63,31 @@ export default {
       page: 1,
       item: null,
       showUpdateModal: false,
+      loading: false,
     }
   },
   mounted() {
     this.getUserAppointmentsList(this.userId, this.page)
   },
   methods: {
+    doAppointment() {
+      this.toggleShowUpdateModal()
+      this.paginate(1)
+    },
     paginate(page) {
       this.page = page
       this.getUserAppointmentsList(this.userId, page)
     },
     getUserAppointmentsList(id, page) {
+      this.loading = true
       this.$store.dispatch('appointments/getUserAppointmentsList', {
         id: id,
         page: page
+      })
+      .finally(() =>{
+        setTimeout(() => {
+          this.loading = false
+        }, 250)
       })
     },
     onUpdate(item) {
@@ -85,6 +98,9 @@ export default {
       this.showUpdateModal = !this.showUpdateModal
     },
     closeUpdateModal() {
+      this.toggleShowUpdateModal()
+    },
+    doneUpdateModal() {
       this.getUserAppointmentsList(this.userId, 1)
       this.toggleShowUpdateModal()
     },

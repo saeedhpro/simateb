@@ -258,6 +258,7 @@
       :item="item"
       @close="closeAppointmentModal"
       @remove="getAppointmentList"
+      @done="doAppointment"
     />
   </v-container>
 </template>

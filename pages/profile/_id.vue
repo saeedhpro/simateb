@@ -189,9 +189,10 @@ export default {
       this.$store.dispatch('users/removeUser', this.user.id)
         .then(() => {
           this.$router.go(-1)
+          this.$toast.success('با موفقیت انجام شد');
         })
         .catch(err => {
-
+          this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
         })
     },
     canSee(tabName) {
