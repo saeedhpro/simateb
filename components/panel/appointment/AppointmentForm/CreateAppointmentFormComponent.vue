@@ -34,13 +34,15 @@
                   <label>تاریخ و ساعت پذیرش</label>
                   <date-picker
                     v-model="appointment.start_at"
-                    format="YYYY-MM-DD HH:mm"
+                    inputFormat="YYYY-MM-DDTHH:mm:ssZ"
+                    format="YYYY-MM-DDTHH:mm:ssZ"
                     display-format="HH:mm --- jYYYY/jMM/jDD"
                     editable
                     class="date-picker"
                     type="datetime"
                     :jump-minute="15"
                     :round-minute="true"
+                    ref="start_at"
                   >
                     <template v-slot:label>
                       <img src="/images/form/datepicker.svg">
@@ -234,7 +236,7 @@ export default {
   data() {
     return {
       appointment: {
-        start_at: this.initTime ? this.$moment(this.initTime).local(true).format("YYYY/MM/DD HH:mm") : this.$moment().local(true).format("YYYY/MM/DD HH:mm"),
+        start_at: this.initTime ? this.initTime : this.$moment.utc().format("YYYY/MM/DDTHH:mm:ssZ"),
         tel: '',
         cardno: '',
         income: 0,
@@ -254,7 +256,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.initTime, "iii")
   },
   methods: {
     closeForm() {
@@ -263,7 +264,7 @@ export default {
     },
     resetForm() {
       this.appointment = {
-        start_at: this.$moment().format("YYYY/MM/DD HH:mm:ss"),
+        start_at: this.initTime ? this.$moment.utc(this.initTime).format("YYYY/MM/DDTHH:mm:ssZ") : this.$moment.utc().format("YYYY/MM/DDTHH:mm:ssZ"),
         tel: '',
         cardno: '',
         income: 0,

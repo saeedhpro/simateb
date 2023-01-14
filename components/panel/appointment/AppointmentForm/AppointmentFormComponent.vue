@@ -866,6 +866,7 @@ import CropImageComponent from "~/components/panel/global/CropImageComponent";
 import UpdateAppointmentFormComponent
   from "~/components/panel/appointment/AppointmentForm/UpdateAppointmentFormComponent";
 import DeleteUserModalComponent from "~/components/global/delete/DeleteUserModalComponent";
+import moment from "jalali-moment";
 
 export default {
   name: "AppointmentFormComponent",
@@ -1141,6 +1142,8 @@ export default {
       if (!this.item) {
         return
       }
+      let date = moment.from(this.item.start_at, "en", "YYYY/MM/DDTHH:mm:ssZ").utc(true).format("YYYY/MM/DD HH:mm:ss")
+      date = moment.from(date, 'fa', 'YYYY/MM/DD HH:mm:ss').locale('en').format("YYYY/MM/DD HH:mm:ss")
       this.appointment = {
         case_type: this.item.case_type,
         code: this.item.code,
@@ -1182,7 +1185,7 @@ export default {
         radiology_msg: this.item.radiology_msg,
         staff: this.item.staff,
         staff_id: this.item.staff_id,
-        start_at: this.item.start_at,
+        start_at: date,
         status: this.item.status,
         subject: this.item.subject,
         updated_at: this.item.updated_at,

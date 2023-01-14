@@ -52,7 +52,10 @@ export default {
       return this.item.user ? `${this.item.user.fname} ${this.item.user.lname}` : ''
     },
     startAt() {
-      return this.$moment.utc(this.item.start_at).local(true).format("HH:mm")
+      let date = moment.from(this.item.start_at, "en", "YYYY/MM/DDTHH:mm:ssZ").utc(true).format("YYYY/MM/DD HH:mm:ss")
+      date = moment.from(date, 'fa', 'YYYY/MM/DD HH:mm:ss').locale('en').format("HH:mm")
+      return date
+      // return this.$moment.utc(this.item.start_at).local(true).format("HH:mm")
     },
     caseType() {
       return this.item.case_type || ''

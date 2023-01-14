@@ -34,7 +34,8 @@
                   <label>تاریخ و ساعت پذیرش</label>
                   <date-picker
                     v-model="appointment.start_at"
-                    format="YYYY-MM-DD HH:mm"
+                    inputFormat="YYYY-MM-DDTHH:mm:ssZ"
+                    format="YYYY-MM-DDTHH:mm:ssZ"
                     display-format="HH:mm --- jYYYY/jMM/jDD"
                     editable
                     class="date-picker"
@@ -206,6 +207,7 @@ import CustomTextAreaInput from "~/components/custom/CustomTextAreaInput";
 import AcceptCreateAppointmentModal from "~/components/panel/appointment/AppointmentForm/AcceptCreateAppointmentModal";
 import CustomNationalCodeInput from "~/components/custom/CustomNationalCodeInput";
 import CustomPhoneNumberInput from "~/components/custom/CustomPhoneNumberInput";
+import moment from "jalali-moment";
 
 export default {
   name: "UpdateAppointmentFormComponent",
@@ -266,9 +268,11 @@ export default {
       this.resetForm();
     },
     resetForm() {
+      let date = moment.from(this.item.start_at, "en", "YYYY/MM/DDTHH:mm:ssZ").utc(true).format("YYYY/MM/DD HH:mm:ss")
+      date = moment.from(date, 'fa', 'YYYY/MM/DD HH:mm:ss').locale('en').format("YYYY/MM/DD HH:mm:ss")
       this.appointment = {
         id: this.item.id,
-        start_at: this.item.start_at,
+        start_at: date,
         tel: this.item.user.tel,
         cardno: this.item.user.cardno,
         income: this.item.user.income,
@@ -331,11 +335,11 @@ export default {
           return
         }
         let start = this.appointment.start_at
-        if (start.match(RegExp(/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]T[0-9][0-9]:[0-9][0-9]:[0-9][0-9]Z/gm))) {
-          start = start.replace('T', ' ')
-          start = start.replace('Z', '')
-          start = start.substring(0, start.length - 3)
-        }
+        // if (start.match(RegExp(/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]T[0-9][0-9]:[0-9][0-9]:[0-9][0-9]Z/gm))) {
+        //   start = start.replace('T', ' ')
+        //   start = start.replace('Z', '')
+        //   start = start.substring(0, start.length - 3)
+        // }
         console.log(start)
         this.$store.dispatch('appointments/updateAppointment', {
           ...this.appointment,

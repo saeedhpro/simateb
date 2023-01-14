@@ -204,7 +204,6 @@
                         <div
                           class="header-date"
                           :class="{'is-today': isToday(i), 'is-friday': isFriday(i)}"
-                          @click="openPazireshModal(`${year}/${month}/${i} ${getTime(i)}`)"
                         >
                           {{ getToday(i) }}
                           {{ i | toPersianNumber }}
@@ -487,7 +486,10 @@ export default {
         })
     },
     openPazireshModal(i) {
-      this.initTime = moment.from(i, "fa", "jYYYY/jMM/jDD HH:mm:ss").locale("en").local().format("YYYY/MM/DD HH:mm:ss")
+      let date = moment.from(i, 'fa', 'YYYY/MM/DD HH:mm:ss').locale('en').format("YYYY/MM/DDTHH:mm:ssZ")
+      this.initTime = date
+      console.log(date, "date")
+      // this.initTime = moment.from(i, "fa", "jYYYY/jMM/jDD HH:mm:ss").locale("en").local().format("YYYY/MM/DD HH:mm:ss")
       this.showPazireshModal = true
     },
     toggleCreateModal() {
@@ -501,6 +503,7 @@ export default {
       this.showAppointmentModal = !this.showAppointmentModal
     },
     closePazireshModal() {
+      this.initTime = null
       this.togglePazireshModal()
     },
     createdPazireshModal() {
@@ -628,7 +631,9 @@ export default {
       if (duration === 0) {
         duration = 20
       }
-      return moment.utc(start, "HH:mm:ss").local().add((day - 1) * duration, "minutes").format("HH:mm:ss")
+      let date = moment.from(start, "en", "HH:mm:ss").utc(true).format("HH:mm:ss")
+      date = moment.from(date, 'fa', 'HH:mm:ss').locale('en').add((day - 1) * duration, "minutes").format("HH:mm:ss")
+      return date
     },
     calcDurations() {
       if (!this.workHour) {
