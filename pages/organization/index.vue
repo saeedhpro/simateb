@@ -297,7 +297,7 @@
                       <span
                         @click="openAppointmentModal(i)"
                         v-if="resulted(i)"
-                        class="status-box resulted"
+                        class="status-box resulted pointer"
                       >نتایج ارسال شده</span>
                       <span
                         @click="openAppointmentModal(i)"
@@ -350,9 +350,9 @@
                     <td class="text-center">{{ i.user && i.user.tel ? i.user.tel : '-' | persianDigit }}</td>
                     <td class="text-center"><nuxt-link :to="i.user ? `/profile/${i.user.id}` : '#'"  class="file-id">{{ i.code ? i.code : '-' | persianDigit }}</nuxt-link></td>
                     <td class="text-center">
-                      {{ $moment.utc(i.start_at).local(true).format("YYYY/MM/DD HH:mm:ss") | toRelativeDate }}
+                      {{ i.start_at | toRelativeDate }}
                       {{
-                        $moment.utc(i.start_at).local(true).format("YYYY/MM/DD HH:mm:ss") | toPersianDate('dddd DD MMMM')
+                        i.start_at | toPersianDate('dddd DD MMMM')
                       }}
                     </td>
                     <td class="text-center">{{ getCases(i) | persianDigit }}</td>
