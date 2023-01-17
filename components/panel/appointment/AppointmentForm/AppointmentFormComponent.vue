@@ -213,7 +213,7 @@
             <div v-else>
               <v-divider class="my-5"/>
               <v-row
-                v-if="appointment.future_prescription"
+                v-if="prescription"
               >
                 <v-col
                   cols="12"
@@ -235,7 +235,7 @@
                 >
                   <div class="detail-box">
                     <div class="phone-box">
-                      <span>{{ appointment.future_prescription }}</span>
+                      <span>{{ prescription }}</span>
                     </div>
                   </div>
                 </v-col>
@@ -906,6 +906,7 @@ export default {
       showPrescriptionList: false,
       doctorPrescription: false,
       pType: 'prescription',
+      prescription: '',
       file: null,
       showDeleteApp: false,
       showFile: false,
@@ -1112,6 +1113,16 @@ export default {
         type: ''
       })
     },
+    getAppointmentPrescription() {
+      this.$store.dispatch('appointments/getAppointmentPrescription', {
+        id: this.item.id,
+        type: ''
+      })
+      .then(res => {
+        console.log(res, "res")
+        this.prescription = res
+      })
+    },
     imaged(file) {
       this.newFiles.push(file)
     },
@@ -1145,6 +1156,7 @@ export default {
       if (!this.item) return
       this.newFiles = []
       this.setAppointment()
+      this.getAppointmentPrescription()
       this.getResults()
       this.loaded = true
     },

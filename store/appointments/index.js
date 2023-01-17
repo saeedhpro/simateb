@@ -99,6 +99,15 @@ export const actions = {
         return Promise.reject(err)
       })
   },
+  getAppointmentPrescription(ctx, data) {
+    return this.$axios.get(`/appointments/${data.id}/prescription`)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
   getQue(ctx, data) {
     return this.$axios.get(`/appointments/que?start=${data.start}&end=${data.end}&ct=${data.case_type}`)
       .then(res => {
