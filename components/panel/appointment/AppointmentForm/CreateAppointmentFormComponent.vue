@@ -208,6 +208,7 @@ import CustomTextAreaInput from "~/components/custom/CustomTextAreaInput";
 import AcceptCreateAppointmentModal from "~/components/panel/appointment/AppointmentForm/AcceptCreateAppointmentModal";
 import CustomNationalCodeInput from "~/components/custom/CustomNationalCodeInput";
 import CustomPhoneNumberInput from "~/components/custom/CustomPhoneNumberInput";
+import moment from "jalali-moment";
 
 export default {
   name: "CreateAppointmentFormComponent",
@@ -332,11 +333,15 @@ export default {
         if (!this.appointment.user_id) {
           return
         }
-        this.$store.dispatch('appointments/createAppointment', {
+        let start_at = this.appointment.start_at.split('+')[0]
+        start_at += 'Z'
+        const data = {
           ...this.appointment,
           user_id: this.user.id,
+          start_at: start_at,
           income: parseFloat(this.appointment.income.split(' ')[0].split(',').join('')),
-        })
+        }
+        this.$store.dispatch('appointments/createAppointment', data)
           .then(() => {
             this.$toast.success('با موفقیت انجام شد');
             this.$emit('created')

@@ -1859,7 +1859,6 @@ table {
   justify-content: center;
   align-items: center;
   margin: auto;
-  cursor: pointer;
 
   .a {
     fill: #5063ff;
@@ -1868,6 +1867,7 @@ table {
 
   &.green-color {
     background-color: #EBFFFB !important;
+    cursor: pointer;
 
     .a {
       fill: #2BC4A9

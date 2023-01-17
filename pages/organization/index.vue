@@ -237,50 +237,75 @@
                     </td>
                     <td class="text-center">{{ i.user && i.user.tel ? i.user.tel : '-' | persianDigit }}</td>
                     <td class="text-center">
-                      <nuxt-link :to="i.user ? `/profile/${i.user.id}` : '#'" class="file-id cursor-pointer" @click="openAppointmentModal(i)">{{
+                      <nuxt-link :to="i.user ? `/profile/${i.user.id}` : '#'" class="file-id cursor-pointer">{{
                           i.user && i.user.file_id ? i.user.file_id : '-' | persianDigit
                         }}</nuxt-link>
                     </td>
                     <td class="text-center">{{ i.user && i.case_type ? i.case_type : '-' | persianDigit }}</td>
                     <td class="text-center">
-                      {{ $moment.utc(i.start_at).local(true).format("HH:mm") | toPersianNumber }}
+                      {{ moment.from(i.start_at, "en", "YYYY/MM/DDTHH:mm:ssZ").locale("fa").format("HH:mm") | toPersianNumber }}
                     </td>
                     <td class="text-center">
-                      <div
-                        v-if="i.radiology"
-                        :class="getErjaClass(i, 3)"
-                        @click="openAppointmentModal(i)"
-                      >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="14.286" viewBox="0 0 20 14.286">
-                          <path class="a"
-                                d="M52,97.429a1.423,1.423,0,0,1-.419,1.01L40.153,109.867a1.428,1.428,0,0,1-2.02,0l-5.714-5.714a1.428,1.428,0,1,1,2.02-2.02l4.7,4.706,10.42-10.42A1.427,1.427,0,0,1,52,97.429Z"
-                                transform="translate(-32 -96)"/>
-                        </svg>
-                      </div>
+                        <v-tooltip
+                          v-if="i.radiology"
+                          bottom
+                        >
+                          <template v-slot:activator="{ on, attrs }">
+                            <div
+                              v-bind="attrs"
+                              v-on="on"
+                              :class="getErjaClass(i, 3)"
+                              @click="openAppointmentModalItem(i, 3)"
+                            >
+                              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="14.286" viewBox="0 0 20 14.286">
+                                <path class="a"
+                                      d="M52,97.429a1.423,1.423,0,0,1-.419,1.01L40.153,109.867a1.428,1.428,0,0,1-2.02,0l-5.714-5.714a1.428,1.428,0,1,1,2.02-2.02l4.7,4.706,10.42-10.42A1.427,1.427,0,0,1,52,97.429Z"
+                                      transform="translate(-32 -96)"/>
+                              </svg>
+                            </div>
+                          </template>
+                          <span>
+                            {{ getErjaType(i, 3) }}
+                          </span>
+                        </v-tooltip>
                     </td>
                     <td class="text-center">
-                      <div
+                      <v-tooltip
                         v-if="i.photography"
-                        :class="getErjaClass(i, 1)"
-                        @click="openAppointmentModal(i)"
+                        bottom
                       >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="14.286" viewBox="0 0 20 14.286">
-                          <path class="a"
-                                d="M52,97.429a1.423,1.423,0,0,1-.419,1.01L40.153,109.867a1.428,1.428,0,0,1-2.02,0l-5.714-5.714a1.428,1.428,0,1,1,2.02-2.02l4.7,4.706,10.42-10.42A1.427,1.427,0,0,1,52,97.429Z"
-                                transform="translate(-32 -96)"/>
-                        </svg>
-                      </div>
+                        <template v-slot:activator="{ on, attrs }">
+                          <div
+                            v-bind="attrs"
+                            v-on="on"
+                            :class="getErjaClass(i, 1)"
+                            @click="openAppointmentModalItem(i, 1)"
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="14.286" viewBox="0 0 20 14.286">
+                              <path class="a"
+                                    d="M52,97.429a1.423,1.423,0,0,1-.419,1.01L40.153,109.867a1.428,1.428,0,0,1-2.02,0l-5.714-5.714a1.428,1.428,0,1,1,2.02-2.02l4.7,4.706,10.42-10.42A1.427,1.427,0,0,1,52,97.429Z"
+                                    transform="translate(-32 -96)"/>
+                            </svg>
+                          </div>
+                        </template>
+                        <span>
+                          {{ getErjaType(i, 1) }}
+                        </span>
+                      </v-tooltip>
                     </td>
                     <td class="text-center">
                       <span
+                        @click="openAppointmentModal(i)"
                         v-if="resulted(i)"
                         class="status-box resulted"
                       >نتایج ارسال شده</span>
                       <span
+                        @click="openAppointmentModal(i)"
                         v-else-if="waiting(i)"
                         class="status-box waiting"
                       >در انتظار مراجعه</span>
                       <span
+                        @click="openAppointmentModal(i)"
                         v-else
                         class="status-box"
                         :style="{
@@ -579,9 +604,17 @@ export default {
       this.item = item
       this.toggleAppointmentModal()
     },
+    openAppointmentModalItem(item, type) {
+      if (this.resulted(item, type)) {
+        this.item = item
+        this.toggleAppointmentModal()
+      }
+    },
     closeAppointmentModal() {
       this.toggleAppointmentModal()
-      this.item = null
+      setTimeout(() => {
+        this.item = null
+      }, 100)
     },
     doneAppointmentModal() {
       this.toggleAppointmentModal()
@@ -651,6 +684,15 @@ export default {
         return 'has-erja'
       } else {
         return 'has-erja black-color'
+      }
+    },
+    getErjaType(appointment, type) {
+      if (this.resulted(appointment, type)) {
+        return 'نتایج ارسال شده'
+      } else if (this.admissioned(appointment, type)) {
+        return 'پذیرش شده'
+      } else {
+        return 'پذیرش نشده'
       }
     }
   },

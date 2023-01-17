@@ -49,6 +49,7 @@
 </template>
 
 <script>
+import moment from "jalali-moment";
 export default {
   name: "AcceptCreateAppointmentModal",
   props: {
@@ -87,11 +88,11 @@ export default {
     },
     getDayName() {
       if (!this.startAt) return ""
-      return this.$moment(this.startAt).locale("fa").format("dddd")
+      return moment.from(this.startAt, "en", "YYYY/MM/DDTHH:mm:ssZ").locale("fa").format("dddd")
     },
     getTime() {
       if (!this.startAt) return ""
-      return this.$moment(this.startAt).locale("fa").format("HH:mm:ss")
+      return moment.from(this.startAt, "en", "YYYY/MM/DDTHH:mm:ssZ").locale("en").format("HH:mm:ss")
     }
   }
 }

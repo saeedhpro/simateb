@@ -538,6 +538,13 @@
                     پذیرش
                   </button>
                   <button
+                    v-if="appointment.status === 2"
+                    class="action-bar-button"
+                    @click="doAction('update')"
+                  >
+                    ذخیره تغییرات
+                  </button>
+                  <button
                     class="action-bar-button"
                     @click="doAction('cancel')"
                   >
@@ -1130,9 +1137,12 @@ export default {
     },
     done() {
       this.$emit('done')
-      this.resetForm();
+      setTimeout(() => {
+        this.resetForm();
+      }, 100)
     },
     resetForm() {
+      if (!this.item) return
       this.newFiles = []
       this.setAppointment()
       this.getResults()
@@ -1192,6 +1202,7 @@ export default {
         user: this.item.user,
         user_id: this.item.user_id,
         vip_introducer: this.item.vip_introducer,
+        waiting: this.item.waiting,
       }
     },
     getUsers() {
@@ -1255,7 +1266,8 @@ export default {
       }
       const data = {
         ...this.appointment,
-        results: this.newFiles
+        results: this.newFiles,
+        start_at: this.item.start_at
       }
       delete data.staff
       delete data.organization
@@ -1406,10 +1418,6 @@ export default {
         .catch(err => {
           this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
         })
-        .finally(() => {
-          this.done()
-          this.loading()
-        })
     },
     openAddResultModal() {
       this.$refs.image.value = null
@@ -1522,7 +1530,7 @@ export default {
   },
   computed: {
     showCode() {
-      return this.appointment.photography_id || this.appointment.radiology_id
+      return this.appointment.photography_cases.length > 0 || this.appointment.radiology_cases.length > 0
     },
     prescriptionListReverse() {
       return this.prescriptionList.reverse()
