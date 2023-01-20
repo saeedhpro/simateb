@@ -1119,8 +1119,7 @@ export default {
         type: ''
       })
       .then(res => {
-        console.log(res, "res")
-        this.prescription = res
+        this.prescription = res.data
       })
     },
     imaged(file) {

@@ -214,20 +214,19 @@
                     </thead>
                     <tbody>
                     <tr
-                        v-for="(items, i) in que.max_length"
-                        :key="i"
+                      v-for="(i, n) in most"
                     >
                       <td
-                        v-for="(item, j) in list.length"
+                        v-for="(j, k) in lastDay"
                       >
                         <table-appointment-component
-                          v-if="list[j][i]"
+                          v-if="list[j - 1] && list[j - 1][i - 1]"
                           :class="{'is-today': isToday(j), 'is-friday': isFriday(j)}"
-                          :item="list[j][i]"
+                          :item="list[j - 1][i - 1]"
                           :day="j"
                           :month="month"
                           :year="year"
-                          @click.native="openItem(list[j][i])"
+                          @click.native="openItem(list[j - 1][i - 1])"
                         />
                         <table-appointment-none-component
                           v-else
@@ -237,7 +236,7 @@
                           :day="j"
                           :month="month"
                           :year="year"
-                          @click.native="openPazireshModal(`${year}/${month}/${j} ${Date.now()}`)"
+                          @click.native="openPazireshModal(`${year}/${month}/${j} ${getTime(i)}`)"
                         />
                       </td>
                     </tr>
@@ -287,7 +286,7 @@ import CreateAppointmentFormComponent
 import WorkHourComponent from "~/components/panel/appointment/WorkHourComponent";
 
 export default {
-  name: "list",
+  name: "index",
   components: {
     WorkHourComponent,
     CreateAppointmentFormComponent,
@@ -446,17 +445,6 @@ export default {
         prefix: '',
         precision: 0,
         masked: false,
-      },
-      que: {
-        ques: [],
-        clock_ques: [],
-        limits: [],
-        default_duration: 20,
-        max_length: 20,
-        work_hour: {
-          end: "",
-          start: ""
-        }
       }
     }
   },
@@ -548,11 +536,7 @@ export default {
     },
     toggleShowHour() {
       this.showHour = !this.showHour
-      if (this.showHour) {
-        this.list = this.que.clock_ques
-      } else {
-        this.list = this.que.ques
-      }
+      this.calcList()
     },
     paginate(page = 1) {
       this.search.page = page
@@ -560,14 +544,9 @@ export default {
     },
     getAppointmentList() {
       this.calcDate()
-      this.$store.dispatch('appointments/getQueV2', this.search)
-        .then(res => {
-          this.que = res.data
-          if (this.showHour) {
-            this.list = this.que.clock_ques
-          } else {
-            this.list = this.que.ques
-          }
+      this.$store.dispatch('appointments/getQue', this.search)
+        .finally(() => {
+          this.calcList()
         })
     },
     calcDate() {
@@ -585,6 +564,11 @@ export default {
         end,
         case_type: ''
       }
+    },
+    isBetween(date, start, end) {
+      return moment(date, "YYYY/MM/DD HH:mm:ss").local()
+        .isBetween(moment(start, "YYYY/MM/DD HH:mm:ss"),
+          moment(end, "YYYY/MM/DD HH:mm:ss"))
     },
     getUsers() {
       this.$store.dispatch('users/getUsers')
@@ -640,7 +624,7 @@ export default {
       return d.weekday() == 6
     },
     getTime(day) {
-      const wh = this.que.work_hour
+      const wh = this.workHour
       const start = wh.start
       const end = wh.end
       let duration = this.que.default_duration
@@ -648,8 +632,60 @@ export default {
         duration = 20
       }
       let date = moment.from(start, "en", "HH:mm:ss").utc(true).format("HH:mm:ss")
-      date = moment.from(date, 'fa', 'HH:mm:ss').locale('en').add((day) * duration, "minutes").format("HH:mm:ss")
+      date = moment.from(date, 'fa', 'HH:mm:ss').locale('en').add((day - 1) * duration, "minutes").format("HH:mm:ss")
       return date
+    },
+    calcDurations() {
+      if (!this.workHour) {
+        return
+      }
+      const wh = this.workHour
+      const start = wh.start
+      const end = wh.end
+      let duration = this.que.default_duration
+      if (duration === 0) {
+        duration = 20
+      }
+      const d = moment.duration(moment.utc(end, "HH:mm:ss").local().diff(moment.utc(start, "HH:mm:ss").local())).asMinutes()
+      this.durations = Math.ceil(d / duration)
+    },
+    calcList() {
+      this.most = 5
+      let list = this.que.ques;
+      let list2 = Array(this.lastDay).fill(null).map(() => Array(0))
+      let year = this.year
+      if (year < 10) {
+        year = `0${year}`
+      }
+      let month = this.month
+      if (month < 10) {
+        month = `0${month}`
+      }
+      const yearMonth = `${year}/${month}`;
+      for (let i = 0; i < this.lastDay; i++) {
+        for (let j = 0; j < list.length; j++) {
+          let s = i + 1;
+          if (s < 10) {
+            s = `0${s}`
+          }
+          if (this.$moment(list[j].start_at).format("jYYYY/jMM/jDD") === `${yearMonth}/${s}`) {
+            list2[i].push(list[j])
+          }
+        }
+      }
+      for (let i = 0; i < list2.length; i++) {
+        if (this.most < list2[i].length) {
+          this.most = list2[i].length
+        }
+      }
+      this.calcDurations()
+      if (this.showHour && this.most < this.durations) {
+        this.most = this.durations
+      }
+      if (!this.showHour && this.most < 5) {
+        this.most = 5
+      }
+      this.list = list2
     },
     onMonthChanged(month) {
       this.month = month
@@ -669,6 +705,9 @@ export default {
     },
     loginUser() {
       return this.$store.getters['login/getUser']
+    },
+    que() {
+      return this.$store.getters['appointments/getQue']
     },
     users() {
       return this.$store.getters['users/getUsers']
