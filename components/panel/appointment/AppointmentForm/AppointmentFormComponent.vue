@@ -99,7 +99,7 @@
                     </span>
                     <span>
                       {{
-                        moment.from(this.item.start_at, "en", "YYYY/MM/DDTHH:mm:ssZ").utc(true).format("HH:mm") | persianDigit
+                        moment.from(this.item.start_at, "en", "YYYY/MM/DDTHH:mm:ssZ").format("HH:mm") | persianDigit
                       }}</span>
                   </div>
                   <div class="phone-box second">

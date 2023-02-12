@@ -335,11 +335,9 @@ export default {
         if (!this.appointment.user_id) {
           return
         }
-        let start = this.appointment.start_at
-        if (!start.match(RegExp(/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]T[0-9][0-9]:[0-9][0-9]:[0-9][0-9]Z/gm))) {
-          start = moment.from(start, "en", "YYYY-MM-DDTHH:mm:ss+03:30").utc().format("YYYY-MM-DDTHH:mm:ssZ")
-        }
-        console.log(start)
+        let start = this.appointment.start_at.split('+')[0]
+        start += 'Z'
+        console.log(start, "start 1111")
         this.$store.dispatch('appointments/updateAppointment', {
           ...this.appointment,
           user_id: this.user.id,
