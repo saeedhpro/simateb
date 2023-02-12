@@ -86,9 +86,7 @@
                     <span>{{
                         $moment.utc(appointment.start_at).locale("fa") | toPersianDate('dddd - DD MMMM')
                       }}</span>
-                    <span>{{
-                        $moment.utc(appointment.start_at).locale("fa")
-                      }}</span>
+                    {{appointment.start_at}}
                   </div>
                   <div class="phone-box second" v-if="!isDoctor">
                     <span class="small">
@@ -102,7 +100,7 @@
                     </span>
                     <span>
                       {{
-                        $moment.utc(appointment.start_at).format("HH:mm") | persianDigit
+                        $moment.utc(appointment.start_at).locale("fa").format("HH:mm") | persianDigit
                       }}</span>
                   </div>
                   <div class="phone-box second">
@@ -1166,8 +1164,9 @@ export default {
       if (!this.item) {
         return
       }
-      let date = moment.from(this.item.start_at, "en", "YYYY/MM/DDTHH:mm:ssZ").utc(true).format("YYYY/MM/DD HH:mm:ss")
-      date = moment.from(date, 'fa', 'YYYY/MM/DD HH:mm:ss').locale('en').format("YYYY/MM/DD HH:mm:ss")
+      // let date = moment.from(this.item.start_at, "en", "YYYY/MM/DDTHH:mm:ssZ").utc(true).format("YYYY/MM/DD HH:mm:ss")
+      // date = moment.from(date, 'fa', 'YYYY/MM/DD HH:mm:ss').locale('en').format("YYYY/MM/DD HH:mm:ss")
+      let date = this.item.start_at
       this.appointment = {
         case_type: this.item.case_type,
         code: this.item.code,
