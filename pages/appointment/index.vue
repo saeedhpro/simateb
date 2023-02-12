@@ -222,7 +222,7 @@
                       >
                         <table-appointment-component
                           v-if="list[j][i]"
-                          :class="{'is-today': isToday(j), 'is-friday': isFriday(j)}"
+                          :class="{'is-today': isToday(j + 1), 'is-friday': isFriday(j + 1)}"
                           :item="list[j][i]"
                           :day="j"
                           :month="month"
@@ -231,7 +231,7 @@
                         />
                         <table-appointment-none-component
                           v-else
-                          :class="{'is-today': isToday(j), 'is-friday': isFriday(j)}"
+                          :class="{'is-today': isToday(j + 1), 'is-friday': isFriday(j + 1)}"
                           :start-at="getTime(i)"
                           :show-hour="showHour"
                           :day="j"
