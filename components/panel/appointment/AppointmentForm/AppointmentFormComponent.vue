@@ -86,6 +86,9 @@
                     <span>{{
                         $moment.utc(appointment.start_at).locale("fa") | toPersianDate('dddd - DD MMMM')
                       }}</span>
+                    <span>{{
+                        $moment.utc(appointment.start_at).locale("fa")
+                      }}</span>
                   </div>
                   <div class="phone-box second" v-if="!isDoctor">
                     <span class="small">
