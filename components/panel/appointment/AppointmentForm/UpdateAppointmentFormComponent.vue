@@ -336,11 +336,9 @@ export default {
           return
         }
         let start = this.appointment.start_at
-        // if (start.match(RegExp(/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]T[0-9][0-9]:[0-9][0-9]:[0-9][0-9]Z/gm))) {
-        //   start = start.replace('T', ' ')
-        //   start = start.replace('Z', '')
-        //   start = start.substring(0, start.length - 3)
-        // }
+        if (!start.match(RegExp(/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]T[0-9][0-9]:[0-9][0-9]:[0-9][0-9]Z/gm))) {
+          start = moment.from(start, "en", "YYYY-MM-DDTHH:mm:ss+03:30").utc().format("YYYY-MM-DDTHH:mm:ssZ")
+        }
         console.log(start)
         this.$store.dispatch('appointments/updateAppointment', {
           ...this.appointment,
