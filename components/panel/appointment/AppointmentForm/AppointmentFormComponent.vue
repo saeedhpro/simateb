@@ -84,7 +84,7 @@
                           تاریخ ویزیت:
                     </span>
                     <span>{{
-                        $moment.utc(appointment.start_at).local(true) | toPersianDate('dddd - DD MMMM')
+                        $moment.utc(appointment.start_at) | toPersianDate('dddd - DD MMMM')
                       }}</span>
                   </div>
                   <div class="phone-box second" v-if="!isDoctor">
@@ -99,7 +99,7 @@
                     </span>
                     <span>
                       {{
-                        $moment.utc(appointment.start_at).local(true).format("HH:mm") | persianDigit
+                        $moment.utc(appointment.start_at).format("HH:mm") | persianDigit
                       }}</span>
                   </div>
                   <div class="phone-box second">
