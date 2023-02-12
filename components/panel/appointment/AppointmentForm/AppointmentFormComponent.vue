@@ -84,9 +84,8 @@
                           تاریخ ویزیت:
                     </span>
                     <span>{{
-                        $moment.utc(appointment.start_at).locale("fa") | toPersianDate('dddd - DD MMMM')
+                        moment.from(this.item.start_at, "en", "YYYY/MM/DDTHH:mm:ssZ").utc(true).format("YYYY/MM/DD HH:mm") | toPersianDate('dddd - DD MMMM')
                       }}</span>
-                    {{appointment.start_at}}
                   </div>
                   <div class="phone-box second" v-if="!isDoctor">
                     <span class="small">
@@ -100,7 +99,7 @@
                     </span>
                     <span>
                       {{
-                        $moment.utc(appointment.start_at).locale("fa").format("HH:mm") | persianDigit
+                        moment.from(this.item.start_at, "en", "YYYY/MM/DDTHH:mm:ssZ").utc(true).format("HH:mm") | persianDigit
                       }}</span>
                   </div>
                   <div class="phone-box second">
@@ -901,6 +900,7 @@ export default {
   },
   data() {
     return {
+      moment: moment,
       loaded: false,
       showUpdateModal: false,
       showActions: false,
