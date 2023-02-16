@@ -136,7 +136,7 @@ export default {
     login() {
       this.$store.dispatch('login/login', this.form)
       .then(res => {
-        if (res.data.user.user_group_id === 1) {
+        if (res.data.data.user.user_group_id === 1) {
           throw NotFoundError
         }
         this.$toast.success("شما با موفقیت وارد شدید");

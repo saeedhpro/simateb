@@ -285,10 +285,12 @@ import AppointmentFormComponent from "~/components/panel/appointment/Appointment
 import CreateAppointmentFormComponent
   from "~/components/panel/appointment/AppointmentForm/CreateAppointmentFormComponent";
 import WorkHourComponent from "~/components/panel/appointment/WorkHourComponent";
+import CustomDateInput from "~/components/custom/CustomDateInput";
 
 export default {
   name: "list",
   components: {
+    CustomDateInput,
     WorkHourComponent,
     CreateAppointmentFormComponent,
     TableAppointmentNoneComponent,
@@ -301,6 +303,7 @@ export default {
   middleware: 'auth',
   data() {
     return {
+      ttt: '',
       showPazireshModal: false,
       showAppointmentModal: false,
       showCreateModal: false,

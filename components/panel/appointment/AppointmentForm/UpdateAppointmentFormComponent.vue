@@ -32,22 +32,23 @@
               >
                 <div class="create-update-model-input-box">
                   <label>تاریخ و ساعت پذیرش</label>
-                  <date-picker
-                    v-model="appointment.start_at"
-                    inputFormat="YYYY-MM-DDTHH:mm:ssZ"
-                    format="YYYY-MM-DDTHH:mm:ssZ"
-                    display-format="HH:mm --- jYYYY/jMM/jDD"
-                    editable
-                    class="date-picker"
-                    type="datetime"
-                    :jump-minute="15"
-                    :round-minute="true"
-                    ref="start"
-                  >
-                    <template v-slot:label>
-                      <img src="/images/form/datepicker.svg">
-                    </template>
-                  </date-picker>
+<!--                  <date-picker-->
+<!--                    v-model="appointment.start_at"-->
+<!--                    inputFormat="YYYY-MM-DDTHH:mm:ssZ"-->
+<!--                    format="jYYYY-jMM-jDDTHH:mm:ssZ"-->
+<!--                    display-format="HH:mm -&#45;&#45; jYYYY/jMM/jDD"-->
+<!--                    editable-->
+<!--                    class="date-picker"-->
+<!--                    type="datetime"-->
+<!--                    :jump-minute="15"-->
+<!--                    :round-minute="true"-->
+<!--                    ref="start"-->
+<!--                  >-->
+<!--                    <template v-slot:label>-->
+<!--                      <img src="/images/form/datepicker.svg">-->
+<!--                    </template>-->
+<!--                  </date-picker>-->
+                  <custom-date-input :initial-value="appointment.start_at" v-model="appointment.start_at" :jump-minute="12" />
                   <span class="create-update-modal-input-error" v-if="errors.start_at">{{ errors.start_at }}</span>
                 </div>
               </v-col>
@@ -209,10 +210,12 @@ import AcceptCreateAppointmentModal from "~/components/panel/appointment/Appoint
 import CustomNationalCodeInput from "~/components/custom/CustomNationalCodeInput";
 import CustomPhoneNumberInput from "~/components/custom/CustomPhoneNumberInput";
 import moment from "jalali-moment";
+import CustomDateInput from "~/components/custom/CustomDateInput";
 
 export default {
   name: "UpdateAppointmentFormComponent",
   components: {
+    CustomDateInput,
     CustomPhoneNumberInput,
     CustomNationalCodeInput,
     AcceptCreateAppointmentModal,
@@ -269,9 +272,9 @@ export default {
       this.resetForm();
     },
     resetForm() {
-      let date = moment.from(this.item.start_at, "en", "YYYY/MM/DDTHH:mm:ssZ").utc(true).format("YYYY/MM/DD HH:mm:ss")
-      date = moment.from(date, 'fa', 'YYYY/MM/DD HH:mm:ss').locale('en').format("YYYY/MM/DD HH:mm:ss")
-      // let date = this.item.start_at
+      // let date = moment.from(this.item.start_at, "en", "YYYY/MM/DDTHH:mm:ssZ").utc(true).format("YYYY/MM/DD HH:mm:ss")
+      // date = moment.from(date, 'fa', 'YYYY/MM/DD HH:mm:ss').locale('en').format("YYYY/MM/DD HH:mm:ss")
+      let date = this.item.start_at
       this.appointment = {
         id: this.item.id,
         start_at: date,
@@ -336,9 +339,7 @@ export default {
         if (!this.appointment.user_id) {
           return
         }
-        let start = this.appointment.start_at.split('+')[0]
-        start += 'Z'
-        console.log(start, "start 1111")
+        const start = this.appointment.start_at.split('+')[0].replaceAll('/', '-') + 'Z'
         this.$store.dispatch('appointments/updateAppointment', {
           ...this.appointment,
           user_id: this.user.id,

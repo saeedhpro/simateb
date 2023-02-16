@@ -35,7 +35,7 @@
                   <date-picker
                     v-model="appointment.start_at"
                     inputFormat="YYYY-MM-DDTHH:mm:ssZ"
-                    format="YYYY-MM-DDTHH:mm:ssZ"
+                    format="YYYY/MM/DDTHH:mm:ssZ"
                     display-format="HH:mm --- jYYYY/jMM/jDD"
                     editable
                     class="date-picker"
@@ -237,7 +237,7 @@ export default {
   data() {
     return {
       appointment: {
-        start_at: this.initTime ? this.initTime : this.$moment.utc().format("YYYY/MM/DDTHH:mm:ssZ"),
+        start_at: this.initTime ? this.$moment.utc(this.initTime).format("YYYY/MM/DDTHH:mm:ssZ") : this.$moment.utc().format("YYYY/MM/DDTHH:mm:ssZ"),
         tel: '',
         cardno: '',
         income: 0,

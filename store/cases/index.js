@@ -47,7 +47,7 @@ export const actions = {
     }
     return this.$axios.get(url)
       .then(res => {
-        const data = res.data;
+        const data = res.data.data;
         ctx.commit('setCaseTypes', data)
         return Promise.resolve(res)
       })

@@ -22,7 +22,7 @@ export const actions = {
   login(ctx, data) {
     return this.$axios.post('/auth/login', data)
       .then(res => {
-        const data = res.data;
+        const data = res.data.data;
         ctx.commit('setToken', data.token)
         ctx.commit('setUser', data.user)
         this.$cookies.set('access_token', data.token)

@@ -135,7 +135,7 @@ export const actions = {
   getUsers(ctx, data) {
     return this.$axios.get(`/organizations/users`)
       .then(res => {
-        const data = res.data;
+        const data = res.data.data;
         ctx.commit('setUsers', data)
         return Promise.resolve(res)
       })

@@ -6,7 +6,7 @@ export const actions = {
       try {
         const res = await this.$axios.get('/own')
         if (res.status === 200) {
-          const data = res.data
+          const data = res.data.data
           commit('login/setToken', token)
           commit('login/setUser', data)
         } else {
