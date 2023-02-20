@@ -467,6 +467,7 @@ export default {
       this.organization.rel_organizations = this.organization.rel_organizations.filter(i => i.rel_organization.id !== val.id)
     },
     addRel(val) {
+      console.log(val, "val")
       this.organization.rel_organizations.push({
         organization: this.organization,
         organization_id: this.organization.id,
@@ -500,16 +501,16 @@ export default {
       return this.$store.getters['login/getUser']
     },
     photographyRelList() {
-      return this.organization.rel_organizations.filter(i => i.profession_id === 1)
+      return this.organization.rel_organizations.filter(i => i.profession_id == 1)
     },
     laboratoryRelList() {
-      return this.organization.rel_organizations.filter(i => i.profession_id === 2)
+      return this.organization.rel_organizations.filter(i => i.profession_id == 2)
     },
     radiologyRelList() {
-      return this.organization.rel_organizations.filter(i => i.profession_id === 3)
+      return this.organization.rel_organizations.filter(i => i.profession_id == 3)
     },
     doctorRelList() {
-      return this.organization.rel_organizations.filter(i => i.profession_id !== 1 && i.profession_id !== 2 && i.profession_id !== 3)
+      return this.organization.rel_organizations.filter(i => i.profession_id != 1 && i.profession_id != 2 && i.profession_id != 3)
     }
   },
   watch: {

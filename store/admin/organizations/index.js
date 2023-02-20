@@ -52,7 +52,7 @@ export const actions = {
   getOrganizations(ctx) {
     return this.$axios.get(`/admin/organizations`)
       .then(res => {
-        const data = res.data;
+        const data = res.data.data;
         ctx.commit('setOrganizations', data)
         return Promise.resolve(res)
       })
@@ -82,7 +82,7 @@ export const actions = {
       })
   },
   getOrganizationsByProfession(ctx, id) {
-    return this.$axios.get(`/admin/organizations/${id}/prof`)
+    return this.$axios.get(`/admin/organizations/${id}/profession`)
       .then(res => {
         const data = res.data;
         ctx.commit('setOrganizationsByProfession', data)

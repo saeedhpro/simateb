@@ -69,7 +69,7 @@
             >
               <div class="page-main-actions-left">
                 <div class="result-count">
-                  <span>{{ users.total_rows ? users.total_rows : 0 | toPersianNumber }}</span>
+                  <span>{{ users.meta.total | toPersianNumber }}</span>
                   نتیجه
                 </div>
                 <div class="page-search-box">
@@ -99,7 +99,7 @@
               <data-table-component
                 :headers="headers"
                 :page="search.page"
-                :total="users.total_rows"
+                :total="users.meta.total"
                 @paginate="paginate"
               >
                 <template v-slot:body>
@@ -130,10 +130,10 @@
                       </span>
                       <span v-else>-</span>
                     <td class="text-center">
-                      {{ i.created ? $moment(i.created).locale("fa").format('jYYYY/jM/jDD') : '-' | persianDigit }}
+                      {{ i.created_at_ago | persianDigit }}
                     </td>
                     <td class="text-center">
-                      {{ i.last_login ? $moment(i.last_login).locale("fa").format('jYYYY/jM/jDD') : '-' | persianDigit }}
+                      {{ i.last_login_ago | persianDigit }}
                     </td>
                   </tr>
                 </template>
@@ -276,7 +276,7 @@ export default {
       this.paginate(1)
     },
     deleteUsers(ids) {
-      this.$store.dispatch('users/deleteUsers', {
+      this.$store.dispatch('users/deleteAdminUsers', {
         ids
       })
         .then(() => {

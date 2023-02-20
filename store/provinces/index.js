@@ -19,9 +19,9 @@ export const mutations = {
 
 export const actions = {
   getList(ctx) {
-    return this.$axios.get(`/provinces?`)
+    return this.$axios.get(`/provinces`)
       .then(res => {
-        const data = res.data;
+        const data = res.data.data;
         ctx.commit('setList', data)
         return Promise.resolve(res)
       })
@@ -32,7 +32,7 @@ export const actions = {
   getCounties(ctx, id) {
     return this.$axios.get(`/provinces/${id}/counties`)
       .then(res => {
-        const data = res.data;
+        const data = res.data.data;
         ctx.commit('setCounties', data)
         return Promise.resolve(res)
       })
@@ -43,7 +43,7 @@ export const actions = {
   getCities(ctx, id) {
     return this.$axios.get(`/counties/${id}/cities`)
       .then(res => {
-        const data = res.data;
+        const data = res.data.data;
         ctx.commit('setCities', data)
         return Promise.resolve(res)
       })

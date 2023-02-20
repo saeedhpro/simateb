@@ -259,7 +259,7 @@
               >
                 <custom-price-input
                   :label="'هزینه درمان'"
-                  v-model="form.due_payment"
+                  v-model="form.surgery_price"
                 />
               </v-col>
               <v-col
@@ -399,7 +399,7 @@ export default {
         introducer: '',
         known_as: '',
         info: '',
-        due_payment: '0',
+        surgery_price: '0',
         pass: '',
         new: null,
         has_surgery: false,
@@ -467,7 +467,7 @@ export default {
         introducer: '',
         known_as: '',
         info: '',
-        due_payment: '0',
+        surgery_price: '0',
         pass: '',
         new: null,
         has_surgery: false,
@@ -560,9 +560,9 @@ export default {
         error = 'فیلد علت جراحی اجباری است'
         isValid = false
       }
-      let p = parseInt(this.form.due_payment.replaceAll(',', '').split(' ')[0])
+      let p = parseInt(this.form.surgery_price.replaceAll(',', '').split(' ')[0])
       if (p < 0 || p > 2147483647) {
-        this.errors.due_payment = 'مبلغ هزینه جراحی باید بین 0 و 2147483647 باشد'
+        this.errors.surgery_price = 'مبلغ هزینه جراحی باید بین 0 و 2147483647 باشد'
         error = 'مبلغ هزینه جراحی باید بین 0 و 2147483647 باشد'
         isValid = false
       }
@@ -585,7 +585,7 @@ export default {
       if (this.validateFrom()) {
         const data = {
           ...this.form,
-          due_payment: parseInt(this.form.due_payment.replaceAll(',', '').split(' ')[0])
+          surgery_price: parseInt(this.form.surgery_price.replaceAll(',', '').split(' ')[0])
         }
         this.$store.dispatch('users/createUser', data)
           .then(() => {

@@ -39,7 +39,7 @@ export const actions = {
   getProfessions(ctx) {
     return this.$axios.get(`/admin/professions`)
       .then(res => {
-        const data = res.data;
+        const data = res.data.data;
         ctx.commit('setProfessions', data)
         return Promise.resolve(res)
       })

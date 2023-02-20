@@ -39,7 +39,7 @@ export const actions = {
   getUserGroups(ctx) {
     return this.$axios.get(`/admin/groups`)
       .then(res => {
-        const data = res.data;
+        const data = res.data.data;
         ctx.commit('setUserGroups', data)
         return Promise.resolve(res)
       })

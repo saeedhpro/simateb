@@ -213,6 +213,15 @@ export const actions = {
         return Promise.reject(err)
       })
   },
+  deleteAdminUsers(ctx, data) {
+    return this.$axios.post(`/admin/users/delete`, data)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
   getMedicalHistory(ctx, id) {
     return this.$axios.get(`/users/${id}/histories`)
       .then(res => {

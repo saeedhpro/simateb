@@ -169,7 +169,7 @@
               >
                 <custom-national-code-input
                   :label="'کد ملی'"
-                  v-model="form.cardno"
+                  v-model="form.nid"
                 />
               </v-col>
               <v-col
@@ -415,7 +415,7 @@ export default {
         gender: '',
         tel: '',
         tel1: '',
-        cardno: '',
+        nid: '',
         birth_date: '',
         file_id: '',
         province_id: 30,
@@ -425,7 +425,7 @@ export default {
         introducer: '',
         known_as: '',
         info: '',
-        due_payment: '0',
+        surgery_price: '0',
         pass: '',
         new: null,
         has_surgery: false,
@@ -445,6 +445,7 @@ export default {
         pass: '',
         has_surgery: '',
         surgery: '',
+        surgery_price: '',
         tel1: '',
       },
       province: {
@@ -491,7 +492,7 @@ export default {
         gender: '',
         tel: '',
         tel1: '',
-        cardno: '',
+        nid: '',
         birth_date: '',
         file_id: '',
         province_id: 0,
@@ -501,7 +502,7 @@ export default {
         introducer: '',
         known_as: '',
         info: '',
-        due_payment: '0',
+        surgery_price: '0',
         pass: '',
         new: null,
         has_surgery: false,
@@ -568,6 +569,7 @@ export default {
         pass: '',
         has_surgery: '',
         surgery: '',
+        surgery_price: '',
         tel1: '',
       }
     },
@@ -634,9 +636,9 @@ export default {
         error = 'فیلد علت جراحی اجباری است'
         isValid = false
       }
-      let p = parseInt(this.form.due_payment.replaceAll(',', '').split(' ')[0])
+      let p = parseInt(this.form.surgery_price.replaceAll(',', '').split(' ')[0])
       if (p < 0 || p > 2147483647) {
-        this.errors.due_payment = 'مبلغ هزینه جراحی باید بین 0 و 2147483647 باشد'
+        this.errors.surgery_price = 'مبلغ هزینه جراحی باید بین 0 و 2147483647 باشد'
         error = 'مبلغ هزینه جراحی باید بین 0 و 2147483647 باشد'
         isValid = false
       }

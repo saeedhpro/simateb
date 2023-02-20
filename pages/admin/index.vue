@@ -40,7 +40,7 @@
                     <td class="text-center">{{ i.tel | persianDigit }}</td>
                     <td class="text-center">{{ i.user_group ? i.user_group.name : '-' | persianDigit }}</td>
                     <td class="text-center">
-                      {{ i.last_login ? i.last_login : '-' | toRelativeDate }}
+                      {{ i.last_login_ago | persianDigit }}
                     </td>
                   </tr>
                 </template>
@@ -89,7 +89,7 @@
                     <td class="text-center">{{ i.tel | persianDigit }}</td>
                     <td class="text-center">{{ i.user_group ? i.user_group.name : '-' | persianDigit }}</td>
                     <td class="text-center">
-                      {{ i.last_login ? i.last_login : '-' | toRelativeDate }}
+                      {{ i.last_login_ago | persianDigit }}
                     </td>
                   </tr>
                 </template>

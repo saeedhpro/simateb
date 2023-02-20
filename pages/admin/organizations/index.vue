@@ -37,7 +37,7 @@
             >
               <div class="page-main-actions-left">
                 <div class="result-count">
-                  <span>{{ organizations.total_rows ? organizations.total_rows : 0 | toPersianNumber }}</span>
+                  <span>{{ organizations.meta ? organizations.meta.total : 0 | toPersianNumber }}</span>
                   نتیجه
                 </div>
                 <div class="page-search-box">
@@ -80,7 +80,7 @@
                                v-model="selectedOrganizations"
                                :value="i.id"
                         />
-                        <img :src="i.logo ? i.logo : 'https://randomuser.me/api/portraits/men/88.jpg'">
+                        <img :src="i.logo_link ? i.logo_link : 'https://randomuser.me/api/portraits/men/88.jpg'">
                         <span><nuxt-link :to="`/admin/organizations/${i.id}`">{{
                             `${i.name}` | persianDigit
                           }}</nuxt-link></span>
@@ -90,8 +90,7 @@
                     <td class="text-center">{{ i.profession ? i.profession.name : '-' | persianDigit }}</td>
                     <td class="text-center">{{ `${i.sms_credit} (${i.sms_price})` | persianDigit }}</td>
                     <td class="text-center">
-<!--                      {{ i.created_at ? $moment(i.created_at).format('jYYYY/jM/jDD') : '-' | persianDigit }}-->
-                      {{ i.staff ? `${i.staff.organization.name}` : '-' | persianDigit }}
+                      {{ i.created_at_ago ? i.created_at_ago : '-' | persianDigit }}
                     </td>
                     <td class="text-center">{{
                         i.staff ? `${i.staff.fname} ${i.staff.lname}` : '-' | persianDigit

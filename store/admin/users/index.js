@@ -8,6 +8,9 @@ export const state = () => ({
     limit: 10,
     page: 1,
     sort: '',
+    meta: {
+      total: 0,
+    },
     total_rows: 0,
     total_pages: 0
   }
@@ -47,7 +50,8 @@ export const actions = {
   getUsers(ctx,) {
     return this.$axios.get(`/admin/users`)
       .then(res => {
-        const data = res.data;
+        const data = res.data.data
+        ;
         ctx.commit('setUsers', data)
         return Promise.resolve(res)
       })
@@ -67,7 +71,7 @@ export const actions = {
   getOnlineUsers(ctx) {
     return this.$axios.get(`/admin/users/online`)
       .then(res => {
-        const data = res.data;
+        const data = res.data.data;
         ctx.commit('setOnlineUsers', data)
         return Promise.resolve(res)
       })
@@ -78,7 +82,7 @@ export const actions = {
   getOnlinePatients(ctx) {
     return this.$axios.get(`/admin/patients/online`)
       .then(res => {
-        const data = res.data;
+        const data = res.data.data;
         ctx.commit('setOnlinePatients', data)
         return Promise.resolve(res)
       })

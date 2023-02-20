@@ -65,7 +65,7 @@
             >
               <div class="page-main-actions-left">
                 <div class="result-count">
-                  <span>{{ messages.total_rows ? messages.total_rows : 0 | toPersianNumber }}</span>
+                  <span>{{ messages.meta ? messages.meta.total : 0 | toPersianNumber }}</span>
                   نتیجه
                 </div>
                 <div class="page-search-box">
@@ -95,7 +95,7 @@
               <data-table-component
                 :headers="headers"
                 :page="search.page"
-                :total="messages.total_rows"
+                :total="messages.meta.total"
                 @paginate="paginate"
               >
                 <template v-slot:body>
@@ -124,7 +124,7 @@
                       }}
                     </td>
                     <td class="text-center">
-                      {{ i.created ? i.created : '-' | toRelativeDate }}
+                      {{ i.created_ago }}
                     </td>
                     <td class="text-center"><span class="message"
                                                   :class="{'message-sent': i.sent, 'message-not-sent': !i.sent}">{{
