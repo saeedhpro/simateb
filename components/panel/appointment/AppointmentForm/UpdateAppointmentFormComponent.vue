@@ -32,23 +32,23 @@
               >
                 <div class="create-update-model-input-box">
                   <label>تاریخ و ساعت پذیرش</label>
-<!--                  <date-picker-->
-<!--                    v-model="appointment.start_at"-->
-<!--                    inputFormat="YYYY-MM-DDTHH:mm:ssZ"-->
-<!--                    format="jYYYY-jMM-jDDTHH:mm:ssZ"-->
-<!--                    display-format="HH:mm -&#45;&#45; jYYYY/jMM/jDD"-->
-<!--                    editable-->
-<!--                    class="date-picker"-->
-<!--                    type="datetime"-->
-<!--                    :jump-minute="15"-->
-<!--                    :round-minute="true"-->
-<!--                    ref="start"-->
-<!--                  >-->
-<!--                    <template v-slot:label>-->
-<!--                      <img src="/images/form/datepicker.svg">-->
-<!--                    </template>-->
-<!--                  </date-picker>-->
-                  <custom-date-input :initial-value="appointment.start_at" v-model="appointment.start_at" :jump-minute="12" />
+                  <date-picker
+                    v-model="appointment.start_at"
+                    inputFormat="YYYY-MM-DD HH:mm:ss"
+                    format="YYYY-MM-DD HH:mm:ss"
+                    display-format="HH:mm --- jYYYY/jMM/jDD"
+                    editable
+                    class="date-picker"
+                    type="datetime"
+                    :jump-minute="15"
+                    :round-minute="true"
+                    ref="start"
+                  >
+                    <template v-slot:label>
+                      <img src="/images/form/datepicker.svg">
+                    </template>
+                  </date-picker>
+<!--                  <custom-date-input :initial-value="appointment.start_at" v-model="appointment.start_at" :jump-minute="12" />-->
                   <span class="create-update-modal-input-error" v-if="errors.start_at">{{ errors.start_at }}</span>
                 </div>
               </v-col>
@@ -278,10 +278,10 @@ export default {
       this.appointment = {
         id: this.item.id,
         start_at: date,
-        tel: this.item.user.tel,
-        cardno: this.item.user.cardno,
-        income: this.item.user.income,
-        user_id: this.item.user.id,
+        tel: this.item.user ? this.item.user.tel : '',
+        cardno: this.item.user ? this.item.user.cardno : '',
+        income: this.item.user ? this.item.user.income : 0,
+        user_id: this.item.user_id,
         case_type: this.item.case_type,
         info: this.item.info,
         status: this.item.status,
@@ -339,7 +339,7 @@ export default {
         if (!this.appointment.user_id) {
           return
         }
-        const start = this.appointment.start_at.split('+')[0].replaceAll('/', '-') + 'Z'
+        const start = this.appointment.start_at
         this.$store.dispatch('appointments/updateAppointment', {
           ...this.appointment,
           user_id: this.user.id,
@@ -368,8 +368,7 @@ export default {
     },
     isDoctor() {
       if (!this.loginUser) return false;
-      const profession_id = this.loginUser.organization.profession_id;
-      return profession_id !== 1 && profession_id !== 2 && profession_id !== 3
+      return this.loginUser.organization.is_doctor;
     },
     loginUser() {
       return this.$store.getters['login/getUser']

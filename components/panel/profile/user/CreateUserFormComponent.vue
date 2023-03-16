@@ -13,7 +13,7 @@
         >
           <div class="create-update-modal-title">
             <button
-              @click="closeForm"
+              @click="closeForm(false)"
               class="create-update-modal-close"
             >
               <v-icon>mdi-close</v-icon>
@@ -314,7 +314,7 @@
               >
                 <button
                   class="second-button"
-                  @click="closeForm"
+                  @click="closeForm(false)"
                 >
                   بستن
                 </button>
@@ -385,7 +385,7 @@ export default {
         lname: '',
         email: '',
         user_group_id: 1,
-        organization_id: this.org ? this.org.id : this.loginUser && this.loginUser.organization ? this.loginUser.organization.id : 1,
+        organization_id: this.org ? this.org.id : this.loginUser ? this.loginUser.organization_id : 1,
         gender: '',
         tel: '',
         tel1: '',
@@ -441,10 +441,15 @@ export default {
     this.getProvinces()
     this.getOrganizations()
     this.getUserGroups()
+    this.resetForm()
   },
   methods: {
-    closeForm() {
-      this.$emit('close')
+    closeForm(done = false) {
+      if (done) {
+        this.$emit('done')
+      } else {
+        this.$emit('close')
+      }
       this.resetForm();
     },
     resetForm() {
@@ -453,7 +458,7 @@ export default {
         lname: '',
         email: '',
         user_group_id: 1,
-        organization_id: this.org ? this.org : this.loginUser.organization ? this.loginUser.organization.id : 1,
+        organization_id: this.org ? this.org.id : this.loginUser ? this.loginUser.organization_id : 1,
         gender: '',
         tel: '',
         tel1: '',
@@ -487,7 +492,10 @@ export default {
         id: 30,
         name: "همدان",
       }
-      this.organization = this.org ? this.org : this.loginUser.organization ? this.loginUser.organization : {
+      this.form.province_id = 30
+      this.form.county_id = 419
+      this.form.city_id = 1225
+      this.organization = this.org ? this.org : this.loginUser ? this.loginUser.organization : {
         id: 1,
         name: "فتوگرافی سیما طب"
       }

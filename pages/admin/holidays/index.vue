@@ -261,7 +261,7 @@
               <data-table-component
                 :headers="headers"
                 :page="search.page"
-                :total="holidays.total_rows"
+                :total="holidays.meta.total"
                 @paginate="paginate"
               >
                 <template v-slot:body>
@@ -351,8 +351,9 @@ export default {
         .locale("en")
         .format('YYYY-MM-DD HH:mm:ss')
       const end = moment.from(`${this.year}/12/01 23:59:59`, 'fa', 'YYYY/MM/DD HH:mm:ss')
+        .endOf("jYear")
         .locale("en")
-        .subtract("1 day").format('YYYY-MM-DD HH:mm:ss')
+        .format('YYYY-MM-DD HH:mm:ss')
       this.search.start = start
       this.search.end = end
       this.paginate()

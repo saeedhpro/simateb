@@ -160,7 +160,7 @@ export default {
           ie_anomalies: histories.ie_anomalies,
         }
       }
-    }, 100)
+    }, 250)
   },
   data() {
     return {

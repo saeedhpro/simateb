@@ -4,7 +4,7 @@
     <div class="input-box">
       <v-icon v-if="status === 'valid'" color="#2BC4A9">mdi-check</v-icon>
       <v-icon v-if="status === 'invalid'" color="#F44336">mdi-alert-circle</v-icon>
-      <input :type="type" v-model="data" @focusout="check" :class="{'has-status': status !== 'none', 'invalid': status === 'invalid', 'valid': status === 'valid'}">
+      <input :max="max" :type="type" v-model="data" @focusout="check" :class="{'has-status': status !== 'none', 'invalid': status === 'invalid', 'valid': status === 'valid'}">
     </div>
     <span class="create-update-modal-input-error" v-if="error">{{ error }}</span>
   </div>
@@ -30,6 +30,10 @@ export default {
       type: [String, Object, Number],
       default: "",
     },
+    max: {
+      type: Number,
+      default: 1000000000,
+    }
   },
   data() {
     return {
@@ -69,7 +73,7 @@ export default {
   computed: {
     data: {
       get() {
-        return this.value
+        return this.value ?? ''
       },
       set(value) {
         this.$emit("input", value)

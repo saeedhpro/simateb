@@ -48,10 +48,24 @@
                       @change="chooseImage"
                     >
                     <img
+                      v-if="form.new"
                       class="full-height"
-                      :src="form.new ? form.new : '/images/pages/img.svg'"
+                      :src="form.new"
                       @click="openChooseImage"
                     >
+                    <img
+                      v-else-if="item.logo"
+                      class="full-height"
+                      :src="item.logo"
+                      @click="openChooseImage"
+                    >
+                    <img
+                      v-else
+                      class="full-height"
+                      :src="'/images/pages/img.svg'"
+                      @click="openChooseImage"
+                    >
+
                     <crop-image-component
                       ref="crop"
                       @imaged="imaged"
@@ -177,6 +191,7 @@
                 <custom-national-code-input
                   :label="'کد ملی'"
                   v-model="form.cardno"
+                  :max="10"
                 />
               </v-col>
               <v-col
@@ -417,23 +432,23 @@ export default {
         user_group_id: 1,
         organization_id: this.item.organization ? this.item.organization.id : 1,
         gender: '',
+        logo: this.item.logo,
         tel: '',
         tel1: '',
         cardno: '',
         birth_date: '',
         file_id: '',
-        province_id: 0,
-        county_id: 0,
-        city_id: 0,
         address: '',
         introducer: '',
         known_as: '',
         info: '',
-        due_payment: '0',
         pass: '',
         new: null,
         has_surgery: false,
         surgery: '',
+        city_id: this.item.city_id,
+        province_id: this.item.province_id,
+        county_id: this.item.county_id,
       },
       errors: {
         fname: '',
@@ -450,7 +465,6 @@ export default {
         pass: '',
         has_surgery: '',
         surgery: '',
-        due_payment: '',
       },
 
       city: this.item.city ? this.item.city : {
@@ -506,14 +520,14 @@ export default {
         cardno: this.item.cardno,
         birth_date: this.item.birth_date,
         file_id: this.item.file_id,
-        province_id: null,
-        county_id: null,
         city_id: this.item.city_id,
+        province_id: this.item.province_id,
+        county_id: this.item.county_id,
+        logo: this.item.logo,
         address: this.item.address,
         introducer: this.item.introducer,
         known_as: this.item.known_as,
         info: this.item.info,
-        due_payment: this.item.due_payment,
         pass: '',
         new: null,
         has_surgery: this.item.has_surgery,
@@ -541,6 +555,9 @@ export default {
         id: 1,
         name: "فتوگرافی سیما طب"
       }
+      this.form.province_id = this.province.id;
+      this.form.county_id = this.county.id;
+      this.form.city_id = this.city.id;
       this.resetErrors()
     },
     resetErrors() {
@@ -559,7 +576,6 @@ export default {
         has_surgery: '',
         surgery: '',
         tel1: '',
-        due_payment: '',
       }
     },
     validateFrom() {
@@ -621,12 +637,12 @@ export default {
         error = 'فیلد علت جراحی اجباری است'
         isValid = false
       }
-      let p = parseInt(this.form.due_payment.replaceAll(',', '').split(' ')[0])
-      if (p < 0 || p > 2147483647) {
-        this.errors.due_payment = 'مبلغ هزینه جراحی باید بین 0 و 2147483647 باشد'
-        error = 'مبلغ هزینه جراحی باید بین 0 و 2147483647 باشد'
-        isValid = false
-      }
+      // let p = parseInt(this.form.due_payment.replaceAll(',', '').split(' ')[0])
+      // if (p < 0 || p > 2147483647) {
+      //   this.errors.due_payment = 'مبلغ هزینه جراحی باید بین 0 و 2147483647 باشد'
+      //   error = 'مبلغ هزینه جراحی باید بین 0 و 2147483647 باشد'
+      //   isValid = false
+      // }
       if (!isValid) {
         this.$toast.error(error)
       }
@@ -646,8 +662,8 @@ export default {
       if (this.validateFrom()) {
         const data = {
           ...this.form,
-          due_payment: parseInt(this.form.due_payment.replaceAll(',', '').split(' ')[0])
         }
+        // due_payment: parseInt(this.form.due_payment.replaceAll(',', '').split(' ')[0])
         if (!this.form.pass) {
           delete data.pass
         }

@@ -200,13 +200,13 @@ export default {
       const professionID = this.loginUser.organization.profession_id
       switch (tabName) {
         case 'photography':
-          return professionID !== 2 && professionID !== 3
+          return professionID != 2 && professionID != 3
         case 'laboratory':
-          return professionID !== 1 && professionID !== 3
+          return professionID != 1 && professionID != 3
         case 'radiology':
-          return professionID !== 1 && professionID !== 2
+          return professionID != 1 && professionID != 2
         case 'doctor':
-          return professionID !== 1 && professionID !== 2 && professionID !== 3
+          return professionID != 1 && professionID != 2 && professionID != 3
       }
     },
     onChanged(item) {

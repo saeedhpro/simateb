@@ -19,6 +19,7 @@
           class="create-update-modal paziresh-form"
         >
           <v-card-title
+            v-if="showDateBox"
             class="create-update-modal-title-box"
           >
             <div class="create-update-modal-title">
@@ -40,7 +41,7 @@
             </div>
           </v-card-title>
           <v-card-text>
-            <div class="custom-date-picker-content-header d-flex flex-row align-center justify-space-between">
+            <div v-if="showDateBox"  class="custom-date-picker-content-header d-flex flex-row align-center justify-space-between">
               <v-btn
                 dense
                 icon
@@ -60,8 +61,8 @@
                 <v-icon size="medium">mdi-arrow-left</v-icon>
               </v-btn>
             </div>
-            <v-divider/>
-            <div class="custom-date-picker-days-list">
+            <v-divider v-if="showDateBox" />
+            <div v-if="showDateBox" class="custom-date-picker-days-list">
               <div
                 v-for="(l, n) in 1"
                 :key="n"
@@ -76,7 +77,7 @@
                 </div>
               </div>
             </div>
-            <div class="custom-date-picker-days-list">
+            <div v-if="showDateBox" class="custom-date-picker-days-list">
               <div
                 v-for="(l, n) in monthDays"
                 :key="n"
@@ -97,8 +98,8 @@
                 </div>
               </div>
             </div>
-            <v-divider />
-            <div class="custom-time-input">
+            <v-divider v-if="showDateBox && showTimeBox" />
+            <div class="custom-time-input" v-if="showTimeBox">
               <div class="time-box">
                 <v-btn
                   small
@@ -215,6 +216,10 @@ export default {
       max: 59,
       min: 1
     },
+    type: {
+      type: String,
+      default: 'datetime'
+    }
   },
   data() {
     return {
@@ -463,7 +468,13 @@ export default {
       } else {
         return this.label
       }
-    }
+    },
+    showDateBox() {
+      return this.type === 'datetime'
+    },
+    showTimeBox() {
+      return this.type === 'time'
+    },
   },
   watch: {
     date() {

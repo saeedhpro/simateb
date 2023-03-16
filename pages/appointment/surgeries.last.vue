@@ -214,15 +214,15 @@
                     </thead>
                     <tbody>
                     <tr
-                      v-for="(items, i) in maxLength"
-                      :key="i"
+                        v-for="(items, i) in que.max_length"
+                        :key="i"
                     >
                       <td
                         v-for="(item, j) in list.length"
                       >
                         <table-appointment-component
                           v-if="list[j][i]"
-                          :class="{'is-today': isToday(j + 1), 'is-friday': isFriday(j + 1)}"
+                          :class="{'is-today': isToday(j), 'is-friday': isFriday(j)}"
                           :item="list[j][i]"
                           :day="j"
                           :month="month"
@@ -231,13 +231,13 @@
                         />
                         <table-appointment-none-component
                           v-else
-                          :class="{'is-today': isToday(j + 1), 'is-friday': isFriday(j + 1)}"
+                          :class="{'is-today': isToday(j), 'is-friday': isFriday(j)}"
                           :start-at="getTime(i)"
                           :show-hour="showHour"
                           :day="j"
                           :month="month"
                           :year="year"
-                          @click.native="openPazireshModal(`${year}/${month}/${j + 1} ${getTime(i)}`)"
+                          @click.native="openPazireshModal(`${year}/${month}/${j} ${Date.now()}`)"
                         />
                       </td>
                     </tr>
@@ -285,12 +285,10 @@ import AppointmentFormComponent from "~/components/panel/appointment/Appointment
 import CreateAppointmentFormComponent
   from "~/components/panel/appointment/AppointmentForm/CreateAppointmentFormComponent";
 import WorkHourComponent from "~/components/panel/appointment/WorkHourComponent";
-import CustomDateInput from "~/components/custom/CustomDateInput";
 
 export default {
   name: "list",
   components: {
-    CustomDateInput,
     WorkHourComponent,
     CreateAppointmentFormComponent,
     TableAppointmentNoneComponent,
@@ -303,7 +301,6 @@ export default {
   middleware: 'auth',
   data() {
     return {
-      ttt: '',
       showPazireshModal: false,
       showAppointmentModal: false,
       showCreateModal: false,
@@ -455,8 +452,7 @@ export default {
         clock_ques: [],
         limits: [],
         default_duration: 20,
-        max_length: 8,
-        clock_max_length: 8,
+        max_length: 20,
         work_hour: {
           end: "",
           start: ""
@@ -502,8 +498,9 @@ export default {
         })
     },
     openPazireshModal(i) {
-      let date = moment.from(i, 'fa', 'YYYY/MM/DD HH:mm:ss').locale('en').format("YYYY/MM/DD HH:mm:ss")
+      let date = moment.from(i, 'fa', 'YYYY/MM/DD HH:mm:ss').locale('en').format("YYYY/MM/DDTHH:mm:ssZ")
       this.initTime = date
+      console.log(date, "date")
       // this.initTime = moment.from(i, "fa", "jYYYY/jMM/jDD HH:mm:ss").locale("en").local().format("YYYY/MM/DD HH:mm:ss")
       this.showPazireshModal = true
     },
@@ -563,7 +560,7 @@ export default {
     },
     getAppointmentList() {
       this.calcDate()
-        this.$store.dispatch('appointments/getQueV2', this.search)
+      this.$store.dispatch('appointments/getQueV2', this.search)
         .then(res => {
           this.que = res.data
           if (this.showHour) {
@@ -581,12 +578,12 @@ export default {
       let yearMonth = moment.from(`${this.year}/${this.month}`, "fa", "jYYYY/jMM").format("jYYYY/jMM")
       const lastDay = moment.from(`${this.year}/${this.month}`, "fa", "jYYYY/jMM").jDaysInMonth()
       this.lastDay = lastDay
-      const start = moment.from(`${yearMonth}/01`, "fa", "YYYY/MM/DD").format('jYYYY/jMM/jDD')
-      const end = moment.from(`${yearMonth}/${lastDay}`, "fa", "YYYY/MM/DD").format('jYYYY/jMM/jDD')
+      const start = moment.from(`${yearMonth}/01`, "fa", "YYYY/MM/DD").locale("en").format("YYYY/MM/DD")
+      const end = moment.from(`${yearMonth}/${lastDay}`, "fa", "YYYY/MM/DD").locale("en").format("YYYY/MM/DD")
       this.search = {
         start,
         end,
-        case_type: 'جراحی'
+        case_type: ''
       }
     },
     getUsers() {
@@ -640,7 +637,7 @@ export default {
     },
     isFriday(day) {
       const d = moment.from(`${this.year}/${this.month}/${day}`, "fa", "jYYYY/jMM/jDD");
-      return d.format("dddd") === 'جمعه'
+      return d.weekday() == 6
     },
     getTime(day) {
       const wh = this.que.work_hour
@@ -667,9 +664,6 @@ export default {
     }
   },
   computed: {
-    maxLength() {
-      return this.showHour ? this.que.clock_max_length : this.que.max_length;
-    },
     mini() {
       return this.$vuetify.breakpoint.mdAndDown
     },

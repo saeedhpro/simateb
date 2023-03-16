@@ -28,7 +28,7 @@ export const actions = {
   getList(ctx, type) {
     return this.$axios.get(`/organizations/type?type=${type}`)
       .then(res => {
-        const data = res.data;
+        const data = res.data.data;
         if (type === 'radiology') {
           ctx.commit('setRadiologyList', data)
         } else if (type === 'photography') {
@@ -44,7 +44,7 @@ export const actions = {
     ctx.commit('setOrganization', null)
     return this.$axios.get(`/organizations/${id}`)
       .then(res => {
-        const data = res.data;
+        const data = res.data.data;
           ctx.commit('setOrganization', data)
         return Promise.resolve(res)
       })

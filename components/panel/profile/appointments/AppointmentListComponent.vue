@@ -25,12 +25,12 @@
       />
       <div
         class="more-items"
-        v-if="list.total_rows > 10"
+        v-if="list.meta.total > 10"
       >
         <v-pagination
           dir="ltr"
           v-model="page"
-          :length="list.total_pages"
+          :length="list.meta.total"
           :total-visible="5"
         ></v-pagination>
       </div>

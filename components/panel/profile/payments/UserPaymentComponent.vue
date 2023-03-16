@@ -84,7 +84,7 @@
               <data-table-component
                 :headers="headers"
                 :page="page"
-                :total="payments.total_rows"
+                :total="payments.meta.total"
                 @paginate="paginate"
               >
                 <template v-slot:body>
@@ -124,7 +124,7 @@
                   </tr>
                 </template>
                 <template v-slot:notfound>
-                  <div v-if="payments.total_rows === 0">اطلاعاتی یافت نشد</div>
+                  <div v-if="payments.meta.total === 0">اطلاعاتی یافت نشد</div>
                 </template>
               </data-table-component>
             </v-col>
@@ -463,6 +463,10 @@ export default {
         check_bank: '',
         check_num: '',
         check_date: '',
+        check_status: 0,
+        discount: 0,
+        ok: 1,
+        income: 1,
       },
       errors: {
         amount: '',

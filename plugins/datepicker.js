@@ -7,6 +7,6 @@ Vue.use(VuePersianDatetimePicker, {
     placeholder: '',
     color: '#00acc1',
     autoSubmit: true,
-    format: 'YYYY-MM-DDTHH:mm:ssZ'
+    format: 'YYYY-MM-DD HH:mm:ss'
   }
 });

@@ -38,7 +38,7 @@
             class="info-input"
             @input="changeInput"
             name="info"
-            :value="i"
+            v-model="i"
             :disabled="isPatient"
           >
 
@@ -61,7 +61,7 @@
             class="comment-input"
             @input="changeInput"
             name="comment"
-            :value="c"
+            v-model="c"
             :disabled="!isPatient"
           >
       </textarea>
@@ -127,7 +127,7 @@
         cols="12"
       >
         <div class="d-flex justify-end">
-          <button class="main-button" :style="{maxWidth: '160px'}">ذخیره</button>
+          <button class="main-button" :style="{maxWidth: '160px'}" @click="change">ذخیره</button>
         </div>
       </v-col>
     </v-row>
@@ -139,6 +139,10 @@ export default {
   name: "FileItemComponent",
   props: {
     id: {
+      type: Number,
+      required: true,
+    },
+    index: {
       type: Number,
       required: true,
     },
@@ -185,11 +189,19 @@ export default {
       this.remove()
     },
     changeInput(e) {
+      // this.$emit('input', {
+      //   id: this.id,
+      //   index: this.index,
+      //   [e.target.name]: e.target.value,
+      // })
+    },
+    change() {
       this.$emit('change', {
         id: this.id,
-        [e.target.name]: e.target.value,
+        info: this.i,
+        comment: this.c,
       })
-    },
+    }
   },
   computed: {
     loginUser() {

@@ -5,7 +5,7 @@ export const actions = {
       await this.$axios.setHeader('Authorization', `Bearer ${token}`)
       try {
         const res = await this.$axios.get('/own')
-        if (res.status === 200) {
+        if (res.status == 200) {
           const data = res.data.data
           commit('login/setToken', token)
           commit('login/setUser', data)

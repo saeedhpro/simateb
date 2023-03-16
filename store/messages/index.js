@@ -6,7 +6,10 @@ export const state = () => ({
     page: 1,
     sort: '',
     total_rows: 0,
-    total_pages: 0
+    total_pages: 0,
+    meta: {
+      total: 0
+    }
   },
   message: null,
   messages: [],

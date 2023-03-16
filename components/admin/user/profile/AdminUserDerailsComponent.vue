@@ -29,7 +29,7 @@
                       <div class="label-box">نام و نام خانوادگی:</div>
                     </v-col>
                     <v-col cols="6">
-                      <div class="value-box">{{ `${user.fname} ${user.lname}` | persianDigit }}</div>
+                      <div class="value-box">{{ `${user.full_name}` | persianDigit }}</div>
                     </v-col>
                   </v-row>
                   <v-row style="width: 100%" v-if="user.age > 0">
@@ -76,7 +76,7 @@
                       <div class="label-box">کد ملی:</div>
                     </v-col>
                     <v-col cols="6">
-                      <div class="value-box">{{ user.cardno | persianDigit }}</div>
+                      <div class="value-box">{{ user.cardno ? user.cardno : '-' | persianDigit }}</div>
                     </v-col>
                   </v-row>
                   <v-row style="width: 100%">
@@ -85,7 +85,7 @@
                     </v-col>
                     <v-col cols="6">
                       <div class="value-box">{{
-                          user.birth_date ? $moment(user.birth_date).format("jYYYY/jMM/jDD") : '-' | persianDigit
+                          user.birth_date_jallali ? user.birth_date_jallali : '-' | persianDigit
                         }}
                       </div>
                     </v-col>

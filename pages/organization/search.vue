@@ -49,7 +49,7 @@
             >
               <div class="page-main-actions-left">
                 <div class="result-count">
-                  <span>{{ appointments.total_rows ? appointments.total_rows : 0 | toPersianNumber }}</span>
+                  <span>{{ appointments.meta.total ? appointments.meta.total : 0 | toPersianNumber }}</span>
                   نتیجه
                 </div>
                 <div class="page-search-box">
@@ -208,7 +208,7 @@
                 v-if="isDoctor"
                 :headers="doctorHeaders"
                 :page="search.page"
-                :total="appointments.total_rows"
+                :total="appointments.meta.total"
                 @paginate="paginate"
               >
                 <template v-slot:body>
@@ -284,14 +284,14 @@
                   </tr>
                 </template>
                 <template v-slot:notfound>
-                  <div v-if="appointments.total_rows === 0">اطلاعاتی یافت نشد</div>
+                  <div v-if="appointments.meta.total == 0">اطلاعاتی یافت نشد</div>
                 </template>
               </data-table-component>
               <data-table-component
                 v-else
                 :headers="headers"
                 :page="search.page"
-                :total="appointments.total_rows"
+                :total="appointments.meta.total"
                 @paginate="paginate"
               >
                 <template v-slot:body>
@@ -349,7 +349,7 @@
                   </tr>
                 </template>
                 <template v-slot:notfound>
-                  <div v-if="appointments.total_rows === 0">اطلاعاتی یافت نشد</div>
+                  <div v-if="appointments.meta.total == 0">اطلاعاتی یافت نشد</div>
                 </template>
               </data-table-component>
             </v-col>
@@ -604,11 +604,11 @@ export default {
     },
     getCases(item) {
       const profession_id = this.loginUser.organization.profession_id;
-      if (profession_id === 1) {
+      if (profession_id == 1) {
         return item.photography_cases
-      } else if (profession_id === 2) {
+      } else if (profession_id == 2) {
         return item.laboratory_cases
-      } else if (profession_id === 3) {
+      } else if (profession_id == 3) {
         return item.radiology_cases
       } else {
         return '-'
@@ -616,20 +616,20 @@ export default {
     },
     resulted(appointment, type) {
       const profession_id = this.loginUser.organization.profession_id;
-      if (profession_id === 1) {
-        return appointment.p_admission_at !== null && appointment.p_result_at !== null
-      } else if (profession_id === 2) {
-        return appointment.l_admission_at !== null && appointment.l_result_at !== null
-      } else if (profession_id === 3) {
-        return appointment.r_admission_at !== null && appointment.r_result_at !== null
+      if (profession_id == 1) {
+        return appointment.p_admission_at != "" && appointment.p_result_at != "" && appointment.p_admission_at != null && appointment.p_result_at != null
+      } else if (profession_id == 2) {
+        return appointment.l_admission_at != "" && appointment.l_result_at != "" && appointment.l_admission_at != null && appointment.l_result_at != null
+      } else if (profession_id == 3) {
+        return appointment.r_admission_at != "" && appointment.r_result_at != "" && appointment.r_admission_at != null && appointment.r_result_at != null
       } else {
         switch (type) {
           case 1:
-            return appointment.p_admission_at !== null && appointment.p_result_at !== null
+            return appointment.p_admission_at != "" && appointment.p_result_at != "" && appointment.p_admission_at != null && appointment.p_result_at != null
           case 2:
-            return appointment.l_admission_at !== null && appointment.l_result_at !== null
+            return appointment.l_admission_at != "" && appointment.l_result_at != "" && appointment.l_admission_at != null && appointment.l_result_at != null
           case 3:
-            return appointment.r_admission_at !== null && appointment.r_result_at !== null
+            return appointment.r_admission_at != "" && appointment.r_result_at != "" && appointment.r_admission_at != null && appointment.r_result_at != null
           default:
             return false;
         }
@@ -637,12 +637,12 @@ export default {
     },
     admissioned(appointment) {
       const profession_id = this.loginUser.organization.profession_id;
-      if (profession_id === 1) {
-        return appointment.p_admission_at !== null
-      } else if (profession_id === 2) {
-        return appointment.l_admission_at !== null
-      } else if (profession_id === 3) {
-        return appointment.r_admission_at !== null
+      if (profession_id == 1) {
+        return appointment.p_admission_at != "" && appointment.p_admission_at != null
+      } else if (profession_id == 2) {
+        return appointment.l_admission_at != "" && appointment.l_admission_at != null
+      } else if (profession_id == 3) {
+        return appointment.r_admission_at != "" && appointment.r_admission_at != null
       }
       return false;
     },
@@ -671,7 +671,7 @@ export default {
     },
     selectedAll: {
       get() {
-        return this.selectedItems.length > 0 && this.selectedItems.length === this.appointments.data.length
+        return this.selectedItems.length > 0 && this.selectedItems.length == this.appointments.data.length
       },
       set(bool) {
         if (bool) {
@@ -693,8 +693,7 @@ export default {
     },
     isDoctor() {
       if (!this.loginUser) return false;
-      const profession_id = this.loginUser.organization.profession_id;
-      return profession_id !== 1 && profession_id !== 2 && profession_id !== 3
+      return this.loginUser.organization.is_doctor;
     },
     mini() {
       return this.$vuetify.breakpoint.mdAndDown

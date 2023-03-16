@@ -14,13 +14,19 @@ export const state = () => ({
     page: 1,
     sort: '',
     total_rows: 0,
-    total_pages: 0
+    total_pages: 0,
+    meta: {
+      total: 0
+    }
   },
   organizationPatients: {
     data: [],
     limit: 10,
     page: 1,
     sort: '',
+    meta: {
+      total: 0,
+    },
     total_rows: 0,
     total_pages: 0
   },
@@ -155,9 +161,9 @@ export const actions = {
       })
   },
   getOrganizationUsers(ctx, id) {
-    return this.$axios.get(`/organizations/${id}/users/all`)
+    return this.$axios.get(`/organizations/${id}/users`)
       .then(res => {
-        const data = res.data;
+        const data = res.data.data;
         ctx.commit('setUsers', data)
         return Promise.resolve(res)
       })
@@ -169,7 +175,7 @@ export const actions = {
     ctx.commit('setUser', null)
     return this.$axios.get(`/users/${id}`)
       .then(res => {
-        const data = res.data;
+        const data = res.data.data;
         ctx.commit('setUser', data)
         return Promise.resolve(res)
       })
@@ -225,7 +231,7 @@ export const actions = {
   getMedicalHistory(ctx, id) {
     return this.$axios.get(`/users/${id}/histories`)
       .then(res => {
-        const data = res.data
+        const data = res.data.data
         const h = {
           accident_to_Head: "",
           adenoid_tonsile_reduction: "",

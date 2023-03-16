@@ -84,7 +84,7 @@
                           تاریخ ویزیت:
                     </span>
                     <span>{{
-                        moment.from(this.item.start_at, "en", "YYYY/MM/DDTHH:mm:ssZ").utc(true).format("YYYY/MM/DD HH:mm") | toPersianDate('dddd - DD MMMM')
+                        moment.from(this.item.start_at, "en", "YYYY/MM/DD HH:mm:ss").utc(true).format("YYYY/MM/DD HH:mm") | toPersianDate('dddd - DD MMMM')
                       }}</span>
                   </div>
                   <div class="phone-box second" v-if="!isDoctor">
@@ -435,7 +435,7 @@
                 cols="12"
                 sm="2"
                 md="2"
-                v-if="appointment.status === 0"
+                v-if="appointment.status == 0"
               >
                 <button
                   class="second-button"
@@ -538,7 +538,7 @@
                     پذیرش
                   </button>
                   <button
-                    v-if="appointment.status === 2"
+                    v-if="appointment.status == 2"
                     class="action-bar-button"
                     @click="doAction('update')"
                   >
@@ -792,7 +792,7 @@
                     </tr>
                   </template>
                   <template v-slot:notfound>
-                    <div v-if="prescriptionList.length === 0">اطلاعاتی یافت نشد</div>
+                    <div v-if="prescriptionList.length == 0">اطلاعاتی یافت نشد</div>
                   </template>
                 </data-table-component>
               </v-col>
@@ -1108,19 +1108,13 @@ export default {
     }
   },
   methods: {
+    getAppointment(id) {
+      this.$store.dispatch('appointments/getAppointment', id)
+    },
     getResults() {
       this.$store.dispatch('appointments/getAppointmentResults', {
         id: this.item.id,
         type: ''
-      })
-    },
-    getAppointmentPrescription() {
-      this.$store.dispatch('appointments/getAppointmentPrescription', {
-        id: this.item.id,
-        type: ''
-      })
-      .then(res => {
-        this.prescription = res.data
       })
     },
     imaged(file) {
@@ -1156,7 +1150,6 @@ export default {
       if (!this.item) return
       this.newFiles = []
       this.setAppointment()
-      this.getAppointmentPrescription()
       this.getResults()
       this.loaded = true
     },
@@ -1168,42 +1161,42 @@ export default {
       // date = moment.from(date, 'fa', 'YYYY/MM/DD HH:mm:ss').locale('en').format("YYYY/MM/DD HH:mm:ss")
       let date = this.item.start_at
       this.appointment = {
-        case_type: this.item.case_type,
-        code: this.item.code,
-        appcode: this.item.appcode,
-        created_at: this.item.created_at,
-        end_at: this.item.end_at,
-        future_prescription: this.item.future_prescription,
-        future_prescription_list: this.item.future_prescription,
+        case_type: this.item.case_type ? this.item.case_type : '',
+        code: this.item.code ? this.item.code : '',
+        appcode: this.item.appcode ? this.item.appcode : '',
+        created_at: this.item.created_at ? this.item.created_at : '',
+        end_at: this.item.end_at ? this.item.end_at : '',
+        future_prescription: this.item.future_prescription ? this.item.future_prescription : '',
+        future_prescription_list: this.item.future_prescription ? this.item.future_prescription : '',
         id: this.item.id,
         income: this.item.income,
-        info: this.item.info,
+        info: this.item.info ? this.item.info : '',
         is_vip: this.item.is_vip,
-        l_admission_at: this.item.l_admission_at,
+        l_admission_at: this.item.l_admission_at ? this.item.l_admission_at : '',
         l_imgs: this.item.l_imgs,
-        l_result_at: this.item.l_result_at,
+        l_result_at: this.item.l_result_at ? this.item.l_result_at : '',
         l_rnd_img: this.item.l_rnd_img,
         laboratory: this.item.laboratory,
-        laboratory_cases: this.item.laboratory_cases,
+        laboratory_cases: this.item.laboratory_cases ? this.item.laboratory_cases : '',
         laboratory_id: this.item.laboratory_id,
-        laboratory_msg: this.item.laboratory_msg,
+        laboratory_msg: this.item.laboratory_msg ? this.item.laboratory_msg : '',
         organization: this.item.organization,
         organization_id: this.item.organization_id,
-        p_admission_at: this.item.p_admission_at,
+        p_admission_at: this.item.p_admission_at ? this.item.p_admission_at : '',
         p_imgs: this.item.p_imgs,
-        p_result_at: this.item.p_result_at,
+        p_result_at: this.item.p_result_at ? this.item.p_result_at : '',
         p_rnd_img: this.item.p_rnd_img,
         photography: this.item.photography,
-        photography_cases: this.item.photography_cases,
+        photography_cases: this.item.photography_cases ? this.item.photography_cases : '',
         photography_id: this.item.photography_id,
-        photography_msg: this.item.photography_msg,
-        prescription: this.item.prescription,
-        r_admission_at: this.item.r_admission_at,
+        photography_msg: this.item.photography_msg ? this.item.photography_msg : '',
+        prescription: this.item.prescription ? this.item.prescription : '',
+        r_admission_at: this.item.r_admission_at ? this.item.r_admission_at : '',
         r_imgs: this.item.r_imgs,
-        r_result_at: this.item.r_result_at,
+        r_result_at: this.item.r_result_at ? this.item.r_result_at : '',
         r_rnd_img: this.item.r_rnd_img,
         radiology: this.item.radiology,
-        radiology_cases: this.item.radiology_cases,
+        radiology_cases: this.item.radiology_cases ? this.item.radiology_cases : '',
         radiology_id: this.item.radiology_id,
         radiology_msg: this.item.radiology_msg,
         staff: this.item.staff,
@@ -1216,7 +1209,9 @@ export default {
         user_id: this.item.user_id,
         vip_introducer: this.item.vip_introducer,
         waiting: this.item.waiting,
+        last_prescription: this.item.last_prescription ? this.item.last_prescription : '',
       }
+      this.getAppointmentPrescription()
     },
     getUsers() {
       this.$store.dispatch('users/getUsers')
@@ -1238,6 +1233,13 @@ export default {
       .then(res => {
         this.prescriptionList = res.data
         this.showPrescriptionList = true
+      })
+    },
+    getAppointmentPrescription() {
+      this.$store.dispatch('appointments/getAppointmentPrescription', this.item.id)
+      .then(res => {
+        const p = res.data.data;
+        this.prescription = p ?? '';
       })
     },
     doAction(action = 'accept') {
@@ -1300,7 +1302,7 @@ export default {
         })
     },
     sendResult() {
-      if (this.newFiles.length === 0) {
+      if (this.newFiles.length == 0) {
         return
       }
       if (!this.appointment.user_id) {
@@ -1455,22 +1457,22 @@ export default {
       this.toggleDoctorPrescription()
     },
     addToDoctorDo(item) {
-      if (this.pType === 'prescription') {
+      if (this.pType == 'prescription') {
         const array = this.appointment.prescription.trim().split(' - ')
-        if (array[0] === '') {
+        if (array[0] == '') {
           array[0] = item
         } else {
           array.push(item)
         }
-        this.appointment.prescription = array.length === 1 ? array.join('') : array.join(' - ')
-      } else if ((this.pType === 'future_prescription_list')) {
+        this.appointment.prescription = array.length == 1 ? array.join('') : array.join(' - ')
+      } else if ((this.pType == 'future_prescription_list')) {
         const array = this.appointment.future_prescription_list.trim().split(' - ')
-        if (array[0] === '') {
+        if (array[0] == '') {
           array[0] = item
         } else {
           array.push(item)
         }
-        this.appointment.future_prescription_list = array.length === 1 ? array.join('') : array.join(' - ')
+        this.appointment.future_prescription_list = array.length == 1 ? array.join('') : array.join(' - ')
       }
       this.toggleDoctorPrescription()
     },
@@ -1558,13 +1560,13 @@ export default {
       return this.$store.getters['cases/getCaseTypes']
     },
     photographyCases() {
-      if (this.appointment.photography_cases === "") {
+      if (this.appointment.photography_cases == "") {
         return []
       }
       return this.appointment.photography_cases.split(',')
     },
     radiologyCases() {
-      if (this.appointment.radiology_cases === "") {
+      if (this.appointment.radiology_cases == "") {
         return []
       }
       return this.appointment.radiology_cases.split(',')
@@ -1574,8 +1576,7 @@ export default {
     },
     isDoctor() {
       if (!this.loginUser) return false;
-      const profession_id = this.loginUser.organization.profession_id;
-      return profession_id !== 1 && profession_id !== 2 && profession_id !== 3
+      return this.loginUser.organization.is_doctor;
     },
     loginUser() {
       return this.$store.getters['login/getUser']
@@ -1614,26 +1615,26 @@ export default {
     },
     resulted() {
       const profession_id = this.loginUser.organization.profession_id;
-      if (profession_id === 1) {
-        return this.appointment.p_admission_at !== null && this.appointment.p_result_at !== null
-      } else if (profession_id === 2) {
-        return this.appointment.l_admission_at !== null && this.appointment.l_result_at !== null
-      } else if (profession_id === 3) {
-        return this.appointment.r_admission_at !== null && this.appointment.r_result_at !== null
+      if (profession_id == 1) {
+        return this.appointment.p_admission_at != "" && this.appointment.p_result_at != "" &&  this.appointment.p_admission_at != null && this.appointment.p_result_at != null
+      } else if (profession_id == 2) {
+        return this.appointment.l_admission_at != "" && this.appointment.l_result_at != "" &&  this.appointment.l_admission_at != null && this.appointment.l_result_at != null
+      } else if (profession_id == 3) {
+        return this.appointment.r_admission_at != "" && this.appointment.r_result_at != "" &&  this.appointment.r_admission_at != null && this.appointment.r_result_at != null
       } else {
-        return (this.appointment.r_admission_at !== null && this.appointment.r_result_at !== null) ||
-          (this.appointment.l_admission_at !== null && this.appointment.l_result_at !== null) ||
-          (this.appointment.p_admission_at !== null && this.appointment.p_result_at !== null)
+        return (this.appointment.r_admission_at != "" && this.appointment.r_result_at != "" &&  this.appointment.p_admission_at != null && this.appointment.p_result_at != null) ||
+          (this.appointment.l_admission_at != "" && this.appointment.l_result_at != "" &&  this.appointment.l_admission_at != null && this.appointment.l_result_at != null) ||
+          (this.appointment.p_admission_at != "" && this.appointment.p_result_at != "" &&  this.appointment.p_admission_at != null && this.appointment.p_result_at != null)
       }
     },
     admissioned() {
       const profession_id = this.loginUser.organization.profession_id;
-      if (profession_id === 1) {
-        return this.appointment.p_admission_at !== null
-      } else if (profession_id === 2) {
-        return this.appointment.l_admission_at !== null
-      } else if (profession_id === 3) {
-        return this.appointment.r_admission_at !== null
+      if (profession_id == 1) {
+        return this.appointment.p_admission_at != "" && this.appointment.p_admission_at != null
+      } else if (profession_id == 2) {
+        return this.appointment.l_admission_at != "" && this.appointment.l_admission_at != null
+      } else if (profession_id == 3) {
+        return this.appointment.r_admission_at != "" && this.appointment.r_admission_at != null
       }
       return false;
     },
@@ -1643,10 +1644,12 @@ export default {
   },
   watch: {
     user() {
-      this.appointment.file_id = this.user.file_id
-      this.appointment.cardno = this.user.cardno
-      this.appointment.user_id = this.user.id
-      this.appointment.tel = this.user.tel
+      if (this.user) {
+        this.appointment.file_id = this.user.file_id
+        this.appointment.cardno = this.user.cardno
+        this.appointment.user_id = this.user.id
+        this.appointment.tel = this.user.tel
+      }
     },
     item(val) {
       if (val) {

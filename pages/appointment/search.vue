@@ -253,7 +253,7 @@
                     <td class="text-center">{{ i.user && i.user.file_id ? i.user.file_id : '-' | persianDigit }}</td>
                     <td class="text-center">{{ $moment.utc(i.start_at).local().format('jYYYY/jM/jDD') | persianDigit }}</td>
                     <td class="text-center">
-                      {{ $moment.utc(i.start_at).local().format('HH:mm:ss') | persianDigit }}
+                      {{ i.start_at_time_fa | persianDigit }}
                     </td>
                     <td class="text-center">
                       <span
@@ -427,9 +427,12 @@ export default {
     },
     doSearch() {
       this.getAppointmentList()
+        .then(() => {
+          this.showFilterModal = false
+        })
     },
     getAppointmentList(load = true) {
-      this.$store.dispatch('appointments/search', this.search)
+      return this.$store.dispatch('appointments/search', this.search)
     },
     createAppointment() {
       this.$store.dispatch('appointments/createAppointment', this.appointment)

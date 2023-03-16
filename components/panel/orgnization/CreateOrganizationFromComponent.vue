@@ -178,7 +178,7 @@
                 cols="12"
                 sm="6"
                 md="4"
-                v-if="organization.profession_id !== 1"
+                v-if="organization.profession_id != 1"
               >
                 <rel-organization-item-component
                   title="فوتوگرافی"
@@ -193,7 +193,7 @@
                 cols="12"
                 sm="6"
                 md="4"
-                v-if="organization.profession_id !== 2"
+                v-if="organization.profession_id != 2"
               >
                 <rel-organization-item-component
                   title="آزمایشگاه"
@@ -208,7 +208,7 @@
                 cols="12"
                 sm="6"
                 md="4"
-                v-if="organization.profession_id !== 3"
+                v-if="organization.profession_id != 3"
               >
                 <rel-organization-item-component
                   title="رادیولوژی"

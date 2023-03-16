@@ -229,6 +229,14 @@ export default {
         .then(res => {
           this.toggleShowSendFileModal()
           this.getUserFiles()
+
+          this.form = {
+            file: null,
+            ext: null,
+            comment: '',
+            info: '',
+            user_id: this.userId
+          }
           this.$toast.success('با موفقیت انجام شد');
         })
         .catch(err => {

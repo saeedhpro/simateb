@@ -39,7 +39,7 @@
       >
         <div class="page-main-actions-left">
           <div class="result-count">
-            <span>{{ users.total_rows ? users.total_rows : 0 | toPersianNumber }}</span>
+            <span>{{ users.meta.total | toPersianNumber }}</span>
             نتیجه
           </div>
           <div class="page-search-box">
@@ -69,7 +69,7 @@
         <data-table-component
           :headers="headers"
           :page="page"
-          :total="users.total_rows"
+          :total="users.meta.total"
           @paginate="paginate"
         >
           <template v-slot:body>
@@ -94,15 +94,15 @@
                 class="text-center file-id">{{ i.file_id ? i.file_id : '-' | persianDigit }}</span></td>
               <td class="text-center">{{ i.age ? i.age : '-' | persianDigit }}</td>
               <td class="text-center">
-                {{ i.created ? $moment(i.created).format('jYYYY/jM/jDD') : '-' | persianDigit }}
+                {{ i.created_at_ago | persianDigit }}
               </td>
               <td class="text-center">
-                {{ i.last_login ? $moment(i.last_login).format('jYYYY/jM/jDD') : '-' | persianDigit }}
+                {{ i.last_login_ago | persianDigit }}
               </td>
             </tr>
           </template>
           <template v-slot:notfound>
-            <div v-if="users.total_rows === 0">اطلاعاتی یافت نشد</div>
+            <div v-if="users.meta.total === 0">اطلاعاتی یافت نشد</div>
           </template>
         </data-table-component>
       </v-col>

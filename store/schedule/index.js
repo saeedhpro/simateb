@@ -26,7 +26,7 @@ export const mutations = {
 
 export const actions = {
   getList(ctx, data) {
-    return this.$axios.get(`/organizations/schedules?page=${data.page}`)
+    return this.$axios.get(`/organizations/schedules?page=${data.page}&date=${data.date}`)
       .then(res => {
         const data = res.data;
         ctx.commit('setList', data)

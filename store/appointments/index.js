@@ -6,7 +6,10 @@ export const state = () => ({
     page: 1,
     sort: '',
     total_rows: 0,
-    total_pages: 0
+    total_pages: 0,
+    meta: {
+      total: 0,
+    }
   },
   appointment: null,
   que: {
@@ -56,7 +59,17 @@ export const actions = {
         arr.push(`${d[i][0]}=${d[i][1]}`)
       }
     }
-    ctx.commit('setList', [])
+    ctx.commit('setList', {
+      data: [],
+      limit: 10,
+      page: 1,
+      sort: '',
+      total_rows: 0,
+      total_pages: 0,
+      meta: {
+        total: 0,
+      }
+    })
     return this.$axios.get(`/organizations/appointments?${arr.join('&')}`)
       .then(res => {
         const data = res.data;
@@ -71,7 +84,7 @@ export const actions = {
     return this.$axios.get(`/appointments/${id}`)
       .then(res => {
         const data = res.data;
-        ctx.commit('setAppointment', data)
+        // ctx.commit('setAppointment', data)
         return Promise.resolve(res)
       })
       .catch(err => {
@@ -99,8 +112,8 @@ export const actions = {
         return Promise.reject(err)
       })
   },
-  getAppointmentPrescription(ctx, data) {
-    return this.$axios.get(`/appointments/${data.id}/prescription`)
+  getAppointmentPrescription(ctx, id) {
+    return this.$axios.get(`/appointments/${id}/prescription`)
       .then(res => {
         return Promise.resolve(res)
       })
@@ -120,7 +133,7 @@ export const actions = {
       })
   },
   getQueV2(ctx, data) {
-    return this.$axios.get(`/appointments/que/v2?start=${data.start}&end=${data.end}&ct=${data.case_type}`)
+    return this.$axios.get(`/appointments/que?start=${data.start}&end=${data.end}&ct=${data.case_type}`)
       .then(res => {
         const data = res.data;
         ctx.commit('setQue', data)
@@ -137,7 +150,10 @@ export const actions = {
       page: 1,
       sort: '',
       total_rows: 0,
-      total_pages: 0
+      total_pages: 0,
+      meta: {
+        total: 0,
+      }
     },)
     const d = Object.entries(data);
     const arr = [];

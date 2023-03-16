@@ -152,10 +152,12 @@ export default {
       this.saveMedicalHistory()
     },
     saveMedicalHistory() {
-      this.$store.dispatch('users/createUserMedicalHistory', {
+      const data = {
         ...this.medicalHistory,
         user_id: parseInt(this.user.id),
-      })
+      }
+      console.log(data)
+      this.$store.dispatch('users/createUserMedicalHistory', data)
         .finally(() => {
           this.close()
         })

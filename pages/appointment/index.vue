@@ -214,7 +214,7 @@
                     </thead>
                     <tbody>
                     <tr
-                        v-for="(items, i) in que.max_length"
+                        v-for="(items, i) in maxLength"
                         :key="i"
                     >
                       <td
@@ -237,7 +237,7 @@
                           :day="j"
                           :month="month"
                           :year="year"
-                          @click.native="openPazireshModal(`${year}/${month}/${j} ${Date.now()}`)"
+                          @click.native="openPazireshModal(`${year}/${month}/${j + 1} ${getTime(i)}`)"
                         />
                       </td>
                     </tr>
@@ -455,7 +455,8 @@ export default {
         clock_ques: [],
         limits: [],
         default_duration: 20,
-        max_length: 20,
+        max_length: 8,
+        clock_max_length: 8,
         work_hour: {
           end: "",
           start: ""
@@ -501,9 +502,8 @@ export default {
         })
     },
     openPazireshModal(i) {
-      let date = moment.from(i, 'fa', 'YYYY/MM/DD HH:mm:ss').locale('en').format("YYYY/MM/DDTHH:mm:ssZ")
+      let date = moment.from(i, 'fa', 'YYYY/MM/DD HH:mm:ss').locale('en').format("YYYY/MM/DD HH:mm:ss")
       this.initTime = date
-      console.log(date, "date")
       // this.initTime = moment.from(i, "fa", "jYYYY/jMM/jDD HH:mm:ss").locale("en").local().format("YYYY/MM/DD HH:mm:ss")
       this.showPazireshModal = true
     },
@@ -581,8 +581,8 @@ export default {
       let yearMonth = moment.from(`${this.year}/${this.month}`, "fa", "jYYYY/jMM").format("jYYYY/jMM")
       const lastDay = moment.from(`${this.year}/${this.month}`, "fa", "jYYYY/jMM").jDaysInMonth()
       this.lastDay = lastDay
-      const start = moment.from(`${yearMonth}/01`, "fa", "YYYY/MM/DD").locale("en").format("YYYY/MM/DD")
-      const end = moment.from(`${yearMonth}/${lastDay}`, "fa", "YYYY/MM/DD").locale("en").format("YYYY/MM/DD")
+      const start = moment.from(`${yearMonth}/01`, "fa", "YYYY/MM/DD").format('jYYYY/jMM/jDD')
+      const end = moment.from(`${yearMonth}/${lastDay}`, "fa", "YYYY/MM/DD").format('jYYYY/jMM/jDD')
       this.search = {
         start,
         end,
@@ -640,7 +640,7 @@ export default {
     },
     isFriday(day) {
       const d = moment.from(`${this.year}/${this.month}/${day}`, "fa", "jYYYY/jMM/jDD");
-      return d.weekday() == 6
+      return d.format("dddd") === 'جمعه'
     },
     getTime(day) {
       const wh = this.que.work_hour
@@ -667,6 +667,9 @@ export default {
     }
   },
   computed: {
+    maxLength() {
+      return this.showHour ? this.que.clock_max_length : this.que.max_length;
+    },
     mini() {
       return this.$vuetify.breakpoint.mdAndDown
     },

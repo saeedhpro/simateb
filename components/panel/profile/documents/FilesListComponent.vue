@@ -3,12 +3,14 @@
     <file-item-component
       v-for="(f,n) in files"
       :key="n"
+      :index="n"
       :id="f.id"
-      :path="f.path"
+      :path="f.url"
       :ext="f.ext"
       :info="f.info"
       :comment="f.comment"
       @change="onChange"
+      @input="onInput"
       @remove="remove(f.id)"
     />
   </div>
@@ -26,8 +28,6 @@ export default {
       required: true,
       default: () => []
     },
-  },
-  mounted() {
   },
   methods: {
     remove(id) {
@@ -53,6 +53,9 @@ export default {
       setTimeout(() => {
         this.$emit('refresh')
       }, 250)
+    },
+    onInput(data) {
+
     }
   },
 }

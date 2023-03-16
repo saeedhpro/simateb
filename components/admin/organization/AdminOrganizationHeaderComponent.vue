@@ -28,6 +28,7 @@
       :open="showAddUserModal"
       :org="organization"
       @close="closeAddUserModal"
+      @done="doneAddUserModal"
       :has-default="true"
     />
   </div>
@@ -52,6 +53,9 @@ export default {
   },
   methods: {
     closeAddUserModal() {
+      this.toggleAddUserModal()
+    },
+    doneAddUserModal() {
       this.toggleAddUserModal()
       this.$emit("updated")
     },

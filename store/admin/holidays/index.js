@@ -5,6 +5,9 @@ export const state = () => ({
     limit: 10,
     page: 1,
     sort: '',
+    meta: {
+      total: 0,
+    },
     total_rows: 0,
     total_pages: 0
   },
@@ -39,7 +42,7 @@ export const actions = {
   getHolidays(ctx) {
     return this.$axios.get(`/admin/holidays`)
       .then(res => {
-        const data = res.data;
+        const data = res.data.data;
         ctx.commit('setHolidays', data)
         return Promise.resolve(res)
       })

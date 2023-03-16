@@ -34,10 +34,6 @@
                 </div>
                 <v-spacer/>
                 <div class="create-update-modal-regbox">
-                  ثبت در سیستم توسط: {{ `${loginUser.staff.lname} ${loginUser.staff.fname}` }}
-                  ({{ loginUser.created | toRelativeDate }} {{
-                    loginUser.created | toPersianDate('YYYY/MM/DD HH:mm:ss')
-                  }})
                 </div>
               </v-card-title>
               <v-card-text>
@@ -257,11 +253,12 @@
                     <td class="text-center">{{ i.title ? i.title : '-' | persianDigit }}</td>
                     <td class="text-center">{{ i.organization ? i.organization.name : '-' | persianDigit }}</td>
                     <td class="text-center flex flex-row justify-space-around align-center">
-                      <button @click="editHoliday(i)" class="action-buttons">
+                      <button v-if="i.organization" @click="editHoliday(i)" class="action-buttons">
                         <v-icon size="16">mdi-pencil-outline</v-icon>
                         <span>ویرایش</span>
                       </button>
                       <button
+                        v-if="i.organization"
                         @click="showRemoveItem(i.id)"
                         class="action-buttons">
                         <v-icon size="16">mdi-trash-can-outline</v-icon>

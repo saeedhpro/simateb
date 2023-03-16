@@ -30,7 +30,7 @@ export const actions = {
   getList(ctx, id) {
     return this.$axios.get(`/files/${id}`)
       .then(res => {
-        const data = res.data;
+        const data = res.data.data;
         ctx.commit('setList', data)
         return Promise.resolve(data)
       })

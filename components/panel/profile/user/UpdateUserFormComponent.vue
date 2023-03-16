@@ -46,12 +46,25 @@
                       hidden
                       accept="image/*"
                       @change="chooseImage"
-                    >
+                    ><img
+                    v-if="form.new"
+                    class="full-height"
+                    :src="form.new"
+                    @click="openChooseImage"
+                  >
                     <img
+                      v-else-if="item.logo"
                       class="full-height"
-                      :src="form.new ? form.new : '/images/pages/img.svg'"
+                      :src="item.logo"
                       @click="openChooseImage"
                     >
+                    <img
+                      v-else
+                      class="full-height"
+                      :src="'/images/pages/img.svg'"
+                      @click="openChooseImage"
+                    >
+
                     <crop-image-component
                       ref="crop"
                       @imaged="imaged"
@@ -422,6 +435,7 @@ export default {
         surgery: '',
         tel1: '',
         due_payment: '',
+        logo: '',
       },
       city: this.item.city ? this.item.city : {
         id: 1225,
@@ -477,7 +491,7 @@ export default {
         file_id: this.item.file_id,
         province_id: null,
         county_id: null,
-        city_id: this.item.city_id,
+        city_id: null,
         address: this.item.address,
         introducer: this.item.introducer,
         known_as: this.item.known_as,
@@ -487,6 +501,8 @@ export default {
         new: null,
         has_surgery: this.item.has_surgery,
         surgery: this.item.surgery,
+        organization_id: this.item.organization_id,
+        logo: this.item.logo,
       }
       this.city = this.item.city ? this.item.city : {
         id: 1225,
@@ -510,6 +526,9 @@ export default {
         id: 1,
         name: "فتوگرافی سیما طب"
       }
+      this.form.province_id = this.province.id
+      this.form.county_id = this.county.id
+      this.form.city_id = this.city.id
       this.resetErrors()
     },
     resetErrors() {

@@ -261,37 +261,37 @@ export default {
   },
   computed: {
     prescriptionArray() {
-      return this.prescription.length ? this.prescription.split(' - ') : []
+      return this.prescription && this.prescription.length ? this.prescription.split(' - ') : []
     },
     radiologyCasesArray() {
-      return this.radiologyCases.length ? this.radiologyCases.split(',') : []
+      return this.radiologyCases && this.radiologyCases.length ? this.radiologyCases.split(',') : []
     },
     photographyCasesArray() {
-      return this.photographyCases.length ? this.photographyCases.split(',') : []
+      return this.photographyCases && this.photographyCases.length ? this.photographyCases.split(',') : []
     },
     loginUser() {
       return this.$store.getters['login/getUser']
     },
     forOrganization() {
       const orgID = this.loginUser.organization_id
-      return orgID === this.organizationId || orgID === this.radiologyId || orgID === this.photographyId
+      return orgID == this.organizationId || orgID == this.radiologyId || orgID == this.photographyId
     },
     resulted() {
       const profession_id = this.loginUser.organization.profession_id;
-      if (profession_id === 1) {
-        return this.pAdmissionAt !== null && this.pResultAt !== null
-      } else if (profession_id === 3) {
-        return this.rAdmissionAt !== null && this.rResultAt !== null
+      if (profession_id == 1) {
+        return this.pAdmissionAt != "" && this.pResultAt != "" && this.pAdmissionAt != null && this.pResultAt != null
+      } else if (profession_id == 3) {
+        return this.rAdmissionAt != "" && this.rResultAt != "" && this.rAdmissionAt != null && this.rResultAt != null
       } else {
         return false
       }
     },
     admissioned() {
       const profession_id = this.loginUser.organization.profession_id;
-      if (profession_id === 1) {
-        return this.pAdmissionAt !== null
-      } else if (profession_id === 3) {
-        return this.rAdmissionAt !== null
+      if (profession_id == 1) {
+        return this.pAdmissionAt != "" && this.pAdmissionAt != null
+      } else if (profession_id == 3) {
+        return this.rAdmissionAt != "" && this.rAdmissionAt != null
       }
       return false;
     }

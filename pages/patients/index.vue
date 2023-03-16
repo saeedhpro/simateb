@@ -76,7 +76,7 @@
             >
               <div class="page-main-actions-left">
                 <div class="result-count">
-                  <span>{{ users.total_rows ? users.total_rows : 0 | toPersianNumber }}</span>
+                  <span>{{ users.meta.total | toPersianNumber }}</span>
                   نتیجه
                 </div>
                 <div class="page-search-box">
@@ -235,7 +235,7 @@
                 v-if="isDoctor"
                 :headers="headers"
                 :page="search.page"
-                :total="users.total_rows"
+                :total="users.meta.total"
                 @paginate="paginate"
               >
                 <template v-slot:body>
@@ -259,24 +259,24 @@
                       class="text-center file-id">{{ i.file_id ? i.file_id : '-' | persianDigit }}</span></td>
                     <td class="text-center">{{ i.age ? i.age : '-' | persianDigit }}</td>
                     <td class="text-center" v-if="i.created">
-                      {{ $moment.utc(i.created).local().format("YYYY/MM/DD HH:mm:ss") | toRelativeDate }}
+                      {{ i.created_at_ago | persianDigit }}
                     </td>
                     <td class="text-center" v-else>-</td>
                     <td class="text-center" v-if="i.last_login">
-                      {{ $moment.utc(i.last_login).local().format("YYYY/MM/DD HH:mm:ss")| toRelativeDate }}
+                      {{ i.last_login_ago | persianDigit }}
                     </td>
                     <td class="text-center" v-else>-</td>
                   </tr>
                 </template>
                 <template v-slot:notfound>
-                  <div v-if="users.total_rows === 0">اطلاعاتی یافت نشد</div>
+                  <div v-if="users.meta.total === 0">اطلاعاتی یافت نشد</div>
                 </template>
               </data-table-component>
               <data-table-component
                 v-else
                 :headers="headers"
                 :page="search.page"
-                :total="users.total_rows"
+                :total="users.meta.total"
                 @paginate="paginate"
               >
                 <template v-slot:body>
@@ -301,17 +301,17 @@
                       class="text-center">{{ i.organization ? i.organization.name : '-' | persianDigit }}</span></td>
                     <td class="text-center">{{ i.age ? i.age : '-' | persianDigit }}</td>
                     <td class="text-center" v-if="i.created">
-                      {{ $moment.utc(i.created).local().format("YYYY/MM/DD HH:mm:ss") | toRelativeDate }}
+                      {{ i.created_at_ago | persianDigit }}
                     </td>
                     <td class="text-center" v-else>-</td>
                     <td class="text-center" v-if="i.last_login">
-                      {{ $moment.utc(i.last_login).local().format("YYYY/MM/DD HH:mm:ss") | toRelativeDate }}
+                      {{ i.last_login_ago | persianDigit }}
                     </td>
                     <td class="text-center" v-else>-</td>
                   </tr>
                 </template>
                 <template v-slot:notfound>
-                  <div v-if="users.total_rows === 0">اطلاعاتی یافت نشد</div>
+                  <div v-if="users.meta.total === 0">اطلاعاتی یافت نشد</div>
                 </template>
               </data-table-component>
             </v-col>
@@ -322,6 +322,7 @@
     <create-user-form-component
       :open="showCreateModal"
       @close="closeForm"
+      @done="doneForm"
     />
     <admin-delete-users-component
       :open="showDelete"
@@ -463,6 +464,9 @@ export default {
     },
     closeForm() {
       this.toggleCreateModal()
+    },
+    doneForm() {
+      this.toggleCreateModal()
       this.getUsersList()
     },
     itemSelected(e) {
@@ -532,8 +536,7 @@ export default {
     },
     isDoctor() {
       if (!this.loginUser) return false;
-      const profession_id = this.loginUser.organization.profession_id;
-      return profession_id !== 1 && profession_id !== 2 && profession_id !== 3
+      return this.loginUser.organization.is_doctor;
     },
   },
 }

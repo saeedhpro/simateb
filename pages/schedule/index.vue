@@ -502,9 +502,14 @@ export default {
       this.editCTI = i
     },
     getScheduleList() {
+      let month = this.month;
+      let year = this.year;
+      if (month < 10) {
+        month = `0${month}`
+      }
       this.$store.dispatch('schedule/getList', {
         ...this.search,
-        year: this.year,
+        date: `${this.year}/${month}/01`
       })
     },
     paginate(page = 1) {
@@ -576,8 +581,8 @@ export default {
       const type = this.create ? 'schedule/createSchedule' : 'schedule/updateSchedule'
       this.$store.dispatch(type, {
         id: this.form.id,
-        start_at: this.form.start_at,
-        end_at: this.form.end_at,
+        start_at: `${this.form.date} ${this.form.start}`,
+        end_at: `${this.form.date} ${this.form.end}`,
         count: parseInt(this.form.count),
         site: parseInt(this.form.site),
         app: parseInt(this.form.app),

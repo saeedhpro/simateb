@@ -119,7 +119,7 @@ export default {
         }
         this.selected = histories.medical_condition.length > 0 ? histories.medical_condition.split(',') : []
       }
-    }, 100)
+    }, 250)
   },
   data() {
     return {

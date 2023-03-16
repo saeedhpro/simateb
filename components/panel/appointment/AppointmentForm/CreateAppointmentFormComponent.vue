@@ -34,8 +34,8 @@
                   <label>تاریخ و ساعت پذیرش</label>
                   <date-picker
                     v-model="appointment.start_at"
-                    inputFormat="YYYY-MM-DDTHH:mm:ssZ"
-                    format="YYYY/MM/DDTHH:mm:ssZ"
+                    inputFormat="YYYY-MM-DD HH:mm:ss"
+                    format="YYYY/MM/DD HH:mm:ss"
                     display-format="HH:mm --- jYYYY/jMM/jDD"
                     editable
                     class="date-picker"
@@ -237,7 +237,7 @@ export default {
   data() {
     return {
       appointment: {
-        start_at: this.initTime ? this.$moment.utc(this.initTime).format("YYYY/MM/DDTHH:mm:ssZ") : this.$moment.utc().format("YYYY/MM/DDTHH:mm:ssZ"),
+        start_at: this.initTime ? this.initTime : this.$moment().format("YYYY/MM/DD HH:mm:ss"),
         tel: '',
         cardno: '',
         income: 0,
@@ -265,7 +265,7 @@ export default {
     },
     resetForm() {
       this.appointment = {
-        start_at: this.initTime ? this.$moment.utc(this.initTime).format("YYYY/MM/DDTHH:mm:ssZ") : this.$moment.utc().format("YYYY/MM/DDTHH:mm:ssZ"),
+        start_at: this.initTime ? this.initTime : this.$moment().format("YYYY/MM/DD HH:mm:ss"),
         tel: '',
         cardno: '',
         income: 0,
@@ -333,8 +333,7 @@ export default {
         if (!this.appointment.user_id) {
           return
         }
-        let start_at = this.appointment.start_at.split('+')[0]
-        start_at += 'Z'
+        let start_at = this.appointment.start_at
         const data = {
           ...this.appointment,
           user_id: this.user.id,
@@ -365,8 +364,7 @@ export default {
     },
     isDoctor() {
       if (!this.loginUser) return false;
-      const profession_id = this.loginUser.organization.profession_id;
-      return profession_id !== 1 && profession_id !== 2 && profession_id !== 3
+      return this.loginUser.organization.is_doctor;
     },
     loginUser() {
       return this.$store.getters['login/getUser']
