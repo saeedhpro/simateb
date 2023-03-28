@@ -55,6 +55,7 @@
     </v-row>
     <update-organization-from-component
       @close="closeUpdate"
+      @done="doneUpdate"
       :show="showUpdateModal"
       :item="organization"
     />
@@ -83,6 +84,9 @@ export default {
       this.toggleShowUpdateModal()
     },
     closeUpdate() {
+      this.toggleShowUpdateModal()
+    },
+    doneUpdate() {
       this.toggleShowUpdateModal()
       this.$emit("updated")
     },

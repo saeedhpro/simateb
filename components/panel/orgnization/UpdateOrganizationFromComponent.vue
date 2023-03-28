@@ -357,8 +357,12 @@ export default {
     }
   },
   methods: {
-    closeForm() {
-      this.$emit('close')
+    closeForm(status) {
+      if (status) {
+        this.$emit('done')
+      } else {
+        this.$emit('close')
+      }
     },
     resetForm() {
       this.organization = {
