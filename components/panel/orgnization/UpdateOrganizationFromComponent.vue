@@ -376,6 +376,7 @@ export default {
         known_as: this.item.known_as,
         created_at: this.item.created_at,
         logo: this.item.logo,
+        logo_link: this.item.logo_link,
         info: this.item.info,
         slider_rnd_img: this.item.slider_rnd_img,
         slider_imgs: this.item.slider_imgs,
@@ -444,6 +445,7 @@ export default {
           sms_credit: parseFloat(this.organization.sms_credit.split(' ')[0].split(',').join('')),
         }
         delete data.logo
+        delete data.logo_link
         this.$store.dispatch('admin/organizations/updateOrganization', data)
           .then(() => {
             this.$toast.success('با موفقیت انجام شد');
@@ -489,8 +491,8 @@ export default {
     getLogo(organization) {
       if (this.organization.new) {
         return organization.new
-      } else if (organization.logo) {
-        return organization.logo
+      } else if (organization.logo_link) {
+        return organization.logo_link
       } else {
         return '/images/pages/img.svg'
       }

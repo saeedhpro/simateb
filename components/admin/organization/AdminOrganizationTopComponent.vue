@@ -12,7 +12,7 @@
           >
             <img
               class="profile-image"
-              :src="organization.logo ? organization.logo : '/images/pages/img.svg'">
+              :src="organization.logo_link ? organization.logo_link : '/images/pages/img.svg'">
           </v-col>
           <v-col
             cols="12"
