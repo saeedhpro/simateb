@@ -48,7 +48,7 @@
                 >
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
-                <img :src="image1" alt="">
+                <img :src="image1_link" alt="">
               </div>
               <div class="plus-box" v-else  @click="chooseImage(1)">
                 <img src="/images/pages/circle-plus.svg" alt="">
@@ -92,7 +92,7 @@
                 >
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
-                <img :src="image2" alt="">
+                <img :src="image2_link" alt="">
               </div>
               <div class="plus-box" v-else  @click="chooseImage(2)">
                 <img src="/images/pages/circle-plus.svg" alt="">
@@ -136,7 +136,7 @@
                 >
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
-                <img :src="image3" alt="">
+                <img :src="image3_link" alt="">
               </div>
               <div class="plus-box" v-else @click="chooseImage(3)">
                 <img src="/images/pages/circle-plus.svg" alt="">
@@ -180,7 +180,7 @@
                 >
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
-                <img :src="image4" alt="">
+                <img :src="image4_link" alt="">
               </div>
               <div class="plus-box" v-else @click="chooseImage(4)">
                 <img src="/images/pages/circle-plus.svg" alt="">
@@ -231,6 +231,10 @@ export default {
       image2: this.organization.image2,
       image3: this.organization.image3,
       image4: this.organization.image4,
+      image1_link: this.organization.image1_link,
+      image2_link: this.organization.image2_link,
+      image3_link: this.organization.image3_link,
+      image4_link: this.organization.image4_link,
       new1: '',
       new2: '',
       new3: '',
