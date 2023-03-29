@@ -104,7 +104,7 @@ export const actions = {
       })
   },
   createOrganization(ctx, data) {
-    return this.$axios.post(`/admin/organizations?`, data)
+    return this.$axios.post(`/admin/organizations`, data)
       .then(res => {
         return Promise.resolve(res)
       })
