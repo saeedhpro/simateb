@@ -173,7 +173,7 @@ export const actions = {
       })
   },
   createAppointment(ctx, data) {
-    return this.$axios.post('/organizations/appointments?', data)
+    return this.$axios.post('/organizations/appointments', data)
       .then(res => {
         return Promise.resolve(res)
       })
