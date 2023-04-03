@@ -189,6 +189,7 @@ export default {
   watch: {
     selectedItem(val) {
       this.selected(val)
+      this.notSelected = false
       if (this.type === 'photography') {
         this.organization = this.photographyList.find(i => i.id === val)
       } else {

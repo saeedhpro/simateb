@@ -92,7 +92,7 @@ export default {
     },
     getTime() {
       if (!this.startAt) return ""
-      return moment.from(this.startAt, "en", "YYYY/MM/DDTHH:mm:ssZ").locale("en").format("HH:mm:ss")
+      return moment.from(this.startAt, "en", "YYYY/MM/DDTHH:mm:ssZ").locale("en").format("HH:mm")
     }
   }
 }
