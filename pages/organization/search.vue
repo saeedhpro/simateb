@@ -232,7 +232,7 @@
                     </td>
                     <td class="text-center">{{ i.user && i.user.tel ? i.user.tel : '-' | persianDigit }}</td>
                     <td class="text-center"><span
-                      class="file-id">{{ i.user && i.user.file_id ? i.user.file_id : '-' | persianDigit }}</span></td>
+                      class="file-id pointer" @click="openItem(i)">{{ i.user && i.user.file_id ? i.user.file_id : '-' | persianDigit }}</span></td>
                     <td class="text-center">{{ i.user && i.case_type ? i.case_type : '-' | persianDigit }}</td>
                     <td class="text-center">
                       {{ $moment.utc(i.start_at).local().format("HH:mm") | toPersianNumber }}
@@ -429,6 +429,7 @@ export default {
         start: '',
         end: '',
         q: '',
+        status: '2',
         page: 1,
       },
       user: null,
@@ -510,6 +511,7 @@ export default {
         start: '',
         end: '',
         q: '',
+        status: '2',
       }
     },
     closePazireshModal() {

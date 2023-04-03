@@ -397,7 +397,7 @@ table {
         margin-right: -4px;
       }
 
-      &:hover, &.nuxt-link-exact-active {
+      &:hover, &.nuxt-link-exact-active, &.nuxt-link-active {
         background: #26264E 0 0 no-repeat padding-box;
         border-radius: 8px;
         transition: all .4s ease;
@@ -483,7 +483,7 @@ table {
   flex-wrap: wrap;
   margin-top: 40px;
   &.surgeries {
-    .page-header.nuxt-link-exact-active {
+    .page-header.nuxt-link-exact-active, &.nuxt-link-active {
       background: #EEF5EF 0 0 no-repeat padding-box !important;
       box-shadow: 0 12px 16px #388E3C29 !important;
       border: 1px solid #388E3C !important;

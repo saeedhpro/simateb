@@ -158,8 +158,6 @@
                   :label="'شماره تماس'"
                   v-model="form.tel1"
                   :check-value="false"
-                  :error="errors.tel1"
-                  @input="errors.tel1 = ''"
                 />
               </v-col>
               <v-col
@@ -612,11 +610,11 @@ export default {
         error = 'فیلد استان اجباری است'
         isValid = false
       }
-      if (this.form.tel1 && !this.$checkPhoneNumber(this.form.tel1, true)) {
-        this.errors.tel1 = 'شماره تماس صحیح نیست'
-        error = 'شماره تماس صحیح نیست'
-        isValid = false
-      }
+      // if (this.form.tel1 && !this.$checkPhoneNumber(this.form.tel1, true)) {
+      //   this.errors.tel1 = 'شماره تماس صحیح نیست'
+      //   error = 'شماره تماس صحیح نیست'
+      //   isValid = false
+      // }
       if (!this.form.county_id) {
         this.errors.county_id = 'فیلد شهرستان اجباری است'
         error = 'فیلد شهرستان اجباری است'
