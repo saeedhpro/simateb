@@ -43,7 +43,7 @@ export default {
   methods: {
     checkNationalCode(code) {
       const L = code.length;
-      if (L < 8 || parseInt(code, 10) === 0) {
+      if (L < 8 || L > 10 || parseInt(code, 10) === 0) {
         return false
       }
       code = ('0000' + code).substr(L + 4 - 10);
@@ -68,6 +68,7 @@ export default {
       } else {
         this.status = 'none'
       }
+      this.$emit('error', this.status)
     }
   },
   computed: {

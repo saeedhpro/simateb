@@ -8,6 +8,7 @@
         v-if="forOrganization"
       >
         <div class="img-box">
+          <span class="item-index">{{ index + 1 | persianDigit }}</span>
           <button
             class="edit-button"
             @click="openUpdateModal"
@@ -31,12 +32,12 @@
               <div class="time-box">
                 <span>
                   {{
-                    $moment.utc(created_at).local().format("YYYY/MM/DD HH:mm:ss") | toRelativeDate
+                    $moment.utc(start_at).local().format("YYYY/MM/DD HH:mm:ss") | toRelativeDate
                   }}
                 </span>
                 <span>
                   <span class="circle"/>
-                  {{ $moment.utc(created_at).local().format("YYYY/MM/DD HH:mm:ss") | toPersianDate('YYYY/MM/DD') }}
+                  {{ $moment.utc(start_at).local().format("YYYY/MM/DD HH:mm:ss") | toPersianDate('YYYY/MM/DD') }}
                   <span class="circle"/>
                 </span>
                 <span
@@ -125,7 +126,15 @@
 export default {
   name: "AppointmentItemComponent",
   props: {
+    index: {
+      type: Number,
+      required: true,
+    },
     created_at: {
+      type: String,
+      required: true,
+    },
+    start_at: {
       type: String,
       required: true,
     },
@@ -274,16 +283,19 @@ export default {
     },
     forOrganization() {
       const orgID = this.loginUser.organization_id
-      return orgID == this.organizationId || orgID == this.radiologyId || orgID == this.photographyId
+      return this.loginUser.is_admin || orgID == this.organizationId || orgID == this.radiologyId || orgID == this.photographyId
     },
     resulted() {
       const profession_id = this.loginUser.organization.profession_id;
       if (profession_id == 1) {
-        return this.pAdmissionAt != "" && this.pResultAt != "" && this.pAdmissionAt != null && this.pResultAt != null
+        return this.pAdmissionAt !== "" && this.pResultAt !== "" && this.pAdmissionAt != null && this.pResultAt != null
       } else if (profession_id == 3) {
-        return this.rAdmissionAt != "" && this.rResultAt != "" && this.rAdmissionAt != null && this.rResultAt != null
+        return this.rAdmissionAt !== "" && this.rResultAt !== "" && this.rAdmissionAt != null && this.rResultAt != null
       } else {
-        return false
+        return this.pAdmissionAt !== "" && this.pResultAt !== "" ||
+          this.pAdmissionAt != null && this.pResultAt != null ||
+          this.rAdmissionAt !== "" && this.rResultAt !== "" ||
+          this.rAdmissionAt != null && this.rResultAt != null;
       }
     },
     admissioned() {
@@ -293,7 +305,8 @@ export default {
       } else if (profession_id == 3) {
         return this.rAdmissionAt != "" && this.rAdmissionAt != null
       }
-      return false;
+      return this.pAdmissionAt != "" && this.pAdmissionAt != null ||
+        this.rAdmissionAt != "" && this.rAdmissionAt != null;
     }
   }
 }

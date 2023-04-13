@@ -39,7 +39,7 @@
             >
               <div class="page-actions"
                    style="min-width: 220px"
-                   @click="toggleCreateModal"
+                   @click="openCreateModal"
               >
                 <img src="/images/pages/plus.svg" alt="users">
                 <span class="title-main">ثبت پرداخت</span>
@@ -105,7 +105,7 @@
                       </div>
                     </td>
                     <td class="text-center dir-ltr">
-                      {{ i.created ? $moment.utc(i.created).local().format('jYYYY/jM/jDD HH:mm:ss') : '-' | persianDigit }}
+                      {{ i.created ? $moment.utc(i.created).local().format('jYYYY/jM/jDD HH:mm') : '-' | persianDigit }}
                     </td>
                     <td class="text-center">
                       {{ i.amount | persianDigit }}
@@ -159,7 +159,7 @@
         >
           <div class="create-update-modal-title">
             <button
-              @click="toggleCreateModal"
+              @click="closeCreateModal"
               class="create-update-modal-close"
             >
               <v-icon>mdi-close</v-icon>
@@ -191,7 +191,7 @@
                   <date-picker
                     v-model="form.created"
                     format="YYYY-MM-DD HH:mm:ss"
-                    display-format="jYYYY/jMM/jDD HH:mm:ss"
+                    display-format="HH:mm --- jYYYY/jMM/jDD"
                     editable
                     type="datetime"
                     class="date-picker"
@@ -354,7 +354,7 @@
               >
                 <button
                   class="second-button"
-                  @click="toggleCreateModal"
+                  @click="closeCreateModal"
                 >
                   بستن
                 </button>
@@ -528,6 +528,10 @@ export default {
         check_bank: '',
         check_num: '',
         check_date: '',
+        check_status: 0,
+        discount: 0,
+        ok: 1,
+        income: 1,
       }
       this.errors = {
         amount: '',
@@ -549,8 +553,12 @@ export default {
     toggleSmsModal() {
       this.showSmsModal = !this.showSmsModal
     },
-    toggleCreateModal() {
-      this.showCreateModal = !this.showCreateModal
+    openCreateModal() {
+      this.showCreateModal = true
+    },
+    closeCreateModal() {
+      this.showCreateModal = false
+      this.clearForm()
     },
     doAction() {
       if (!this.action) return
@@ -593,8 +601,7 @@ export default {
         this.$store.dispatch('payments/createPayment', data)
           .then(res => {
             this.$toast.success('با موفقیت انجام شد');
-            this.clearForm()
-            this.toggleCreateModal()
+            this.closeCreateModal()
             this.paginate()
           })
           .catch(err => {

@@ -4,8 +4,10 @@
       <appointment-item-component
         v-for="(i,n) in list.data"
         :key="n"
+        :index="n"
         :id="i.id"
         :created_at="i.created_at"
+        :start_at="i.start_at"
         :organization-id="i.organization_id"
         :status="i.status"
         :case-type="i.case_type"
