@@ -44,7 +44,7 @@
             </v-menu>
           </div>
           <div class="links d-none d-md-flex mx-auto">
-            <nuxt-link to="/admin">
+            <nuxt-link to="/admin" :class="{'none' : notExactAdmin}">
               <span class="title">داشبورد</span>
             </nuxt-link>
             <nuxt-link to="/admin/users">
@@ -124,6 +124,9 @@ export default {
     },
     isAdmin() {
       return this.loginUser.user_group_id === 2
+    },
+    notExactAdmin() {
+      return this.$route.path !== '/admin'
     }
   }
 }

@@ -81,7 +81,6 @@
                          class="table-selectable-checkbox"
                          v-model="selectedUsers"
                          :value="i"
-                         :ripple="false"
                   />
                   <img :src="i.logo ? i.logo : 'https://randomuser.me/api/portraits/men/88.jpg'">
                   <span class="cursor-pointer" @click="editUser(i)">{{
@@ -91,7 +90,12 @@
               </td>
               <td class="text-center">{{ i.tel ? i.tel : '-' | persianDigit }}</td>
               <td class="text-center"><span
-                class="text-center file-id">{{ i.file_id ? i.file_id : '-' | persianDigit }}</span></td>
+                class="text-center file-id">
+                <nuxt-link :to="`/admin/profile/${i.id}`" class="file-id cursor-pointer">{{
+                  i.file_id ? i.file_id : '-' | persianDigit
+                }}</nuxt-link>
+                </span>
+              </td>
               <td class="text-center">{{ i.age ? i.age : '-' | persianDigit }}</td>
               <td class="text-center">
                 {{ i.created_at_ago | persianDigit }}

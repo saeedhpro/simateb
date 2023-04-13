@@ -162,6 +162,8 @@
                 <custom-national-code-input
                   :label="'کد ملی'"
                   v-model="form.cardno"
+                  :error="errors.cardno"
+                  @input="errors.cardno = ''"
                 />
               </v-col>
               <v-col
@@ -434,6 +436,7 @@ export default {
         tel1: '',
         due_payment: '',
         logo: '',
+        cardno: '',
       },
       city: this.item.city ? this.item.city : {
         id: 1225,
@@ -545,7 +548,25 @@ export default {
         surgery: '',
         tel1: '',
         due_payment: '',
+        cardno: '',
       }
+    },
+    codeMelliCheck(code) {
+      const L = code.length;
+      if (L < 8 || L > 10 || parseInt(code, 10) === 0) {
+        return false
+      }
+      code = ('0000' + code).substr(L + 4 - 10);
+      if (parseInt(code.substr(3, 6), 10) === 0) {
+        return false
+      }
+      const c = parseInt(code.substr(9, 1), 10);
+      let s = 0;
+      for (let i = 0; i < 9; i++) {
+        s += parseInt(code.substr(i, 1), 10) * (10 - i);
+      }
+      s = s % 11;
+      return (s < 2 && c === s) || (s >= 2 && c === (11 - s));
     },
     validateFrom() {
       this.resetErrors()
@@ -589,6 +610,16 @@ export default {
       if (!this.form.city_id) {
         this.errors.city_id = 'فیلد شهر اجباری است'
         error = 'فیلد شهر اجباری است'
+        isValid = false
+      }
+      if (!this.codeMelliCheck(this.form.cardno)) {
+        this.errors.cardno = 'فیلد کدملی صحیح نیست'
+        error = 'فیلد کدملی صحیح نیست'
+        isValid = false
+      }
+      if (!this.form.cardno) {
+        this.errors.cardno = 'فیلد کدملی اجباری است'
+        error = 'فیلد کدملی اجباری است'
         isValid = false
       }
       // if (this.form.tel1 && !this.$checkPhoneNumber(this.form.tel1, true)) {

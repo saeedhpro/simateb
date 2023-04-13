@@ -65,11 +65,13 @@ export default {
       this.getUsersList(this.search.q)
     },
     getUsersList(q = '') {
-      this.search.q = q
-      this.$store.dispatch('users/getOrganizationPatients', {
-        ...this.search,
-        id: this.organization.id,
-      })
+      setTimeout(() => {
+        this.search.q = q
+        this.$store.dispatch('users/getOrganizationPatients', {
+          ...this.search,
+          id: this.organization.id,
+        })
+      }, 200)
     },
     getAllUsers() {
       this.$store.dispatch('users/getOrganizationUsers', this.organization.id)
