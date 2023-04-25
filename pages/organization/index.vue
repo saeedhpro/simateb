@@ -227,7 +227,7 @@
                     <td class="text-center">
                       <div class="table-row flex flex-row align-center justify-start">
                         <img
-                          :src="i.user && i.user.logo ? i.user.logo : 'https://randomuser.me/api/portraits/men/88.jpg'">
+                          :src="getLogo(i)">
                         <span>
                           <a class="select-item-search" @click="openAppointmentModal(i)">{{
                               i.user ? `${i.user.fname} ${i.user.lname}` : '-' | persianDigit
@@ -340,7 +340,7 @@
                                :ripple="false"
                         />
                         <img
-                          :src="i.user && i.user.logo ? i.user.logo : 'https://randomuser.me/api/portraits/men/88.jpg'">
+                          :src="getLogo(i)">
                         <span>
                           <a @click="openAppointmentModal(i)">{{
                               i.user ? `${i.user.fname} ${i.user.lname}` : '-' | persianDigit
@@ -698,6 +698,17 @@ export default {
         return 'پذیرش شده'
       } else {
         return 'پذیرش نشده'
+      }
+    },
+    getLogo(app) {
+      if (app.user && app.user.logo) {
+        return app.user.logo
+      } else {
+        if (app.user.gender == 'female') {
+          return '/images/profile/woman.svg'
+        } else {
+          return '/images/profile/man.svg'
+        }
       }
     }
   },

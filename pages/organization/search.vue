@@ -222,7 +222,7 @@
                                :value="i"
                         />
                         <img
-                          :src="i.user && i.user.logo ? i.user.logo : 'https://randomuser.me/api/portraits/men/88.jpg'">
+                          :src="getLogo(i)">
                         <span>
                           <a class="select-item-search" @click="openItem(i)">{{
                               i.user ? `${i.user.fname} ${i.user.lname}` : '-' | persianDigit
@@ -231,37 +231,62 @@
                       </div>
                     </td>
                     <td class="text-center">{{ i.user && i.user.tel ? i.user.tel : '-' | persianDigit }}</td>
-                    <td class="text-center"><span
-                      class="file-id pointer" @click="openItem(i)">{{ i.user && i.user.file_id ? i.user.file_id : '-' | persianDigit }}</span></td>
-                    <td class="text-center">{{ i.user && i.case_type ? i.case_type : '-' | persianDigit }}</td>
                     <td class="text-center">
-                      {{ $moment.utc(i.start_at).local().format("HH:mm") | toPersianNumber }}
+                      <nuxt-link :to="i.user ? `/profile/${i.user.id}` : '#'" class="file-id cursor-pointer">{{
+                          i.user && i.user.file_id ? i.user.file_id : '-' | persianDigit
+                        }}</nuxt-link>
+                    </td>
+                    <td class="text-center">{{ i.case_type ? i.case_type : '-' | persianDigit }}</td>
+                    <td class="text-center">
+                      {{ i.start_at_time_fa | persianDigit }}
                     </td>
                     <td class="text-center">
-                      <div
+                      <v-tooltip
                         v-if="i.radiology"
-                        :class="getErjaClass(i, 3)"
-                        @click="openItem(i)"
+                        bottom
                       >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="14.286" viewBox="0 0 20 14.286">
-                          <path class="a"
-                                d="M52,97.429a1.423,1.423,0,0,1-.419,1.01L40.153,109.867a1.428,1.428,0,0,1-2.02,0l-5.714-5.714a1.428,1.428,0,1,1,2.02-2.02l4.7,4.706,10.42-10.42A1.427,1.427,0,0,1,52,97.429Z"
-                                transform="translate(-32 -96)"/>
-                        </svg>
-                      </div>
+                        <template v-slot:activator="{ on, attrs }">
+                          <div
+                            v-bind="attrs"
+                            v-on="on"
+                            :class="getErjaClass(i, 3)"
+                            @click="openAppointmentModalItem(i, 3)"
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="14.286" viewBox="0 0 20 14.286">
+                              <path class="a"
+                                    d="M52,97.429a1.423,1.423,0,0,1-.419,1.01L40.153,109.867a1.428,1.428,0,0,1-2.02,0l-5.714-5.714a1.428,1.428,0,1,1,2.02-2.02l4.7,4.706,10.42-10.42A1.427,1.427,0,0,1,52,97.429Z"
+                                    transform="translate(-32 -96)"/>
+                            </svg>
+                          </div>
+                        </template>
+                        <span>
+                            {{ getErjaType(i, 3) }}
+                          </span>
+                      </v-tooltip>
                     </td>
                     <td class="text-center">
-                      <div
+                      <v-tooltip
                         v-if="i.photography"
-                        :class="getErjaClass(i, 1)"
-                        @click="openItem(i)"
+                        bottom
                       >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="14.286" viewBox="0 0 20 14.286">
-                          <path class="a"
-                                d="M52,97.429a1.423,1.423,0,0,1-.419,1.01L40.153,109.867a1.428,1.428,0,0,1-2.02,0l-5.714-5.714a1.428,1.428,0,1,1,2.02-2.02l4.7,4.706,10.42-10.42A1.427,1.427,0,0,1,52,97.429Z"
-                                transform="translate(-32 -96)"/>
-                        </svg>
-                      </div>
+                        <template v-slot:activator="{ on, attrs }">
+                          <div
+                            v-bind="attrs"
+                            v-on="on"
+                            :class="getErjaClass(i, 1)"
+                            @click="openAppointmentModalItem(i, 1)"
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="14.286" viewBox="0 0 20 14.286">
+                              <path class="a"
+                                    d="M52,97.429a1.423,1.423,0,0,1-.419,1.01L40.153,109.867a1.428,1.428,0,0,1-2.02,0l-5.714-5.714a1.428,1.428,0,1,1,2.02-2.02l4.7,4.706,10.42-10.42A1.427,1.427,0,0,1,52,97.429Z"
+                                    transform="translate(-32 -96)"/>
+                            </svg>
+                          </div>
+                        </template>
+                        <span>
+                          {{ getErjaType(i, 1) }}
+                        </span>
+                      </v-tooltip>
                     </td>
                     <td class="text-center">
                       <span
@@ -306,7 +331,7 @@
                                :ripple="false"
                         />
                         <img
-                          :src="i.user && i.user.logo ? i.user.logo : 'https://randomuser.me/api/portraits/men/88.jpg'">
+                          :src="getLogo(i)">
                         <span>
                           <a v-if="!isDoctor" @click="openItem(i)">{{
                               `${i.user.fname} ${i.user.lname}` | persianDigit
@@ -659,7 +684,33 @@ export default {
       } else {
         return 'has-erja black-color'
       }
-    }
+    },
+    getLogo(app) {
+      if (app.user && app.user.logo) {
+        return app.user.logo
+      } else {
+        if (app.user.gender == 'female') {
+          return '/images/profile/woman.svg'
+        } else {
+          return '/images/profile/man.svg'
+        }
+      }
+    },
+    openAppointmentModalItem(item, type) {
+      if (this.resulted(item, type)) {
+        this.item = item
+        this.toggleAppointmentModal()
+      }
+    },
+    getErjaType(appointment, type) {
+      if (this.resulted(appointment, type)) {
+        return 'نتایج ارسال شده'
+      } else if (this.admissioned(appointment, type)) {
+        return 'پذیرش شده'
+      } else {
+        return 'پذیرش نشده'
+      }
+    },
   },
   computed: {
     loginUser() {

@@ -42,7 +42,7 @@
                     >
                     <img
                       class="full-height"
-                      :src="form.new ? form.new : '/images/pages/img.svg'"
+                      :src="form.new ? form.new : getLogo()"
                       @click="openChooseImage"
                     >
                     <crop-image-component
@@ -522,6 +522,7 @@ export default {
       }
     },
     codeMelliCheck(code) {
+      if (!code) return false
       const L = code.length;
       if (L < 8 || L > 10 || parseInt(code, 10) === 0) {
         return false
@@ -702,6 +703,14 @@ export default {
         this.city = null
         this.form.city_id = 0
       }
+    },
+    getLogo() {
+      if (this.form.gender == 'female') {
+        return '/images/profile/woman.svg'
+      } else if (this.form.gender == 'male') {
+        return '/images/profile/man.svg'
+      }
+      return '/images/pages/img.svg'
     }
   },
   computed: {

@@ -1350,6 +1350,22 @@ table {
       align-items: center;
       justify-content: center;
       margin-top: 35px;
+      &.save {
+        &:hover {
+          background: #F6F7FF 0 0 no-repeat padding-box;
+          border: 1px solid #5063ff;
+          .v-icon {
+            color: #5063ff;
+          }
+        }
+      }
+      &:hover {
+        background: #FFFAFA 0 0 no-repeat padding-box;
+        border: 1px solid #F44336;
+        .v-icon {
+          color: #F44336;
+        }
+      }
     }
   }
 }

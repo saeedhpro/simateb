@@ -31,28 +31,10 @@ export default {
   },
   methods: {
     remove(id) {
-      this.$store.dispatch('files/removeFile', id)
-      .then(() => {
-        this.$toast.success('با موفقیت انجام شد');
-      })
-        .catch(err => {
-          this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
-        })
-      setTimeout(() => {
-        this.$emit('refresh')
-      }, 250)
+      this.$emit('remove', id)
     },
     onChange(data) {
-      this.$store.dispatch('files/updateFile', data)
-        .then(() => {
-          this.$toast.success('با موفقیت انجام شد');
-        })
-        .catch(err => {
-          this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
-        })
-      setTimeout(() => {
-        this.$emit('refresh')
-      }, 250)
+      this.$emit('change', data)
     },
     onInput(data) {
 

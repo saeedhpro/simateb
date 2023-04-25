@@ -155,7 +155,13 @@ export default {
     pAdmissionAt: {
       type: String,
     },
+    lAdmissionAt: {
+      type: String,
+    },
     pResultAt: {
+      type: String,
+    },
+    lResultAt: {
       type: String,
     },
     rAdmissionAt: {
@@ -286,26 +292,30 @@ export default {
       return this.loginUser.is_admin || orgID == this.organizationId || orgID == this.radiologyId || orgID == this.photographyId
     },
     resulted() {
-      const profession_id = this.loginUser.organization.profession_id;
-      if (profession_id == 1) {
-        return this.pAdmissionAt !== "" && this.pResultAt !== "" && this.pAdmissionAt != null && this.pResultAt != null
-      } else if (profession_id == 3) {
-        return this.rAdmissionAt !== "" && this.rResultAt !== "" && this.rAdmissionAt != null && this.rResultAt != null
+      const type = this.loginUser.organization.profession_id;
+      if (type == 1) {
+        return this.pAdmissionAt != "" && this.pResultAt != "" && this.pAdmissionAt != null && this.pResultAt != null
+      } else if (type == 2) {
+        return this.lAdmissionAt != "" && this.lResultAt != "" && this.lAdmissionAt != null && this.lResultAt != null
+      } else if (type == 3) {
+        return this.rAdmissionAt != "" && this.rResultAt != "" && this.rAdmissionAt != null && this.rResultAt != null
       } else {
-        return this.pAdmissionAt !== "" && this.pResultAt !== "" ||
-          this.pAdmissionAt != null && this.pResultAt != null ||
-          this.rAdmissionAt !== "" && this.rResultAt !== "" ||
-          this.rAdmissionAt != null && this.rResultAt != null;
+        return (this.pAdmissionAt != "" && this.pResultAt != "" && this.pAdmissionAt != null && this.pResultAt != null) ||
+          (this.lAdmissionAt != "" && this.lResultAt != "" && this.lAdmissionAt != null && this.lResultAt) ||
+          (this.rAdmissionAt != "" && this.rResultAt != "" && this.rAdmissionAt != null && this.rResultAt != null);
       }
     },
     admissioned() {
-      const profession_id = this.loginUser.organization.profession_id;
-      if (profession_id == 1) {
+      const type = this.loginUser.organization.profession_id;
+      if (type == 1) {
         return this.pAdmissionAt != "" && this.pAdmissionAt != null
-      } else if (profession_id == 3) {
+      } else if (type == 2) {
+        return this.lAdmissionAt != "" && this.lAdmissionAt != null
+      } else if (type == 3) {
         return this.rAdmissionAt != "" && this.rAdmissionAt != null
       }
       return this.pAdmissionAt != "" && this.pAdmissionAt != null ||
+        this.lAdmissionAt != "" && this.lAdmissionAt != null ||
         this.rAdmissionAt != "" && this.rAdmissionAt != null;
     }
   }

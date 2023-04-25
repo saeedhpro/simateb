@@ -1,12 +1,6 @@
 <template>
   <div class="send-documents-component">
     <div class="action-box">
-      <!--      <div class="choose-file"-->
-      <!--           @click="saveList"-->
-      <!--      >-->
-      <!--        <img src="/images/profile/choosefile.svg">-->
-      <!--        <span>ذخیره</span>-->
-      <!--      </div>-->
       <div class="choose-file"
            @click="openChooseFile"
       >
@@ -36,9 +30,27 @@
     </div>
     <files-list-component
       v-if="!loading"
-      :files="fileList"
+      :files="newFiles"
       @refresh="getUserFiles"
+      @remove="removeNew"
+      @change="onChangeNew"
     />
+    <files-list-component
+      v-if="!loading"
+      :files="oldFiles"
+      @refresh="getUserFiles"
+      @remove="remove"
+      @change="onChange"
+    />
+    <v-row v-if="showSave">
+      <v-col
+        cols="12"
+      >
+        <div class="d-flex justify-end mt-6">
+          <button class="main-button" :style="{maxWidth: '160px'}" @click="save">ذخیره</button>
+        </div>
+      </v-col>
+    </v-row>
     <crop-image-component
       ref="crop"
       @changed="cropped"
@@ -175,7 +187,9 @@ export default {
         user_id: this.userId,
       },
       newFiles: [],
+      oldFiles: [],
       show: false,
+      changed: false,
       loading: false,
       showSendFileModal: false,
     }
@@ -184,6 +198,11 @@ export default {
     getUserFiles() {
       this.loading = true
       this.$store.dispatch('files/getList', this.userId)
+        .then(files => {
+          this.oldFiles = [
+            ...files,
+          ]
+        })
       .finally(() => {
         setTimeout(() => {
           this.loading = false
@@ -225,23 +244,40 @@ export default {
       this.$refs.file.click()
     },
     sendFile() {
-      this.$store.dispatch('files/createFile', this.form)
-        .then(res => {
-          this.toggleShowSendFileModal()
-          this.getUserFiles()
-
-          this.form = {
-            file: null,
-            ext: null,
-            comment: '',
-            info: '',
-            user_id: this.userId
-          }
-          this.$toast.success('با موفقیت انجام شد');
-        })
-        .catch(err => {
-          this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
-        })
+      const id = this.newFiles.length > 0  ? this.newFiles[this.newFiles.length].id + 1 : 0
+      this.newFiles.push({
+        id: id,
+        url: this.form.file,
+        ext: null,
+        comment: '',
+        info: '',
+        user_id: this.userId
+      })
+      this.form = {
+        file: null,
+        ext: null,
+        comment: '',
+        info: '',
+        user_id: this.userId
+      }
+      this.toggleShowSendFileModal()
+      // this.$store.dispatch('files/createFile', this.form)
+      //   .then(res => {
+      //     this.toggleShowSendFileModal()
+      //     this.getUserFiles()
+      //
+      //     this.form = {
+      //       file: null,
+      //       ext: null,
+      //       comment: '',
+      //       info: '',
+      //       user_id: this.userId
+      //     }
+      //     this.$toast.success('با موفقیت انجام شد');
+      //   })
+      //   .catch(err => {
+      //     this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
+      //   })
     },
     closeForm() {
       this.toggleShowSendFileModal()
@@ -255,7 +291,29 @@ export default {
     },
     toggleShowSendFileModal() {
       this.showSendFileModal = !this.showSendFileModal
-    }
+    },
+    save() {
+
+    },
+    removeNew(id) {
+      this.newFiles = this.newFiles.filter(i => i.id != id)
+    },
+    remove(id) {
+      this.oldFiles = this.oldFiles.filter(i => i.id != id)
+    },
+    onChangeNew(data) {
+      if (this.newFiles[data.id].comment != data.comment || this.newFiles[data.id].info != data.info) {
+        this.newFiles[data.id] = data
+        this.changed = true
+      }
+    },
+    onChange(data) {
+      const index = this.oldFiles.findIndex(i => i.id == data.id)
+      if (index > -1 && (this.oldFiles[index].comment != data.comment || this.oldFiles[index].info != data.info)) {
+          this.oldFiles[index] = data
+          this.changed = true
+      }
+    },
   },
   computed: {
     loginUser() {
@@ -263,6 +321,9 @@ export default {
     },
     fileList() {
       return this.$store.getters['files/getList']
+    },
+    showSave() {
+      return this.changed || this.newFiles.length > 0 || this.fileList.length > 0 && this.fileList.length !== this.oldFiles.length
     }
   }
 }

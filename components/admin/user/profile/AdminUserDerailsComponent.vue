@@ -12,7 +12,7 @@
           >
             <img
               class="profile-image"
-              :src="user.logo ? user.logo : 'https://randomuser.me/api/portraits/men/88.jpg'">
+              :src="getLogo(user)">
           </v-col>
           <v-col
             cols="12"
@@ -235,6 +235,17 @@ export default {
           this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
         })
     },
+    getLogo(user) {
+      if (user.logo) {
+        return user.logo
+      } else {
+        if (user.gender == 'female') {
+          return '/images/profile/woman.svg'
+        } else {
+          return '/images/profile/man.svg'
+        }
+      }
+    }
   },
   computed: {
     loginUser() {

@@ -42,7 +42,7 @@
                   >
                     <img
                       class="profile-image"
-                      :src="appointment.user && appointment.user.logo ? appointment.user.logo : 'https://randomuser.me/api/portraits/men/88.jpg'">
+                      :src="getLogo(appointment)">
                   </v-col>
                   <v-col
                     cols="12"
@@ -1239,6 +1239,7 @@ export default {
       this.$store.dispatch('appointments/getAppointmentPrescription', this.item.id)
       .then(res => {
         const p = res.data.data;
+        console.log(res, "pre")
         this.prescription = p ?? '';
       })
     },
@@ -1541,6 +1542,17 @@ export default {
         .finally(() => {
           this.showDeleteApp = true
         })
+    },
+    getLogo(app) {
+      if (app.user && app.user.logo) {
+        return app.user.logo
+      } else {
+        if (app.user.gender == 'female') {
+          return '/images/profile/woman.svg'
+        } else {
+          return '/images/profile/man.svg'
+        }
+      }
     }
   },
   computed: {

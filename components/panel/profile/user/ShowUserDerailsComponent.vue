@@ -12,7 +12,7 @@
           >
             <img
               class="profile-image"
-              :src="user.logo ? user.logo : 'https://randomuser.me/api/portraits/men/88.jpg'">
+              :src="getLogo(user)">
           </v-col>
           <v-col
             cols="12"
@@ -136,6 +136,8 @@
             <v-menu
               close-on-content-click
               offset-y
+              offset-x
+              location="end"
               v-if="canDelete"
             >
               <template v-slot:activator="{ on, attrs }">
@@ -150,7 +152,9 @@
                   </v-icon>
                 </v-btn>
               </template>
-              <v-list>
+              <v-list
+                class="delete-user-btn"
+              >
                 <v-list-item
                   @click="remove"
                 >
@@ -285,13 +289,24 @@ export default {
     getMedicalHistory() {
       this.$store.dispatch('users/getMedicalHistory', this.user.id)
     },
+    getLogo(user) {
+      if (user.logo) {
+        return user.logo
+      } else {
+        if (user.gender == 'female') {
+          return '/images/profile/woman.svg'
+        } else {
+          return '/images/profile/man.svg'
+        }
+      }
+    }
   },
   computed: {
     canDelete() {
-      if (this.user.id === this.loginUser.id || this.loginUser.user_group_id !== 2) {
+      if (this.user.id === this.loginUser.id) {
         return false
       }
-      return this.user.user_group_id !== 2;
+      return this.user.organization_id === this.loginUser.organization_id || this.loginUser.user_group_id === 2;
     },
     loginUser() {
       return this.$store.getters['login/getUser']
@@ -316,6 +331,17 @@ export default {
       outline: none !important;
       transition: all .3s ease-in-out;
     }
+  }
+}
+.delete-user-btn {
+  padding: 1px 3px !important;
+  background: #FFF5F5 0 0 no-repeat padding-box;
+  box-shadow: 0 2px 4px #F4433629;
+  border: 1px solid #F44336;
+  border-radius: 8px;
+  .v-list-item {
+    color: #F44336 !important;
+    background: #FFF5F5 !important;
   }
 }
 </style>

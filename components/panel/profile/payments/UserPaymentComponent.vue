@@ -98,7 +98,7 @@
                                :value="i"
                                :ripple="false"
                         />
-                        <img :src="i.user ? i.user.logo : 'https://randomuser.me/api/portraits/men/88.jpg'">
+                        <img :src="getLogo(i)">
                         <span> {{
                             i.user ? `${i.user.fname} ${i.user.lname}` : '-' | persianDigit
                           }}</span>
@@ -683,6 +683,17 @@ export default {
           return '-'
       }
     },
+    getLogo(pay) {
+      if (pay.user && pay.user.logo) {
+        return pay.user.logo
+      } else {
+        if (pay.user.gender == 'female') {
+          return '/images/profile/woman.svg'
+        } else {
+          return '/images/profile/man.svg'
+        }
+      }
+    }
   },
   computed: {
     payments() {
