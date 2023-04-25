@@ -410,7 +410,7 @@ export default {
         this.appointment.user_id = this.user.id
         this.appointment.tel = this.user.tel
       } else {
-        this.appointment.file_id = ''
+        // this.appointment.file_id = ''
         this.appointment.cardno = ''
         this.appointment.user_id = null
         this.appointment.tel = ''
@@ -429,7 +429,7 @@ export default {
           this.appointment.tel = user.tel
         } else {
           this.user = null
-          this.appointment.file_id = ''
+          // this.appointment.file_id = ''
           this.appointment.cardno = ''
           this.appointment.user_id = null
           this.appointment.tel = ''
@@ -437,12 +437,11 @@ export default {
       } else {
         if (!this.user) {
           this.user = null
-          this.appointment.file_id = ''
+          // this.appointment.file_id = ''
           this.appointment.cardno = ''
           this.appointment.user_id = null
           this.appointment.tel = ''
         } else {
-          console.log(this.user, "usr")
           this.appointment.file_id = this.user.file_id
         }
       }

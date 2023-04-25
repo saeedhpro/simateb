@@ -552,6 +552,7 @@ export default {
       }
     },
     codeMelliCheck(code) {
+      if (!code) return false
       const L = code.length;
       if (L < 8 || L > 10 || parseInt(code, 10) === 0) {
         return false

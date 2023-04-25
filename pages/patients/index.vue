@@ -233,7 +233,7 @@
             >
               <data-table-component
                 v-if="isDoctor"
-                :headers="headers"
+                :headers="doctorHeaders"
                 :page="search.page"
                 :total="users.meta.total"
                 @paginate="paginate"
@@ -248,7 +248,7 @@
                                v-model="selectedUsers"
                                :value="i"
                         />
-                        <img :src="i.logo ? i.logo : 'https://randomuser.me/api/portraits/men/88.jpg'">
+                        <img :src="getLogo(i)">
                         <span><nuxt-link :to="`/profile/${i.id}`">{{
                             `${i.fname} ${i.lname}` | persianDigit
                           }}</nuxt-link></span>
@@ -256,7 +256,12 @@
                     </td>
                     <td class="text-center">{{ i.tel ? i.tel : '-' | persianDigit }}</td>
                     <td class="text-center"><span
-                      class="text-center file-id">{{ i.file_id ? i.file_id : '-' | persianDigit }}</span></td>
+                      class="text-center file-id">
+                      <nuxt-link :to="`/profile/${i.id}`" class="file-id cursor-pointer">{{
+                          i.file_id ? i.file_id : '-' | persianDigit
+                      }}</nuxt-link>
+                    </span>
+                    </td>
                     <td class="text-center">{{ i.age ? i.age : '-' | persianDigit }}</td>
                     <td class="text-center" v-if="i.created">
                       {{ i.created_at_ago | persianDigit }}
@@ -290,7 +295,7 @@
                                :value="i"
                                :ripple="false"
                         />
-                        <img :src="i.logo ? i.logo : 'https://randomuser.me/api/portraits/men/88.jpg'">
+                        <img :src="getLogo(i)">
                         <span><nuxt-link :to="`/profile/${i.id}`">{{
                             `${i.fname} ${i.lname}` | persianDigit
                           }}</nuxt-link></span>
@@ -507,6 +512,17 @@ export default {
     toggleShowSendSmsModal() {
       this.showSendSmsModal = !this.showSendSmsModal
     },
+    getLogo(user) {
+      if (user.logo) {
+        return user.logo
+      } else {
+        if (user.gender == 'female') {
+          return '/images/profile/woman.svg'
+        } else {
+          return '/images/profile/man.svg'
+        }
+      }
+    }
   },
   computed: {
     users() {

@@ -113,7 +113,7 @@
                                :value="i"
                                :ripple="false"
                         />
-                        <img :src="i.logo ? i.logo : 'https://randomuser.me/api/portraits/men/88.jpg'">
+                        <img :src="getLogo(i)">
                         <span><nuxt-link :to="`/admin/profile/${i.id}`">{{
                             `${i.fname} ${i.lname}` | persianDigit
                           }}</nuxt-link></span>
@@ -298,6 +298,17 @@ export default {
       this.selectedUsers = []
       this.toggleSmsModal()
       this.action = null
+    },
+    getLogo(user) {
+      if (user.logo) {
+        return user.logo
+      } else {
+        if (user.gender == 'female') {
+          return '/images/profile/woman.svg'
+        } else {
+          return '/images/profile/man.svg'
+        }
+      }
     }
   },
   computed: {

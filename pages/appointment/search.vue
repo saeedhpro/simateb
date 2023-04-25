@@ -240,7 +240,7 @@
                                :ripple="false"
                         />
                         <img
-                          :src="i.user && i.user.logo ? i.user.logo : 'https://randomuser.me/api/portraits/men/88.jpg'">
+                          :src="getLogo(i)">
                         <span>
                           <nuxt-link v-if="i.user" :to="`/profile/${i.user.id}`">{{
                               `${i.user.fname} ${i.user.lname}` | persianDigit
@@ -457,6 +457,17 @@ export default {
     },
     onChecked(item) {
       this.appointment.case_type = item.checked ? item.name : ''
+    },
+    getLogo(app) {
+      if (app.user && app.user.logo) {
+        return app.user.logo
+      } else {
+        if (app.user.gender == 'female') {
+          return '/images/profile/woman.svg'
+        } else {
+          return '/images/profile/man.svg'
+        }
+      }
     }
   },
   computed: {

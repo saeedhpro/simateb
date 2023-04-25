@@ -93,7 +93,7 @@
             <v-card-text
               class="accept-file-remove-text"
             >
-              همه سوابق و مشخصات بیمار حذف خواهند شد و قابل بازگشت نیستند
+              داکیومنت ارسالی بیمار حذف خواهد شد و قابل بازگشت نیست
             </v-card-text>
 
             <v-card-actions>
@@ -114,22 +114,32 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-        <button
-          @click="remove"
-          class="remove-button"
-        >
-          <v-icon>
-            mdi-delete-outline
-          </v-icon>
-        </button>
-      </v-col>
-      <v-col
-        cols="12"
-      >
-        <div class="d-flex justify-end">
-          <button class="main-button" :style="{maxWidth: '160px'}" @click="change">ذخیره</button>
+        <div class="d-flex flex-row justify-space-between">
+          <button
+            @click="remove"
+            class="remove-button"
+          >
+            <v-icon>
+              mdi-delete-outline
+            </v-icon>
+          </button>
+          <button
+            @click="change"
+            class="remove-button save"
+          >
+            <v-icon>
+              mdi-content-save-outline
+            </v-icon>
+          </button>
         </div>
       </v-col>
+<!--      <v-col-->
+<!--        cols="12"-->
+<!--      >-->
+<!--        <div class="d-flex justify-end">-->
+<!--          <button class="main-button" :style="{maxWidth: '160px'}" @click="change">ذخیره</button>-->
+<!--        </div>-->
+<!--      </v-col>-->
     </v-row>
   </div>
 </template>
@@ -200,6 +210,8 @@ export default {
         id: this.id,
         info: this.i,
         comment: this.c,
+        path: this.path,
+        ext: this.ext,
       })
     }
   },
