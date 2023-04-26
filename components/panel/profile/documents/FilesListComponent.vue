@@ -37,7 +37,7 @@ export default {
       this.$emit('change', data)
     },
     onInput(data) {
-
+      this.$emit('input', data)
     }
   },
 }

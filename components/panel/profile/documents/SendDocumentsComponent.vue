@@ -27,6 +27,9 @@
         <img src="/images/profile/chooseimg.svg">
         <span>افزودن عکس</span>
       </div>
+      <div class="choose-image mr-2">
+        <button class="main-button" :style="{maxWidth: '160px'}" @click="save">ذخیره</button>
+      </div>
     </div>
     <files-list-component
       v-if="!loading"
@@ -34,6 +37,7 @@
       @refresh="getUserFiles"
       @remove="removeNew"
       @change="onChangeNew"
+      @input="onInputNew"
     />
     <files-list-component
       v-if="!loading"
@@ -41,16 +45,8 @@
       @refresh="getUserFiles"
       @remove="remove"
       @change="onChange"
+      @input="onInput"
     />
-    <v-row v-if="showSave">
-      <v-col
-        cols="12"
-      >
-        <div class="d-flex justify-end mt-6">
-          <button class="main-button" :style="{maxWidth: '160px'}" @click="save">ذخیره</button>
-        </div>
-      </v-col>
-    </v-row>
     <crop-image-component
       ref="crop"
       @changed="cropped"
@@ -199,9 +195,16 @@ export default {
       this.loading = true
       this.$store.dispatch('files/getList', this.userId)
         .then(files => {
+          let data = []
+          for (const f of files) {
+            data.push({
+              ...f
+            })
+          }
           this.oldFiles = [
-            ...files,
+            ...data,
           ]
+          this.newFiles = []
         })
       .finally(() => {
         setTimeout(() => {
@@ -245,17 +248,19 @@ export default {
     },
     sendFile() {
       const id = this.newFiles.length > 0  ? this.newFiles[this.newFiles.length].id + 1 : 0
+      const ext = this.form.file.split(';')[0].split('/')[1];
       this.newFiles.push({
         id: id,
         url: this.form.file,
-        ext: null,
-        comment: '',
-        info: '',
+        file: this.form.file,
+        ext: ext,
+        comment: this.form.comment,
+        info: this.form.info,
         user_id: this.userId
       })
       this.form = {
         file: null,
-        ext: null,
+        ext: '',
         comment: '',
         info: '',
         user_id: this.userId
@@ -283,7 +288,7 @@ export default {
       this.toggleShowSendFileModal()
       this.form = {
         file: null,
-        ext: null,
+        ext: '',
         comment: '',
         info: '',
         user_id: this.userId,
@@ -293,7 +298,20 @@ export default {
       this.showSendFileModal = !this.showSendFileModal
     },
     save() {
-
+      const data = {
+        new_files: this.newFiles,
+        old_files: this.oldFiles,
+        user_id: this.userId,
+      }
+      this.$store.dispatch('files/createMultipleFile', data)
+      .then(res => {
+        this.getUserFiles();
+        this.$toast.success("اسناد با موفقیت ارسال شد");
+      })
+      .catch(err => {
+        console.log(err, "err")
+        this.$toast.error("متاسفانه خطایی رخ داده است. دوباره امتحان کنید");
+      })
     },
     removeNew(id) {
       this.newFiles = this.newFiles.filter(i => i.id != id)
@@ -302,7 +320,8 @@ export default {
       this.oldFiles = this.oldFiles.filter(i => i.id != id)
     },
     onChangeNew(data) {
-      if (this.newFiles[data.id].comment != data.comment || this.newFiles[data.id].info != data.info) {
+      if (this.newFiles[data.id].comment != data.comment ||
+        this.newFiles[data.id].info != data.info) {
         this.newFiles[data.id] = data
         this.changed = true
       }
@@ -314,6 +333,14 @@ export default {
           this.changed = true
       }
     },
+    onInputNew(data) {
+      this.newFiles[data.index].info = data.info
+      this.newFiles[data.index].comment = data.comment
+    },
+    onInput(data) {
+      this.oldFiles[data.index].info = data.info
+      this.oldFiles[data.index].comment = data.comment
+    }
   },
   computed: {
     loginUser() {

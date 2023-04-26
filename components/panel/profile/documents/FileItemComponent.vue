@@ -123,23 +123,8 @@
               mdi-delete-outline
             </v-icon>
           </button>
-          <button
-            @click="change"
-            class="remove-button save"
-          >
-            <v-icon>
-              mdi-content-save-outline
-            </v-icon>
-          </button>
         </div>
       </v-col>
-<!--      <v-col-->
-<!--        cols="12"-->
-<!--      >-->
-<!--        <div class="d-flex justify-end">-->
-<!--          <button class="main-button" :style="{maxWidth: '160px'}" @click="change">ذخیره</button>-->
-<!--        </div>-->
-<!--      </v-col>-->
     </v-row>
   </div>
 </template>
@@ -199,11 +184,13 @@ export default {
       this.remove()
     },
     changeInput(e) {
-      // this.$emit('input', {
-      //   id: this.id,
-      //   index: this.index,
-      //   [e.target.name]: e.target.value,
-      // })
+      this.$emit('input', {
+        id: this.id,
+        index: this.index,
+        info: this.info,
+        comment: this.comment,
+        [e.target.name]: e.target.value,
+      })
     },
     change() {
       this.$emit('change', {
@@ -213,7 +200,7 @@ export default {
         path: this.path,
         ext: this.ext,
       })
-    }
+    },
   },
   computed: {
     loginUser() {
@@ -225,7 +212,7 @@ export default {
       }
       return false
     }
-  }
+  },
 }
 </script>
 
