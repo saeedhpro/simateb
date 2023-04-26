@@ -59,6 +59,15 @@ export const actions = {
         return Promise.reject(err)
       })
   },
+  createMultipleFile(ctx, data) {
+    return this.$axios.post(`/files/upload`, data)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
   removeFile(ctx, id) {
     return this.$axios.delete(`/files/${id}`)
       .then(res => {
