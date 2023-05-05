@@ -184,10 +184,10 @@
                             :key="n"
                           >
                             <div>
-                              {{ l.name | toPersianNumber }}
+                              {{ l.name  }}
                             </div>
                             <span>
-                              {{ l.limitation | toPersianNumber }}
+                              {{ l.limitation  }}
                             </span>
                           </div>
                         </div>
@@ -206,7 +206,7 @@
                           :class="{'is-today': isToday(i), 'is-friday': isFriday(i)}"
                         >
                           {{ getToday(i) }}
-                          {{ i | toPersianNumber }}
+                          {{ i  }}
                           {{ months[month - 1].label }}
                         </div>
                       </th>
@@ -471,7 +471,7 @@ export default {
       this.$store.dispatch('appointments/createAppointment', {
         ...this.appointment,
         user_id: this.user.id,
-        income: parseFloat(this.appointment.income.split(' ')[0].split(',').join('')),
+        income: this.appointment.income,
       })
         .then(() => {
           this.$toast.success('با موفقیت انجام شد');

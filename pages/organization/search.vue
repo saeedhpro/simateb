@@ -49,7 +49,7 @@
             >
               <div class="page-main-actions-left">
                 <div class="result-count">
-                  <span>{{ appointments.meta.total ? appointments.meta.total : 0 | toPersianNumber }}</span>
+                  <span>{{ appointments.meta.total ? appointments.meta.total : 0  }}</span>
                   نتیجه
                 </div>
                 <div class="page-search-box">
@@ -689,8 +689,12 @@ export default {
       if (app.user && app.user.logo) {
         return app.user.logo
       } else {
-        if (app.user.gender == 'female') {
-          return '/images/profile/woman.svg'
+        if (app.user) {
+          if (app.user.gender == 'female') {
+            return '/images/profile/woman.svg'
+          } else {
+            return '/images/profile/man.svg'
+          }
         } else {
           return '/images/profile/man.svg'
         }

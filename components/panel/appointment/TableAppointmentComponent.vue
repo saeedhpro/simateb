@@ -6,17 +6,17 @@
     <div
       class="full-name"
     >
-      {{ fullName | toPersianNumber }}
+      {{ fullName }}
     </div>
     <div
       class="start-at"
     >
-      {{ startAt | toPersianNumber }}
+      {{ startAt }}
     </div>
     <div
       class="case-type"
     >
-      {{ caseType | toPersianNumber }}
+      {{ caseType }}
     </div>
   </div>
 </template>

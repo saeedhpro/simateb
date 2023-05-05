@@ -706,9 +706,9 @@ export default {
     },
     getLogo() {
       if (this.form.gender == 'female') {
-        return '/images/profile/woman.svg'
+        return '/images/profile/woman2.svg'
       } else if (this.form.gender == 'male') {
-        return '/images/profile/man.svg'
+        return '/images/profile/man2.svg'
       }
       return '/images/pages/img.svg'
     }

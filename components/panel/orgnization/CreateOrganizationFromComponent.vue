@@ -433,8 +433,8 @@ export default {
               }
             }),
           ],
-          sms_price: parseFloat(this.organization.sms_price.split(' ')[0].split(',').join('')),
-          sms_credit: parseFloat(this.organization.sms_credit.split(' ')[0].split(',').join('')),
+          sms_price: this.organization.sms_price,
+          sms_credit: this.organization.sms_credit,
         }
         delete data.logo
         this.$store.dispatch('admin/organizations/createOrganization', data)

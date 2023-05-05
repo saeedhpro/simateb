@@ -240,7 +240,7 @@
                     <td class="text-center">{{ (search.page - 1) * 10 + n + 1 | persianDigit }}</td>
                     <td class="text-center">
                       <span class="file-id">
-                        {{ i.name ? i.name : '-' | toPersianNumber }}
+                        {{ i.name ? i.name : '-'  }}
                       </span>
                     </td>
                     <td class="text-center">{{ i.duration | persianDigit }}</td>

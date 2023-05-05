@@ -68,7 +68,7 @@
             >
               <div class="page-main-actions-left">
                 <div class="result-count">
-                  <span>{{ appointments.total_rows ? appointments.total_rows : 0 | toPersianNumber }}</span>
+                  <span>{{ appointments.total_rows ? appointments.total_rows : 0  }}</span>
                   نتیجه
                 </div>
                 <div class="page-search-box">

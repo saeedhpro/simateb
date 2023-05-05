@@ -247,7 +247,7 @@ export default {
       this.$refs.file.click()
     },
     sendFile() {
-      const id = this.newFiles.length > 0  ? this.newFiles[this.newFiles.length].id + 1 : 0
+      const id = this.newFiles.length > 0  ? this.newFiles[this.newFiles.length - 1].id + 1 : 0
       const ext = this.form.file.split(';')[0].split('/')[1];
       this.newFiles.push({
         id: id,

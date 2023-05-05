@@ -32,7 +32,8 @@ export default {
     {src: '~/plugins/cropper.js', ssr: false},
     {src: '~/plugins/persianFilter.js', ssr: false},
     {src: '~/plugins/notification.js', ssr: false},
-    {src: '~/plugins/vuelidate.js', ssr: false}
+    {src: '~/plugins/vuelidate.js', ssr: false},
+    {src: '~/plugins/topersian.js', ssr: false}
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

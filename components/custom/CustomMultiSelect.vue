@@ -17,10 +17,10 @@
     >
       <template slot="singleLabel" slot-scope="props"><span
         class="option__desc"><span
-        class="option__title">{{ hasCustomLabel ? `${props.option.fname} ${props.option.lname}` : props.option.name | toPersianNumber }}</span></span>
+        class="option__title">{{ hasCustomLabel ? `${props.option.fname} ${props.option.lname}` : props.option.name  }}</span></span>
       </template>
       <template slot="option" slot-scope="props">
-        <div class="option__desc"><span class="option__title">{{ hasCustomLabel ? `${props.option.fname} ${props.option.lname}` : props.option.name | toPersianNumber  }}</span></div>
+        <div class="option__desc"><span class="option__title">{{ hasCustomLabel ? `${props.option.fname} ${props.option.lname}` : props.option.name   }}</span></div>
       </template>
     </multiselect>
     <span class="create-update-modal-input-error" v-if="error">{{ error }}</span>

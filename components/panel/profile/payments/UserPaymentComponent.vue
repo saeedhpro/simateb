@@ -14,7 +14,7 @@
             >
               <div class="payment-detail">
                 <span>مجموع هزینه درمان:</span>
-                <span>{{ total.due_total | toPersianCurrency('تومان', 1) }}</span>
+                <span>{{ duePayment | toPersianCurrency('تومان',0) }}</span>
               </div>
             </v-col>
             <v-col
@@ -23,7 +23,16 @@
             >
               <div class="payment-detail">
                 <span>مجموع پرداخت‌ها:</span>
-                <span>{{ total.total | toPersianCurrency('تومان', 1) }}</span>
+                <span>{{ total.total | toPersianCurrency('تومان', 0) }}</span>
+              </div>
+            </v-col>
+            <v-col
+              cols="12"
+              md="2"
+            >
+              <div class="payment-detail">
+                <span>باقیمانده:</span>
+                <span>{{ duePayment > 0 ? (duePayment - total.total) : 0 | toPersianCurrency('تومان', 0) }}</span>
               </div>
             </v-col>
             <v-col
@@ -57,7 +66,7 @@
                   v-model="selectedAll"
                 ></v-checkbox>
                 <div class="selected-count" v-if="selectedUsers.length > 0">
-                  {{ selectedUsers.length | persianDigit }}
+                  {{ selectedUsers.length }}
                 </div>
                 <v-select
                   outlined
@@ -96,22 +105,23 @@
                                class="table-selectable-checkbox"
                                v-model="selectedPayments"
                                :value="i"
-                               :ripple="false"
                         />
                         <img :src="getLogo(i)">
+                        <a @click.prevent="openUpdateModal(i)" href="#">
                         <span> {{
-                            i.user ? `${i.user.fname} ${i.user.lname}` : '-' | persianDigit
+                            i.user ? `${i.user.fname} ${i.user.lname}` : '-'
                           }}</span>
+                        </a>
                       </div>
                     </td>
                     <td class="text-center dir-ltr">
-                      {{ i.created ? $moment.utc(i.created).local().format('jYYYY/jM/jDD HH:mm') : '-' | persianDigit }}
+                      {{ i.created ? $moment.utc(i.created).local().format('jYYYY/jM/jDD HH:mm') : '-' }}
                     </td>
                     <td class="text-center">
-                      {{ i.amount | persianDigit }}
+                      {{ i.amount | toPersianCurrency('تومان', 0) }}
                     </td>
                     <td class="text-center">
-                      {{ i.trace_code ? i.trace_code : '-' | persianDigit }}
+                      {{ i.trace_code ? i.trace_code : '-' }}
                     </td>
                     <td class="text-center">
                       <span class="file-id main">
@@ -164,7 +174,7 @@
             >
               <v-icon>mdi-close</v-icon>
             </button>
-            <span>ثبت پرداخت</span>
+            <span>{{ isUpdate ? 'ویرایش' : 'ثبت' }} پرداخت</span>
           </div>
           <v-spacer/>
         </v-card-title>
@@ -404,6 +414,10 @@ export default {
       type: Number,
       required: true,
     },
+    duePayment: {
+      type: Number,
+      default: 0
+    },
     fullName: {
       type: String,
       default: "",
@@ -450,6 +464,7 @@ export default {
       selectedPayments: [],
       showSmsModal: false,
       showDelete: false,
+      isUpdate: false,
       showCreateModal: false,
       form: {
         user_id: this.userId,
@@ -538,6 +553,14 @@ export default {
         check_bank: '',
         check_num: '',
       }
+      this.payType = {
+        id: 4,
+        name: 'کارت به کارت'
+      }
+      this.paidFor = {
+        id: 1,
+        name: 'قسط درمان'
+      }
     },
     toggleRemove() {
       this.showDelete = !this.showDelete
@@ -554,9 +577,35 @@ export default {
       this.showSmsModal = !this.showSmsModal
     },
     openCreateModal() {
+      this.form.created = this.$moment().format('YYYY/MM/DD HH:mm:ss'),
+      this.isUpdate = false
+      this.showCreateModal = true
+    },
+    openUpdateModal(i) {
+      this.payType = this.payTypes.find(item => item.id = i.paytype)
+      this.paidFor = this.paidFors.find(item => item.id = i.paid_for)
+      this.form = {
+        user_id: this.userId,
+        created: i.created,
+        amount: i.amount,
+        paytype: i.paytype,
+        paid_for: i.paid_for,
+        paid_to: i.paid_to,
+        info: i.info,
+        trace_code: i.trace_code,
+        check_bank: i.check_bank,
+        check_num: i.check_num,
+        check_date: i.check_date,
+        check_status: i.check_status,
+        discount: i.discount,
+        ok: i.ok,
+        income: i.income,
+      }
+      this.isUpdate = true
       this.showCreateModal = true
     },
     closeCreateModal() {
+      this.isUpdate = false
       this.showCreateModal = false
       this.clearForm()
     },
@@ -592,26 +641,44 @@ export default {
         })
     },
     createPayment() {
-      this.errors.amount = ''
-      if (this.validate()) {
-        const data = {
-          ...this.form,
-          amount: parseFloat(this.form.amount.split(' ')[0].split(',').join('')),
+      if (this.isUpdate) {
+        this.errors.amount = ''
+        if (this.validate()) {
+          const data = {
+            ...this.form,
+          }
+          this.$store.dispatch('payments/updatePayment', data)
+            .then(res => {
+              this.$toast.success('با موفقیت انجام شد');
+              this.closeCreateModal()
+              this.paginate()
+            })
+            .catch(err => {
+              this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
+            })
         }
-        this.$store.dispatch('payments/createPayment', data)
-          .then(res => {
-            this.$toast.success('با موفقیت انجام شد');
-            this.closeCreateModal()
-            this.paginate()
-          })
-          .catch(err => {
-            this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
-          })
+      } else {
+        this.errors.amount = ''
+        if (this.validate()) {
+          const data = {
+            ...this.form,
+          }
+          this.$store.dispatch('payments/createPayment', data)
+            .then(res => {
+              this.$toast.success('با موفقیت انجام شد');
+              this.closeCreateModal()
+              this.paginate()
+            })
+            .catch(err => {
+              this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
+            })
+        }
       }
     },
     validate() {
       let validated = true
-      const amount = this.form.amount.split(' ')[0].split(',').join('')
+      // const amount = this.form.amount.split(' ')[0].split(',').join('')
+      const amount = this.form.amount
       let error = ''
       if (!amount) {
         this.errors.amount = 'فیلد مبلغ الزامی است!'

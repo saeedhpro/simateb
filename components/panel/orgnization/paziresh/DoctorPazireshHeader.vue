@@ -3,7 +3,7 @@
     <v-col>
       <div class="doctor-paziresh-header">
         <div class="circle"></div>
-        <div class="text">برای امروز، <span>{{ total | toPersianNumber }}</span> مورد پذیرش ثبت شده است</div>
+        <div class="text">برای امروز، <span>{{ total  }}</span> مورد پذیرش ثبت شده است</div>
       </div>
     </v-col>
   </v-row>

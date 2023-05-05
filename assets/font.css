@@ -1,11 +1,26 @@
+/*@font-face {*/
+/*  font-family: 'IRANYekanRegular';*/
+/*  src: url( 'font/IRANYekanRegular.eot' );*/
+/*  src: url( 'font/IRANYekanRegular.eot?#iefix' ) format( 'embedded-opentype' ),*/
+/*  url( 'font/IRANYekanRegular.woff2' ) format( 'woff2' ),*/
+/*  url( 'font/IRANYekanRegular.woff' ) format( 'woff' ),*/
+/*  url( 'font/IRANYekanRegular.ttf' ) format( 'truetype' ),*/
+/*  url( 'font/IRANYekanRegular.svg#Yekan' ) format( 'svg' );*/
+/*}*/
 @font-face {
-  font-family: 'IRANYekanRegular';
-  src: url( 'font/IRANYekanRegular.eot' );
-  src: url( 'font/IRANYekanRegular.eot?#iefix' ) format( 'embedded-opentype' ),
-  url( 'font/IRANYekanRegular.woff2' ) format( 'woff2' ),
-  url( 'font/IRANYekanRegular.woff' ) format( 'woff' ),
-  url( 'font/IRANYekanRegular.ttf' ) format( 'truetype' ),
-  url( 'font/IRANYekanRegular.svg#Yekan' ) format( 'svg' );
+  font-family: IRANYekanRegular;
+  font-style: normal;
+  font-weight: bold;
+  src: url('font/Woff/IRANYekanXFaNum-Bold.woff') format('woff'),
+  url('font/Woff2/IRANYekanXFaNum-Bold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: IRANYekanRegular;
+  font-style: normal;
+  font-weight: normal;
+  src: url('font/Woff/IRANYekanXFaNum-Regular.woff') format('woff'),
+  url('font/Woff2/IRANYekanXFaNum-Regular.woff2') format('woff2');
 }
 .regular {
   font-family: "IRANYekanRegular";

@@ -3,10 +3,10 @@
     <div class="top-box">
       <span class="right-box">
         <span class="appcode">کد پذیرش:</span>
-        <span class="appcode-number">{{ appointment.code | toPersianNumber }}</span>
+        <span class="appcode-number">{{ appointment.code  }}</span>
       </span>
       <span class="time-box">{{
-          appointment.p_result_at ? $moment(appointment.p_result_at).format("jYYYY/jMM/jDD") : '' | toPersianNumber
+          appointment.p_result_at ? $moment(appointment.p_result_at).format("jYYYY/jMM/jDD") : ''
         }}</span>
     </div>
     <div class="images-box">

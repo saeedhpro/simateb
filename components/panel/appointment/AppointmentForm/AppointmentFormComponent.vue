@@ -293,7 +293,7 @@
                           </span>
                       </div>
                     </div>
-                    <button @click="openDoctorPrescriptionModal('future_prescription_list')" class="add-more-button">
+                    <button @click="openDoctorPrescriptionModal('future_prescription')" class="add-more-button">
                       <v-icon>mdi-plus</v-icon>
                       اضافه کردن
                     </button>
@@ -301,7 +301,7 @@
                   <div class="mt-2 create-update-model-input-box">
                       <textarea
                         class="prescription-textarea"
-                        v-model="appointment.future_prescription_list"
+                        v-model="appointment.future_prescription"
                         rows="5"
                       ></textarea>
                   </div>
@@ -522,7 +522,7 @@
                           <span
                             v-else
                           >
-                            {{ statuses[appointment.status - 1].title | toPersianNumber }}
+                            {{ statuses[appointment.status - 1].title  }}
                           </span>
                         </div>
                         <div class="icon-box">
@@ -954,7 +954,7 @@ export default {
         status: 0,
         user: null,
         appcode: null,
-        future_prescription_list: '',
+        future_prescription: '',
       },
       money: {
         decimal: '.',
@@ -1167,7 +1167,6 @@ export default {
         created_at: this.item.created_at ? this.item.created_at : '',
         end_at: this.item.end_at ? this.item.end_at : '',
         future_prescription: this.item.future_prescription ? this.item.future_prescription : '',
-        future_prescription_list: this.item.future_prescription ? this.item.future_prescription : '',
         id: this.item.id,
         income: this.item.income,
         info: this.item.info ? this.item.info : '',
@@ -1231,7 +1230,9 @@ export default {
     getLastPrescriptions() {
       this.$store.dispatch('appointments/getLastPrescriptions', this.appointment.id)
       .then(res => {
-        this.prescriptionList = res.data
+        if(res.data) {
+          this.prescriptionList = res.data
+        }
         this.showPrescriptionList = true
       })
     },
@@ -1445,8 +1446,8 @@ export default {
           this.pType = 'prescription'
           this.toggleDoctorPrescription()
           break
-        case 'future_prescription_list':
-          this.pType = 'future_prescription_list'
+        case 'future_prescription':
+          this.pType = 'future_prescription'
           this.toggleDoctorPrescription()
           break
       }
@@ -1466,14 +1467,14 @@ export default {
           array.push(item)
         }
         this.appointment.prescription = array.length == 1 ? array.join('') : array.join(' - ')
-      } else if ((this.pType == 'future_prescription_list')) {
-        const array = this.appointment.future_prescription_list.trim().split(' - ')
+      } else if ((this.pType == 'future_prescription')) {
+        const array = this.appointment.future_prescription.trim().split(' - ')
         if (array[0] == '') {
           array[0] = item
         } else {
           array.push(item)
         }
-        this.appointment.future_prescription_list = array.length == 1 ? array.join('') : array.join(' - ')
+        this.appointment.future_prescription = array.length == 1 ? array.join('') : array.join(' - ')
       }
       this.toggleDoctorPrescription()
     },
@@ -1560,7 +1561,7 @@ export default {
       return this.appointment.photography_cases.length > 0 || this.appointment.radiology_cases.length > 0
     },
     prescriptionListReverse() {
-      return this.prescriptionList.reverse()
+      return this.prescriptionList ? this.prescriptionList.reverse() : []
     },
     results() {
       return this.$store.getters['appointments/getResults']
