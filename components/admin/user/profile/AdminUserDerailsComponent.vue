@@ -240,9 +240,9 @@ export default {
         return user.logo
       } else {
         if (user.gender == 'female') {
-          return '/images/profile/woman.svg'
+          return '/images/profile/woman2.svg'
         } else {
-          return '/images/profile/man.svg'
+          return '/images/profile/man2.svg'
         }
       }
     }

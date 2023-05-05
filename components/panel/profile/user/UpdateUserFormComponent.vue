@@ -23,7 +23,7 @@
           <v-spacer/>
           <div class="create-update-modal-regbox">
             ثبت در سیستم توسط:
-            {{ `${item.staff.fname} ${item.staff.lname}` }}
+            {{ item.staff ? `${item.staff.fname} ${item.staff.lname}` : '' }}
             ({{ item.created | toRelativeDate }} {{
               item.created | toPersianDate('YYYY/MM/DD HH:mm:ss')
             }})

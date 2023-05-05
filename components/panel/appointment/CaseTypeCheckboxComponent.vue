@@ -3,7 +3,7 @@
        :class="{checked: isChecked}"
        @click="toggleCheck">
     <span class="circle"></span>
-    <span class="name">{{ name | toPersianNumber }}</span>
+    <span class="name">{{ name  }}</span>
   </div>
 </template>
 

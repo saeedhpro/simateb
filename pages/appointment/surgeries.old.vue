@@ -184,10 +184,10 @@
                             :key="n"
                           >
                             <div>
-                              {{ l.name | toPersianNumber }}
+                              {{ l.name  }}
                             </div>
                             <span>
-                              {{ l.limitation | toPersianNumber }}
+                              {{ l.limitation  }}
                             </span>
                           </div>
                         </div>
@@ -207,7 +207,7 @@
                           @click="openPazireshModal(`${year}/${month}/${i} ${getTime(i)}`)"
                         >
                           {{ getToday(i) }}
-                          {{ i | toPersianNumber }}
+                          {{ i  }}
                           {{ months[month - 1].label }}
                         </div>
                       </th>
@@ -443,7 +443,7 @@ export default {
         ...this.appointment,
         case_type: 'جراحی',
         user_id: this.user.id,
-        income: parseFloat(this.appointment.income.split(' ')[0].split(',').join('')),
+        income: this.appointment.income,
       })
         .then(() => {
           setTimeout(() => {

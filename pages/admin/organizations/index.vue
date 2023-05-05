@@ -37,7 +37,7 @@
             >
               <div class="page-main-actions-left">
                 <div class="result-count">
-                  <span>{{ organizations.meta ? organizations.meta.total : 0 | toPersianNumber }}</span>
+                  <span>{{ organizations.meta ? organizations.meta.total : 0  }}</span>
                   نتیجه
                 </div>
                 <div class="page-search-box">

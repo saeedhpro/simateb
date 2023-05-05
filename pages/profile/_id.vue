@@ -83,6 +83,7 @@
             <v-tab-item v-if="canSee('doctor')">
               <user-payment-component
                 :user-id="user.id"
+                :due-payment="user.due_payment"
                 :organization-id="user.organization_id"
                 :fullName="`${user.fname} ${user.lname}`"
               />

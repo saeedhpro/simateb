@@ -21,9 +21,9 @@
       >
         <span>آیا از رزرو وقت برای </span>
         <span>
-          <span class="font-weight-bold blue-color">{{ fullName | toPersianNumber }}</span>
-          <span>در روز </span> <span class="blue-color">{{ getDayName | toPersianNumber }} </span>
-          <span>ساعت </span> <span class="blue-color">{{ getTime | toPersianNumber }} </span>
+          <span class="font-weight-bold blue-color">{{ fullName  }}</span>
+          <span>در روز </span> <span class="blue-color">{{ getDayName  }} </span>
+          <span>ساعت </span> <span class="blue-color">{{ getTime  }} </span>
         </span>
         <span>اطمینان دارید؟ </span>
       </v-card-text>

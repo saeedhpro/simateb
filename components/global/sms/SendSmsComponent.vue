@@ -107,7 +107,7 @@
                     v-model="form.msg"
                     rows="4"
                   ></textarea>
-                  <div class="sms-number">تعداد پیامک: <span>{{ smsNumber | toPersianNumber }}</span></div>
+                  <div class="sms-number">تعداد پیامک: <span>{{ smsNumber  }}</span></div>
                 </div>
               </v-col>
             </v-row>

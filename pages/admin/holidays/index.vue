@@ -268,7 +268,7 @@
                   <tr v-for="(i, n) in holidays.data" :key="n">
                     <td class="text-center">{{ (search.page - 1) * 10 + n + 1 | persianDigit }}</td>
                     <td class="text-center">
-                      {{ i.hdate ? $moment(i.hdate).format("jYYYY/jMM/jDD") : '-' | toPersianNumber }}
+                      {{ i.hdate ? $moment(i.hdate).format("jYYYY/jMM/jDD") : '-'  }}
                     </td>
                     <td class="text-center">{{ i.title ? i.title : '-' | persianDigit }}</td>
                     <td class="text-center">{{ i.organization ? i.organization.name : '-' | persianDigit }}</td>

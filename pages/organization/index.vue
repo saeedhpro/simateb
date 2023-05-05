@@ -57,7 +57,7 @@
             >
               <div class="page-main-actions-left">
                 <div class="result-count">
-                  <span>{{ appointments.meta.total | toPersianNumber }}</span>
+                  <span>{{ appointments.meta.total  }}</span>
                   نتیجه
                 </div>
                 <div class="page-search-box">
@@ -244,7 +244,7 @@
                     <td class="text-center">{{ i.case_type ? i.case_type : '-' | persianDigit }}</td>
                     <td class="text-center">
                       {{ i.start_at_time_fa | persianDigit }}
-<!--                      {{ moment.from(i.start_at, "en", "YYYY/MM/DDTHH:mm:ssZ").locale("fa").format("HH:mm") | toPersianNumber }}-->
+<!--                      {{ moment.from(i.start_at, "en", "YYYY/MM/DDTHH:mm:ssZ").locale("fa").format("HH:mm")  }}-->
                     </td>
                     <td class="text-center">
                         <v-tooltip

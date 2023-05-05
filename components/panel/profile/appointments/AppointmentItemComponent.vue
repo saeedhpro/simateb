@@ -40,12 +40,12 @@
                   {{ $moment.utc(start_at).local().format("YYYY/MM/DD HH:mm:ss") | toPersianDate('YYYY/MM/DD') }}
                   <span class="circle"/>
                 </span>
+<!--                <span-->
+<!--                  v-if="resulted"-->
+<!--                  class="status-box resulted"-->
+<!--                >نتایج ارسال شده</span>-->
                 <span
-                  v-if="resulted"
-                  class="status-box resulted"
-                >نتایج ارسال شده</span>
-                <span
-                  v-else-if="waiting"
+                  v-if="waiting"
                   class="status-box waiting"
                 >در انتظار مراجعه</span>
                 <span
@@ -55,16 +55,16 @@
                   'background-color': `${statuses[status - 1].background}`,
                   'color': `${statuses[status - 1].color}`
                 }"
-                >{{ statuses[status - 1].title | toPersianNumber }}</span>
+                >{{ statuses[status - 1].title  }}</span>
               </div>
               <div class="case-type" v-if="caseType">
-                علت مراجعه: <span>{{ caseType | toPersianNumber }}</span>
+                علت مراجعه: <span>{{ caseType  }}</span>
               </div>
               <div class="code" v-if="info">
-                توضیحات پذیرش: <span>{{ info | toPersianNumber }}</span>
+                توضیحات پذیرش: <span>{{ info  }}</span>
               </div>
               <div class="code" v-if="code">
-                کد پذیرش: <span>{{ code | toPersianNumber }}</span>
+                کد پذیرش: <span>{{ code  }}</span>
               </div>
             </v-col>
             <v-col
@@ -78,7 +78,7 @@
                   :key="n"
                   class="prescription"
                 >
-                  {{ p | toPersianNumber }}
+                  {{ p  }}
                 </span>
               </div>
               <div class="prescription-box" v-if="radiologyCases">
@@ -87,8 +87,9 @@
                   v-for="(p, n) in radiologyCasesArray"
                   :key="n"
                   class="prescription radiology"
+                  :class="{'resulted': resulted}"
                 >
-                  {{ p | toPersianNumber }}
+                  {{ p  }}
                 </span>
               </div>
               <div class="prescription-box" v-if="photographyCases">
@@ -97,8 +98,9 @@
                   v-for="(p, n) in photographyCasesArray"
                   :key="n"
                   class="prescription photography"
+                  :class="{'resulted': resulted}"
                 >
-                  {{ p | toPersianNumber }}
+                  {{ p  }}
                 </span>
               </div>
               <v-container fluid>

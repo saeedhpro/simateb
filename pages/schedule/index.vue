@@ -416,7 +416,7 @@
             <div class="case-type-list">
               <div class="case-type-item" v-for="(c, i) in case_types" :key="i">
                 <div class="case-item-name">
-                  {{ c | toPersianNumber }}
+                  {{ c  }}
                 </div>
                 <div class="case-actions text-center flex flex-row justify-space-around align-center">
                   <button @click="editCaseType(c, i)" class="action-buttons">

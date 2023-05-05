@@ -6,7 +6,7 @@
       class="time"
       v-if="showHour"
     >
-      {{ startAt | toPersianNumber }}
+      {{ startAt  }}
     </div>
   </div>
 </template>

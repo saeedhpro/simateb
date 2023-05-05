@@ -21,7 +21,7 @@
         </div>
         <v-spacer/>
         <div class="create-update-modal-regbox">
-          {{ `${user.fname} ${user.staff.lname}` }}
+          {{ user ? `${user.fname} ${user.lname}` : '' }}
         </div>
       </v-card-title>
       <v-card-text>

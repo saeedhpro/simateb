@@ -344,7 +344,7 @@ export default {
           ...this.appointment,
           user_id: this.user.id,
           start_at: start,
-          income: parseFloat(this.appointment.income.split(' ')[0].split(',').join('')),
+          income: this.appointment.income,
         })
           .then(() => {
             this.$toast.success('با موفقیت انجام شد');
