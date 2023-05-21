@@ -580,7 +580,7 @@ export default {
       }
     },
     codeMelliCheck(code) {
-      if (!code) return false
+      if (!code) return true
       const L = code.length;
       if (L < 8 || L > 10 || parseInt(code, 10) === 0) {
         return false
@@ -651,11 +651,6 @@ export default {
         error = 'فیلد کدملی صحیح نیست'
         isValid = false
       }
-      if (!this.form.cardno) {
-        this.errors.cardno = 'فیلد کدملی اجباری است'
-        error = 'فیلد کدملی اجباری است'
-        isValid = false
-      }
       // if (this.form.tel1 && !this.$checkPhoneNumber(this.form.tel1, true)) {
       //   this.errors.tel1 = 'شماره تماس صحیح نیست'
       //   error = 'شماره تماس صحیح نیست'
@@ -666,7 +661,7 @@ export default {
         error = 'فیلد علت جراحی اجباری است'
         isValid = false
       }
-      // let p = parseInt(this.form.due_payment.replaceAll(',', '').split(' ')[0])
+      // let p = parseInt(this.form.due_payment)
       // if (p < 0 || p > 2147483647) {
       //   this.errors.due_payment = 'مبلغ هزینه جراحی باید بین 0 و 2147483647 باشد'
       //   error = 'مبلغ هزینه جراحی باید بین 0 و 2147483647 باشد'
@@ -692,7 +687,7 @@ export default {
         const data = {
           ...this.form,
         }
-        // due_payment: parseInt(this.form.due_payment.replaceAll(',', '').split(' ')[0])
+        // due_payment: parseInt(this.form.due_payment)
         if (!this.form.pass) {
           delete data.pass
         }

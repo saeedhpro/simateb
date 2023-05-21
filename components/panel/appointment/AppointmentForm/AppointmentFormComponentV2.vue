@@ -1110,9 +1110,6 @@ export default {
     }
   },
   methods: {
-    getAppointment(id) {
-      this.$store.dispatch('appointments/getAppointment', id)
-    },
     getResults() {
       this.$store.dispatch('appointments/getAppointmentResults', {
         id: this.item.id,

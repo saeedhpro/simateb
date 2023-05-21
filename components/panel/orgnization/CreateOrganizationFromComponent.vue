@@ -181,7 +181,7 @@
                 v-if="organization.profession_id != 1"
               >
                 <rel-organization-item-component
-                  title="فوتوگرافی"
+                  title="فتوگرافی"
                   :items="getOrganizationsByProfession.photographies"
                   :rel-list="photographyRelList"
                   type="photography"

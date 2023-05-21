@@ -204,6 +204,7 @@
                         <div
                           class="header-date"
                           :class="{'is-today': isToday(i), 'is-friday': isFriday(i)}"
+                          @click="openPazireshModal(`${year}/${month}/${i + 1} ${getTime(0)}`)"
                         >
                           {{ getToday(i) }}
                           {{ i  }}
@@ -220,16 +221,18 @@
                       <td
                         v-for="(item, j) in list.length"
                       >
-                        <table-appointment-component
+                        <table-appointment-v2
                           v-if="list[j][i]"
                           :class="{'is-today': isToday(j + 1), 'is-friday': isFriday(j + 1)}"
-                          :item="list[j][i]"
+                          :case-type="list[j][i].case_type"
+                          :user-full-name="list[j][i].user_full_name"
+                          :start-at-time-fa="list[j][i].start_at_time_fa"
                           :day="j"
                           :month="month"
                           :year="year"
-                          @click.native="openItem(list[j][i])"
+                          @click.native="openItem(list[j][i].id)"
                         />
-                        <table-appointment-none-component
+                        <table-appointment-none-v2
                           v-else
                           :class="{'is-today': isToday(j + 1), 'is-friday': isFriday(j + 1)}"
                           :start-at="getTime(i)"
@@ -237,7 +240,6 @@
                           :day="j"
                           :month="month"
                           :year="year"
-                          @click.native="openPazireshModal(`${year}/${month}/${j + 1} ${getTime(i)}`)"
                         />
                       </td>
                     </tr>
@@ -268,6 +270,7 @@
       :open="showWorkHour"
       :start="workHour.start"
       :end="workHour.end"
+      :period="workHour.period"
       :organizationId="workHour.organization_id"
       @close="closeShowWorkHour"
       v-if="showWorkHour"
@@ -277,11 +280,11 @@
 
 <script>
 import moment from 'jalali-moment'
-import TableAppointmentComponent from "~/components/panel/appointment/TableAppointmentComponent";
-import TableAppointmentNoneComponent from "~/components/panel/appointment/TableAppointmentNoneComponent";
+import TableAppointmentV2 from "~/components/panel/appointment/TableAppointmentV2";
+import TableAppointmentNoneV2 from "~/components/panel/appointment/TableAppointmentNoneV2";
 import DataTableComponent from "~/components/panel/global/DataTableComponent";
 import CaseTypeCheckboxComponent from "~/components/panel/appointment/CaseTypeCheckboxComponent";
-import AppointmentFormComponent from "~/components/panel/appointment/AppointmentForm/AppointmentFormComponent";
+import AppointmentFormComponent from "~/components/panel/appointment/AppointmentForm/AppointmentFormComponentV2";
 import CreateAppointmentFormComponent
   from "~/components/panel/appointment/AppointmentForm/CreateAppointmentFormComponent";
 import WorkHourComponent from "~/components/panel/appointment/WorkHourComponent";
@@ -293,8 +296,8 @@ export default {
     CustomDateInput,
     WorkHourComponent,
     CreateAppointmentFormComponent,
-    TableAppointmentNoneComponent,
-    TableAppointmentComponent,
+    TableAppointmentNoneV2,
+    TableAppointmentV2,
     CaseTypeCheckboxComponent,
     DataTableComponent,
     AppointmentFormComponent
@@ -502,17 +505,19 @@ export default {
         })
     },
     openPazireshModal(i) {
-      let date = moment.from(i, 'fa', 'YYYY/MM/DD HH:mm:ss').locale('en').format("YYYY/MM/DD HH:mm:ss")
-      this.initTime = date
+      this.initTime = moment.from(i, 'fa', 'YYYY/MM/DD HH:mm:ss').locale('en').format("YYYY/MM/DD HH:mm:ss")
       // this.initTime = moment.from(i, "fa", "jYYYY/jMM/jDD HH:mm:ss").locale("en").local().format("YYYY/MM/DD HH:mm:ss")
       this.showPazireshModal = true
     },
     toggleCreateModal() {
       this.showPazireshModal = !this.showPazireshModal
     },
-    openItem(item) {
-      this.item = item
-      this.toggleAppointmentModal()
+    openItem(id) {
+      this.$axios.get(`/appointments/${id}`)
+      .then(res => {
+        this.item = res.data.data
+        this.toggleAppointmentModal()
+      })
     },
     toggleAppointmentModal() {
       this.showAppointmentModal = !this.showAppointmentModal
@@ -651,7 +656,7 @@ export default {
         duration = 20
       }
       let date = moment.from(start, "en", "HH:mm:ss").utc(true).format("HH:mm:ss")
-      date = moment.from(date, 'fa', 'HH:mm:ss').locale('en').add((day) * duration, "minutes").format("HH:mm:ss")
+      date = moment.from(date, 'fa', 'HH:mm:ss').locale('en').add((day) * duration, "minutes").format("HH:mm")
       return date
     },
     onMonthChanged(month) {
@@ -664,7 +669,42 @@ export default {
     },
     getHolidays() {
       this.$store.dispatch('holidays/getHolidays')
-    }
+    },
+    clockQues() {
+      let duration = moment.duration(moment(this.workHour.start).diff(this.workHour.start));
+      let minutes = duration.asMinutes();
+      let queIndexMax = Math.floor(minutes / this.que.default_duration);
+      let normalTimeSpan = queIndexMax;
+      let queCounter = 0;
+      let ques = [];
+      const wh = this.que.work_hour
+      const start = wh.start
+      for (let i = 0; i < this.lastDay; i++) {
+        ques[i] = [];
+        for (let j = 0; j < this.que.ques[i].length; j++) {
+          let baseDate =moment.from(`${this.year}/${this.month}/${i + 1} ${start}`, "fa", "jYYYY/jMM/jDD").utc(true).locale("en");
+          for (let k = 0; k <= normalTimeSpan || (this.que.ques[i][queCounter]); k++) {
+            if (this.que.ques[i][queCounter] &&
+              (!baseDate.isBefore(this.que.ques[i][queCounter].start_at)
+                || (k > normalTimeSpan)
+              ))
+            {//day matches to this gap
+              ques[i].push(this.que.ques[i][queCounter]);
+              baseDate.add(this.que.ques[i][queCounter].duration, 'minutes');
+              queCounter++;
+            } else {
+              ques[i].push(null);
+              baseDate.add(this.que.default_duration, 'minutes');
+            }
+          }
+          queIndexMax = Math.max.apply(Math, ques[i].map(function (a) {
+            return a ? a.length : 0;
+          }));
+          this.que.clock_max_length = queIndexMax
+        }
+      }
+      return this.que.clock_ques
+    },
   },
   computed: {
     maxLength() {

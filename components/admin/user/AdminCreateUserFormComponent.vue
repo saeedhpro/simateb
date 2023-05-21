@@ -578,7 +578,7 @@ export default {
       }
     },
     codeMelliCheck(code) {
-      if (!code) return false
+      if (!code) return true
       const L = code.length;
       if (L < 8 || L > 10 || parseInt(code, 10) === 0) {
         return false
@@ -654,11 +654,6 @@ export default {
         error = 'فیلد کدملی صحیح نیست'
         isValid = false
       }
-      if (!this.form.cardno) {
-        this.errors.cardno = 'فیلد کدملی اجباری است'
-        error = 'فیلد کدملی اجباری است'
-        isValid = false
-      }
       if (!this.form.pass) {
         this.errors.pass = 'فیلد پسورد اجباری است'
         isValid = false
@@ -668,7 +663,7 @@ export default {
         error = 'فیلد علت جراحی اجباری است'
         isValid = false
       }
-      let p = parseInt(this.form.surgery_price.replaceAll(',', '').split(' ')[0])
+      let p = parseInt(this.form.surgery_price)
       if (p < 0 || p > 2147483647) {
         this.errors.surgery_price = 'مبلغ هزینه جراحی باید بین 0 و 2147483647 باشد'
         error = 'مبلغ هزینه جراحی باید بین 0 و 2147483647 باشد'

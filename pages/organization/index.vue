@@ -474,7 +474,7 @@ export default {
         'علت مراجعه',
         'ساعت',
         'ارجاع به رادیولوژی',
-        'ارجاع به فوتوگرافی',
+        'ارجاع به فتوگرافی',
         'وضعیت',
       ],
       headers: [
@@ -742,7 +742,7 @@ export default {
       const profession_id = this.loginUser.organization.profession_id;
       switch (profession_id) {
         case 1:
-          return 'فوتوگرافی';
+          return 'فتوگرافی';
         case 2:
           return 'ازمایشگاه';
         case 3:
@@ -756,7 +756,7 @@ export default {
         case 7:
           return 'دندان پزشک';
       }
-      return 'فوتوگرافی';
+      return 'فتوگرافی';
     },
     selectedAll: {
       get() {

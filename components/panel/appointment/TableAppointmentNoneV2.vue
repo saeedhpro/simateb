@@ -13,7 +13,7 @@
 
 <script>
 export default {
-  name: "TableAppointmentNoneComponent",
+  name: "TableAppointmentNoneV2",
   props: {
     startAt: {
       type: String,

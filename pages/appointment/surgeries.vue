@@ -204,6 +204,7 @@
                         <div
                           class="header-date"
                           :class="{'is-today': isToday(i), 'is-friday': isFriday(i)}"
+                          @click="openPazireshModal(`${year}/${month}/${i + 1} ${getTime(0)}`)"
                         >
                           {{ getToday(i) }}
                           {{ i  }}

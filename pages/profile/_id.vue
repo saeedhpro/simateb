@@ -38,7 +38,7 @@
               v-if="canSee('photography')"
             >
               <img src="/images/profile/photo.svg">
-              نتایج فوتوگرافی
+              نتایج فتوگرافی
             </v-tab>
             <v-tab
               class="profile-tab"
