@@ -657,6 +657,7 @@ export default {
       }
       let date = moment.from(start, "en", "HH:mm:ss").utc(true).format("HH:mm:ss")
       date = moment.from(date, 'fa', 'HH:mm:ss').locale('en').add((day) * duration, "minutes").format("HH:mm")
+      console.log()
       return date
     },
     onMonthChanged(month) {
