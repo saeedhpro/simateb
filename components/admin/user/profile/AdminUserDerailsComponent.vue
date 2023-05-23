@@ -236,10 +236,10 @@ export default {
         })
     },
     getLogo(user) {
-      if (user.logo) {
+      if (user && user.logo) {
         return user.logo
       } else {
-        if (user.gender == 'female') {
+        if (user && user.gender == 'female') {
           return '/images/profile/woman2.svg'
         } else {
           return '/images/profile/man2.svg'

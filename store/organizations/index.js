@@ -6,6 +6,7 @@ export const state = () => ({
   workHour: {
     start: '',
     end: '',
+    period: 15,
   },
 })
 
@@ -20,7 +21,11 @@ export const mutations = {
     state.organization = organization
   },
   setOrganizationWorkHour(state, workHour) {
-    state.workHour = workHour
+    state.workHour = {
+      start: workHour.start,
+      end: workHour.end,
+      period: parseInt(workHour.period),
+    }
   },
 }
 

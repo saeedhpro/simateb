@@ -773,19 +773,21 @@
                   @paginate="() => {}"
                 >
                   <template v-slot:body>
-                    <tr  v-for="(p,i) in prescriptionListReverse" :key="i">
+                    <tr  v-for="(p,i) in prescriptionList" :key="i">
                       <td class="text-center">{{ i + 1 | persianDigit }}</td>
                       <td class="text-center">
-                        <span class="file-id">
-                          {{
-                            p.prescription | persianDigit
-                          }}
+                        <span
+                          v-for="(p,i) in toList(p.prescription)"
+                          :key="i"
+                          class="file-id mx-1"
+                        >
+                        {{ p }}
                         </span>
                       </td>
                       <td class="text-center">
                         <span class="file-id">
                           {{
-                            p.created_at | toPersianDate('jYYYY/jMM/jDD')
+                            p.start_at_fa
                           }}
                         </span>
                       </td>
@@ -1231,7 +1233,7 @@ export default {
       this.$store.dispatch('appointments/getLastPrescriptions', this.appointment.id)
       .then(res => {
         if(res.data) {
-          this.prescriptionList = res.data
+          this.prescriptionList = res.data.data
         }
         this.showPrescriptionList = true
       })
@@ -1240,7 +1242,6 @@ export default {
       this.$store.dispatch('appointments/getAppointmentPrescription', this.item.id)
       .then(res => {
         const p = res.data.data;
-        console.log(res, "pre")
         this.prescription = p ?? '';
       })
     },
@@ -1554,14 +1555,14 @@ export default {
           return '/images/profile/man.svg'
         }
       }
+    },
+    toList(p) {
+      return p.length > 0 ? p.split('-') : [];
     }
   },
   computed: {
     showCode() {
       return this.appointment.photography_cases.length > 0 || this.appointment.radiology_cases.length > 0
-    },
-    prescriptionListReverse() {
-      return this.prescriptionList ? this.prescriptionList.reverse() : []
     },
     results() {
       return this.$store.getters['appointments/getResults']
@@ -1610,7 +1611,7 @@ export default {
       const profession_id = this.loginUser.organization.profession_id;
       switch (profession_id) {
         case 1:
-          return 'فوتوگرافی';
+          return 'فتوگرافی';
         case 2:
           return 'ازمایشگاه';
         case 3:
@@ -1624,7 +1625,7 @@ export default {
         case 7:
           return 'دندان پزشک';
       }
-      return 'فوتوگرافی';
+      return 'فتوگرافی';
     },
     resulted() {
       const profession_id = this.loginUser.organization.profession_id;

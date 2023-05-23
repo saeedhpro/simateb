@@ -93,7 +93,7 @@
                 </span>
               </div>
               <div class="prescription-box" v-if="photographyCases">
-                فوتوگرافی:
+                فتوگرافی:
                 <span
                   v-for="(p, n) in photographyCasesArray"
                   :key="n"

@@ -43,6 +43,7 @@ export default {
   methods: {
     checkNationalCode(code) {
       const L = code.length;
+      if (L === 0) return  true
       if (L < 8 || L > 10 || parseInt(code, 10) === 0) {
         return false
       }

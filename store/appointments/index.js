@@ -133,10 +133,10 @@ export const actions = {
       })
   },
   getQueV2(ctx, data) {
-    return this.$axios.get(`/appointments/que?start=${data.start}&end=${data.end}&ct=${data.case_type}`)
+    return this.$axios.get(`/appointments/que/v2?start=${data.start}&end=${data.end}&ct=${data.case_type}`)
       .then(res => {
-        const data = res.data;
-        ctx.commit('setQue', data)
+        // const data = res.data;
+        // ctx.commit('setQue', data)
         return Promise.resolve(res)
       })
       .catch(err => {

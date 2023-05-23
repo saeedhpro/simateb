@@ -280,7 +280,7 @@ export default {
         start_at: date,
         tel: this.item.user ? this.item.user.tel : '',
         cardno: this.item.user ? this.item.user.cardno : '',
-        income: this.item.user ? this.item.user.income : 0,
+        income: parseInt(this.item.income),
         user_id: this.item.user_id,
         case_type: this.item.case_type,
         info: this.item.info,
@@ -344,7 +344,6 @@ export default {
           ...this.appointment,
           user_id: this.user.id,
           start_at: start,
-          income: this.appointment.income,
         })
           .then(() => {
             this.$toast.success('با موفقیت انجام شد');
@@ -389,7 +388,7 @@ export default {
       const profession_id = this.loginUser.organization.profession_id;
       switch (profession_id) {
         case 1:
-          return 'فوتوگرافی';
+          return 'فتوگرافی';
         case 2:
           return 'ازمایشگاه';
         case 3:
@@ -403,7 +402,7 @@ export default {
         case 7:
           return 'دندان پزشک';
       }
-      return 'فوتوگرافی';
+      return 'فتوگرافی';
     },
   },
   watch: {

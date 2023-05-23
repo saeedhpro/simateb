@@ -64,6 +64,15 @@
                 </date-picker>
               </div>
             </v-col>
+            <v-col
+              cols="12"
+              sm="6"
+            >
+              <custom-text-input
+                :label="'بازه زمانی'"
+                v-model="work.period"
+              />
+            </v-col>
           </v-row>
         </v-container>
       </v-card-text>
@@ -118,6 +127,10 @@ export default {
       type: String,
       default: "00:00:00",
     },
+    period: {
+      type: Number,
+      default: 15,
+    },
     organizationId: {
       type: Number,
       required: true,
@@ -128,6 +141,7 @@ export default {
       work: {
         start: this.start,
         end: this.end,
+        period: this.period,
         organization_id: this.organizationId,
       }
     }
@@ -139,7 +153,6 @@ export default {
     save() {
       this.$store.dispatch('organizations/updateOrganizationWorkHour', this.work)
       .finally((res) => {
-        console.log(res)
         this.close()
       })
     }

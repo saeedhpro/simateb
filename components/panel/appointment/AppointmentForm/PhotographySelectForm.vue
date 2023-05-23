@@ -17,7 +17,7 @@
           >
             <v-icon>mdi-close</v-icon>
           </button>
-          <span>فرم فوتوگرافی</span>
+          <span>فرم فتوگرافی</span>
         </div>
         <v-spacer/>
       </v-card-title>

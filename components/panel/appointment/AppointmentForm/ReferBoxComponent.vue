@@ -33,7 +33,7 @@
             >
               <refer-item-component
                 type="photography"
-                title="فوتوگرافی"
+                title="فتوگرافی"
                 :refer="photography"
                 :items="photoItems"
                 @selected="itemSelected"

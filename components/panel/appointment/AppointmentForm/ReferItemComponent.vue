@@ -28,7 +28,7 @@
               v-if="type === 'photography'"
               outlined
               :items="photographyList"
-              label="فوتوگرافی"
+              label="فتوگرافی"
               item-value="id"
               item-text="name"
               v-model="selectedItem"
