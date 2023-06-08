@@ -215,14 +215,14 @@
                     </thead>
                     <tbody>
                     <tr
-                        v-for="(items, i) in maxLength"
-                        :key="i"
+                      v-for="(items, i) in maxLength"
+                      :key="i"
                     >
                       <td
                         v-for="(item, j) in list.length"
                       >
                         <table-appointment-v2
-                          v-if="list[j][i]"
+                          v-if="list[j][i] && !list[j][i].is_empty"
                           :class="{'is-today': isToday(j + 1), 'is-friday': isFriday(j + 1)}"
                           :case-type="list[j][i].case_type"
                           :user-full-name="list[j][i].user_full_name"
@@ -234,12 +234,11 @@
                         />
                         <table-appointment-none-v2
                           v-else
-                          :class="{'is-today': isToday(j + 1), 'is-friday': isFriday(j + 1)}"
-                          :start-at="getTime(i)"
+                          :data-label="list[j][i]"
+                          :class="{'is-today': isToday(j + 1), 'is-friday': isFriday(j + 1), 'data': i}"
+                          :start-at="list[j][i] ? list[j][i].start_at_time_fa : getTime(i)"
                           :show-hour="showHour"
-                          :day="j"
-                          :month="month"
-                          :year="year"
+                          @click.native="list[j][i] ? openPazireshModal(list[j][i].start_at): openPazireshModal(`${year}/${month}/${i + 1} ${getTime(i)}`)"
                         />
                       </td>
                     </tr>
@@ -514,10 +513,10 @@ export default {
     },
     openItem(id) {
       this.$axios.get(`/appointments/${id}`)
-      .then(res => {
-        this.item = res.data.data
-        this.toggleAppointmentModal()
-      })
+        .then(res => {
+          this.item = res.data.data
+          this.toggleAppointmentModal()
+        })
     },
     toggleAppointmentModal() {
       this.showAppointmentModal = !this.showAppointmentModal
@@ -557,7 +556,7 @@ export default {
     toggleShowHour() {
       this.showHour = !this.showHour
       if (this.showHour) {
-        this.list = this.que.clock_ques
+        this.list = this.clockQues()
       } else {
         this.list = this.que.ques
       }
@@ -568,11 +567,11 @@ export default {
     },
     getAppointmentList() {
       this.calcDate()
-      this.$store.dispatch('appointments/getQueV2', this.search)
+      this.$store.dispatch('appointments/getQueV3', this.search)
         .then(res => {
           this.que = res.data
           if (this.showHour) {
-            this.list = this.que.clock_ques
+            this.list = this.clockQues()
           } else {
             this.list = this.que.ques
           }
@@ -698,12 +697,14 @@ export default {
               baseDate.add(this.que.default_duration, 'minutes');
             }
           }
-          queIndexMax = Math.max.apply(Math, ques[i].map(function (a) {
-            return a ? a.length : 0;
-          }));
-          this.que.clock_max_length = queIndexMax
+          queIndexMax = ques[i].map(function (a) {
+            return a ? a : 0;
+          });
+          // this.que.clock_max_length = 16
         }
       }
+      // console.log(this.que.clock_max_length, "clock_max_length")
+      // this.que.clock_ques = ques
       return this.que.clock_ques
     },
   },

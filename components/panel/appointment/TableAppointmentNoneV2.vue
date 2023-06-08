@@ -22,22 +22,7 @@ export default {
     showHour: {
       type: Boolean,
       default: false,
-    },
-    day: {
-      type: Number,
-      default: 1,
-      required: true,
-    },
-    month: {
-      type: Number,
-      default: 1,
-      required: true,
-    },
-    year: {
-      type: Number,
-      default: 1398,
-      required: true,
-    },
+    }
   },
 }
 </script>

@@ -59,8 +59,7 @@
             color="red darken-1 white--text" @click="dialog = false;"
           >
             لغو
-          </v-btn
-          >
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

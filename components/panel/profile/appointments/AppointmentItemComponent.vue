@@ -112,7 +112,12 @@
                     v-for="(i,n) in radiologyResultList"
                     :key="n"
                   >
-                    <img class="prescription-image" :src="i" alt="">
+                    <img
+                      class="prescription-image"
+                      :src="i"
+                      alt=""
+                      @click="showImages(n, radiologyResultList)"
+                    >
                   </v-col>
                 </v-row>
               </v-container>
@@ -121,6 +126,80 @@
         </div>
       </v-col>
     </v-row>
+    <v-dialog
+      v-model="showSlides"
+      fullscreen
+      overlay-color="#000"
+      overlay-opacity=".4"
+    >
+      <div class="slide-show-content">
+        <div class="action-bar">
+          <div class="actions">
+            <v-btn
+              icon
+              color="#FFF"
+              @click="closeSlideShow"
+              large
+            >
+              <v-icon size="36px">mdi-close</v-icon>
+            </v-btn>
+            <v-btn
+              icon
+              color="#FFF"
+              @click="onAutoPlaySlideClick"
+              large
+            >
+              <v-icon v-if="autoPlaySlide" size="36px">mdi-pause</v-icon>
+              <v-icon v-else size="36px">mdi-play</v-icon>
+            </v-btn>
+            <v-btn
+              icon
+              color="#FFF"
+              @click="onShowSlideListClick"
+              large
+            >
+              <v-icon size="36px">mdi-view-list</v-icon>
+            </v-btn>
+          </div>
+        </div>
+        <div class="slide-show-images-box">
+          <div v-if="showList" class="slide-show-thumbnails">
+            <div
+              class="slide-show-thumbnail"
+              v-for="(img, i) in selectedImages"
+              key="i"
+              @click="selectedIndex = i"
+              :class="{'selected': selectedIndex == i}"
+            >
+              <img :src="img">
+            </div>
+          </div>
+          <div class="slide-show-image-content">
+            <v-btn
+              icon
+              color="#FFF"
+              @click="goNext"
+              class="go-next-image"
+              large
+            >
+              <v-icon size="36px">mdi-arrow-right</v-icon>
+            </v-btn>
+            <v-btn
+              icon
+              color="#FFF"
+              @click="goPrev"
+              class="go-prev-image"
+              large
+            >
+              <v-icon size="36px">mdi-arrow-left</v-icon>
+            </v-btn>
+            <div class="slide-show-image">
+              <img :src="selectedImages[selectedIndex]">
+            </div>
+          </div>
+        </div>
+      </div>
+    </v-dialog>
   </div>
 </template>
 
@@ -241,10 +320,19 @@ export default {
       ],
       radiologyResultList: [],
       photographyResultList: [],
+      images: [],
+      showSlides: false,
+      autoPlaySlide: false,
+      showList: false,
+      selectedImg: null,
+      selectedIndex: 0,
+      selectedImages: [],
+      interval: null
     }
   },
   mounted() {
     this.getResults()
+    clearInterval(this.interval)
   },
   methods: {
     getResults() {
@@ -274,6 +362,50 @@ export default {
     },
     openUpdateModal() {
       this.$emit('updated')
+    },
+    showImages(i, list) {
+      this.selectedImages = list
+      this.selectedIndex = i
+      this.showSlides = true
+    },
+    closeSlideShow() {
+      this.selectedIndex = 0
+      this.selectedImages = []
+      this.showSlides = false
+      this.autoPlaySlide = false
+      this.showList = false
+    },
+    onAutoPlaySlideClick() {
+      this.autoPlaySlide = !this.autoPlaySlide
+      if (!this.autoPlaySlide) {
+        clearInterval(this.interval)
+      } else {
+        const self = this
+        this.interval = setInterval(function(){
+          if (self.selectedIndex == self.selectedImages.length - 1) {
+            self.selectedIndex = 0
+          } else {
+            self.selectedIndex += 1
+          }
+        }, 1300);
+      }
+    },
+    onShowSlideListClick() {
+      this.showList = !this.showList
+    },
+    goNext() {
+      if (this.selectedIndex == this.selectedImages.length - 1) {
+        this.selectedIndex = 0
+      } else {
+        this.selectedIndex += 1
+      }
+    },
+    goPrev() {
+      if (this.selectedIndex == 0) {
+        this.selectedIndex = this.selectedImages.length - 1
+      } else {
+        this.selectedIndex -= 1
+      }
     }
   },
   computed: {
