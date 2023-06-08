@@ -143,6 +143,17 @@ export const actions = {
         return Promise.reject(err)
       })
   },
+  getQueV3(ctx, data) {
+    return this.$axios.get(`/appointments/que/v3?start=${data.start}&end=${data.end}&ct=${data.case_type}`)
+      .then(res => {
+        // const data = res.data;
+        // ctx.commit('setQue', data)
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
   search(ctx, data) {
     ctx.commit('setList', {
       data: [],
