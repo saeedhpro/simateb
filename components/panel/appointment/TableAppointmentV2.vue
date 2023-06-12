@@ -18,6 +18,12 @@
     >
       {{ caseType }}
     </div>
+    <div
+      class="start-at"
+      v-if="isFriday"
+    >
+      {{ index + 1 }}
+    </div>
   </div>
 </template>
 
@@ -54,12 +60,21 @@ export default {
       default: 1398,
       required: true,
     },
+    isFriday: {
+      type: Boolean,
+      default: false,
+    },
+    index: {
+      type: Number,
+      default: 0,
+      required: false,
+    },
   },
   computed: {
-    isFriday() {
-      const today = moment.from(`${this.year}/${this.month}/${this.day}`, "fa", "YYYY/MM/DD").local().format("dddd");
-      return today === 'جمعه' || today === 'Friday';
-    },
+    // isFriday() {
+    //   const today = moment.from(`${this.year}/${this.month}/${this.day}`, "fa", "YYYY/MM/DD").local().format("dddd");
+    //   return today === 'جمعه' || today === 'Friday';
+    // },
     isHoliday() {
       if (this.holidays.length < 1) {
         return false

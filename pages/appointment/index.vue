@@ -160,12 +160,10 @@
             <v-col
               cols="12"
             >
-              <div>
-                <v-simple-table
-                  fixed-header
+              <div style="overflow-x: scroll" id="table-wrapper" ref="table-wrapper">
+                <table
                   class="appointment-table"
                 >
-                  <template v-slot:default>
                     <thead
                       v-if="showCaseType"
                     >
@@ -223,28 +221,31 @@
                       >
                         <table-appointment-v2
                           v-if="list[j][i] && !list[j][i].is_empty"
-                          :class="{'is-today': isToday(j + 1), 'is-friday': isFriday(j + 1)}"
+                          :class="{'is-today': isToday(j + 1)}"
+                          :is-friday="isFriday(j + 1)"
                           :case-type="list[j][i].case_type"
                           :user-full-name="list[j][i].user_full_name"
                           :start-at-time-fa="list[j][i].start_at_time_fa"
                           :day="j"
                           :month="month"
                           :year="year"
+                          :index="i"
                           @click.native="openItem(list[j][i].id)"
                         />
                         <table-appointment-none-v2
                           v-else
                           :data-label="list[j][i]"
-                          :class="{'is-today': isToday(j + 1), 'is-friday': isFriday(j + 1), 'data': i}"
+                          :class="{'is-today': isToday(j + 1), 'data': i}"
+                          :is-friday="isFriday(j + 1)"
                           :start-at="list[j][i] ? list[j][i].start_at_time_fa : getTime(i)"
                           :show-hour="showHour"
+                          :index="i"
                           @click.native="list[j][i] ? openPazireshModal(list[j][i].start_at): openPazireshModal(`${year}/${month}/${i + 1} ${getTime(i)}`)"
                         />
                       </td>
                     </tr>
                     </tbody>
-                  </template>
-                </v-simple-table>
+                </table>
               </div>
             </v-col>
           </v-row>
@@ -299,7 +300,7 @@ export default {
     TableAppointmentV2,
     CaseTypeCheckboxComponent,
     DataTableComponent,
-    AppointmentFormComponent
+    AppointmentFormComponent,
   },
   layout: 'panel',
   middleware: 'auth',
@@ -476,6 +477,32 @@ export default {
     this.getUsers()
     this.getOrganizationWorkHour()
     this.getCaseTypes()
+    const slider = this.$refs["table-wrapper"];
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    slider.addEventListener('mousedown', (e) => {
+      isDown = true;
+      slider.classList.add('active');
+      startX = e.pageX - slider.offsetLeft;
+      scrollLeft = slider.scrollLeft;
+    });
+    slider.addEventListener('mouseleave', () => {
+      isDown = false;
+      slider.classList.remove('active');
+    });
+    slider.addEventListener('mouseup', () => {
+      isDown = false;
+      slider.classList.remove('active');
+    });
+    slider.addEventListener('mousemove', (e) => {
+      if(!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - slider.offsetLeft;
+      const walk = (x - startX) * 3; //scroll-fast
+      slider.scrollLeft = scrollLeft - walk;
+    });
   },
   methods: {
     getOrganizationWorkHour() {

@@ -98,6 +98,7 @@ tr.waiting {
     width: 40px;
     border-radius: 8px;
     margin: 0 10px;
+    opacity: .4;
   }
 
   .table-selectable-checkbox {
@@ -151,7 +152,9 @@ table {
     }
   }
 }
-
+.fancybox-item {
+  margin: 5px;
+}
 .login-box {
   display: flex;
   flex-direction: row;
@@ -1976,6 +1979,8 @@ table {
   }
 
   .header-date {
+    font-size: 12px;
+    font-weight: bold;
     min-width: 100px;
     margin-left: 5px;
     background: #F0F0F0 0 0 no-repeat padding-box;
@@ -2033,6 +2038,7 @@ table {
 }
 
 .appointment-table {
+  width: 100%;
   &.surgeries {
     .header-case-type-th {
       background: #388E3C 0 0  no-repeat padding-box !important;
@@ -2081,6 +2087,7 @@ table {
   width: 100%;
   padding: 5px;
   cursor: pointer;
+  min-height: 86px;
 
   &.surgeries {
     background: #EFF7EF 0 0 no-repeat padding-box;
@@ -2142,7 +2149,7 @@ table {
   width: 100%;
   padding: 5px;
   //cursor: pointer;
-  height: 70px;
+  min-height: 86px;
 
   &.surgeries {
     background: #EFF7EF 0 0 no-repeat padding-box;
@@ -3563,6 +3570,7 @@ table {
       justify-content: center;
       img {
         max-height: calc(100vh * 0.6);
+        max-width: calc(100vw * 0.6);
       }
     }
   }
