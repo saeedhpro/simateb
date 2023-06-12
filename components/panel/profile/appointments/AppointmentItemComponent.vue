@@ -107,19 +107,43 @@
                 <v-row>
                   <v-col
                     cols="12"
-                    sm="4"
-                    md="2"
-                    v-for="(i,n) in radiologyResultList"
-                    :key="n"
                   >
-                    <img
-                      class="prescription-image"
-                      :src="i"
-                      alt=""
-                      @click="showImages(n, radiologyResultList)"
+                    <Fancybox
+                      :options="options"
                     >
+                      <a
+                        v-for="(i,n) in radiologyResultList"
+                        :key="n"
+                        data-fancybox="gallery"
+                        :href="i"
+                        class="fancybox-item"
+                        :data-fancybox-index="n"
+                      >
+                        <img
+                          class="prescription-image"
+                          :src="i"
+                          alt=""
+                        width="200" height="150" />
+                      </a>
+                    </Fancybox>
                   </v-col>
                 </v-row>
+<!--                <v-row>-->
+<!--                  <v-col-->
+<!--                    cols="12"-->
+<!--                    sm="4"-->
+<!--                    md="2"-->
+<!--                    v-for="(i,n) in radiologyResultList"-->
+<!--                    :key="n"-->
+<!--                  >-->
+<!--                    <img-->
+<!--                      class="prescription-image"-->
+<!--                      :src="i"-->
+<!--                      alt=""-->
+<!--                      @click="showImages(n, radiologyResultList)"-->
+<!--                    >-->
+<!--                  </v-col>-->
+<!--                </v-row>-->
               </v-container>
             </v-col>
           </v-row>
@@ -160,6 +184,14 @@
             >
               <v-icon size="36px">mdi-view-list</v-icon>
             </v-btn>
+            <v-btn
+              icon
+              color="#FFF"
+              @click="onMagnifyClick"
+              large
+            >
+              <v-icon size="36px">mdi-magnify</v-icon>
+            </v-btn>
           </div>
         </div>
         <div class="slide-show-images-box">
@@ -167,7 +199,7 @@
             <div
               class="slide-show-thumbnail"
               v-for="(img, i) in selectedImages"
-              key="i"
+              :key="i"
               @click="selectedIndex = i"
               :class="{'selected': selectedIndex == i}"
             >
@@ -194,7 +226,7 @@
               <v-icon size="36px">mdi-arrow-left</v-icon>
             </v-btn>
             <div class="slide-show-image">
-              <img :src="selectedImages[selectedIndex]">
+              <img :src="selectedImages[selectedIndex]" v-hammer:swipe.horizontal="onTouchStart">
             </div>
           </div>
         </div>
@@ -204,6 +236,7 @@
 </template>
 
 <script>
+import Fancybox from "~/components/Fancybox";
 export default {
   name: "AppointmentItemComponent",
   props: {
@@ -284,8 +317,25 @@ export default {
       default: false,
     }
   },
+  components: {
+    Fancybox,
+  },
+  mounted() {
+    this.getResults()
+  },
   data() {
     return {
+      options: {
+        showClass:"f-scaleIn",
+        hideClass: "f-scaleOut",
+        animated: true,
+        thumbs: {
+          autoStart : true,
+          type: "classic",
+          axis: 'y',
+          parentEl: '.fancybox__container',
+        },
+      },
       statuses: [
         {
           id: 1,
@@ -329,10 +379,6 @@ export default {
       selectedImages: [],
       interval: null
     }
-  },
-  mounted() {
-    this.getResults()
-    clearInterval(this.interval)
   },
   methods: {
     getResults() {
@@ -406,6 +452,16 @@ export default {
       } else {
         this.selectedIndex -= 1
       }
+    },
+    onTouchStart(e) {
+      if (e.direction == 4) {
+        this.goNext()
+      } else {
+        this.goPrev()
+      }
+    },
+    onMagnifyClick() {
+
     }
   },
   computed: {

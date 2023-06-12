@@ -1,12 +1,19 @@
 <template>
   <div
     class="table-appointment-none"
+    :class="{'is-friday': isFriday}"
   >
     <div
       class="time"
-      v-if="showHour"
+      v-if="showHour && !isFriday"
     >
       {{ startAt  }}
+    </div>
+    <div
+      class="start-at"
+      v-if="isFriday"
+    >
+      {{ index + 1 }}
     </div>
   </div>
 </template>
@@ -22,7 +29,16 @@ export default {
     showHour: {
       type: Boolean,
       default: false,
-    }
+    },
+    isFriday: {
+      type: Boolean,
+      default: false,
+    },
+    index: {
+      type: Number,
+      default: 0,
+      required: false,
+    },
   },
 }
 </script>

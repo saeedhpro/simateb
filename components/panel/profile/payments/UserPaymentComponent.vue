@@ -467,6 +467,7 @@ export default {
       isUpdate: false,
       showCreateModal: false,
       form: {
+        id: 0,
         user_id: this.userId,
         created: this.$moment().format('YYYY/MM/DD HH:mm:ss'),
         amount: 0,
@@ -547,6 +548,7 @@ export default {
         discount: 0,
         ok: 1,
         income: 1,
+        id: 0,
       }
       this.errors = {
         amount: '',
@@ -577,14 +579,15 @@ export default {
       this.showSmsModal = !this.showSmsModal
     },
     openCreateModal() {
-      this.form.created = this.$moment().format('YYYY/MM/DD HH:mm:ss'),
+      this.form.created = this.$moment().format('YYYY/MM/DD HH:mm:ss')
       this.isUpdate = false
       this.showCreateModal = true
     },
     openUpdateModal(i) {
-      this.payType = this.payTypes.find(item => item.id = i.paytype)
-      this.paidFor = this.paidFors.find(item => item.id = i.paid_for)
+      this.payType = this.payTypes.find(item => item.id == i.paytype)
+      this.paidFor = this.paidFors.find(item => item.id == i.paid_for)
       this.form = {
+        id: i.id,
         user_id: this.userId,
         created: i.created,
         amount: i.amount,

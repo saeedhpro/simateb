@@ -403,10 +403,6 @@ export default {
           label: 'اقدام جمعی'
         },
         {
-          id: 1,
-          label: 'حذف کن'
-        },
-        {
           id: 2,
           label: 'ارسال پیامک'
         }
