@@ -1546,7 +1546,7 @@ export default {
       if (app.user && app.user.logo) {
         return app.user.logo
       } else {
-        if (app.user.gender == 'female') {
+        if (app.user && app.user.gender == 'female') {
           return '/images/profile/woman.svg'
         } else {
           return '/images/profile/man.svg'
