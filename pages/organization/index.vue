@@ -123,18 +123,23 @@
                             >
                               <div class="create-update-model-input-box">
                                 <label>تاریخ ابتدا</label>
-                                <date-picker
+                                <custom-date-input
+                                  :type="'date'"
                                   v-model="search.start"
-                                  format="YYYY-MM-DD"
-                                  display-format="jYYYY/jMM/jDD"
-                                  editable
-                                  class="date-picker"
-                                  type="date"
-                                >
-                                  <template v-slot:label>
-                                    <img src="/images/form/datepicker.svg">
-                                  </template>
-                                </date-picker>
+                                  :initial-value="search.start"
+                                />
+<!--                                <date-picker-->
+<!--                                  v-model="search.start"-->
+<!--                                  format="YYYY-MM-DD"-->
+<!--                                  display-format="jYYYY/jMM/jDD"-->
+<!--                                  editable-->
+<!--                                  class="date-picker"-->
+<!--                                  type="date"-->
+<!--                                >-->
+<!--                                  <template v-slot:label>-->
+<!--                                    <img src="/images/form/datepicker.svg">-->
+<!--                                  </template>-->
+<!--                                </date-picker>-->
                               </div>
                             </v-col>
                             <v-col
@@ -144,18 +149,23 @@
                             >
                               <div class="create-update-model-input-box">
                                 <label>تاریخ انتها</label>
-                                <date-picker
+                                <custom-date-input
+                                  :type="'date'"
                                   v-model="search.end"
-                                  format="YYYY-MM-DD"
-                                  display-format="jYYYY/jMM/jDD"
-                                  editable
-                                  class="date-picker"
-                                  type="date"
-                                >
-                                  <template v-slot:label>
-                                    <img src="/images/form/datepicker.svg">
-                                  </template>
-                                </date-picker>
+                                  :initial-value="search.end"
+                                />
+<!--                                <date-picker-->
+<!--                                  v-model="search.end"-->
+<!--                                  format="YYYY-MM-DD"-->
+<!--                                  display-format="jYYYY/jMM/jDD"-->
+<!--                                  editable-->
+<!--                                  class="date-picker"-->
+<!--                                  type="date"-->
+<!--                                >-->
+<!--                                  <template v-slot:label>-->
+<!--                                    <img src="/images/form/datepicker.svg">-->
+<!--                                  </template>-->
+<!--                                </date-picker>-->
                               </div>
                             </v-col>
                           </v-row>
@@ -407,6 +417,20 @@
         @close="closeSmsForm"
       />
     </v-row>
+    <Fancybox
+      :options="options"
+    >
+      <a
+        v-for="(i,n) in results"
+        :key="n"
+        data-fancybox="gallery"
+        :href="i"
+        class="fancybox-item"
+        :data-fancybox-index="n"
+        :id="`item${n}`"
+      >
+      </a>
+    </Fancybox><custom-date
   </v-container>
 </template>
 <script>
@@ -445,6 +469,7 @@ export default {
         q: '',
         status: '',
         page: 1,
+        admissioned: 0,
       },
       actions: [
         {
@@ -519,6 +544,18 @@ export default {
           background: '#FFF9EB'
         }
       ],
+      results: [],
+      options: {
+        showClass:"f-scaleIn",
+        hideClass: "f-scaleOut",
+        animated: true,
+        thumbs: {
+          autoStart : true,
+          type: "classic",
+          axis: 'y',
+          parentEl: '.fancybox__container',
+        },
+      },
     }
   },
   methods: {
@@ -527,6 +564,16 @@ export default {
       this.getAppointmentList()
     },
     getAppointmentList(filtered = false) {
+      if (this.search.q && this.search.q.length != 6) {
+       return
+      }
+      this.search.q = this.$enDigit(this.search.q)
+      if (this.search.q != '' && !this.$isNumeric(this.search.q)) {
+        return;
+      }
+      if (!this.search.q) {
+        this.search.admissioned = 0
+      }
       if (!filtered) {
         if (this.isDoctor) {
           this.search.start = this.$moment().format("YYYY-MM-DD")
@@ -534,12 +581,18 @@ export default {
         } else {
           this.search.start = ''
           this.search.end = ''
+          if (this.search.q.length == 6) {
+            this.search.admissioned = 1
+          }
         }
       }
       if (this.isDoctor) {
         this.search.status = ''
       } else {
         this.search.status = '2'
+        if (this.search.q.length == 6) {
+          this.search.admissioned = 1
+        }
       }
       this.$store.dispatch('appointments/getOrganizationAppointmentsList', this.search)
     },
@@ -604,8 +657,23 @@ export default {
     },
     openAppointmentModalItem(item, type) {
       if (this.resulted(item, type)) {
-        this.item = item
-        this.toggleAppointmentModal()
+        this.results = []
+        const t = type == 1 ? 'photography' : 'radiology'
+        this.$store.dispatch('appointments/getAppointmentResults', {
+          id: item.id,
+          type: t
+        })
+        .then(res => {
+          this.results = [
+            ...res.data,
+          ]
+          setTimeout(() => {
+            const item = document.getElementById('item0')
+            item.click()
+          }, 300)
+        })
+        // this.item = item
+        // this.toggleAppointmentModal()
       }
     },
     closeAppointmentModal() {
@@ -680,6 +748,14 @@ export default {
         appointment.r_admission_at != "" && appointment.r_admission_at != null;
     },
     waiting(appointment) {
+      const profession_id = this.loginUser.organization.profession_id;
+      if (profession_id == 1) {
+        return !appointment.p_admission_at
+      } else if (profession_id == 2) {
+        return !appointment.l_admission_at
+      } else if (profession_id == 3) {
+        return !appointment.r_admission_at
+      }
       return appointment.waiting
     },
     getErjaClass(appointment, type) {

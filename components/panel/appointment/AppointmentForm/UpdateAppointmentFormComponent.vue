@@ -32,24 +32,30 @@
               >
                 <div class="create-update-model-input-box">
                   <label>تاریخ و ساعت پذیرش</label>
-                  <date-picker
-                    v-model="appointment.start_at"
-                    inputFormat="YYYY-MM-DD HH:mm:ss"
-                    format="YYYY-MM-DD HH:mm:ss"
-                    display-format="HH:mm --- jYYYY/jMM/jDD"
-                    editable
-                    class="date-picker"
-                    type="datetime"
+                  <custom-date-input
+                    :type="'datetime'"
                     :jump-minute="15"
-                    :round-minute="true"
-                    ref="start"
-                  >
-                    <template v-slot:label>
-                      <img src="/images/form/datepicker.svg">
-                    </template>
-                  </date-picker>
+                    v-model="appointment.start_at"
+                    :initial-value="appointment.start_at"
+                  />
+<!--                  <date-picker-->
+<!--                    v-model="appointment.start_at"-->
+<!--                    inputFormat="YYYY-MM-DD HH:mm:ss"-->
+<!--                    format="YYYY-MM-DD HH:mm:ss"-->
+<!--                    display-format="HH:mm -&#45;&#45; jYYYY/jMM/jDD"-->
+<!--                    editable-->
+<!--                    class="date-picker"-->
+<!--                    type="datetime"-->
+<!--                    :jump-minute="15"-->
+<!--                    :round-minute="true"-->
+<!--                    ref="start"-->
+<!--                  >-->
+<!--                    <template v-slot:label>-->
+<!--                      <img src="/images/form/datepicker.svg">-->
+<!--                    </template>-->
+<!--                  </date-picker>-->
 <!--                  <custom-date-input :initial-value="appointment.start_at" v-model="appointment.start_at" :jump-minute="12" />-->
-                  <span class="create-update-modal-input-error" v-if="errors.start_at">{{ errors.start_at }}</span>
+<!--                  <span class="create-update-modal-input-error" v-if="errors.start_at">{{ errors.start_at }}</span>-->
                 </div>
               </v-col>
               <v-col

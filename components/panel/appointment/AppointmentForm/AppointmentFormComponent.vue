@@ -1,5 +1,5 @@
 <template>
-  <div class="appointment-form-component" v-if="show">
+  <div class="appointment-form-component" v-if="show && item">
     <v-dialog
       v-model="show"
       persistent
@@ -347,24 +347,43 @@
                 cols="12"
               >
                 <v-row>
-                  <v-col
-                    cols="12"
-                    sm="4"
-                    md="3"
-                    v-for="(r,n) in results"
-                    :key="n"
+                  <Fancybox
+                    :options="options"
                   >
-                    <img @click="openShowResult(r)" class="result-img" :src="r" alt=""/>
-                  </v-col>
-                  <v-col
-                    cols="12"
-                    sm="4"
-                    md="3"
-                    v-for="(r,n) in newFiles"
-                    :key="n + 1000"
-                  >
-                    <img @click="openShowResult(r)" class="result-img" :src="r" alt=""/>
-                  </v-col>
+                    <a
+                      v-for="(i,n) in allResults"
+                      :key="n"
+                      data-fancybox="gallery"
+                      :href="i"
+                      class="fancybox-item"
+                      :data-fancybox-index="n"
+                    >
+                      <img
+                        class="prescription-image"
+                        :src="i"
+                        alt=""
+                        width="200" height="150" />
+                    </a>
+                  </Fancybox>
+
+                  <!--                  <v-col-->
+<!--                    cols="12"-->
+<!--                    sm="4"-->
+<!--                    md="3"-->
+<!--                    v-for="(r,n) in results"-->
+<!--                    :key="n"-->
+<!--                  >-->
+<!--                    <img @click="openShowResult(r)" class="result-img" :src="r" alt=""/>-->
+<!--                  </v-col>-->
+<!--                  <v-col-->
+<!--                    cols="12"-->
+<!--                    sm="4"-->
+<!--                    md="3"-->
+<!--                    v-for="(r,n) in newFiles"-->
+<!--                    :key="n + 1000"-->
+<!--                  >-->
+<!--                    <img @click="openShowResult(r)" class="result-img" :src="r" alt=""/>-->
+<!--                  </v-col>-->
                 </v-row>
               </v-col>
             </v-row>
@@ -388,7 +407,6 @@
                 cols="12"
                 sm="4"
                 md="4"
-                v-if="!waiting"
               >
                 <button
                   @click="openAddResultModal"
@@ -403,24 +421,43 @@
                 cols="12"
               >
                 <v-row>
-                  <v-col
-                    cols="12"
-                    sm="4"
-                    md="3"
-                    v-for="(r,n) in results"
-                    :key="n"
+                  <Fancybox
+                    :options="options"
                   >
-                    <img @click="openShowResult(r)" class="result-img" :src="r" alt=""/>
-                  </v-col>
-                  <v-col
-                    cols="12"
-                    sm="4"
-                    md="3"
-                    v-for="(r,n) in newFiles"
-                    :key="n + 1000"
-                  >
-                    <img @click="openShowResult(r)" class="result-img" :src="r" alt=""/>
-                  </v-col>
+                    <a
+                      v-for="(i,n) in allResults"
+                      :key="n"
+                      data-fancybox="gallery"
+                      :href="i"
+                      class="fancybox-item"
+                      :data-fancybox-index="n"
+                    >
+                      <img
+                        class="prescription-image"
+                        :src="i"
+                        alt=""
+                        width="200" height="150" />
+                    </a>
+                  </Fancybox>
+
+                  <!--                  <v-col-->
+<!--                    cols="12"-->
+<!--                    sm="4"-->
+<!--                    md="3"-->
+<!--                    v-for="(r,n) in results"-->
+<!--                    :key="n"-->
+<!--                  >-->
+<!--                    <img @click="openShowResult(r)" class="result-img" :src="r" alt=""/>-->
+<!--                  </v-col>-->
+<!--                  <v-col-->
+<!--                    cols="12"-->
+<!--                    sm="4"-->
+<!--                    md="3"-->
+<!--                    v-for="(r,n) in newFiles"-->
+<!--                    :key="n + 1000"-->
+<!--                  >-->
+<!--                    <img @click="openShowResult(r)" class="result-img" :src="r" alt=""/>-->
+<!--                  </v-col>-->
                 </v-row>
               </v-col>
             </v-row>
@@ -612,7 +649,7 @@
               <v-col
                 cols="12"
                 sm="3"
-                v-if="admissioned"
+                v-if="admissioned && newFiles.length > 0"
               >
                 <button
                   class="send-button form-button"
@@ -876,10 +913,12 @@ import UpdateAppointmentFormComponent
   from "~/components/panel/appointment/AppointmentForm/UpdateAppointmentFormComponent";
 import DeleteUserModalComponent from "~/components/global/delete/DeleteUserModalComponent";
 import moment from "jalali-moment";
+import Fancybox from "~/components/Fancybox";
 
 export default {
   name: "AppointmentFormComponent",
   components: {
+    Fancybox,
     DeleteUserModalComponent,
     UpdateAppointmentFormComponent,
     ReferBoxComponent,
@@ -902,6 +941,17 @@ export default {
   },
   data() {
     return {
+      options: {
+        showClass:"f-scaleIn",
+        hideClass: "f-scaleOut",
+        animated: true,
+        thumbs: {
+          autoStart : true,
+          type: "classic",
+          axis: 'y',
+          parentEl: '.fancybox__container',
+        },
+      },
       moment: moment,
       loaded: false,
       showUpdateModal: false,
@@ -1112,6 +1162,64 @@ export default {
   methods: {
     getAppointment(id) {
       this.$store.dispatch('appointments/getAppointment', id)
+      .then(res => {
+        const data = res.data.data
+        this.setAppointmentItem(data)
+      })
+    },
+    setAppointmentItem(item) {
+      let date = item.start_at
+      this.appointment = {
+        case_type: item.case_type ? item.case_type : '',
+        code: item.code ? item.code : '',
+        appcode: item.appcode ? item.appcode : '',
+        created_at: item.created_at ? item.created_at : '',
+        end_at: item.end_at ? item.end_at : '',
+        future_prescription: item.future_prescription ? item.future_prescription : '',
+        id: item.id,
+        income: item.income,
+        info: item.info ? item.info : '',
+        is_vip: item.is_vip,
+        l_admission_at: item.l_admission_at ? item.l_admission_at : '',
+        l_imgs: item.l_imgs,
+        l_result_at: item.l_result_at ? item.l_result_at : '',
+        l_rnd_img: item.l_rnd_img,
+        laboratory: item.laboratory,
+        laboratory_cases: item.laboratory_cases ? item.laboratory_cases : '',
+        laboratory_id: item.laboratory_id,
+        laboratory_msg: item.laboratory_msg ? item.laboratory_msg : '',
+        organization: item.organization,
+        organization_id: item.organization_id,
+        p_admission_at: item.p_admission_at ? item.p_admission_at : '',
+        p_imgs: item.p_imgs,
+        p_result_at: item.p_result_at ? item.p_result_at : '',
+        p_rnd_img: item.p_rnd_img,
+        photography: item.photography,
+        photography_cases: item.photography_cases ? item.photography_cases : '',
+        photography_id: item.photography_id,
+        photography_msg: item.photography_msg ? item.photography_msg : '',
+        prescription: item.prescription ? item.prescription : '',
+        r_admission_at: item.r_admission_at ? item.r_admission_at : '',
+        r_imgs: item.r_imgs,
+        r_result_at: item.r_result_at ? item.r_result_at : '',
+        r_rnd_img: item.r_rnd_img,
+        radiology: item.radiology,
+        radiology_cases: item.radiology_cases ? item.radiology_cases : '',
+        radiology_id: item.radiology_id,
+        radiology_msg: item.radiology_msg,
+        staff: item.staff,
+        staff_id: item.staff_id,
+        start_at: date,
+        status: item.status,
+        subject: item.subject,
+        updated_at: item.updated_at,
+        user: item.user,
+        user_id: item.user_id,
+        vip_introducer: item.vip_introducer,
+        waiting: item.waiting,
+        last_prescription: item.last_prescription ? item.last_prescription : '',
+      }
+      this.getAppointmentPrescription()
     },
     getResults() {
       this.$store.dispatch('appointments/getAppointmentResults', {
@@ -1364,14 +1472,15 @@ export default {
       this.$store.dispatch('appointments/acceptedAppointment', this.appointment.id)
         .then(() => {
           this.$toast.success('با موفقیت انجام شد');
-          this.done()
+          // this.done()
+          this.getAppointment(this.appointment.id)
           this.loading()
         })
         .catch(err => {
           this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
+          this.$emit('close')
         })
         .finally(() => {
-          this.$emit('close')
         })
     },
     doCancel() {
@@ -1549,7 +1658,7 @@ export default {
       if (app.user && app.user.logo) {
         return app.user.logo
       } else {
-        if (app.user.gender == 'female') {
+        if (app.user && app.user.gender == 'female') {
           return '/images/profile/woman.svg'
         } else {
           return '/images/profile/man.svg'
@@ -1653,7 +1762,18 @@ export default {
       return false;
     },
     waiting() {
+      const profession_id = this.loginUser.organization.profession_id;
+      if (profession_id == 1) {
+        return !this.appointment.p_admission_at
+      } else if (profession_id == 2) {
+        return !this.appointment.l_admission_at
+      } else if (profession_id == 3) {
+        return !this.appointment.r_admission_at
+      }
       return this.appointment.waiting
+    },
+    allResults() {
+      return this.results.concat(this.newFiles)
     }
   },
   watch: {

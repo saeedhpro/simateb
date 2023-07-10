@@ -13,6 +13,7 @@
       width="auto"
       v-model="open"
       min-width="300px"
+      max-width="450px"
     >
       <template v-slot:default="{ isActive }">
         <v-card
@@ -30,7 +31,7 @@
               >
                 <v-icon size="medium">mdi-arrow-right</v-icon>
               </v-btn>
-              <span class="selected-year">{{ jYear | persianDigit }}</span>
+              <span class="selected-year" @click="openYearBox">{{ jYear | persianDigit }}</span>
               <v-btn
                 dense
                 icon
@@ -40,7 +41,26 @@
               </v-btn>
             </div>
           </v-card-title>
-          <v-card-text>
+          <v-cars-text v-if="showYearBox">
+            <div v-if="showDateBox" class="custom-date-picker-days-list">
+              <div
+                v-for="(l, n) in 1"
+                :key="n"
+                class="custom-date-picker-days"
+              >
+                <div
+                  v-for="(d, n) in jSmallDayNames"
+                  :key="n"
+                  class="custom-date-picker-day"
+                >
+                  {{ d }}
+                </div>
+              </div>
+            </div>
+          </v-cars-text>
+          <v-card-text
+            v-else
+          >
             <div v-if="showDateBox"  class="custom-date-picker-content-header d-flex flex-row align-center justify-space-between">
               <v-btn
                 dense
@@ -88,16 +108,19 @@
                   :key="n"
                   class="custom-date-picker-day"
                   :class="{
-                    'selected': isSelected(d + 1),
+                    'selected': isSelected(d),
                     'disabled': dayIsDisabled(d),
-                    'today': isToday(d + 1)
+                    'today': isToday(d),
+                    'is-friday': isFriday(d),
+                    'none': d == '',
                   }"
                   @click="selectDay(d)"
                 >
-                  {{ d | persianDigit }}
+                  {{ d }}
                 </div>
               </div>
             </div>
+
             <v-divider v-if="showDateBox && showTimeBox" />
             <div class="custom-time-input" v-if="showTimeBox">
               <div class="time-box">
@@ -252,31 +275,45 @@ export default {
         "چ",
         "پ",
         "ج",
-      ]
+      ],
+      showYearBox: false
     }
   },
   mounted() {
     this.setInitDateValue()
   },
   methods: {
+    openYearBox() {
+      this.showYearBox = true
+    },
+    closeYearBox() {
+      this.showYearBox = false
+    },
     setInitDateValue() {
       if (this.initialValue && this.isValidDate(this.initialValue)) {
         this.date = this.initialValue
-        this.selectedDay = this.$moment(this.initialValue).format("YYYY/MM/DD HH:mm:ss")
+        this.selectedDay = this.$moment(this.initialValue).format(this.getEnFormat)
+        const format = this.getFormat
+        this.dateFormatted = this.$moment(this.date).format(format)
       } else {
         this.selectedDay = ""
-        this.date = this.$moment().format('YYYY/MM/DD HH:mm:ss')
+        this.date = this.$moment().format(this.getEnFormat)
       }
     },
     isValidDate(date) {
       return this.$moment(date).isValid()
     },
     onDateChange(e) {
-      const date =  moment.from(this.dateFormatted, "fa", "jYYYY/jMM/jDD HH:mm").utc().format("YYYY/MM/DD HH:mm")
+      if (this.dateFormatted.length !== 16) {
+        return
+      }
+      const format = this.getFormat
+      const enFormat = this.getEnFormat
+      const date =  moment.from(this.dateFormatted, "fa", format).utc().format(enFormat)
       const isValid = this.isValidDate(date)
       if (isValid) {
         this.date = this.$moment(date)
-        const selectedDay = moment(`${this.dateFormatted}:00`, "jYYYY/jMM/jDD HH:mm:ss").utc().locale("en").format("YYYY/MM/DDTHH:mm:ssZ")
+        const selectedDay = moment(`${this.dateFormatted}`, format).utc().locale("en").format(enFormat)
         this.$emit('select', selectedDay)
         this.$emit('input', selectedDay)
       }
@@ -288,7 +325,8 @@ export default {
       this.open = false
     },
     acceptChosenDate() {
-      this.closeCalendar()
+      const day = moment.from(this.$moment().format("YYYY/MM/DD HH:mm:ss"), "en", "YYYY/MM/DD HH:mm:ss").add(1, "jDay").utc().format("jDD")
+      this.selectDay(day)
     },
     nextMonth() {
       this.date = moment(`${this.jYear}/${this.jMonth}/${this.jDay} ${this.hour}:${this.minute}:00`, "jYYYY/jMM/jDD HH:mm:ss").add(1, "jMonth").locale("en").format("YYYY/MM/DD HH:mm:ss")
@@ -317,7 +355,7 @@ export default {
     isSelected(day) {
       if (this.selectedDay) {
         const dStr = this.$moment(this.date).format('jYYYY/jMM')
-        const d = moment(`${dStr}/${day}`, "jYYYY/jMM/jDD").utc().format("jYYYYjMMjDD")
+        const d = `${dStr}/${day}`.replaceAll('/', '')
         const date = moment.from(this.$moment(this.selectedDay).format("YYYY/MM/DD HH:mm:ss"), "en", "YYYY/MM/DD HH:mm:ss").utc().format("jYYYYjMMjDD")
         return date === d
       }
@@ -326,7 +364,7 @@ export default {
     isToday(day) {
       if (this.date && day) {
         const dStr = this.$moment(this.date).format('jYYYY/jMM')
-        const d = moment(`${dStr}/${day}`, "jYYYY/jMM/jDD").utc().format("jYYYYjMMjDD")
+        const d = `${dStr}/${day}`.replaceAll('/', '')
         const date = moment.from(this.$moment().format("YYYY/MM/DD HH:mm:ss"), "en", "YYYY/MM/DD HH:mm:ss").utc().format("jYYYYjMMjDD")
        return date === d
       }
@@ -337,8 +375,14 @@ export default {
       if (!this.dayIsDisabled(day)) {
         const dStr = this.$moment(this.date).format('jYYYY/jMM')
         this.selectedDay = moment(`${dStr}/${day} ${this.hour}:${this.minute}:00`, "jYYYY/jMM/jDD HH:mm:ss").locale("en").format("YYYY/MM/DD HH:mm:ss")
-        this.dateFormatted = `${dStr}/${day} ${this.hour}:${this.minute}`
-        const selectedDay = moment(`${dStr}/${day} ${this.hour}:${this.minute}:00`, "jYYYY/jMM/jDD HH:mm:ss").utc().locale("en").format("YYYY/MM/DDTHH:mm:ssZ")
+        let selectedDay = ''
+        if (this.type === 'datetime') {
+          this.dateFormatted = `${dStr}/${day} ${this.hour}:${this.minute}`
+          selectedDay = moment(`${dStr}/${day} ${this.hour}:${this.minute}`, this.getFormat).locale("en").format(this.getEnFormat)
+        } else if (this.type === 'date') {
+          this.dateFormatted = `${dStr}/${day}`
+          selectedDay = moment(`${dStr}/${day}`, this.getFormat).locale("en").format(this.getEnFormat)
+        }
         this.closeCalendar()
         this.$emit('select', selectedDay)
         this.$emit('input', selectedDay)
@@ -358,6 +402,12 @@ export default {
     onHourChange(event) {
       const val = event.target.value
       if (!/\d/.test(val)) return event.preventDefault()
+      if (parseInt(val) > 23) {
+        this.hour = 0
+      }
+      if (parseInt(val) < 0) {
+        this.hour = 23
+      }
     },
     downHour() {
       let jump = 1
@@ -388,6 +438,12 @@ export default {
     onMinuteChange(event) {
       const val = event.target.value
       if (!/\d/.test(val)) return event.preventDefault()
+      if (parseInt(val) > 59) {
+        this.minute = 0
+      }
+      if (parseInt(val) < 0) {
+        this.minute = 59
+      }
     },
     downMinute() {
       let jump = this.jumpMinute
@@ -409,6 +465,14 @@ export default {
       }
       return 0
     },
+    isFriday(day) {
+      if (this.date && day) {
+        const dStr = this.$moment(this.date).format('jYYYY/jMM')
+        const d = moment(`${dStr}/${day}`, "jYYYY/jMM/jDD").jDay()
+        return d == 6
+      }
+      return false
+    }
   },
   computed: {
     data: {
@@ -435,30 +499,27 @@ export default {
       let days = []
       if (!this.date) return
       let j = 0;
-      days[j] = [7]
-      let s = 1
-      for (let i = 0; i <= this.faDaysInMonth; i++) {
-        if (j === 0) {
-          const index = this.startDayIndex(this.date)
-          for (let k = 0; k < index; k++) {
-            days[j][k] = ``
-            s++
+      let index = this.startDayIndex(this.date)
+      let i = 1
+      days[j] = Array(7).fill('')
+      while (i <= this.faDaysInMonth) {
+        while (index < 7) {
+          if (i > this.faDaysInMonth) {
+            break
           }
+          let day = `${i}`
+          if (i < 10) {
+            day = `0${day}`
+          }
+          days[j][index] = day
+          index++
+          i++
         }
-        if (s < 10) {
-          days[j][i] = `0${s}`
-        } else {
-          days[j][i] = s
-        }
-        if (i % 7 === 0) {
+        index = 0
+        if (i <= this.faDaysInMonth) {
           j++
-          days[j] = [7]
+          days[j] = Array(7).fill('')
         }
-        s++
-        console.log(days[j][i], "s")
-      }
-      for (let i = days[j].length; i < 7; i++) {
-        days[j][i] = ``
       }
       return days;
     },
@@ -473,8 +534,32 @@ export default {
       return this.type === 'datetime'
     },
     showTimeBox() {
-      return this.type === 'time'
+      return this.showDateBox || this.type === 'time'
     },
+    getFormat() {
+      if (this.type === 'datetime') {
+        return "jYYYY/jMM/jDD HH:mm"
+      }
+      if (this.type === 'date') {
+        return "jYYYY/jMM/jDD"
+      }
+      if (this.type === 'time') {
+        return "HH:mm"
+      }
+      return "jYYYY/jMM/jDD HH:mm"
+    },
+    getEnFormat() {
+      if (this.type === 'datetime') {
+        return "YYYY/MM/DD HH:mm"
+      }
+      if (this.type === 'date') {
+        return "YYYY/MM/DD"
+      }
+      if (this.type === 'time') {
+        return "HH:mm"
+      }
+      return "YYYY/MM/DD HH:mm"
+    }
   },
   watch: {
     date() {
@@ -505,6 +590,7 @@ export default {
   display: flex;
   flex-direction: column;
   height: 42px;
+  width: 100%;
   .date-input-box {
     height: 42px;
     background: #FFFFFF 0 0 no-repeat padding-box;
@@ -547,6 +633,10 @@ export default {
     font: normal normal bold 16px/22px IRANYekanRegular !important;
     border: 1px solid #DBDBDB;
     border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     &:hover {
       border-color: #808080;
     }
@@ -567,14 +657,14 @@ export default {
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  direction: ltr;
+  direction: rtl;
   padding: 0 10px;
 
   .custom-date-picker-days {
     display: flex;
-    flex-direction: row-reverse;
+    flex-direction: row;
     align-items: center;
-    justify-content: space-around;
+    justify-content: flex-start;
     width: 100%;
     margin-top: 5px;
 
@@ -594,9 +684,14 @@ export default {
       text-align: center;
       color: #1A1A1A;
       height: 24px;
-      width: 24px;
-      margin-right: 11px;
+      width: 100px;
       cursor: pointer;
+
+      &.is-friday {
+        background: red;
+        color: #fff;
+        border-radius: 5px;
+      }
 
       &:last-child {
         margin-right: 0;
@@ -605,6 +700,11 @@ export default {
       &.disabled {
         color: #B4B4B4;
         cursor: not-allowed;
+      }
+
+      &.none {
+        color: #B4B4B4;
+        cursor: default;
       }
 
       &.today {

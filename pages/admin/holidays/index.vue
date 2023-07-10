@@ -60,17 +60,22 @@
                     >
                       <div class="create-update-model-input-box">
                         <label>تاریخ</label>
-                        <date-picker
+                        <custom-date-input
+                          :type="'date'"
                           v-model="form.hdate"
-                          format="YYYY-MM-DD"
-                          display-format="jYYYY/jMM/jDD"
-                          editable
-                          class="date-picker"
-                        >
-                          <template v-slot:label>
-                            <img src="/images/form/datepicker.svg">
-                          </template>
-                        </date-picker>
+                          :initial-value="form.hdate"
+                        />
+<!--                        <date-picker-->
+<!--                          v-model="form.hdate"-->
+<!--                          format="YYYY-MM-DD"-->
+<!--                          display-format="jYYYY/jMM/jDD"-->
+<!--                          editable-->
+<!--                          class="date-picker"-->
+<!--                        >-->
+<!--                          <template v-slot:label>-->
+<!--                            <img src="/images/form/datepicker.svg">-->
+<!--                          </template>-->
+<!--                        </date-picker>-->
                       </div>
                     </v-col>
                     <v-col

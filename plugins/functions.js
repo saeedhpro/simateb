@@ -12,3 +12,32 @@ Vue.prototype.$checkPhoneNumber = (number, isTel = false) => {
     return false
   }
 }
+
+Vue.prototype.$isNumeric = (str) => {
+  if (typeof str != "string") return false // we only process strings!
+  return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
+    !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
+}
+
+Vue.prototype.$enDigit = (value) => {
+  const persian = {
+    0: '۰',
+    1: '۱',
+    2: '۲',
+    3: '۳',
+    4: '۴',
+    5: '۵',
+    6: '۶',
+    7: '۷',
+    8: '۸',
+    9: '۹'
+  }
+  let result = value ? value.toString() : ''
+  if (value === 0) {
+    result = value.toString()
+  }
+  for (let i = 0; i <= 9; i++) {
+    result = result.replace(new RegExp(`${persian[i]}`, 'g'), i)
+  }
+  return result
+}
