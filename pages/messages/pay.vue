@@ -82,7 +82,7 @@
               cols="12"
             >
               <div class="d-flex justify-center mt-4">
-                <button class="pay-button">
+                <button class="pay-button" @click="doPay">
                   پرداخت
                 </button>
               </div>
@@ -113,8 +113,19 @@ export default {
     }
   },
   methods: {
-    pay() {
-
+    doPay() {
+      const price = parseInt(this.price.toString().replaceAll('ریال', '').trim().replaceAll(',', ''))
+      const data = {
+        'amount': price / 10,
+      }
+      console.log(data)
+      this.$axios.post('/payment', data)
+        .then(res => {
+          console.log(res, "res")
+        })
+        .catch(err => {
+          console.log(err, 'err')
+        })
     },
     selectPrice(price) {
       this.price = price

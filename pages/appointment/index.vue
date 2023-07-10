@@ -38,6 +38,17 @@
         </div>
       </v-col>
     </v-row>
+<!--    <v-row>-->
+<!--      <v-col>-->
+<!--        {{ selectedTime }}-->
+<!--        <custom-date-input-->
+<!--          :type="'datetime'"-->
+<!--          :jump-minute="15"-->
+<!--          v-model="selectedTime"-->
+<!--          :initial-value="selectedTime"-->
+<!--        />-->
+<!--      </v-col>-->
+<!--    </v-row>-->
     <v-row>
       <v-col
         cols="12"
@@ -178,14 +189,15 @@
                         >
                           <div
                             class="header-case-type"
-                            v-for="(l,n) in que.limits"
-                            :key="n"
+                            v-for="(l,n2) in que.limits"
+                            :key="n2"
+                            :class="{'is-zero': getLimit(l, n) == 0}"
                           >
                             <div>
                               {{ l.name  }}
                             </div>
                             <span>
-                              {{ l.limitation  }}
+                              {{ getLimit(l, n) }}
                             </span>
                           </div>
                         </div>
@@ -202,7 +214,7 @@
                         <div
                           class="header-date"
                           :class="{'is-today': isToday(i), 'is-friday': isFriday(i)}"
-                          @click="openPazireshModal(`${year}/${month}/${i + 1} ${getTime(0)}`)"
+                          @click="openPazireshModal(`${year}/${month}/${i} ${getTime(0)}`)"
                         >
                           {{ getToday(i) }}
                           {{ i  }}
@@ -306,6 +318,7 @@ export default {
   middleware: 'auth',
   data() {
     return {
+      selectedTime: '2023/07/10 21:47',
       ttt: '',
       showPazireshModal: false,
       showAppointmentModal: false,
@@ -734,6 +747,15 @@ export default {
       // this.que.clock_ques = ques
       return this.que.clock_ques
     },
+    getLimit(limit, n) {
+      if (this.que.ques.length < n) {
+        return limit.limitation
+      }
+      this.que.ques[n].filter(i =>{
+        return i.case_type == limit.name
+      })
+      return limit.limitation - this.que.ques[n].filter(i => i.case_type == limit.name).length
+    }
   },
   computed: {
     maxLength() {

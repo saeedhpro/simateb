@@ -30,18 +30,23 @@
             >
               <div class="create-update-model-input-box">
                 <label>ساعت شروع</label>
-                <date-picker
+                <custom-date-input
+                  :type="'time'"
                   v-model="work.start"
-                  format="HH:mm:ss"
-                  display-format="HH:mm:00"
-                  editable
-                  class="date-picker"
-                  type="time"
-                >
-                  <template v-slot:label>
-                    <img src="/images/form/datepicker.svg">
-                  </template>
-                </date-picker>
+                  :initial-value="work.start"
+                />
+<!--                <date-picker-->
+<!--                  v-model="work.start"-->
+<!--                  format="HH:mm:ss"-->
+<!--                  display-format="HH:mm:ss"-->
+<!--                  editable-->
+<!--                  class="date-picker"-->
+<!--                  type="time"-->
+<!--                >-->
+<!--                  <template v-slot:label>-->
+<!--                    <img src="/images/form/datepicker.svg">-->
+<!--                  </template>-->
+<!--                </date-picker>-->
               </div>
             </v-col>
             <v-col
@@ -50,18 +55,23 @@
             >
               <div class="create-update-model-input-box">
                 <label>ساعت پایان</label>
-                <date-picker
+                <custom-date-input
+                  :type="'time'"
                   v-model="work.end"
-                  format="HH:mm:ss"
-                  display-format="HH:mm:00"
-                  editable
-                  class="date-picker"
-                  type="time"
-                >
-                  <template v-slot:label>
-                    <img src="/images/form/datepicker.svg">
-                  </template>
-                </date-picker>
+                  :initial-value="work.end"
+                />
+<!--                <date-picker-->
+<!--                  v-model="work.end"-->
+<!--                  format="HH:mm:ss"-->
+<!--                  display-format="HH:mm:00"-->
+<!--                  editable-->
+<!--                  class="date-picker"-->
+<!--                  type="time"-->
+<!--                >-->
+<!--                  <template v-slot:label>-->
+<!--                    <img src="/images/form/datepicker.svg">-->
+<!--                  </template>-->
+<!--                </date-picker>-->
               </div>
             </v-col>
             <v-col
