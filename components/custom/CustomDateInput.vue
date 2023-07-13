@@ -31,7 +31,7 @@
               >
                 <v-icon size="medium">mdi-arrow-right</v-icon>
               </v-btn>
-              <span class="selected-year" @click="openYearBox">{{ jYear | persianDigit }}</span>
+              <span class="selected-year" @click="toggleYearBox">{{ jYear | persianDigit }}</span>
               <v-btn
                 dense
                 icon
@@ -123,7 +123,7 @@
               </div>
             </div>
 
-            <v-divider v-if="showDateBox && showTimeBox" />
+            <v-divider class="mt-4" v-if="showDateBox && showTimeBox" />
             <div class="custom-time-input" v-if="showTimeBox">
               <div class="time-box">
                 <v-btn
@@ -285,6 +285,9 @@ export default {
     this.setInitDateValue()
   },
   methods: {
+    toggleYearBox() {
+      this.showYearBox = !this.showYearBox
+    },
     openYearBox() {
       this.showYearBox = true
     },
@@ -570,7 +573,7 @@ export default {
     listedYears() {
       let y = this.jYear - 20
       let list = [8]
-      for (let i = 0; i < 8; i++) {
+      for (let i = 0; i < 6; i++) {
         list[i] = []
         for (let j = 0; j < 5; j++) {
           list[i][j] = y
