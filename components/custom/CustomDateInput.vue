@@ -73,8 +73,8 @@
                 <v-icon size="medium">mdi-arrow-right</v-icon>
               </v-btn>
               <span class="custom-date-picker-content-title" v-if="faDate">
-          {{ faDate | toPersianDate('MMMM jYYYY') }}
-          </span>
+                <span>{{ faDate | toPersianDate('MMMM') }} {{jYear}}</span>
+              </span>
               <v-btn
                 dense
                 icon

@@ -38,6 +38,17 @@
         </div>
       </v-col>
     </v-row>
+<!--    <v-row>-->
+<!--      <v-col>-->
+<!--        {{ selectedTime }}-->
+<!--        <custom-date-input-->
+<!--          :type="'datetime'"-->
+<!--          :jump-minute="15"-->
+<!--          v-model="selectedTime"-->
+<!--          :initial-value="selectedTime"-->
+<!--        />-->
+<!--      </v-col>-->
+<!--    </v-row>-->
     <v-row>
       <v-col
         cols="12"
@@ -160,12 +171,10 @@
             <v-col
               cols="12"
             >
-              <div>
-                <v-simple-table
-                  fixed-header
+              <div style="overflow-x: scroll" id="table-wrapper" ref="table-wrapper">
+                <table
                   class="appointment-table"
                 >
-                  <template v-slot:default>
                     <thead
                       v-if="showCaseType"
                     >
@@ -180,14 +189,15 @@
                         >
                           <div
                             class="header-case-type"
-                            v-for="(l,n) in que.limits"
-                            :key="n"
+                            v-for="(l,n2) in que.limits"
+                            :key="n2"
+                            :class="{'is-zero': getLimit(l, n) == 0}"
                           >
                             <div>
                               {{ l.name  }}
                             </div>
                             <span>
-                              {{ l.limitation  }}
+                              {{ getLimit(l, n) }}
                             </span>
                           </div>
                         </div>
@@ -204,7 +214,7 @@
                         <div
                           class="header-date"
                           :class="{'is-today': isToday(i), 'is-friday': isFriday(i)}"
-                          @click="openPazireshModal(`${year}/${month}/${i + 1} ${getTime(0)}`)"
+                          @click="openPazireshModal(`${year}/${month}/${i} ${getTime(0)}`)"
                         >
                           {{ getToday(i) }}
                           {{ i  }}
@@ -221,30 +231,33 @@
                       <td
                         v-for="(item, j) in list.length"
                       >
-                        <table-appointment-component
-                          v-if="list[j][i]"
-                          :class="{'is-today': isToday(j + 1), 'is-friday': isFriday(j + 1)}"
-                          :item="list[j][i]"
+                        <table-appointment-v2
+                          v-if="list[j][i] && !list[j][i].is_empty"
+                          :class="{'is-today': isToday(j + 1)}"
+                          :is-friday="isFriday(j + 1)"
+                          :case-type="list[j][i].case_type"
+                          :user-full-name="list[j][i].user_full_name"
+                          :start-at-time-fa="list[j][i].start_at_time_fa"
                           :day="j"
                           :month="month"
                           :year="year"
-                          @click.native="openItem(list[j][i])"
+                          :index="i"
+                          @click.native="openItem(list[j][i].id)"
                         />
-                        <table-appointment-none-component
+                        <table-appointment-none-v2
                           v-else
-                          :class="{'is-today': isToday(j + 1), 'is-friday': isFriday(j + 1)}"
-                          :start-at="getTime(i)"
+                          :data-label="list[j][i]"
+                          :class="{'is-today': isToday(j + 1), 'data': i}"
+                          :is-friday="isFriday(j + 1)"
+                          :start-at="list[j][i] ? list[j][i].start_at_time_fa : getTime(i)"
                           :show-hour="showHour"
-                          :day="j"
-                          :month="month"
-                          :year="year"
-                          @click.native="openPazireshModal(`${year}/${month}/${j + 1} ${getTime(i)}`)"
+                          :index="i"
+                          @click.native="list[j][i] ? openPazireshModal(list[j][i].start_at): openPazireshModal(`${year}/${month}/${i + 1} ${getTime(i)}`)"
                         />
                       </td>
                     </tr>
                     </tbody>
-                  </template>
-                </v-simple-table>
+                </table>
               </div>
             </v-col>
           </v-row>
@@ -269,6 +282,7 @@
       :open="showWorkHour"
       :start="workHour.start"
       :end="workHour.end"
+      :period="workHour.period"
       :organizationId="workHour.organization_id"
       @close="closeShowWorkHour"
       v-if="showWorkHour"
@@ -278,11 +292,11 @@
 
 <script>
 import moment from 'jalali-moment'
-import TableAppointmentComponent from "~/components/panel/appointment/TableAppointmentComponent";
-import TableAppointmentNoneComponent from "~/components/panel/appointment/TableAppointmentNoneComponent";
+import TableAppointmentV2 from "~/components/panel/appointment/TableAppointmentV2";
+import TableAppointmentNoneV2 from "~/components/panel/appointment/TableAppointmentNoneV2";
 import DataTableComponent from "~/components/panel/global/DataTableComponent";
 import CaseTypeCheckboxComponent from "~/components/panel/appointment/CaseTypeCheckboxComponent";
-import AppointmentFormComponent from "~/components/panel/appointment/AppointmentForm/AppointmentFormComponent";
+import AppointmentFormComponent from "~/components/panel/appointment/AppointmentForm/AppointmentFormComponentV2";
 import CreateAppointmentFormComponent
   from "~/components/panel/appointment/AppointmentForm/CreateAppointmentFormComponent";
 import WorkHourComponent from "~/components/panel/appointment/WorkHourComponent";
@@ -294,16 +308,17 @@ export default {
     CustomDateInput,
     WorkHourComponent,
     CreateAppointmentFormComponent,
-    TableAppointmentNoneComponent,
-    TableAppointmentComponent,
+    TableAppointmentNoneV2,
+    TableAppointmentV2,
     CaseTypeCheckboxComponent,
     DataTableComponent,
-    AppointmentFormComponent
+    AppointmentFormComponent,
   },
   layout: 'panel',
   middleware: 'auth',
   data() {
     return {
+      selectedTime: '2023/07/10 21:47',
       ttt: '',
       showPazireshModal: false,
       showAppointmentModal: false,
@@ -475,6 +490,32 @@ export default {
     this.getUsers()
     this.getOrganizationWorkHour()
     this.getCaseTypes()
+    const slider = this.$refs["table-wrapper"];
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    slider.addEventListener('mousedown', (e) => {
+      isDown = true;
+      slider.classList.add('active');
+      startX = e.pageX - slider.offsetLeft;
+      scrollLeft = slider.scrollLeft;
+    });
+    slider.addEventListener('mouseleave', () => {
+      isDown = false;
+      slider.classList.remove('active');
+    });
+    slider.addEventListener('mouseup', () => {
+      isDown = false;
+      slider.classList.remove('active');
+    });
+    slider.addEventListener('mousemove', (e) => {
+      if(!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - slider.offsetLeft;
+      const walk = (x - startX) * 3; //scroll-fast
+      slider.scrollLeft = scrollLeft - walk;
+    });
   },
   methods: {
     getOrganizationWorkHour() {
@@ -503,17 +544,19 @@ export default {
         })
     },
     openPazireshModal(i) {
-      let date = moment.from(i, 'fa', 'YYYY/MM/DD HH:mm:ss').locale('en').format("YYYY/MM/DD HH:mm:ss")
-      this.initTime = date
+      this.initTime = moment.from(i, 'fa', 'YYYY/MM/DD HH:mm:ss').locale('en').format("YYYY/MM/DD HH:mm:ss")
       // this.initTime = moment.from(i, "fa", "jYYYY/jMM/jDD HH:mm:ss").locale("en").local().format("YYYY/MM/DD HH:mm:ss")
       this.showPazireshModal = true
     },
     toggleCreateModal() {
       this.showPazireshModal = !this.showPazireshModal
     },
-    openItem(item) {
-      this.item = item
-      this.toggleAppointmentModal()
+    openItem(id) {
+      this.$axios.get(`/appointments/${id}`)
+        .then(res => {
+          this.item = res.data.data
+          this.toggleAppointmentModal()
+        })
     },
     toggleAppointmentModal() {
       this.showAppointmentModal = !this.showAppointmentModal
@@ -553,7 +596,7 @@ export default {
     toggleShowHour() {
       this.showHour = !this.showHour
       if (this.showHour) {
-        this.list = this.que.clock_ques
+        this.list = this.clockQues()
       } else {
         this.list = this.que.ques
       }
@@ -564,11 +607,11 @@ export default {
     },
     getAppointmentList() {
       this.calcDate()
-        this.$store.dispatch('appointments/getQueV2', this.search)
+      this.$store.dispatch('appointments/getQueV3', this.search)
         .then(res => {
           this.que = res.data
           if (this.showHour) {
-            this.list = this.que.clock_ques
+            this.list = this.clockQues()
           } else {
             this.list = this.que.ques
           }
@@ -652,7 +695,8 @@ export default {
         duration = 20
       }
       let date = moment.from(start, "en", "HH:mm:ss").utc(true).format("HH:mm:ss")
-      date = moment.from(date, 'fa', 'HH:mm:ss').locale('en').add((day) * duration, "minutes").format("HH:mm:ss")
+      date = moment.from(date, 'fa', 'HH:mm:ss').locale('en').add((day) * duration, "minutes").format("HH:mm")
+      console.log()
       return date
     },
     onMonthChanged(month) {
@@ -665,6 +709,52 @@ export default {
     },
     getHolidays() {
       this.$store.dispatch('holidays/getHolidays')
+    },
+    clockQues() {
+      let duration = moment.duration(moment(this.workHour.start).diff(this.workHour.start));
+      let minutes = duration.asMinutes();
+      let queIndexMax = Math.floor(minutes / this.que.default_duration);
+      let normalTimeSpan = queIndexMax;
+      let queCounter = 0;
+      let ques = [];
+      const wh = this.que.work_hour
+      const start = wh.start
+      for (let i = 0; i < this.lastDay; i++) {
+        ques[i] = [];
+        for (let j = 0; j < this.que.ques[i].length; j++) {
+          let baseDate =moment.from(`${this.year}/${this.month}/${i + 1} ${start}`, "fa", "jYYYY/jMM/jDD").utc(true).locale("en");
+          for (let k = 0; k <= normalTimeSpan || (this.que.ques[i][queCounter]); k++) {
+            if (this.que.ques[i][queCounter] &&
+              (!baseDate.isBefore(this.que.ques[i][queCounter].start_at)
+                || (k > normalTimeSpan)
+              ))
+            {//day matches to this gap
+              ques[i].push(this.que.ques[i][queCounter]);
+              baseDate.add(this.que.ques[i][queCounter].duration, 'minutes');
+              queCounter++;
+            } else {
+              ques[i].push(null);
+              baseDate.add(this.que.default_duration, 'minutes');
+            }
+          }
+          queIndexMax = ques[i].map(function (a) {
+            return a ? a : 0;
+          });
+          // this.que.clock_max_length = 16
+        }
+      }
+      // console.log(this.que.clock_max_length, "clock_max_length")
+      // this.que.clock_ques = ques
+      return this.que.clock_ques
+    },
+    getLimit(limit, n) {
+      if (this.que.ques.length < n) {
+        return limit.limitation
+      }
+      this.que.ques[n].filter(i =>{
+        return i.case_type == limit.name
+      })
+      return limit.limitation - this.que.ques[n].filter(i => i.case_type == limit.name).length
     }
   },
   computed: {
