@@ -31,7 +31,7 @@
               >
                 <v-icon size="medium">mdi-arrow-right</v-icon>
               </v-btn>
-              <span class="selected-year" @click="openYearBox">{{ jYear | persianDigit }}</span>
+              <span class="selected-year" @click="toggleYearBox">{{ jYear | persianDigit }}</span>
               <v-btn
                 dense
                 icon
@@ -41,23 +41,25 @@
               </v-btn>
             </div>
           </v-card-title>
-          <v-cars-text v-if="showYearBox">
+          <v-card-text v-if="showYearBox">
             <div v-if="showDateBox" class="custom-date-picker-days-list">
               <div
-                v-for="(l, n) in 1"
+                v-for="(l, n) in listedYears"
                 :key="n"
                 class="custom-date-picker-days"
               >
                 <div
-                  v-for="(d, n) in jSmallDayNames"
+                  v-for="(y, n) in l"
                   :key="n"
                   class="custom-date-picker-day"
+                  :class="{'selected': y == jYear}"
+                  @click="selectYear(y)"
                 >
-                  {{ d }}
+                  {{ y }}
                 </div>
               </div>
             </div>
-          </v-cars-text>
+          </v-card-text>
           <v-card-text
             v-else
           >
@@ -71,7 +73,7 @@
                 <v-icon size="medium">mdi-arrow-right</v-icon>
               </v-btn>
               <span class="custom-date-picker-content-title" v-if="faDate">
-          {{ faDate | toPersianDate('MMMM YYYY') }}
+          {{ faDate | toPersianDate('MMMM jYYYY') }}
           </span>
               <v-btn
                 dense
@@ -121,7 +123,7 @@
               </div>
             </div>
 
-            <v-divider v-if="showDateBox && showTimeBox" />
+            <v-divider class="mt-4" v-if="showDateBox && showTimeBox" />
             <div class="custom-time-input" v-if="showTimeBox">
               <div class="time-box">
                 <v-btn
@@ -283,6 +285,9 @@ export default {
     this.setInitDateValue()
   },
   methods: {
+    toggleYearBox() {
+      this.showYearBox = !this.showYearBox
+    },
     openYearBox() {
       this.showYearBox = true
     },
@@ -472,6 +477,11 @@ export default {
         return d == 6
       }
       return false
+    },
+    selectYear(jYear) {
+      this.jYear = jYear
+      this.date = moment(`${this.jYear}/${this.jMonth}/${this.jDay} ${this.hour}:${this.minute}:00`, "jYYYY/jMM/jDD HH:mm:ss").locale("en").format("YYYY/MM/DD HH:mm:ss")
+      this.closeYearBox()
     }
   },
   computed: {
@@ -559,6 +569,18 @@ export default {
         return "HH:mm"
       }
       return "YYYY/MM/DD HH:mm"
+    },
+    listedYears() {
+      let y = this.jYear - 20
+      let list = [8]
+      for (let i = 0; i < 6; i++) {
+        list[i] = []
+        for (let j = 0; j < 5; j++) {
+          list[i][j] = y
+          y++
+        }
+      }
+      return list
     }
   },
   watch: {
@@ -713,7 +735,7 @@ export default {
       }
 
       &.selected {
-        background: #E76D2D !important;
+        background: #07ca07 !important;
         border-radius: 5px;
         color: #FFFFFF !important;
       }
