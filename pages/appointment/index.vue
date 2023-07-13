@@ -684,6 +684,8 @@ export default {
     },
     isFriday(day) {
       const d = moment.from(`${this.year}/${this.month}/${day}`, "fa", "jYYYY/jMM/jDD");
+      console.log(d, "d")
+      console.log(d.jWeek(), "jWeek")
       return d.format("dddd") === 'جمعه'
     },
     getTime(day) {
