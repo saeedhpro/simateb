@@ -13,10 +13,10 @@
             <img src="/images/pages/search-icon.svg" alt="users">
             <span class="title">جستجو نوبت ها</span>
           </nuxt-link>
-          <nuxt-link to="/appointment/surgeries" class="page-header">
+          <nuxt-link to="/appointment/surgeries" class="page-header surgeries">
             <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
               <defs>
-                <style>.a.index,.b.index{fill:#5063ff;}.a.index{opacity:.12;}.b.index{opacity:1;}</style>
+                <style>.a.index,.b.index{fill:#299565;}.a.index{opacity:.12;}.b.index{opacity:1;}</style>
               </defs>
               <g transform="translate(-1316 -132)">
                 <rect class="a index" width="40" height="40" rx="20" transform="translate(1316 132)"/>
@@ -54,7 +54,7 @@
         cols="12"
       >
         <v-card
-          class="page-main-box"
+          class="page-main-box surgeries"
         >
           <v-row class="search-box">
             <v-col
@@ -114,7 +114,7 @@
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
                     <defs>
                       <style>.a {
-                        fill: #424242;
+                        fill: #FFFFFF;
                       }</style>
                     </defs>
                     <path class="a"
@@ -139,7 +139,7 @@
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="13" viewBox="0 0 16 13">
                     <defs>
                       <style>.a {
-                        fill: #424242;
+                        fill: #FFFFFF;
                       }</style>
                     </defs>
                     <path class="a"
@@ -173,7 +173,7 @@
             >
               <div style="overflow-x: scroll" id="table-wrapper" ref="table-wrapper">
                 <table
-                  class="appointment-table"
+                  class="appointment-table surgeries"
                 >
                     <thead
                       v-if="showCaseType"
@@ -252,7 +252,7 @@
                           :start-at="list[j][i] ? list[j][i].start_at_time_fa : getTime(i)"
                           :show-hour="showHour"
                           :index="i"
-                          @click.native="list[j][i] ? openPazireshModal(list[j][i].start_at): openPazireshModal(`${year}/${month}/${i + 1} ${getTime(i)}`)"
+                          @click.native="showHour ? list[j][i] ? openPazireshModal(list[j][i].start_at): openPazireshModal(`${year}/${month}/${i + 1} ${getTime(i)}`) : () => {}"
                         />
                       </td>
                     </tr>

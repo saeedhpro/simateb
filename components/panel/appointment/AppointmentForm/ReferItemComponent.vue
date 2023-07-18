@@ -23,12 +23,25 @@
               class="refer-item-select"
               :error="notSelected"
               :clearable="true"
+              :disabled="disableRadiologySelect"
             ></v-select>
             <v-select
               v-if="type === 'photography'"
               outlined
               :items="photographyList"
               label="فتوگرافی"
+              item-value="id"
+              item-text="name"
+              v-model="selectedItem"
+              class="refer-item-select"
+              :error="notSelected"
+              :clearable="true"
+            ></v-select>
+            <v-select
+              v-if="type === 'doctor'"
+              outlined
+              :items="doctorList"
+              label="متخصص"
               item-value="id"
               item-text="name"
               v-model="selectedItem"
@@ -44,6 +57,7 @@
               v-if="type === 'radiology'"
               class="main-button"
               @click="openRadiologyFrom"
+              :disabled="disableRadiologySelect"
             >
               <v-icon color="#fff">mdi-radioactive-circle-outline</v-icon>
               فرم رادیولوژی
@@ -55,6 +69,14 @@
             >
               <v-icon color="#fff">mdi-camera-outline</v-icon>
               فرم فتوگرافی
+            </button>
+            <button
+              v-if="type === 'doctor'"
+              class="main-button"
+              @click="openDoctorFrom"
+            >
+              <v-icon color="#fff">mdi-camera-outline</v-icon>
+              ارسال عکس
             </button>
           </v-col>
           <v-col
@@ -86,6 +108,86 @@
       @close="closeRadiologyForm"
       @setRadiologyCases="setRadiologyCases"
     />
+    <v-dialog
+      v-if="organization"
+      v-model="showDoctorFrom"
+      persistent
+      max-width="800"
+    >
+      <v-card
+        class="create-update-modal"
+      >
+        <v-card-title
+          class="create-update-modal-title-box"
+        >
+          <div class="create-update-modal-title">
+            <button
+              @click="closeShowDoctorFrom"
+              class="create-update-modal-close"
+            >
+              <v-icon>mdi-close</v-icon>
+            </button>
+            <span>فرم ارسال نتایج</span>
+          </div>
+          <v-spacer/>
+        </v-card-title>
+        <v-card-text
+          v-if="type"
+          class="paziresh-form-box">
+          <v-container fluid>
+            <div class="send-image-list">
+              <div class="send-image-item"
+               :class="{'selected': isSelected(i)}"
+               v-for="(i,n) in results"
+               :key="n"
+              >
+                <input :id="`image_${i}`" type="checkbox" hidden :value="i" v-model="doctorImages">
+                <label :for="`image_${i}`">
+                    <img
+                      :src="i"
+                      alt=""
+                    />
+                </label>
+              </div>
+<!--              <div @click="selectImage(i)" class="send-image-item" v-for="(i,n) in results" :key="n">-->
+<!--                <v-img width="200px" :src="i" alt=""/>-->
+<!--              </div>-->
+            </div>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-container fluid>
+            <v-row>
+              <v-spacer/>
+              <v-col
+                cols="12"
+                sm="3"
+                md="3"
+              >
+                <button
+                  class="second-button"
+                  @click="closeShowDoctorFrom"
+                >
+                  بستن
+                </button>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="4"
+                md="4"
+              >
+                <button
+                  class="main-button"
+                  @click="saveCases"
+                >
+                  تایید
+                </button>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -120,8 +222,10 @@ export default {
       organization: null,
       selectedItem: null,
       showRadiologyFrom: false,
+      showDoctorFrom: false,
       showPhotographyFrom: false,
       notSelected: false,
+      doctorImages: [],
       msg: '',
     }
   },
@@ -160,8 +264,25 @@ export default {
       }
       this.toggleShowRadiologyFrom()
     },
+    openDoctorFrom() {
+      if (!this.selectedItem) {
+        this.notSelected = true
+        return
+      }
+      this.toggleShowDoctorFrom()
+    },
+    toggleShowDoctorFrom() {
+      this.showDoctorFrom = !this.showDoctorFrom
+    },
+    closeShowDoctorFrom() {
+      this.toggleShowDoctorFrom()
+    },
     toggleShowRadiologyFrom() {
       this.showRadiologyFrom = !this.showRadiologyFrom
+    },
+    saveCases() {
+      this.$emit('setDoctorImagesCases', this.doctorImages)
+      this.closeShowDoctorFrom()
     },
     selected(val) {
       this.$emit('selected', {
@@ -169,22 +290,43 @@ export default {
         type: this.type,
       })
     },
+    selectImage(img) {
+      this.doctorImages.push(img)
+    },
     setPhotographyCases(cases) {
       this.$emit('setPhotographyCases', cases)
       this.closePhotographyFrom()
     },
     setRadiologyCases(cases) {
-      this.$emit('setRadiologyCases', cases)
+      this.$emit('sestart_at_ago_fatRadiologyCases', cases)
       this.closeRadiologyForm()
+    },
+    isSelected(img) {
+      const index = this.doctorImages.findIndex(i => i == img)
+      return index > -1
     }
   },
   computed: {
+    results() {
+      return this.$store.getters['appointments/getResults']
+    },
     radiologyList() {
       return this.$store.getters['organizations/getRadiologyList']
     },
     photographyList() {
       return this.$store.getters['organizations/getPhotographyList']
     },
+    doctorList() {
+      return this.$store.getters['organizations/getRelationDoctorList']
+    },
+    loginUser() {
+      return this.$store.getters['login/getUser']
+    },
+    disableRadiologySelect() {
+      if (!this.loginUser) return true
+      const profession_id = this.loginUser.organization.profession_id
+      return profession_id != 5 && profession_id != 7
+    }
   },
   watch: {
     selectedItem(val) {

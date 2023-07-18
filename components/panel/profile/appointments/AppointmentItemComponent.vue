@@ -10,7 +10,7 @@
         <div class="img-box">
           <span class="item-index">{{ index + 1 | persianDigit }}</span>
           <button
-            class="edit-button"
+            class="edit-butto;n"
             @click="openUpdateModal"
           >
             ویرایش
@@ -32,12 +32,12 @@
               <div class="time-box">
                 <span>
                   {{
-                    $moment.utc(start_at).local().format("YYYY/MM/DD HH:mm:ss") | toRelativeDate
+                    start_at_ago_fa
                   }}
                 </span>
                 <span>
                   <span class="circle"/>
-                  {{ $moment.utc(start_at).local().format("YYYY/MM/DD HH:mm:ss") | toPersianDate('YYYY/MM/DD') }}
+                  {{ start_at_fa }}
                   <span class="circle"/>
                 </span>
 <!--                <span-->
@@ -249,6 +249,14 @@ export default {
       required: true,
     },
     start_at: {
+      type: String,
+      required: true,
+    },
+    start_at_ago_fa: {
+      type: String,
+      required: true,
+    },
+    start_at_fa: {
       type: String,
       required: true,
     },
