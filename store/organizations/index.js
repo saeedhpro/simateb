@@ -2,6 +2,7 @@ require('whatwg-fetch')
 export const state = () => ({
   radiologyList: [],
   photographyList: [],
+  relationDoctorList: [],
   organization: null,
   workHour: {
     start: '',
@@ -16,6 +17,9 @@ export const mutations = {
   },
   setPhotographyList(state, photographyList) {
     state.photographyList = photographyList
+  },
+  setRelationDoctorList(state, doctorList) {
+    state.relationDoctorList = doctorList
   },
   setOrganization(state, organization) {
     state.organization = organization
@@ -38,6 +42,8 @@ export const actions = {
           ctx.commit('setRadiologyList', data)
         } else if (type === 'photography') {
           ctx.commit('setPhotographyList', data)
+        } else if (type === 'doctor') {
+          ctx.commit('setRelationDoctorList', data)
         }
         return Promise.resolve(res)
       })
@@ -105,6 +111,9 @@ export const getters = {
   },
   getPhotographyList(state) {
     return state.photographyList
+  },
+  getRelationDoctorList(state) {
+    return state.relationDoctorList
   },
   getOrganization(state) {
     return state.organization

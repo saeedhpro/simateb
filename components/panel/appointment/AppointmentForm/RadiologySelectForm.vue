@@ -567,42 +567,58 @@
           v-if="type"
           class="paziresh-form-box">
           <v-container fluid>
-            <v-row>
-              <v-col
-                cols="12"
+            <div class="dent-list">
+              <div
+                v-for="(i,n) in 8"
+                :key="n"
+                class="dent-item"
+                :class="{'selected': inList(`${type}_${i}`)}"
               >
-                <div class="dent-list">
-                  <div
-                    v-for="(i,n) in 16"
-                    :key="n"
-                    class="dent-item"
-                    :class="{'selected': inList(`${type}_${i}`)}"
-                  >
-                    <img
-                      @click="onDentClicked(`${type}_${i}`, type, i)"
-                      :src="`/images/dents/${i}.png`"
-                    >
-                  </div>
-                </div>
-              </v-col>
-              <v-col
-                cols="12"
+                <img
+                  @click="onDentClicked(`${type}_${i}`, type, i)"
+                  :src="`/images/dents/${i}.png`"
+                >
+              </div>
+              <v-divider vertical class="mx-2 border-black"/>
+              <div
+                v-for="(i,n) in 8"
+                :key="n"
+                class="dent-item"
+                :class="{'selected': inList(`${type}_${i + 8}`)}"
               >
-                <div class="dent-list">
-                  <div
-                    v-for="(i,n) in 16"
-                    :key="n"
-                    class="dent-item"
-                    :class="{'selected': inList(`${type}_${i + 16}`)}"
-                  >
-                    <img
-                      @click="onDentClicked(`${type}_${i + 16}`,  type,i + 16)"
-                      :src="`/images/dents/${i + 16}.png`"
-                    >
-                  </div>
-                </div>
-              </v-col>
-            </v-row>
+                <img
+                  @click="onDentClicked(`${type}_${i + 8}`, type, i + 8)"
+                  :src="`/images/dents/${i + 8}.png`"
+                >
+              </div>
+
+            </div>
+            <v-divider class="border-black"/>
+            <div class="dent-list">
+              <div
+                v-for="(i,n) in 8"
+                :key="n"
+                class="dent-item"
+                :class="{'selected': inList(`${type}_${i + 16}`)}"
+              >
+                <img
+                  @click="onDentClicked(`${type}_${i + 16}`,  type,i + 16)"
+                  :src="`/images/dents/${i + 16}.png`"
+                >
+              </div>
+              <v-divider vertical class="mx-2 border-black" />
+              <div
+                v-for="(i,n) in 8"
+                :key="n"
+                class="dent-item"
+                :class="{'selected': inList(`${type}_${i + 24}`)}"
+              >
+                <img
+                  @click="onDentClicked(`${type}_${i + 24}`,  type,i + 24)"
+                  :src="`/images/dents/${i + 24}.png`"
+                >
+              </div>
+            </div>
           </v-container>
         </v-card-text>
       </v-card>
@@ -735,35 +751,81 @@ export default {
         let values = this.selectedRightTopDents.map(i => `${type}_${i}`)
         this.cases = this.cases.filter(i => !values.includes(i))
         this.selectedRightTopDents = []
-        values = this.selectedLeftTopDents.map(i => `${type}_${i}`)
+        values = this.selectedLeftTopDents.map(i => `${type}_${(i + 8)}`)
         this.cases = this.cases.filter(i => !values.includes(i))
         this.selectedLeftTopDents = []
-        values = this.selectedRightBottomDents.map(i => `${type}_${i}`)
+        values = this.selectedRightBottomDents.map(i => `${type}_${(i + 16)}`)
         this.cases = this.cases.filter(i => !values.includes(i))
         this.selectedRightBottomDents = []
-        values = this.selectedLeftBottomDents.map(i => `${type}_${i}`)
+        values = this.selectedLeftBottomDents.map(i => `${type}_${(i + 24)}`)
         this.cases = this.cases.filter(i => !values.includes(i))
         this.selectedLeftBottomDents = []
       } else {
         let values = this.selectedCBCTRightTopDents.map(i => `${type}_${i}`)
         this.cases = this.cases.filter(i => !values.includes(i))
         this.selectedCBCTRightTopDents = []
-        values = this.selectedCBCTLeftTopDents.map(i => `${type}_${i}`)
+        values = this.selectedCBCTLeftTopDents.map(i => `${type}_${i + 8}`)
         this.cases = this.cases.filter(i => !values.includes(i))
         this.selectedCBCTLeftTopDents = []
-        values = this.selectedCBCTRightBottomDents.map(i => `${type}_${i}`)
+        values = this.selectedCBCTRightBottomDents.map(i => `${type}_${i + 16}`)
         this.cases = this.cases.filter(i => !values.includes(i))
         this.selectedCBCTRightBottomDents = []
-        values = this.selectedCBCTLeftBottomDents.map(i => `${type}_${i}`)
+        values = this.selectedCBCTLeftBottomDents.map(i => `${type}_${i + 24}`)
         this.cases = this.cases.filter(i => !values.includes(i))
         this.selectedCBCTLeftBottomDents = []
+      }
+    },
+    onPeriapicalChanged(values) {
+      let index = values.findIndex(i => i == "INTRA_Periapical (Parallel)")
+      if (index == -1) {
+        this.removeDents("Periapical")
+      } else {
+        for (let i = 1; i <= 32; i++) {
+          this.cases.push(`Periapical_${i}`)
+          if (i < 9) {
+            this.selectedRightTopDents.push(i)
+            this.selectedRightTopDents.sort()
+          } else if (i < 17) {
+            this.selectedLeftTopDents.push(i - 8)
+            this.selectedLeftTopDents.sort((a, b) => a > b ? -1 : 1)
+          } else if (i < 25) {
+            this.selectedRightBottomDents.push(i - 16)
+            this.selectedRightBottomDents.sort()
+          } else {
+            this.selectedLeftBottomDents.push(i - 24)
+            this.selectedLeftBottomDents.sort().sort((a, b) => a > b ? -1 : 1)
+          }
+        }
+      }
+    },
+    onImplantChanged(values) {
+      let index = values.findIndex(i => i == "Implant")
+      if (index == -1) {
+        this.removeDents("Implant")
+      } else {
+        for (let i = 1; i <= 32; i++) {
+          this.cases.push(`Implant_${i}`)
+          if (i < 9) {
+            this.selectedCBCTRightTopDents.push(i)
+            this.selectedCBCTRightTopDents.sort()
+          } else if (i < 17) {
+            this.selectedCBCTLeftTopDents.push(i - 8)
+            this.selectedCBCTLeftTopDents.sort((a, b) => a > b ? -1 : 1)
+          } else if (i < 25) {
+            this.selectedCBCTRightBottomDents.push(i - 16)
+            this.selectedCBCTRightBottomDents.sort()
+          } else {
+            this.selectedCBCTLeftBottomDents.push(i - 24)
+            this.selectedCBCTLeftBottomDents.sort().sort((a, b) => a > b ? -1 : 1)
+          }
+        }
       }
     }
   },
   computed: {
     show() {
       return this.open;
-    },
+    }
   },
   watch: {
     items(val) {

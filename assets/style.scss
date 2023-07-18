@@ -534,6 +534,15 @@ table {
       background: #F6F7FF 0 0 no-repeat padding-box !important;
       box-shadow: 0 12px 16px #5063FF28 !important;
       border: 1px solid #5063FF !important;
+      &.surgeries {
+        background: #F6F7FF 0 0 no-repeat padding-box !important;
+        box-shadow: 0 12px 16px rgba(41, 149, 101, .15) !important;
+        border: 1px solid #299565 !important;
+
+        .title {
+          color: #299565 !important;
+        }
+      }
 
       .title {
         color: #5063FF !important;
@@ -650,6 +659,41 @@ table {
   box-shadow: 0 2px 4px #14143214 !important;
   border-radius: 8px !important;
   padding: 40px;
+
+  &.surgeries {
+      background: #299565 !important;
+    .tafkik {
+      color: #FFFFFF;
+    }
+    .theme--light.v-select {
+      .v-select__selections {
+        color: #FFFFFF;
+      }
+    }
+    .theme--light.v-icon, .theme--light.v-label {
+      color: #FFFFFF;
+    }
+    .theme--light.v-input {
+      input {
+        color: #FFFFFF;
+      }
+    }
+    .show-button {
+      background: transparent !important;
+      border: 1px solid #FFFFFF !important;
+      color: #FFFFFF;
+      &.active {
+        border: 1px solid #299565 !important;
+        background: #FFFFFF !important;
+        color: #299565;
+        svg {
+          .a {
+            fill: #299565 !important;
+          }
+        }
+      }
+    }
+  }
 
   .selected-count {
     background: #5063FF 0 0 no-repeat padding-box;
@@ -2055,6 +2099,7 @@ table {
 .appointment-table {
   width: 100%;
   &.surgeries {
+    background: #EBEBEB !important;
     .header-case-type-th {
       background: #388E3C 0 0  no-repeat padding-box !important;
       border: 1px solid #388E3C !important;
@@ -2239,6 +2284,33 @@ table {
   font: normal normal bold 16px/28px IRANYekanRegular !important;
   letter-spacing: 0px;
   color: #424242;
+}
+.send-image-list {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+.send-image-item {
+  cursor: pointer;
+  width: 200px;
+  border-radius: 5px;
+  border: 2px solid #fff;
+  margin-bottom: 10px;
+  label {
+    height: 100%;
+    display: flex;
+  }
+  img {
+    cursor: pointer;
+    border-radius: 5px;
+    width: 196px;
+  }
+  &.selected {
+    border: 2px solid #3949CC;
+    border-radius: 5px;
+  }
 }
 
 .main-false-button {
@@ -2655,7 +2727,7 @@ table {
 
       .selected-items-box {
         width: 100%;
-        max-width: 200px;
+        max-width: 240px;
 
         .selected-items-row {
           display: flex;
@@ -2710,10 +2782,12 @@ table {
     }
   }
 }
-
+.border-black {
+  border-color: rgba(0, 0, 0, 1) !important;
+}
 .dent-list {
   display: flex;
-  overflow-x: scroll;
+  //overflow-x: scroll;
   justify-content: center;
 
   .dent-item {

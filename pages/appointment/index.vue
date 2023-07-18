@@ -13,7 +13,7 @@
             <img src="/images/pages/search-icon.svg" alt="users">
             <span class="title">جستجو نوبت ها</span>
           </nuxt-link>
-          <nuxt-link to="/appointment/surgeries" class="page-header">
+          <nuxt-link to="/appointment/surgeries" class="page-header" v-if="canSeeSurgeries">
             <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
               <defs>
                 <style>.a.index,.b.index{fill:#5063ff;}.a.index{opacity:.12;}.b.index{opacity:1;}</style>
@@ -252,7 +252,7 @@
                           :start-at="list[j][i] ? list[j][i].start_at_time_fa : getTime(i)"
                           :show-hour="showHour"
                           :index="i"
-                          @click.native="list[j][i] ? openPazireshModal(list[j][i].start_at): openPazireshModal(`${year}/${month}/${i + 1} ${getTime(i)}`)"
+                          @click.native="showHour ? list[j][i] ? openPazireshModal(list[j][i].start_at): openPazireshModal(`${year}/${month}/${i + 1} ${getTime(i)}`) : () => {}"
                         />
                       </td>
                     </tr>
@@ -790,6 +790,11 @@ export default {
         }
       }
     },
+    canSeeSurgeries() {
+      if (!this.loginUser) return true
+      const profession_id = this.loginUser.organization.profession_id
+      return !(profession_id == 5 || profession_id == 7)
+    }
   },
 }
 </script>

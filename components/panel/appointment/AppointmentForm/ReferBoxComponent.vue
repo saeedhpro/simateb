@@ -41,6 +41,21 @@
                 @setPhotographyCases="setPhotographyCases"
               />
             </v-col>
+            <v-col
+              cols="12"
+              sm="6"
+              md="6"
+            >
+              <refer-item-component
+                type="doctor"
+                title="متخصص"
+                :refer="doctor"
+                :items="doctorItems"
+                @selected="itemSelected"
+                @setMsg="setMsg"
+                @setPhotographyCases="setPhotographyCases"
+              />
+            </v-col>
           </v-row>
         </v-expansion-panel-content>
       </v-expansion-panel>
@@ -58,9 +73,17 @@ export default {
       type: Object,
       default: null,
     },
+    doctor: {
+      type: Object,
+      default: null,
+    },
     radiology: {
       type: Object,
       default: null,
+    },
+    doctorItems: {
+      type: Array,
+      default: () => []
     },
     photoItems: {
       type: Array,

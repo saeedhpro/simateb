@@ -8,6 +8,8 @@
         :id="i.id"
         :created_at="i.created_at"
         :start_at="i.start_at"
+        :start_at_fa="i.start_at_fa"
+        :start_at_ago_fa="i.start_at_ago_fa"
         :organization-id="i.organization_id"
         :status="i.status"
         :case-type="i.case_type"
