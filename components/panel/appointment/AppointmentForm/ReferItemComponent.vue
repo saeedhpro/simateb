@@ -290,15 +290,12 @@ export default {
         type: this.type,
       })
     },
-    selectImage(img) {
-      this.doctorImages.push(img)
-    },
     setPhotographyCases(cases) {
       this.$emit('setPhotographyCases', cases)
       this.closePhotographyFrom()
     },
     setRadiologyCases(cases) {
-      this.$emit('sestart_at_ago_fatRadiologyCases', cases)
+      this.$emit('setRadiologyCases', cases)
       this.closeRadiologyForm()
     },
     isSelected(img) {

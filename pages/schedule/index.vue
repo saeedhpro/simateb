@@ -506,7 +506,7 @@ export default {
   methods: {
     setCases() {
       const cases = this.loginUser.organization.case_types;
-      this.case_types = cases.split(",")
+      this.case_types = cases ? cases.split(",") : []
     },
     showRemoveCaseType(c) {
       this.case_types = this.case_types.filter(i => i != c)
