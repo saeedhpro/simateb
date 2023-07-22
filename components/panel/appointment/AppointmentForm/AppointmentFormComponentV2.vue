@@ -314,12 +314,15 @@
                   <refer-box-component
                     :photography="appointment.photography"
                     :radiology="appointment.radiology"
+                    :doctor="appointment.doctor"
                     :radio-items="radiologyCases"
                     :photo-items="photographyCases"
+                    :doctor-items="doctorImages"
                     @selected="itemSelected"
                     @setMsg="setMsg"
                     @setPhotographyCases="setPhotographyCases"
                     @setRadiologyCases="setRadiologyCases"
+                    @setDoctorImages="setDoctorImages"
                   />
                 </v-col>
               </v-row>
@@ -1196,6 +1199,9 @@ export default {
         radiology: this.item.radiology,
         radiology_cases: this.item.radiology_cases ? this.item.radiology_cases : '',
         radiology_id: this.item.radiology_id,
+        doctor: this.item.doctor,
+        doctor_id: this.item.doctor_id,
+        doctor_images: this.item.doctor_images ? this.item.doctor_images : [],
         radiology_msg: this.item.radiology_msg,
         staff: this.item.staff,
         staff_id: this.item.staff_id,
@@ -1484,6 +1490,9 @@ export default {
         case 'radiology':
           this.appointment.radiology_id = item.val
           break;
+        case 'doctor':
+          this.appointment.doctor_id = item.val
+          break;
       }
     },
     setMsg(item) {
@@ -1501,6 +1510,9 @@ export default {
     },
     setRadiologyCases(cases) {
       this.appointment.radiology_cases = cases.join(',')
+    },
+    setDoctorImages(images) {
+      this.appointment.doctor_images = images
     },
     openEditModal() {
       // this.$emit('openUpdate', this.item)
@@ -1559,7 +1571,7 @@ export default {
   },
   computed: {
     showCode() {
-      return this.appointment.photography_cases.length > 0 || this.appointment.radiology_cases.length > 0
+      return this.appointment.photography_cases.length > 0 || this.appointment.radiology_cases.length > 0|| this.appointment.doctor_id != null
     },
     results() {
       return this.$store.getters['appointments/getResults']
@@ -1581,6 +1593,9 @@ export default {
         return []
       }
       return this.appointment.radiology_cases.split(',')
+    },
+    doctorImages() {
+      return this.appointment.doctor_images
     },
     show() {
       return this.open;
