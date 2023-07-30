@@ -299,6 +299,29 @@
                       </v-tooltip>
                     </td>
                     <td class="text-center">
+                      <v-tooltip
+                        v-if="i.doctor"
+                        bottom
+                      >
+                        <template v-slot:activator="{ on, attrs }">
+                          <div
+                            v-bind="attrs"
+                            v-on="on"
+                            :class="getErjaClass(i)"
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="14.286" viewBox="0 0 20 14.286">
+                              <path class="a"
+                                    d="M52,97.429a1.423,1.423,0,0,1-.419,1.01L40.153,109.867a1.428,1.428,0,0,1-2.02,0l-5.714-5.714a1.428,1.428,0,1,1,2.02-2.02l4.7,4.706,10.42-10.42A1.427,1.427,0,0,1,52,97.429Z"
+                                    transform="translate(-32 -96)"/>
+                            </svg>
+                          </div>
+                        </template>
+                        <span>
+                          {{ getErjaType(i) }}
+                        </span>
+                      </v-tooltip>
+                    </td>
+                    <td class="text-center">
                       <span
                         v-if="resulted(i)"
                         class="status-box resulted"
@@ -392,7 +415,7 @@
         </v-card>
       </v-col>
     </v-row>
-    <appointment-form-component
+    <appointment-form-component-v2
       :open="showPazireshModal"
       :item="item"
       @close="closePazireshModal"
@@ -420,7 +443,7 @@
 import moment from "jalali-moment";
 import DataTableComponent from "~/components/panel/global/DataTableComponent";
 import CaseTypeCheckboxComponent from "~/components/panel/appointment/CaseTypeCheckboxComponent";
-import AppointmentFormComponent from "~/components/panel/appointment/AppointmentForm/AppointmentFormComponent";
+import AppointmentFormComponentV2 from "~/components/panel/appointment/AppointmentForm/AppointmentFormComponentV2";
 import CreateAppointmentFormComponent
   from "~/components/panel/appointment/AppointmentForm/CreateAppointmentFormComponent";
 import PazireshLinkBox from "~/components/panel/orgnization/paziresh/PazireshLinkBox";
@@ -433,7 +456,7 @@ export default {
     AdminDeleteUsersComponent,
     PazireshLinkBox,
     SendSmsComponent,
-    CreateAppointmentFormComponent, AppointmentFormComponent, CaseTypeCheckboxComponent, DataTableComponent
+    CreateAppointmentFormComponent, AppointmentFormComponentV2, CaseTypeCheckboxComponent, DataTableComponent
   },
   layout: 'panel',
   data() {
@@ -477,6 +500,7 @@ export default {
         'ساعت',
         'ارجاع به رادیولوژی',
         'ارجاع به فتوگرافی',
+        'ارجاع به متخصص',
         'وضعیت',
       ],
       headers: [
@@ -651,6 +675,10 @@ export default {
         return '-'
       }
     },
+    isReDoctor(appointment) {
+      if (!this.loginUser) return false;
+      return this.loginUser.organization.id == appointment.doctor_id;
+    },
     resulted(appointment, type) {
       const profession_id = this.loginUser.organization.profession_id;
       if (profession_id == 1) {
@@ -659,6 +687,8 @@ export default {
         return appointment.l_admission_at != "" && appointment.l_result_at != "" && appointment.l_admission_at != null && appointment.l_result_at != null
       } else if (profession_id == 3) {
         return appointment.r_admission_at != "" && appointment.r_result_at != "" && appointment.r_admission_at != null && appointment.r_result_at != null
+      } else if (this.isReDoctor(appointment)) {
+        return appointment.d_admission_at != null && appointment.d_admission_at != "" && appointment.d_result_at != "" && appointment.d_result_at != null
       } else {
         switch (type) {
           case 1:
@@ -680,6 +710,8 @@ export default {
         return appointment.l_admission_at != "" && appointment.l_admission_at != null
       } else if (profession_id == 3) {
         return appointment.r_admission_at != "" && appointment.r_admission_at != null
+      } else if (this.isReDoctor(appointment)) {
+        return appointment.d_admission_at != "" && appointment.d_admission_at != null
       }
       return false;
     },

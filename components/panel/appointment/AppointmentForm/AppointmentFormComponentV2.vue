@@ -60,13 +60,17 @@
                       <div class="phone-box second">
                         <span>{{ appointment.user ? `${appointment.user.tel}` : '-' | persianDigit }}</span>
                       </div>
-                      <div class="phone-box second">
+                      <div class="phone-box second"
+                        v-if="!isReDoctor"
+                      >
                         <span class="small">شماره پرونده: </span>
                         <span class="file-id">{{
                             appointment.user && appointment.user.file_id ? appointment.user.file_id : '-' | persianDigit
                           }}</span>
                       </div>
-                      <div class="phone-box second">
+                      <div class="phone-box second"
+                           v-if="!isReDoctor"
+                      >
                         <span class="small">کد پذیرش: </span>
                         <span>{{ showCode ? `${appointment.code}` : '-' | persianDigit }}</span>
                       </div>
@@ -245,6 +249,7 @@
                 v-if="appointment.prescription"
               />
               <v-row
+                v-if="!isReDoctor"
               >
                 <v-col
                   cols="12"
@@ -307,7 +312,9 @@
                   </div>
                 </v-col>
               </v-row>
-              <v-row>
+              <v-row
+                v-if="!isReDoctor"
+              >
                 <v-col
                   cols="12"
                 >
@@ -550,18 +557,21 @@
                   <button
                     class="action-bar-button"
                     @click="doAction('cancel')"
+                    v-if="!this.isReDoctor"
                   >
                     کنسل
                   </button>
                   <button
                     class="action-bar-button"
                     @click="doAction('waiting')"
+                    v-if="!this.isReDoctor"
                   >
                     در انتظار
                   </button>
                   <button
                     class="action-bar-button"
                     @click="doAction('reserve')"
+                    v-if="!this.isReDoctor"
                   >
                     رزرو
                   </button>
@@ -960,6 +970,7 @@ export default {
         user: null,
         appcode: null,
         future_prescription: '',
+        doctor_id: null,
       },
       money: {
         decimal: '.',
@@ -1351,6 +1362,8 @@ export default {
       delete data.user
       delete data.radiology
       delete data.photography
+      console.log(this.appointment.id)
+      console.log(data.id)
       this.$store.dispatch('appointments/acceptAppointment', data)
         .then(() => {
           this.$toast.success('با موفقیت انجام شد');
@@ -1571,7 +1584,7 @@ export default {
   },
   computed: {
     showCode() {
-      return this.appointment.photography_cases.length > 0 || this.appointment.radiology_cases.length > 0|| this.appointment.doctor_id != null
+      return this.appointment.photography_cases.length > 0 || this.appointment.radiology_cases.length > 0 || this.appointment.doctor_id != null
     },
     results() {
       return this.$store.getters['appointments/getResults']
@@ -1647,10 +1660,13 @@ export default {
         return this.appointment.l_admission_at != "" && this.appointment.l_result_at != "" &&  this.appointment.l_admission_at != null && this.appointment.l_result_at != null
       } else if (profession_id == 3) {
         return this.appointment.r_admission_at != "" && this.appointment.r_result_at != "" &&  this.appointment.r_admission_at != null && this.appointment.r_result_at != null
+      } else if (this.isReDoctor) {
+        return this.appointment.d_admission_at != "" && this.appointment.d_result_at != "" &&  this.appointment.d_admission_at != null && this.appointment.d_result_at != null
       } else {
         return (this.appointment.r_admission_at != "" && this.appointment.r_result_at != "" &&  this.appointment.p_admission_at != null && this.appointment.p_result_at != null) ||
           (this.appointment.l_admission_at != "" && this.appointment.l_result_at != "" &&  this.appointment.l_admission_at != null && this.appointment.l_result_at != null) ||
-          (this.appointment.p_admission_at != "" && this.appointment.p_result_at != "" &&  this.appointment.p_admission_at != null && this.appointment.p_result_at != null)
+          (this.appointment.p_admission_at != "" && this.appointment.p_result_at != "" &&  this.appointment.p_admission_at != null && this.appointment.p_result_at != null) ||
+          (this.appointment.d_admission_at != "" && this.appointment.d_result_at != "" &&  this.appointment.d_admission_at != null && this.appointment.d_result_at != null)
       }
     },
     admissioned() {
@@ -1661,11 +1677,16 @@ export default {
         return this.appointment.l_admission_at != "" && this.appointment.l_admission_at != null
       } else if (profession_id == 3) {
         return this.appointment.r_admission_at != "" && this.appointment.r_admission_at != null
+      } else if (this.isReDoctor) {
+        return this.appointment.d_admission_at != "" && this.appointment.d_admission_at != null
       }
       return false;
     },
     waiting() {
-      return this.appointment.waiting
+      return this.appointment.waiting || (this.isReDoctor && (this.appointment.d_admission_at == "" || this.appointment.d_admission_at == null))
+    },
+    isReDoctor() {
+      return this.loginUser.organization.id == this.appointment.doctor_id
     }
   },
   watch: {

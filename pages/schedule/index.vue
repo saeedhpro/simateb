@@ -24,6 +24,12 @@
             <img src="/images/pages/plus.svg" alt="organizations">
             <span class="title-main">افزودن</span>
           </div>
+          <div class="page-actions"
+               @click="openReserveForm"
+          >
+            <img src="/images/pages/new-user.svg" alt="users">
+            <span class="title-main">رزرو برای دکتر دیگر</span>
+          </div>
         </div>
       </v-col>
     </v-row>
@@ -482,6 +488,10 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <appointment-reserve-component
+      :open="showReserveForm"
+      @close="closeReserveForm"
+    />
   </v-container>
 </template>
 
@@ -489,12 +499,13 @@
 import DataTableComponent from "~/components/panel/global/DataTableComponent";
 import CustomRadioBox from "~/components/panel/global/CustomInput/CustomRadioBox";
 import moment from "jalali-moment";
+import AppointmentReserveComponent from "~/components/panel/profile/appointments/AppointmentReserveComponent.vue";
 
 export default {
   name: "index",
   layout: "panel",
   middleware: "auth",
-  components: {CustomRadioBox, DataTableComponent},
+  components: {AppointmentReserveComponent, CustomRadioBox, DataTableComponent},
   mounted() {
     const year = parseInt(moment().local().format("jYYYY"))
     const month = parseInt(moment().local().format("jMM"))
@@ -666,6 +677,12 @@ export default {
         .finally(() => {
           this.showCasesModal = false
         })
+    },
+    openReserveForm() {
+      this.showReserveForm = true
+    },
+    closeReserveForm() {
+      this.showReserveForm = false
     }
   },
   data() {
@@ -674,6 +691,7 @@ export default {
       showCreateModal: false,
       showCasesModal: false,
       showRemoveItemModal: false,
+      showReserveForm: false,
       create: false,
       editCT: false,
       editCTI: 0,
