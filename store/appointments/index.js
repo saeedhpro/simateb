@@ -22,6 +22,7 @@ export const state = () => ({
     }
   },
   results: [],
+  referedResults: [],
 })
 
 export const mutations = {
@@ -36,6 +37,9 @@ export const mutations = {
   },
   setResults(state, results) {
     state.results = results
+  },
+  setReferedResults(state, results) {
+    state.referedResults = results
   }
 }
 
@@ -106,6 +110,18 @@ export const actions = {
       .then(res => {
         const data = res.data;
         ctx.commit('setResults', data)
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  getAppointmentReferedResults(ctx, data) {
+    return this.$axios.get(`/appointments/${data.id}/results/refered`)
+      .then(res => {
+        const data = res.data;
+        console.log(data, "data")
+        ctx.commit('setReferedResults', data)
         return Promise.resolve(res)
       })
       .catch(err => {
@@ -192,6 +208,15 @@ export const actions = {
         return Promise.reject(err)
       })
   },
+  reserveAppointmentForDoctor(ctx, data) {
+    return this.$axios.post('/organizations/appointments/reserve', data)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
   createAppointmentAppCode(ctx, id) {
     return this.$axios.post(`/appointments/${id}/appcode`)
       .then(res => {
@@ -212,6 +237,15 @@ export const actions = {
   },
   updateAppointment(ctx, data) {
     return this.$axios.put(`/appointments/${data.id}`, data)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  sendDescAppointment(ctx, data) {
+    return this.$axios.patch(`/appointments/${data.id}/desc`, data)
       .then(res => {
         return Promise.resolve(res)
       })
@@ -305,5 +339,8 @@ export const getters = {
   },
   getResults(state) {
     return state.results
+  },
+  getReferedResults(state) {
+    return state.referedResults
   }
 }

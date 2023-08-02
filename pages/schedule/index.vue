@@ -114,9 +114,10 @@
                         }}
                       </span>
                     </td>
-                    <td class="text-center">{{ i.count | persianDigit }}</td>
-                    <td class="text-center">{{ i.site | persianDigit }}</td>
-                    <td class="text-center">{{ i.app | persianDigit }}</td>
+                    <td class="text-center">{{ i.count }}</td>
+                    <td class="text-center">{{ i.site }}</td>
+                    <td class="text-center">{{ i.app }}</td>
+                    <td class="text-center">{{ i.case_type ? i.case_type : '-' }}</td>
                     <td class="text-center flex flex-row justify-space-around align-center">
                       <button @click="editSchedule(i)" class="action-buttons">
                         <v-icon size="16">mdi-pencil-outline</v-icon>
@@ -273,6 +274,24 @@
                 <div class="create-update-model-input-box">
                   <label>ظرفیت App</label>
                   <input type="number" v-model="form.app">
+                </div>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="6"
+                md="6"
+              >
+                <div class="create-update-model-input-box">
+                  <label>خدمت</label>
+                  <v-autocomplete
+                    v-model="form.case_type"
+                    :items="case_types"
+                    outlined
+                    dense
+                    item-text="name"
+                    item-value="id"
+                    label=""
+                  ></v-autocomplete>
                 </div>
               </v-col>
             </v-row>
@@ -577,6 +596,7 @@ export default {
         count: schedule.count,
         site: schedule.site,
         app: schedule.app,
+        case_type: schedule.case_type,
         organization_id: schedule.organization_id,
       }
       this.toggleCreateModal()
@@ -612,6 +632,7 @@ export default {
         count: parseInt(this.form.count),
         site: parseInt(this.form.site),
         app: parseInt(this.form.app),
+        case_type: this.form.case_type,
         organization_id: this.form.organization_id ? parseInt(this.form.organization_id) : parseInt(this.loginUser.organization_id),
       })
         .then(() => {
@@ -704,6 +725,7 @@ export default {
         'ظرفیت Doctor',
         'ظرفیت Site',
         'ظرفیت App',
+        'خدمت',
         'عملیات',
       ],
       search: {
@@ -719,6 +741,7 @@ export default {
         count: 0,
         site: 0,
         app: 0,
+        case_type: '',
         organization_id: null,
       },
       lastDay: 0,

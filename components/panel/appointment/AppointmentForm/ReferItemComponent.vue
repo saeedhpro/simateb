@@ -231,6 +231,11 @@ export default {
   },
   mounted() {
     this.getList()
+    if (this.items.length > 0) {
+      this.doctorImages = [
+        ...this.items,
+      ]
+    }
   },
   methods: {
     getList() {
@@ -281,7 +286,11 @@ export default {
       this.showRadiologyFrom = !this.showRadiologyFrom
     },
     saveCases() {
-      this.$emit('setDoctorImagesCases', this.doctorImages)
+      const items = this.doctorImages.map(i => {
+        const split = i.split('/');
+        return `${split[split.length - 2]}/${split[split.length - 1]}`;
+      })
+      this.$emit('setDoctorImagesCases', items)
       this.closeShowDoctorFrom()
     },
     selected(val) {
@@ -331,8 +340,10 @@ export default {
       this.notSelected = false
       if (this.type === 'photography') {
         this.organization = this.photographyList.find(i => i.id === val)
-      } else {
+      } else if(this.type === 'radiology') {
         this.organization = this.radiologyList.find(i => i.id === val)
+      } else if(this.type === 'doctor') {
+        this.organization = this.doctorList.find(i => i.id === val)
       }
     },
     msg(val) {

@@ -88,7 +88,7 @@
                           تاریخ ویزیت:
                     </span>
                     <span>{{
-                        moment.from(this.item.start_at, "en", "YYYY/MM/DD HH:mm:ss").utc(true).format("YYYY/MM/DD HH:mm") | toPersianDate('dddd - DD MMMM')
+                        moment.from(appointment.start_at, "en", "YYYY/MM/DD HH:mm:ss").utc(true).format("YYYY/MM/DD HH:mm") | toPersianDate('dddd - DD MMMM')
                       }}</span>
                   </div>
                   <div class="phone-box second" v-if="!isDoctor">
@@ -103,7 +103,7 @@
                     </span>
                     <span>
                       {{
-                        moment.from(this.item.start_at, "en", "YYYY/MM/DDTHH:mm:ssZ").format("HH:mm") | persianDigit
+                        moment.from(appointment.start_at, "en", "YYYY/MM/DDTHH:mm:ssZ").format("HH:mm") | persianDigit
                       }}</span>
                   </div>
                   <div class="phone-box second">
@@ -135,7 +135,7 @@
                         }"
                     >{{ statuses[appointment.status - 1].title }}</span>
                   </div>
-                  <div class="phone-box second d-flex flex-row align-center" style="width: 100%" v-if="admissioned">
+                  <div class="phone-box second d-flex flex-row align-center" style="width: 100%" v-if="admissioned && !isReDoctor">
                     <span class="small" style="width: 50px">
                           کد اپ:
                     </span>
@@ -246,7 +246,7 @@
               </v-row>
               <v-divider
                 class="my-5"
-                v-if="appointment.prescription"
+                v-if="appointment.prescription && !isReDoctor"
               />
               <v-row
                 v-if="!isReDoctor"
@@ -330,16 +330,38 @@
                     @setPhotographyCases="setPhotographyCases"
                     @setRadiologyCases="setRadiologyCases"
                     @setDoctorImages="setDoctorImages"
+                    @setDoctorImagesCases="setDoctorImagesCases"
                   />
                 </v-col>
               </v-row>
             </div>
             <v-divider
+              v-if="!isReDoctor"
               class="my-5"
             />
             <v-row
-              v-if="isDoctor && resulted"
+              v-if="isDoctor && !isReDoctor && resulted"
             >
+              <v-col
+                cols="12"
+                v-if="appointment.d_desc"
+              >
+                <div class="detail-box">
+                  <div class="phone-box">
+                    <span class="small">
+                      توضیحات متخصص:
+                    </span>
+                  </div>
+                </div>
+              </v-col>
+              <v-col
+                cols="12"
+                v-if="appointment.d_desc"
+              >
+                <div class="detail-box text-right">
+                  <p>{{ appointment.d_desc }}</p>
+                </div>
+              </v-col>
               <v-col
                 cols="12"
                 sm="4"
@@ -357,24 +379,24 @@
                 cols="12"
               >
                 <v-row>
-                  <v-col
-                    cols="12"
-                    sm="4"
-                    md="3"
-                    v-for="(r,n) in results"
-                    :key="n"
+                  <Fancybox
+                    :options="options"
                   >
-                    <img @click="openShowResult(r)" class="result-img" :src="r" alt=""/>
-                  </v-col>
-                  <v-col
-                    cols="12"
-                    sm="4"
-                    md="3"
-                    v-for="(r,n) in newFiles"
-                    :key="n + 1000"
-                  >
-                    <img @click="openShowResult(r)" class="result-img" :src="r" alt=""/>
-                  </v-col>
+                    <a
+                      v-for="(i,n) in allResults"
+                      :key="n"
+                      data-fancybox="gallery"
+                      :href="i"
+                      class="fancybox-item"
+                      :data-fancybox-index="n"
+                    >
+                      <img
+                        class="prescription-image"
+                        :src="i"
+                        alt=""
+                        width="100" height="75" />
+                    </a>
+                  </Fancybox>
                 </v-row>
               </v-col>
             </v-row>
@@ -413,24 +435,127 @@
                 cols="12"
               >
                 <v-row>
-                  <v-col
-                    cols="12"
-                    sm="4"
-                    md="3"
-                    v-for="(r,n) in results"
-                    :key="n"
+                  <Fancybox
+                    :options="options"
                   >
-                    <img @click="openShowResult(r)" class="result-img" :src="r" alt=""/>
-                  </v-col>
-                  <v-col
-                    cols="12"
-                    sm="4"
-                    md="3"
-                    v-for="(r,n) in newFiles"
-                    :key="n + 1000"
+                    <a
+                      v-for="(i,n) in allResults"
+                      :key="n"
+                      data-fancybox="gallery"
+                      :href="i"
+                      class="fancybox-item"
+                      :data-fancybox-index="n"
+                    >
+                      <img
+                        class="prescription-image"
+                        :src="i"
+                        alt=""
+                        width="200" height="150" />
+                    </a>
+                  </Fancybox>
+                </v-row>
+              </v-col>
+            </v-row>
+            <v-row
+              v-if="isReDoctor"
+            >
+              <v-col
+                cols="12"
+                sm="4"
+                md="2"
+              >
+                <div class="detail-box">
+                  <div class="phone-box">
+                    <span class="small">
+                      تصاویر ارجاع شده:
+                    </span>
+                  </div>
+                </div>
+              </v-col>
+              <v-col
+                cols="12"
+              >
+                <v-row>
+                  <Fancybox
+                    :options="options"
                   >
-                    <img @click="openShowResult(r)" class="result-img" :src="r" alt=""/>
-                  </v-col>
+                    <a
+                      v-for="(i,n) in listReferedResults"
+                      :key="n"
+                      data-fancybox="gallery"
+                      :href="i"
+                      class="fancybox-item"
+                      :data-fancybox-index="n"
+                    >
+                      <img
+                        class="prescription-image"
+                        :src="i"
+                        alt=""
+                        width="200" height="150" />
+                    </a>
+                  </Fancybox>
+                </v-row>
+              </v-col>
+            </v-row>
+            <v-row
+              v-if="isReDoctor && admissioned"
+            >
+              <v-col
+                cols="12"
+                sm="4"
+                md="2"
+              >
+                <div class="detail-box">
+                  <div class="phone-box">
+                    <span class="small">
+                      ارسال نتایج:
+                    </span>
+                  </div>
+                </div>
+              </v-col>
+              <v-col
+                cols="12"
+                v-if="!waiting"
+              >
+                <button
+                  @click="openAddResultModal"
+                  class="add-doc-button">
+                  <v-icon right color="#ffffff">
+                    mdi-plus
+                  </v-icon>
+                  افزودن تصویر
+                </button>
+                <button
+                  @click="openAddDescModal"
+                  class="add-doc-button">
+                  <v-icon right color="#ffffff">
+                    mdi-plus
+                  </v-icon>
+                  افزودن توضیحات
+                </button>
+              </v-col>
+              <v-col
+                cols="12"
+              >
+                <v-row>
+                  <Fancybox
+                    :options="options"
+                  >
+                    <a
+                      v-for="(i,n) in allReferedResults"
+                      :key="n"
+                      data-fancybox="gallery"
+                      :href="i"
+                      class="fancybox-item"
+                      :data-fancybox-index="n"
+                    >
+                      <img
+                        class="prescription-image"
+                        :src="i"
+                        alt=""
+                        width="200" height="150" />
+                    </a>
+                  </Fancybox>
                 </v-row>
               </v-col>
             </v-row>
@@ -462,6 +587,7 @@
                 <button
                   class="remove-button"
                   @click="showRemoveAppointment"
+                  v-if="!isReDoctor"
                 >
                   حذف
                 </button>
@@ -517,8 +643,8 @@
                       v-bind="attrs"
                       v-on="on"
                     >
-                      <div class="action-bar-content">
-                        <div class="text-box">
+                      <span class="action-bar-content">
+                        <span class="text-box">
                           <span
                             v-if="resulted"
                           >
@@ -534,21 +660,22 @@
                           >
                             {{ statuses[appointment.status - 1].title  }}
                           </span>
-                        </div>
-                        <div class="icon-box">
+                        </span>
+                        <span class="icon-box">
                           <v-icon color="white">mdi-chevron-down</v-icon>
-                        </div>
-                      </div>
+                        </span>
+                      </span>
                     </button>
                   </template>
                   <button
                     class="action-bar-button"
                     @click="doAction('accept')"
+                    v-if="!isReDoctor || !appointment.d_admission_at"
                   >
                     پذیرش
                   </button>
                   <button
-                    v-if="appointment.status == 2"
+                    v-if="appointment.status == 2 && !isReDoctor"
                     class="action-bar-button"
                     @click="doAction('update')"
                   >
@@ -557,24 +684,36 @@
                   <button
                     class="action-bar-button"
                     @click="doAction('cancel')"
-                    v-if="!this.isReDoctor"
+                    v-if="!isReDoctor"
                   >
                     کنسل
                   </button>
                   <button
                     class="action-bar-button"
                     @click="doAction('waiting')"
-                    v-if="!this.isReDoctor"
+                    v-if="!isReDoctor"
                   >
                     در انتظار
                   </button>
                   <button
                     class="action-bar-button"
                     @click="doAction('reserve')"
-                    v-if="!this.isReDoctor"
+                    v-if="!isReDoctor"
                   >
                     رزرو
                   </button>
+                  <v-col
+                    cols="12"
+                    sm="3"
+                    v-if="isReDoctor && admissioned"
+                  >
+                    <button
+                      class="send-button form-button"
+                      @click="doAction('result')"
+                    >
+                      ارسال نتایج
+                    </button>
+                  </v-col>
 <!--                  <button-->
 <!--                    class="action-bar-button"-->
 <!--                    @click="doAction('update')"-->
@@ -834,6 +973,74 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-dialog
+      v-model="showAddDescModal"
+      persistent
+      max-width="1056px"
+    >
+      <v-card
+        class="create-update-modal"
+      >
+        <v-card-title
+          class="create-update-modal-title-box"
+        >
+          <div class="create-update-modal-title">
+            <button
+              @click="closeAddDescModal"
+              class="create-update-modal-close"
+            >
+              <v-icon>mdi-close</v-icon>
+            </button>
+            <span>توضیحات</span>
+          </div>
+          <v-spacer/>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row
+            >
+              <div class="create-update-model-input-box">
+                <custom-text-area-input
+                  v-model="appointment.d_desc"
+                  label="توضیحات"
+                  :rows="6"
+                />
+              </div>
+            </v-row>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-container>
+            <v-row>
+              <v-col
+                cols="12"
+                sm="3"
+                md="3"
+              >
+                <button
+                  class="second-button"
+                  @click="closeAddDescModal"
+                >
+                  بستن
+                </button>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="3"
+                md="3"
+              >
+                <button
+                  class="main-button"
+                  @click="saveDesc"
+                >
+                  ارسال
+                </button>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <input
       type="file"
       ref="image"
@@ -915,6 +1122,17 @@ export default {
   },
   data() {
     return {
+      options: {
+        showClass:"f-scaleIn",
+        hideClass: "f-scaleOut",
+        animated: true,
+        thumbs: {
+          autoStart : true,
+          type: "classic",
+          axis: 'y',
+          parentEl: '.fancybox__container',
+        },
+      },
       moment: moment,
       loaded: false,
       showUpdateModal: false,
@@ -926,6 +1144,7 @@ export default {
       file: null,
       showDeleteApp: false,
       showFile: false,
+      showAddDescModal: false,
       statuses: [
         {
           id: 1,
@@ -961,6 +1180,7 @@ export default {
       appointment: {
         start_at: this.$moment().format("YYYY/MM/DD HH:mm:ss"),
         tel: '',
+        d_desc: '',
         cardno: '',
         income: 0,
         user_id: null,
@@ -1118,12 +1338,13 @@ export default {
       ],
     }
   },
-  mounted() {
-    if (this.item && this.resulted) {
-      this.getResults()
-    }
-  },
   methods: {
+    getReferedResults() {
+      console.log('refered')
+      this.$store.dispatch('appointments/getAppointmentReferedResults', {
+        id: this.item.id,
+      })
+    },
     getResults() {
       this.$store.dispatch('appointments/getAppointmentResults', {
         id: this.item.id,
@@ -1154,77 +1375,95 @@ export default {
       this.resetForm();
     },
     done() {
-      this.$emit('done')
+      this.resetForm();
       setTimeout(() => {
-        this.resetForm();
+        this.$emit('done')
       }, 100)
     },
     resetForm() {
       if (!this.item) return
       this.newFiles = []
-      this.setAppointment()
-      this.getResults()
-      this.loaded = true
+      this.getAppointment()
+        .then(res => {
+          const app = res.data.data;
+          this.setAppointment(app)
+          this.getResults()
+          if(this.isReDoctor) {
+            this.getReferedResults()
+          }
+        })
+        .catch(err => {
+          this.closeForm()
+        })
+        .finally(() => {
+          this.loaded = true
+        })
     },
-    setAppointment() {
-      if (!this.item) {
+    getAppointment() {
+      return this.$store.dispatch('appointments/getAppointment', this.item.id)
+    },
+    setAppointment(item) {
+      if (!item) {
         return
       }
       // let date = moment.from(this.item.start_at, "en", "YYYY/MM/DDTHH:mm:ssZ").utc(true).format("YYYY/MM/DD HH:mm:ss")
       // date = moment.from(date, 'fa', 'YYYY/MM/DD HH:mm:ss').locale('en').format("YYYY/MM/DD HH:mm:ss")
-      let date = this.item.start_at
+      let date = item.start_at
       this.appointment = {
-        case_type: this.item.case_type ? this.item.case_type : '',
-        code: this.item.code ? this.item.code : '',
-        appcode: this.item.appcode ? this.item.appcode : '',
-        created_at: this.item.created_at ? this.item.created_at : '',
-        end_at: this.item.end_at ? this.item.end_at : '',
-        future_prescription: this.item.future_prescription ? this.item.future_prescription : '',
-        id: this.item.id,
-        income: this.item.income,
-        info: this.item.info ? this.item.info : '',
-        is_vip: this.item.is_vip,
-        l_admission_at: this.item.l_admission_at ? this.item.l_admission_at : '',
-        l_imgs: this.item.l_imgs,
-        l_result_at: this.item.l_result_at ? this.item.l_result_at : '',
-        l_rnd_img: this.item.l_rnd_img,
-        laboratory: this.item.laboratory,
-        laboratory_cases: this.item.laboratory_cases ? this.item.laboratory_cases : '',
-        laboratory_id: this.item.laboratory_id,
-        laboratory_msg: this.item.laboratory_msg ? this.item.laboratory_msg : '',
-        organization: this.item.organization,
-        organization_id: this.item.organization_id,
-        p_admission_at: this.item.p_admission_at ? this.item.p_admission_at : '',
-        p_imgs: this.item.p_imgs,
-        p_result_at: this.item.p_result_at ? this.item.p_result_at : '',
-        p_rnd_img: this.item.p_rnd_img,
-        photography: this.item.photography,
-        photography_cases: this.item.photography_cases ? this.item.photography_cases : '',
-        photography_id: this.item.photography_id,
-        photography_msg: this.item.photography_msg ? this.item.photography_msg : '',
-        prescription: this.item.prescription ? this.item.prescription : '',
-        r_admission_at: this.item.r_admission_at ? this.item.r_admission_at : '',
-        r_imgs: this.item.r_imgs,
-        r_result_at: this.item.r_result_at ? this.item.r_result_at : '',
-        r_rnd_img: this.item.r_rnd_img,
-        radiology: this.item.radiology,
-        radiology_cases: this.item.radiology_cases ? this.item.radiology_cases : '',
-        radiology_id: this.item.radiology_id,
-        doctor: this.item.doctor,
-        doctor_id: this.item.doctor_id,
-        doctor_images: this.item.doctor_images ? this.item.doctor_images : [],
-        radiology_msg: this.item.radiology_msg,
-        staff: this.item.staff,
-        staff_id: this.item.staff_id,
+        case_type: item.case_type ? item.case_type : '',
+        code: item.code ? item.code : '',
+        appcode: item.appcode ? item.appcode : '',
+        created_at: item.created_at ? item.created_at : '',
+        end_at: item.end_at ? item.end_at : '',
+        future_prescription: item.future_prescription ? item.future_prescription : '',
+        id: item.id,
+        income: item.income,
+        info: item.info ? item.info : '',
+        is_vip: item.is_vip ? item.is_vip : false,
+        d_admission_at: item.d_admission_at ? item.d_admission_at : '',
+        d_result_at: item.d_result_at ? item.d_result_at : '',
+        l_admission_at: item.l_admission_at ? item.l_admission_at : '',
+        l_imgs: item.l_imgs ? item.l_imgs : '',
+        l_result_at: item.l_result_at ? item.l_result_at : '',
+        l_rnd_img: item.l_rnd_img ? item.l_rnd_img : '',
+        laboratory: item.laboratory,
+        laboratory_cases: item.laboratory_cases ? item.laboratory_cases : '',
+        laboratory_id: item.laboratory_id,
+        laboratory_msg: item.laboratory_msg ? item.laboratory_msg : '',
+        organization: item.organization,
+        organization_id: item.organization_id,
+        p_admission_at: item.p_admission_at ? item.p_admission_at : '',
+        p_imgs: item.p_imgs ? item.p_imgs : '',
+        p_result_at: item.p_result_at ? item.p_result_at : '',
+        p_rnd_img: item.p_rnd_img ? item.p_rnd_img : '',
+        photography: item.photography,
+        photography_cases: item.photography_cases ? item.photography_cases : '',
+        photography_id: item.photography_id,
+        photography_msg: item.photography_msg ? item.photography_msg : '',
+        prescription: item.prescription ? item.prescription : '',
+        r_admission_at: item.r_admission_at ? item.r_admission_at : '',
+        r_imgs: item.r_imgs ? item.r_imgs : '',
+        r_result_at: item.r_result_at ? item.r_result_at : '',
+        r_rnd_img: item.r_rnd_img ? item.r_rnd_img : '',
+        radiology: item.radiology,
+        radiology_cases: item.radiology_cases ? item.radiology_cases : '',
+        radiology_id: item.radiology_id,
+        doctor: item.doctor,
+        doctor_id: item.doctor_id,
+        doctor_images: item.doctor_images ? item.doctor_images : [],
+        radiology_msg: item.radiology_msg,
+        staff: item.staff ?? null,
+        staff_id: item.staff_id ?? null,
         start_at: date,
-        status: this.item.status,
-        subject: this.item.subject,
-        updated_at: this.item.updated_at,
-        user: this.item.user,
-        user_id: this.item.user_id,
-        vip_introducer: this.item.vip_introducer,
-        waiting: this.item.waiting,
-        last_prescription: this.item.last_prescription ? this.item.last_prescription : '',
+        status: item.status,
+        subject: item.subject ?? '',
+        updated_at: item.updated_at ?? '',
+        user: item.user,
+        user_id: item.user_id,
+        vip_introducer: item.vip_introducer ?? '',
+        waiting: item.waiting,
+        last_prescription: item.last_prescription ? item.last_prescription : '',
+        d_desc: item.d_desc ? item.d_desc : '',
       }
       this.getAppointmentPrescription()
     },
@@ -1299,7 +1538,7 @@ export default {
       const data = {
         ...this.appointment,
         results: this.newFiles,
-        start_at: this.item.start_at
+        start_at: this.item.start_at,
       }
       delete data.staff
       delete data.organization
@@ -1316,6 +1555,34 @@ export default {
         .finally(() => {
           this.done()
           this.loading()
+        })
+    },
+    saveDesc() {
+      if (!this.appointment.user_id) {
+        this.loading()
+        return
+      }
+      const data = {
+        ...this.appointment,
+        results: this.newFiles,
+        start_at: this.item.start_at,
+      }
+      delete data.staff
+      delete data.organization
+      delete data.user
+      delete data.radiology
+      delete data.photography
+      this.$store.dispatch('appointments/sendDescAppointment', data)
+        .then(() => {
+          this.$toast.success('با موفقیت انجام شد');
+        })
+        .catch(err => {
+          this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
+        })
+        .finally(() => {
+          this.done()
+          this.loading()
+          this.closeAddDescModal()
         })
     },
     sendResult() {
@@ -1362,8 +1629,6 @@ export default {
       delete data.user
       delete data.radiology
       delete data.photography
-      console.log(this.appointment.id)
-      console.log(data.id)
       this.$store.dispatch('appointments/acceptAppointment', data)
         .then(() => {
           this.$toast.success('با موفقیت انجام شد');
@@ -1457,6 +1722,13 @@ export default {
       this.$refs.image.value = null
       this.$refs.image.click()
     },
+    openAddDescModal() {
+      this.showAddDescModal = true
+    },
+    closeAddDescModal() {
+      this.appointment.d_desc = this.item.d_desc
+      this.showAddDescModal = false
+    },
     openDoctorPrescriptionModal(type) {
       switch (type) {
         case 'prescription':
@@ -1525,6 +1797,9 @@ export default {
       this.appointment.radiology_cases = cases.join(',')
     },
     setDoctorImages(images) {
+      this.appointment.doctor_images = images
+    },
+    setDoctorImagesCases(images) {
       this.appointment.doctor_images = images
     },
     openEditModal() {
@@ -1683,10 +1958,33 @@ export default {
       return false;
     },
     waiting() {
-      return this.appointment.waiting || (this.isReDoctor && (this.appointment.d_admission_at == "" || this.appointment.d_admission_at == null))
+      if (!this.isDoctor) {
+        const profession_id = this.loginUser.organization.profession_id;
+        if (profession_id == 1) {
+          return !this.appointment.p_admission_at
+        } else if (profession_id == 2) {
+          return !this.appointment.l_admission_at
+        } else if (profession_id == 3) {
+          return !this.appointment.r_admission_at
+        }
+        return false
+      }
+      if (this.isReDoctor) {
+        return !this.appointment.d_admission_at
+      }
+      return this.appointment.waiting
     },
     isReDoctor() {
       return this.loginUser.organization.id == this.appointment.doctor_id
+    },
+    allResults() {
+      return this.results.concat(this.newFiles)
+    },
+    allReferedResults() {
+      return this.results.concat(this.newFiles)
+    },
+    listReferedResults() {
+      return this.$store.getters['appointments/getReferedResults']
     }
   },
   watch: {

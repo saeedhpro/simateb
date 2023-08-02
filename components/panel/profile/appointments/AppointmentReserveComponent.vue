@@ -124,9 +124,11 @@
                 sm="8"
                 md="8"
               >
-                <div class="create-update-model-input-box">
+                <div
+                  v-if="form.case_type"
+                  class="create-update-model-input-box">
                   <label>نزدیگ ترین زمان ممکن</label>
-                  <v-radio-group v-model="form.start_at">
+                  <v-radio-group v-model="form.start_at" v-if="startAtList.length > 0">
                     <v-radio
                       v-for="(s, n) in startAtList"
                       :key="n"
@@ -134,6 +136,7 @@
                       :value="s.start_at"
                     ></v-radio>
                   </v-radio-group>
+                  <p v-else>امکان رزرو وقت برای این دکتر وجود ندارد</p>
                 </div>
               </v-col>
             </v-row>
@@ -218,12 +221,7 @@ export default{
         birth_date: '',
         start_at: '',
       },
-      startAtList: [
-        {
-          start_at: '1402/12/05 12:00:00',
-          label: 'پنج شنبه ۰۵/۱۲/۱۴۰۲ - ساعت ۱۲'
-        }
-      ],
+      startAtList: [],
       organizations: [],
       case_types: [],
       errors: {
@@ -242,6 +240,7 @@ export default{
     closeForm() {
       this.$emit('close')
       this.resetErrors()
+      this.resetForm()
     },
     resetErrors() {
       this.errors = {
@@ -265,7 +264,18 @@ export default{
       this.resetErrors()
     },
     save() {
-      this.closeForm()
+      const data = {
+        ...this.form,
+        organization_id: this.form.organization_id.id,
+        case_type: this.form.case_type.name
+      }
+      this.$store.dispatch('appointments/reserveAppointmentForDoctor', data)
+        .then(res => {
+          this.closeForm()
+        })
+        .catch(err => {
+          console.log(err, "err")
+        })
     },
     getOrganizations() {
       this.$axios.get('/organizations/type')
@@ -280,6 +290,13 @@ export default{
           this.case_types = res.data.data
         })
     },
+    getWindows(caseType) {
+      const id = this.form.organization_id ? this.form.organization_id.id : 0
+      this.$axios.get(`/organizations/${id}/windows?origin=own&case=${caseType.name}`)
+        .then(res => {
+          this.startAtList = res.data
+        })
+    },
   },
   computed: {
     show() {
@@ -291,7 +308,20 @@ export default{
   },
   watch: {
     'form.organization_id'(val) {
-      this.getCaseTypes(val)
+      this.form.case_type = ''
+      this.form.start_at = ''
+      if (val) {
+        this.getCaseTypes(val)
+      } else {
+        this.case_types = []
+      }
+    },
+    'form.case_type'(val) {
+      if (val) {
+        this.getWindows(val)
+      } else {
+        this.startAtList = []
+      }
     }
   }
 }

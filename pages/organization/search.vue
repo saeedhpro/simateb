@@ -557,6 +557,7 @@ export default {
       this.showFilterModal = false
       const data = {
         ...this.search,
+        q: this.$enDigit(this.search.q)
       }
       // if (!filtered) {
       //   delete data.start
@@ -716,6 +717,9 @@ export default {
       return false;
     },
     waiting(appointment) {
+      if (this.isReDoctor(appointment) && (appointment.d_admission_at == "" || appointment.d_admission_at == null)) {
+        return true
+      }
       return appointment.waiting
     },
     getErjaClass(appointment, type) {

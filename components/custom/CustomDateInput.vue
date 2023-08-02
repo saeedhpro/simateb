@@ -3,204 +3,199 @@
     <label v-if="label">{{ label }}</label>
     <div class="custom-date-input-box">
       <div class="date-input-box">
-        <input v-model="dateFormatted" @input="onDateChange" maxlength="16" type="text" pattern="YYYY/MM/DD HH:mm" placeholder="1374/11/23 11:00"/>
+        <input v-model="dateFormatted" @input="onDateChange" maxlength="16" type="text" pattern="YYYY/MM/DD HH:mm" :placeholder="placeholder"/>
         <img @click="openCalendar" alt="" src="/images/form/datepicker.svg">
       </div>
     </div>
     <div class="appointment-form-component">
       <v-dialog
-      transition="dialog-bottom-transition"
-      width="auto"
-      v-model="open"
-      min-width="300px"
-      max-width="450px"
-    >
-      <template v-slot:default="{ isActive }">
-        <v-card
-          class="create-update-modal paziresh-form"
-        >
-          <v-card-title
-            v-if="showDateBox"
-            class="create-update-modal-title-box"
+        transition="dialog-bottom-transition"
+        width="auto"
+        v-model="open"
+        min-width="300px"
+        max-width="450px"
+      >
+        <template v-slot:default="{ isActive }">
+          <v-card
+            class="create-update-modal paziresh-form"
+            min-width="300px"
           >
-            <div class="create-update-modal-title">
-              <v-btn
-                dense
-                icon
-                @click="prevYear"
-              >
-                <v-icon size="medium">mdi-arrow-right</v-icon>
-              </v-btn>
-              <span class="selected-year" @click="toggleYearBox">{{ jYear | persianDigit }}</span>
-              <v-btn
-                dense
-                icon
-                @click="nextYear"
-              >
-                <v-icon size="medium">mdi-arrow-left</v-icon>
-              </v-btn>
-            </div>
-          </v-card-title>
-          <v-card-text v-if="showYearBox">
-            <div v-if="showDateBox" class="custom-date-picker-days-list">
-              <div
-                v-for="(l, n) in listedYears"
-                :key="n"
-                class="custom-date-picker-days"
-              >
-                <div
-                  v-for="(y, n) in l"
-                  :key="n"
-                  class="custom-date-picker-day"
-                  :class="{'selected': y == jYear}"
-                  @click="selectYear(y)"
+            <v-card-title
+              v-if="showDateBox"
+              class="create-update-modal-title-box"
+            >
+              <div class="create-update-modal-title">
+                <v-btn
+                  dense
+                  icon
+                  @click="prevYear"
                 >
-                  {{ y }}
+                  <v-icon size="medium">mdi-arrow-right</v-icon>
+                </v-btn>
+                <span class="selected-year" @click="toggleYearBox">{{ jYear | persianDigit }}</span>
+                <v-btn
+                  dense
+                  icon
+                  @click="nextYear"
+                >
+                  <v-icon size="medium">mdi-arrow-left</v-icon>
+                </v-btn>
+              </div>
+            </v-card-title>
+            <v-card-text v-if="showYearBox">
+              <div v-if="showDateBox" class="custom-date-picker-days-list">
+                <div
+                  v-for="(l, n) in listedYears"
+                  :key="n"
+                  class="custom-date-picker-days"
+                >
+                  <div
+                    v-for="(y, n) in l"
+                    :key="n"
+                    class="custom-date-picker-day"
+                    :class="{'selected': y == jYear}"
+                    @click="selectYear(y)"
+                  >
+                    {{ y }}
+                  </div>
                 </div>
               </div>
-            </div>
-          </v-card-text>
-          <v-card-text
-            v-else
-          >
-            <div v-if="showDateBox"  class="custom-date-picker-content-header d-flex flex-row align-center justify-space-between">
-              <v-btn
-                dense
-                icon
-                @click="prevMonth"
-                class="custom-date-picker-content-arrow"
-              >
-                <v-icon size="medium">mdi-arrow-right</v-icon>
-              </v-btn>
-              <span class="custom-date-picker-content-title" v-if="faDate">
-                <span>{{ faDate | toPersianDate('MMMM') }} {{jYear}}</span>
-              </span>
-              <v-btn
-                dense
-                icon
-                @click="nextMonth"
-              >
-                <v-icon size="medium">mdi-arrow-left</v-icon>
-              </v-btn>
-            </div>
-            <v-divider v-if="showDateBox" />
-            <div v-if="showDateBox" class="custom-date-picker-days-list">
-              <div
-                v-for="(l, n) in 1"
-                :key="n"
-                class="custom-date-picker-days"
-              >
-                <div
-                  v-for="(d, n) in jSmallDayNames"
-                  :key="n"
-                  class="custom-date-picker-day"
+            </v-card-text>
+            <v-card-text
+              v-else
+            >
+              <div v-if="showDateBox"  class="custom-date-picker-content-header d-flex flex-row align-center justify-space-between">
+                <v-btn
+                  dense
+                  icon
+                  @click="prevMonth"
+                  class="custom-date-picker-content-arrow"
                 >
-                  {{ d }}
+                  <v-icon size="medium">mdi-arrow-right</v-icon>
+                </v-btn>
+                <span class="custom-date-picker-content-title" v-if="faDate">
+                  <span>{{ faDate | toPersianDate('MMMM') }} {{jYear}}</span>
+                </span>
+                <v-btn
+                  dense
+                  icon
+                  @click="nextMonth"
+                >
+                  <v-icon size="medium">mdi-arrow-left</v-icon>
+                </v-btn>
+              </div>
+              <v-divider v-if="showDateBox" />
+              <div v-if="showDateBox" class="custom-date-picker-days-list">
+                <div
+                  v-for="(l, n) in 1"
+                  :key="n"
+                  class="custom-date-picker-days"
+                >
+                  <div
+                    v-for="(d, n) in jSmallDayNames"
+                    :key="n"
+                    class="custom-date-picker-day"
+                  >
+                    {{ d }}
+                  </div>
                 </div>
               </div>
-            </div>
-            <div v-if="showDateBox" class="custom-date-picker-days-list">
-              <div
-                v-for="(l, n) in monthDays"
-                :key="n"
-                class="custom-date-picker-days"
-              >
+              <div v-if="showDateBox" class="custom-date-picker-days-list">
                 <div
-                  v-for="(d, n) in l"
+                  v-for="(l, n) in monthDays"
                   :key="n"
-                  class="custom-date-picker-day"
-                  :class="{
-                    'selected': isSelected(d),
-                    'disabled': dayIsDisabled(d),
-                    'today': isToday(d),
-                    'is-friday': isFriday(d),
-                    'none': d == '',
-                  }"
-                  @click="selectDay(d)"
+                  class="custom-date-picker-days"
                 >
-                  {{ d }}
+                  <div
+                    v-for="(d, n) in l"
+                    :key="n"
+                    class="custom-date-picker-day"
+                    :class="{
+                      'selected': isSelected(d),
+                      'disabled': dayIsDisabled(d),
+                      'today': isToday(d),
+                      'is-friday': isFriday(d),
+                      'none': d == '',
+                    }"
+                    @click="selectDay(d)"
+                  >
+                    {{ d }}
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <v-divider class="mt-4" v-if="showDateBox && showTimeBox" />
-            <div class="custom-time-input" v-if="showTimeBox">
-              <div class="time-box">
-                <v-btn
-                  small
-                  icon
-                  @click="upHour"
-                >
-                  <v-icon size="medium">mdi-arrow-up</v-icon>
-                </v-btn>
-                <input @input="onHourChange" class="time-input" v-model.number="hour" pattern="[0-9][0-9]">
-                <v-btn
-                  small
-                  icon
-                  @click="downHour"
-                >
-                  <v-icon size="medium">mdi-arrow-down</v-icon>
-                </v-btn>
+              <v-divider class="mt-4" v-if="showDateBox && showTimeBox" />
+              <div class="custom-time-input" v-if="showTimeBox">
+                <div class="time-box">
+                  <v-btn
+                    small
+                    icon
+                    @click="upHour"
+                  >
+                    <v-icon size="medium">mdi-arrow-up</v-icon>
+                  </v-btn>
+                  <input @input="onHourChange" class="time-input" v-model.number="hour" pattern="[0-9][0-9]">
+                  <v-btn
+                    small
+                    icon
+                    @click="downHour"
+                  >
+                    <v-icon size="medium">mdi-arrow-down</v-icon>
+                  </v-btn>
+                </div>
+                <div class="time-box">
+                  <v-btn
+                    small
+                    icon
+                    @click="upMinute"
+                  >
+                    <v-icon size="medium">mdi-arrow-up</v-icon>
+                  </v-btn>
+                  <input @input="onMinuteChange" class="time-input" v-model.number="minute" pattern="[0-9][0-9]">
+                  <v-btn
+                    small
+                    icon
+                    @click="downMinute"
+                  >
+                    <v-icon size="medium">mdi-arrow-down</v-icon>
+                  </v-btn>
+                </div>
               </div>
-              <div class="time-box">
-                <v-btn
-                  small
-                  icon
-                  @click="upMinute"
+            </v-card-text>
+            <v-card-actions class="justify-end">
+              <v-row>
+                <v-col
+                  cols="12"
+                  md="4"
                 >
-                  <v-icon size="medium">mdi-arrow-up</v-icon>
-                </v-btn>
-                <input @input="onMinuteChange" class="time-input" v-model.number="minute" pattern="[0-9][0-9]">
-                <v-btn
-                  small
-                  icon
-                  @click="downMinute"
+                  <button
+                    class="second-button"
+                    @click="closeCalendar"
+                  >
+                    بستن
+                  </button>
+                </v-col>
+                <v-col
+                  cols="12"
+                  md="4"
                 >
-                  <v-icon size="medium">mdi-arrow-down</v-icon>
-                </v-btn>
-              </div>
-            </div>
-          </v-card-text>
-          <v-card-actions class="justify-end">
-            <v-row>
-              <v-col
-                cols="12"
-                md="4"
-              >
-                <button
-                  class="second-button"
-                  @click="closeCalendar"
+                </v-col>
+                <v-col
+                  cols="12"
+                  md="4"
                 >
-                  بستن
-                </button>
-              </v-col>
-              <v-col
-                cols="12"
-                md="4"
-              >
-<!--                <button-->
-<!--                  class="second-button"-->
-<!--                  @click="selectToday"-->
-<!--                >-->
-<!--                  اکنون-->
-<!--                </button>-->
-              </v-col>
-              <v-col
-                cols="12"
-                md="4"
-              >
-                <button
-                  class="main-button"
-                  @click="acceptChosenDate"
-                >
-                  تایید
-                </button>
-              </v-col>
-            </v-row>
-          </v-card-actions>
-        </v-card>
-      </template>
-    </v-dialog>
+                  <button
+                    class="main-button"
+                    @click="acceptChosenDate"
+                  >
+                    تایید
+                  </button>
+                </v-col>
+              </v-row>
+            </v-card-actions>
+          </v-card>
+        </template>
+      </v-dialog>
     </div>
   </div>
 </template>
@@ -295,9 +290,13 @@ export default {
       this.showYearBox = false
     },
     setInitDateValue() {
-      if (this.initialValue && this.isValidDate(this.initialValue)) {
-        this.date = this.initialValue
-        this.selectedDay = this.$moment(this.initialValue).format(this.getEnFormat)
+      let date = this.initialValue
+      if (this.type == 'time') {
+        date = `${this.$moment().format("YYYY/MM/DD")} ${date}`
+      }
+      if (date && this.isValidDate(date)) {
+        this.date = date
+        this.selectedDay = this.$moment(date).format(this.getEnFormat)
         const format = this.getFormat
         this.dateFormatted = this.$moment(this.date).format(format)
       } else {
@@ -330,8 +329,9 @@ export default {
       this.open = false
     },
     acceptChosenDate() {
-      const day = moment.from(this.$moment().format("YYYY/MM/DD HH:mm:ss"), "en", "YYYY/MM/DD HH:mm:ss").add(1, "jDay").utc().format("jDD")
-      this.selectDay(day)
+      // const day = moment.from(this.$moment().format("YYYY/MM/DD HH:mm:ss"), "en", "YYYY/MM/DD HH:mm:ss").add(1, "jDay").utc().format("jDD")
+      // this.selectDay(day)
+      this.selectDay(this.selectedDay, true)
     },
     nextMonth() {
       this.date = moment(`${this.jYear}/${this.jMonth}/${this.jDay} ${this.hour}:${this.minute}:00`, "jYYYY/jMM/jDD HH:mm:ss").add(1, "jMonth").locale("en").format("YYYY/MM/DD HH:mm:ss")
@@ -375,18 +375,30 @@ export default {
       }
       return false
     },
-    selectDay(day) {
+    selectDay(day, accepted = false) {
       if (!day || this.disabled) return
       if (!this.dayIsDisabled(day)) {
         const dStr = this.$moment(this.date).format('jYYYY/jMM')
-        this.selectedDay = moment(`${dStr}/${day} ${this.hour}:${this.minute}:00`, "jYYYY/jMM/jDD HH:mm:ss").locale("en").format("YYYY/MM/DD HH:mm:ss")
         let selectedDay = ''
         if (this.type === 'datetime') {
           this.dateFormatted = `${dStr}/${day} ${this.hour}:${this.minute}`
           selectedDay = moment(`${dStr}/${day} ${this.hour}:${this.minute}`, this.getFormat).locale("en").format(this.getEnFormat)
+          this.selectedDay = moment(`${dStr}/${day} ${this.hour}:${this.minute}:00`, "jYYYY/jMM/jDD HH:mm:ss").locale("en").format("YYYY/MM/DD HH:mm:ss")
         } else if (this.type === 'date') {
-          this.dateFormatted = `${dStr}/${day}`
-          selectedDay = moment(`${dStr}/${day}`, this.getFormat).locale("en").format(this.getEnFormat)
+          if (accepted) {
+            const jDay = this.$moment(this.date).format('jDD')
+            this.dateFormatted = `${dStr}/${jDay}`
+            selectedDay = moment(`${dStr}/${jDay}`, this.getFormat).locale("en").format(this.getEnFormat)
+            this.selectedDay = moment(`${dStr}/${jDay} ${this.hour}:${this.minute}:00`, "jYYYY/jMM/jDD HH:mm:ss").locale("en").format("YYYY/MM/DD HH:mm:ss")
+          } else {
+            this.dateFormatted = `${dStr}/${day}`
+            selectedDay = moment(`${dStr}/${day}`, this.getFormat).locale("en").format(this.getEnFormat)
+            this.selectedDay = moment(`${dStr}/${day} ${this.hour}:${this.minute}:00`, "jYYYY/jMM/jDD HH:mm:ss").locale("en").format("YYYY/MM/DD HH:mm:ss")
+          }
+        } else if (this.type === 'time') {
+          this.dateFormatted = `${this.hour}:${this.minute}`
+          selectedDay = moment(`${this.dateFormatted}`, this.getFormat).locale("en").format(this.getEnFormat)
+          this.selectedDay = moment(`${this.$moment().format('YYYY/MM/DD')} ${this.hour}:${this.minute}:00`, "jYYYY/jMM/jDD HH:mm:ss").locale("en").format("YYYY/MM/DD HH:mm:ss")
         }
         this.closeCalendar()
         this.$emit('select', selectedDay)
@@ -541,10 +553,10 @@ export default {
       }
     },
     showDateBox() {
-      return this.type === 'datetime'
+      return this.type === 'datetime' || this.type == 'date'
     },
     showTimeBox() {
-      return this.showDateBox || this.type === 'time'
+      return this.type === 'datetime' || this.type === 'time'
     },
     getFormat() {
       if (this.type === 'datetime') {
@@ -581,6 +593,15 @@ export default {
         }
       }
       return list
+    },
+    placeholder() {
+      if (this.type == 'datetime') {
+        return '1374/11/23 11:00'
+      } else if (this.type == 'date') {
+        return '1374/11/23'
+      } else if (this.type == 'time') {
+        return '11:00'
+      }
     }
   },
   watch: {
