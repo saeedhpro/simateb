@@ -247,7 +247,7 @@
                         <table-appointment-none-v2
                           v-else
                           :data-label="list[j][i]"
-                          :class="{'is-today': isToday(j + 1), 'data': i}"
+                          :class="{'is-today': isToday(j + 1), 'data': i, 'show-hour': showHour}"
                           :is-friday="isFriday(j + 1)"
                           :start-at="list[j][i] ? list[j][i].start_at_time_fa : getTime(i)"
                           :show-hour="showHour"
@@ -412,10 +412,6 @@ export default {
         {
           id: 1,
           label: 'روزهای تعطیل'
-        },
-        {
-          id: 2,
-          label: 'برنامه نوبت دهی vip'
         },
         {
           id: 3,
@@ -653,7 +649,7 @@ export default {
           break;
         case 3:
           this.$router.push({
-            path: '/cases'
+            path: '/cases/surgeries'
           })
           break;
         case 4:

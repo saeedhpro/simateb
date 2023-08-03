@@ -322,6 +322,7 @@ export default {
         is_limited: caseType.is_limited,
         limitation: caseType.limitation,
         organization_id: caseType.organization_id,
+        type: caseType.type,
       }
       this.toggleCreateModal()
     },

@@ -31,6 +31,7 @@
                   :key="index"
                   link
                   @click="goToPage(item.link)"
+                  v-if="canShow(item)"
                 >
                   <v-list-item-title>{{ item.title }}</v-list-item-title>
                 </v-list-item>
@@ -63,6 +64,12 @@
             <nuxt-link to="/messages">
               <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><defs><style>.a,.b,.c{fill:#f1f2f5;}.a{opacity:0.16;}.b{opacity:0.4;}</style></defs><g transform="translate(-709 -20)"><circle class="a" cx="24" cy="24" r="24" transform="translate(709 20)"/><g transform="translate(719 32.45)"><path class="b" d="M272.8,130.761v8.361a2.772,2.772,0,0,1-2.8,2.761h-1.4v2.373a.426.426,0,0,1-.678.344l-3.62-2.718-5.541.079a2.772,2.772,0,0,1-2.761-2.8v-1.4h4.2a4.208,4.208,0,0,0,4.2-4.2V128H270A2.8,2.8,0,0,1,272.8,130.761Z" transform="translate(-244.8 -122.4)"/><path class="c" d="M15.4,0H2.8A2.8,2.8,0,0,0,0,2.761V11.2A2.807,2.807,0,0,0,2.8,14H4.2v2.373a.426.426,0,0,0,.678.345L8.5,14,15.4,14a2.8,2.8,0,0,0,2.8-2.8V2.761A2.8,2.8,0,0,0,15.4,0Z"/></g></g></svg>
               <span class="title">پیامرسان</span>
+            </nuxt-link>
+            <nuxt-link
+              v-if="!isDoctor"
+              to="/images">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><defs><style>.a,.b,.c{fill:#f1f2f5;}.a{opacity:0.16;}.b{opacity:0.4;}</style></defs><g transform="translate(-709 -20)"><circle class="a" cx="24" cy="24" r="24" transform="translate(709 20)"/><g transform="translate(719 32.45)"><path class="b" d="M272.8,130.761v8.361a2.772,2.772,0,0,1-2.8,2.761h-1.4v2.373a.426.426,0,0,1-.678.344l-3.62-2.718-5.541.079a2.772,2.772,0,0,1-2.761-2.8v-1.4h4.2a4.208,4.208,0,0,0,4.2-4.2V128H270A2.8,2.8,0,0,1,272.8,130.761Z" transform="translate(-244.8 -122.4)"/><path class="c" d="M15.4,0H2.8A2.8,2.8,0,0,0,0,2.761V11.2A2.807,2.807,0,0,0,2.8,14H4.2v2.373a.426.426,0,0,0,.678.345L8.5,14,15.4,14a2.8,2.8,0,0,0,2.8-2.8V2.761A2.8,2.8,0,0,0,15.4,0Z"/></g></g></svg>
+              <span class="title">ارسال تصاویر</span>
             </nuxt-link>
           </div>
           <div class="organization-box">
@@ -125,6 +132,9 @@ export default {
     async exit() {
       await this.$store.dispatch('login/exit')
       await this.$router.push('/')
+    },
+    canShow(item) {
+      return !item.isAdmin || this.isAdmin
     }
   },
   computed: {
@@ -133,6 +143,9 @@ export default {
     },
     isAdmin() {
       return this.loginUser.user_group_id === 2
+    },
+    isDoctor() {
+      return this.loginUser.organization_id != 1 && this.loginUser.organization_id != 2 && this.loginUser.organization_id != 3
     }
   }
 }
