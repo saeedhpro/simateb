@@ -728,17 +728,18 @@
             <v-row
               v-else
             >
-<!--              <v-col-->
-<!--                cols="12"-->
-<!--                sm="3"-->
-<!--              >-->
-<!--                <button-->
-<!--                  class="canceled-button form-button"-->
-<!--                  @click="doAction('canceled')"-->
-<!--                >-->
-<!--                  لغو پذیرش-->
-<!--                </button>-->
-<!--              </v-col>-->
+              <v-col
+                cols="12"
+                sm="3"
+                v-if="!resulted"
+              >
+                <button
+                  class="canceled-button form-button"
+                  @click="doAction('canceled')"
+                >
+                  لغو پذیرش
+                </button>
+              </v-col>
               <v-spacer/>
               <v-col
                 cols="12"
