@@ -131,7 +131,9 @@
       <v-col
         cols="12"
       >
-        <div class="description-box">
+        <div class="description-box"
+          v-if="isDoctor"
+        >
           <div class="action-box">
             <v-menu
               close-on-content-click
@@ -302,6 +304,10 @@ export default {
     }
   },
   computed: {
+    isDoctor() {
+      if (!this.loginUser) return false;
+      return this.loginUser.organization.is_doctor;
+    },
     canDelete() {
       if (this.user.id === this.loginUser.id) {
         return false

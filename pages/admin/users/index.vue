@@ -138,7 +138,7 @@
                   </tr>
                 </template>
                 <template v-slot:notfound>
-                  <div v-if="users.total_rows === 0">اطلاعاتی یافت نشد</div>
+                  <div v-if="users.meta.total === 0">اطلاعاتی یافت نشد</div>
                 </template>
               </data-table-component>
             </v-col>

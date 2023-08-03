@@ -61,7 +61,7 @@
                         <span>{{ appointment.user ? `${appointment.user.tel}` : '-' | persianDigit }}</span>
                       </div>
                       <div class="phone-box second"
-                        v-if="!isReDoctor"
+                        v-if="isDoctor && !isReDoctor"
                       >
                         <span class="small">شماره پرونده: </span>
                         <span class="file-id">{{
@@ -106,12 +106,14 @@
                         moment.from(appointment.start_at, "en", "YYYY/MM/DDTHH:mm:ssZ").format("HH:mm") | persianDigit
                       }}</span>
                   </div>
-                  <div class="phone-box second">
+                  <div
+                    v-if="isDoctor && !isReDoctor"
+                    class="phone-box second">
                     <span class="small">
                           علت مراجعه:
                     </span>
                     <span class="file-id">{{
-                        appointment.case_type ? appointment.case_type : '-' | persianDigit
+                        appointment.case_type ? appointment.case_type : '-'
                       }}</span>
                   </div>
                   <div class="phone-box second">
@@ -450,7 +452,7 @@
                         class="prescription-image"
                         :src="i"
                         alt=""
-                        width="200" height="150" />
+                        width="100" height="75" />
                     </a>
                   </Fancybox>
                 </v-row>
@@ -491,7 +493,7 @@
                         class="prescription-image"
                         :src="i"
                         alt=""
-                        width="200" height="150" />
+                        width="100" height="75" />
                     </a>
                   </Fancybox>
                 </v-row>
@@ -553,7 +555,7 @@
                         class="prescription-image"
                         :src="i"
                         alt=""
-                        width="200" height="150" />
+                        width="100" height="75" />
                     </a>
                   </Fancybox>
                 </v-row>
@@ -726,17 +728,17 @@
             <v-row
               v-else
             >
-              <v-col
-                cols="12"
-                sm="3"
-              >
-                <button
-                  class="canceled-button form-button"
-                  @click="doAction('canceled')"
-                >
-                  لغو پذیرش
-                </button>
-              </v-col>
+<!--              <v-col-->
+<!--                cols="12"-->
+<!--                sm="3"-->
+<!--              >-->
+<!--                <button-->
+<!--                  class="canceled-button form-button"-->
+<!--                  @click="doAction('canceled')"-->
+<!--                >-->
+<!--                  لغو پذیرش-->
+<!--                </button>-->
+<!--              </v-col>-->
               <v-spacer/>
               <v-col
                 cols="12"

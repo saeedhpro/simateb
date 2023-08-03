@@ -30,7 +30,6 @@
 
           <v-divider inset/>
           <div class="page-actions-secondary"
-               @click="togglePazireshModal"
           >
             <span class="title-main">
               {{ today | toPersianDate('dddd DD MMMM') }}
@@ -78,7 +77,7 @@
             >
               <div class="page-main-actions-left">
                 <div class="result-count">
-                  <span>{{ appointments.total_rows ? appointments.total_rows : 0  }}</span>
+                  <span>{{ appointments.meta.total ? appointments.meta.total : 0  }}</span>
                   نتیجه
                 </div>
                 <div class="page-search-box">
@@ -245,7 +244,7 @@
               <data-table-component
                 :headers="headers"
                 :page="search.page"
-                :total="appointments.total_rows"
+                :total="appointments.meta.total"
                 @paginate="paginate"
               >
                 <template v-slot:body>
@@ -287,7 +286,7 @@
                   </tr>
                 </template>
                 <template v-slot:notfound>
-                  <div v-if="appointments.total_rows === 0">اطلاعاتی یافت نشد</div>
+                  <div v-if="appointments.meta.total === 0">اطلاعاتی یافت نشد</div>
                 </template>
               </data-table-component>
             </v-col>

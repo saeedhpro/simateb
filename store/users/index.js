@@ -5,6 +5,9 @@ export const state = () => ({
     limit: 10,
     page: 1,
     sort: '',
+    meta: {
+      total: 0,
+    },
     total_rows: 0,
     total_pages: 0
   },
@@ -39,6 +42,9 @@ export const state = () => ({
     limit: 10,
     page: 1,
     sort: '',
+    meta: {
+      total: 0,
+    },
     total_rows: 0,
     total_pages: 0
   },
@@ -47,6 +53,9 @@ export const state = () => ({
     limit: 10,
     page: 1,
     sort: '',
+    meta: {
+      total: 0,
+    },
     total_rows: 0,
     total_pages: 0
   }
