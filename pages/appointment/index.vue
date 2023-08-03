@@ -191,12 +191,14 @@
                             class="header-case-type"
                             v-for="(l,n2) in que.limits"
                             :key="n2"
-                            :class="{'is-zero': getLimit(l, n) == 0}"
                           >
                             <div>
                               {{ l.name  }}
                             </div>
-                            <span>
+                            <span
+                              class="ltr"
+                              :class="{'is-red': getLimit(l, n) < 0, 'is-zero': getLimit(l, n) == 0}"
+                            >
                               {{ getLimit(l, n) }}
                             </span>
                           </div>
@@ -247,7 +249,7 @@
                         <table-appointment-none-v2
                           v-else
                           :data-label="list[j][i]"
-                          :class="{'is-today': isToday(j + 1), 'data': i}"
+                          :class="{'is-today': isToday(j + 1), 'data': i, 'show-hour': showHour}"
                           :is-friday="isFriday(j + 1)"
                           :start-at="list[j][i] ? list[j][i].start_at_time_fa : getTime(i)"
                           :show-hour="showHour"

@@ -2072,19 +2072,6 @@ table {
     justify-content: space-between;
     position: relative;
 
-    &.is-zero {
-      background: #f16161 0 0 no-repeat padding-box;
-      border: 1px solid #f16161;
-      div {
-        color: #fff;
-      }
-      span {
-        color: #fff;
-        background: #f16161 0 0 no-repeat padding-box;
-        border: 1px solid #EBEBEB;
-      }
-    }
-
     div {
       margin-right: 10px;
     }
@@ -2099,6 +2086,16 @@ table {
       border-radius: 4px;
       width: 28px;
       height: 100%;
+
+      &.is-zero {
+        border: 1px solid #f16161;
+      }
+
+      &.is-red {
+        background: #f16161 0 0 no-repeat padding-box;
+        border: 1px solid #f16161;
+        color: #fff;
+      }
     }
   }
 }
@@ -2217,7 +2214,9 @@ table {
   padding: 5px;
   //cursor: pointer;
   min-height: 86px;
-
+  &.show-hour {
+    cursor: pointer !important;
+  }
   &.surgeries {
     background: #EFF7EF 0 0 no-repeat padding-box;
     border: 1px solid #BCE0BC;

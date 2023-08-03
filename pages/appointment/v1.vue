@@ -234,7 +234,7 @@
                         />
                         <table-appointment-none-v2
                           v-else
-                          :class="{'is-today': isToday(j + 1), 'is-friday': isFriday(j + 1)}"
+                          :class="{'is-today': isToday(j + 1), 'is-friday': isFriday(j + 1), 'show-hour': showHour}"
                           :start-at="getTime(i)"
                           :show-hour="showHour"
                           :day="j"
