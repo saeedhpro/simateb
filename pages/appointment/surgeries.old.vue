@@ -252,6 +252,7 @@
       </v-col>
     </v-row>
     <create-appointment-form-component
+      :is-surgery="true"
       v-if="showPazireshModal"
       :open="showPazireshModal"
       :init-time="initTime"
@@ -259,6 +260,7 @@
       @created="createdPazireshModal"
     />
     <appointment-form-component
+      :is-surgery="true"
       :open="showAppointmentModal"
       :item="item"
       @close="closeAppointmentModal"

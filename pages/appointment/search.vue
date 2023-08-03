@@ -295,6 +295,7 @@
       </v-col>
     </v-row>
     <create-appointment-form-component
+      :is-surgery="false"
       :open="showPazireshModal"
       @close="closePazireshModal"
     />

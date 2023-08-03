@@ -1118,6 +1118,11 @@ export default {
       default: false,
       required: true,
     },
+    isSurgery: {
+      type: Boolean,
+      default: false,
+      required: true,
+    },
     item: {
       type: Object,
       default: null
@@ -1474,7 +1479,8 @@ export default {
       this.$store.dispatch('users/getUsers')
     },
     getCaseTypes() {
-      this.$store.dispatch('cases/getCaseTypes', {})
+      const type = this.isSurgery ? 2 : 1
+      this.$store.dispatch('cases/getCaseTypes', {type: type})
     },
     customLabel(item) {
       return item.fname

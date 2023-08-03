@@ -270,10 +270,12 @@
       :init-time="initTime"
       @close="closePazireshModal"
       @created="createdPazireshModal"
+     :is-surgery="true"
     />
     <appointment-form-component
       :open="showAppointmentModal"
       :item="item"
+      :is-surgery="true"
       @close="closeAppointmentModal"
       @remove="getAppointmentList"
       @done="doAppointment"

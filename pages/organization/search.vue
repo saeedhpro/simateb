@@ -418,6 +418,7 @@
     <appointment-form-component-v2
       :open="showPazireshModal"
       :item="item"
+      :is-surgery="false"
       @close="closePazireshModal"
       @done="doneAppointmentModal"
       @remove="getAppointmentList"
