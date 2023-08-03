@@ -421,6 +421,7 @@
       <appointment-form-component-v2
         :open="showAppointmentModal"
         :item="item"
+        :is-surgery="false"
         @close="closeAppointmentModal"
         @done="doneAppointmentModal"
         @remove="paginate"
@@ -464,10 +465,13 @@ import DoctorPazireshHeader from "~/components/panel/orgnization/paziresh/Doctor
 import AdminDeleteUsersComponent from "~/components/admin/global/AdminDeleteUsersComponent";
 import SendSmsComponent from "~/components/global/sms/SendSmsComponent";
 import moment from "jalali-moment"
+import CreateAppointmentFormComponent
+  from "~/components/panel/appointment/AppointmentForm/CreateAppointmentFormComponent.vue";
 
 export default {
   name: "index",
   components: {
+    CreateAppointmentFormComponent,
     SendSmsComponent,
     AdminDeleteUsersComponent,
     DoctorPazireshHeader,
