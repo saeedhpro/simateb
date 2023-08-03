@@ -12,15 +12,24 @@
     <div class="images-box">
       <v-container fluid>
         <v-row>
-          <v-col
-            col="12"
-            sm="4"
-            md="2"
-            v-for="(r, n) in results"
-            :key="n"
+          <Fancybox
+            :options="options"
           >
-            <img @click="showImage(r)" class="result-image" alt="" :src="r">
-          </v-col>
+            <a
+              v-for="(i,n) in results"
+              :key="n"
+              data-fancybox="gallery"
+              :href="i"
+              class="fancybox-item"
+              :data-fancybox-index="n"
+            >
+              <img
+                class="prescription-image"
+                :src="i"
+                alt=""
+                width="100" height="75" />
+            </a>
+          </Fancybox>
         </v-row>
       </v-container>
     </div>
@@ -53,6 +62,17 @@ export default {
       showFile: false,
       file: null,
       results: [],
+      options: {
+        showClass:"f-scaleIn",
+        hideClass: "f-scaleOut",
+        animated: true,
+        thumbs: {
+          autoStart : true,
+          type: "classic",
+          axis: 'y',
+          parentEl: '.fancybox__container',
+        },
+      },
     }
   },
   mounted() {

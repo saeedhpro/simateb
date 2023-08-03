@@ -123,7 +123,7 @@
                           class="prescription-image"
                           :src="i"
                           alt=""
-                        width="200" height="150" />
+                        width="100" height="75" />
                       </a>
                     </Fancybox>
                   </v-col>
@@ -228,7 +228,7 @@
             <div class="slide-show-image">
               <img :src="selectedImages[selectedIndex]" v-hammer:swipe.horizontal="onTouchStart">
             </div>
-          </div>
+          </div><table-appointment-v2
         </div>
       </div>
     </v-dialog>

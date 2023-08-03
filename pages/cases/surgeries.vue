@@ -232,7 +232,7 @@
               <data-table-component
                 :headers="headers"
                 :page="search.page"
-                :total="cases.total_rows"
+                :total="cases.meta.total"
                 @paginate="paginate"
               >
                 <template v-slot:body>
@@ -260,7 +260,7 @@
                   </tr>
                 </template>
                 <template v-slot:notfound>
-                  <div v-if="cases.total_rows === 0">اطلاعاتی یافت نشد</div>
+                  <div v-if="cases.meta.total === 0">اطلاعاتی یافت نشد</div>
                 </template>
               </data-table-component>
             </v-col>

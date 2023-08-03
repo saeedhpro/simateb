@@ -362,7 +362,7 @@
                         class="prescription-image"
                         :src="i"
                         alt=""
-                        width="200" height="150" />
+                        width="100" height="75" />
                     </a>
                   </Fancybox>
 
@@ -436,7 +436,7 @@
                         class="prescription-image"
                         :src="i"
                         alt=""
-                        width="200" height="150" />
+                        width="100" height="75" />
                     </a>
                   </Fancybox>
 

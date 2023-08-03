@@ -133,7 +133,7 @@
                   </tr>
                 </template>
                 <template v-slot:notfound>
-                  <div v-if="messages.total_rows === 0">اطلاعاتی یافت نشد</div>
+                  <div v-if="messages.meta.total === 0">اطلاعاتی یافت نشد</div>
                 </template>
               </data-table-component>
             </v-col>

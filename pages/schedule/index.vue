@@ -83,7 +83,7 @@
               <data-table-component
                 :headers="headers"
                 :page="search.page"
-                :total="schedules.total_rows"
+                :total="schedules.meta.total"
                 @paginate="paginate"
               >
                 <template v-slot:body>
@@ -133,7 +133,7 @@
                   </tr>
                 </template>
                 <template v-slot:notfound>
-                  <div v-if="schedules.total_rows === 0">اطلاعاتی یافت نشد</div>
+                  <div v-if="schedules.meta.total === 0">اطلاعاتی یافت نشد</div>
                 </template>
               </data-table-component>
             </v-col>
