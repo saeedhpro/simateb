@@ -633,7 +633,7 @@ export default {
       this.$store.dispatch('users/getUsers')
     },
     getCaseTypes() {
-      this.$store.dispatch('cases/getCaseTypes', {type: 1})
+      this.$store.dispatch('cases/getCaseTypes', {type: 2})
     },
     doAction() {
       switch (this.action) {
