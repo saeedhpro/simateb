@@ -24,6 +24,12 @@
             <img src="/images/pages/plus.svg" alt="organizations">
             <span class="title-main">افزودن</span>
           </div>
+          <div class="page-actions"
+               @click="openReserveForm"
+          >
+            <img src="/images/pages/new-user.svg" alt="users">
+            <span class="title-main">رزرو برای دکتر دیگر</span>
+          </div>
         </div>
       </v-col>
     </v-row>
@@ -108,9 +114,10 @@
                         }}
                       </span>
                     </td>
-                    <td class="text-center">{{ i.count | persianDigit }}</td>
-                    <td class="text-center">{{ i.site | persianDigit }}</td>
-                    <td class="text-center">{{ i.app | persianDigit }}</td>
+                    <td class="text-center">{{ i.count }}</td>
+                    <td class="text-center">{{ i.site }}</td>
+                    <td class="text-center">{{ i.app }}</td>
+                    <td class="text-center">{{ i.case_type ? i.case_type : '-' }}</td>
                     <td class="text-center flex flex-row justify-space-around align-center">
                       <button @click="editSchedule(i)" class="action-buttons">
                         <v-icon size="16">mdi-pencil-outline</v-icon>
@@ -267,6 +274,24 @@
                 <div class="create-update-model-input-box">
                   <label>ظرفیت App</label>
                   <input type="number" v-model="form.app">
+                </div>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="6"
+                md="6"
+              >
+                <div class="create-update-model-input-box">
+                  <label>خدمت</label>
+                  <v-autocomplete
+                    v-model="form.case_type"
+                    :items="case_types"
+                    outlined
+                    dense
+                    item-text="name"
+                    item-value="id"
+                    label=""
+                  ></v-autocomplete>
                 </div>
               </v-col>
             </v-row>
@@ -482,6 +507,10 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <appointment-reserve-component
+      :open="showReserveForm"
+      @close="closeReserveForm"
+    />
   </v-container>
 </template>
 
@@ -489,12 +518,13 @@
 import DataTableComponent from "~/components/panel/global/DataTableComponent";
 import CustomRadioBox from "~/components/panel/global/CustomInput/CustomRadioBox";
 import moment from "jalali-moment";
+import AppointmentReserveComponent from "~/components/panel/profile/appointments/AppointmentReserveComponent.vue";
 
 export default {
   name: "index",
   layout: "panel",
   middleware: "auth",
-  components: {CustomRadioBox, DataTableComponent},
+  components: {AppointmentReserveComponent, CustomRadioBox, DataTableComponent},
   mounted() {
     const year = parseInt(moment().local().format("jYYYY"))
     const month = parseInt(moment().local().format("jMM"))
@@ -566,6 +596,7 @@ export default {
         count: schedule.count,
         site: schedule.site,
         app: schedule.app,
+        case_type: schedule.case_type,
         organization_id: schedule.organization_id,
       }
       this.toggleCreateModal()
@@ -601,6 +632,7 @@ export default {
         count: parseInt(this.form.count),
         site: parseInt(this.form.site),
         app: parseInt(this.form.app),
+        case_type: this.form.case_type,
         organization_id: this.form.organization_id ? parseInt(this.form.organization_id) : parseInt(this.loginUser.organization_id),
       })
         .then(() => {
@@ -666,6 +698,12 @@ export default {
         .finally(() => {
           this.showCasesModal = false
         })
+    },
+    openReserveForm() {
+      this.showReserveForm = true
+    },
+    closeReserveForm() {
+      this.showReserveForm = false
     }
   },
   data() {
@@ -674,6 +712,7 @@ export default {
       showCreateModal: false,
       showCasesModal: false,
       showRemoveItemModal: false,
+      showReserveForm: false,
       create: false,
       editCT: false,
       editCTI: 0,
@@ -686,6 +725,7 @@ export default {
         'ظرفیت Doctor',
         'ظرفیت Site',
         'ظرفیت App',
+        'خدمت',
         'عملیات',
       ],
       search: {
@@ -701,6 +741,7 @@ export default {
         count: 0,
         site: 0,
         app: 0,
+        case_type: '',
         organization_id: null,
       },
       lastDay: 0,

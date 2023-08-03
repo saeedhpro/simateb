@@ -1668,7 +1668,14 @@ table {
   align-items: flex-start;
   justify-content: flex-start;
   width: 100%;
-
+  .v-input--selection-controls {
+    margin-top: 0 !important;
+  }
+  .v-radio {
+    .v-label {
+      top: 5px !important;
+    }
+  }
   &.has-error {
     textarea, input, .multiselect__tags {
       outline: none !important;

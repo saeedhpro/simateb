@@ -53,7 +53,7 @@
                 :items="doctorItems"
                 @selected="itemSelected"
                 @setMsg="setMsg"
-                @setPhotographyCases="setPhotographyCases"
+                @setDoctorImagesCases="setDoctorImagesCases"
               />
             </v-col>
           </v-row>
@@ -106,6 +106,9 @@ export default {
     },
     setPhotographyCases(cases) {
       this.$emit('setPhotographyCases', cases)
+    },
+    setDoctorImagesCases(cases) {
+      this.$emit('setDoctorImagesCases', cases)
     },
     setRadiologyCases(cases) {
       this.$emit('setRadiologyCases', cases)

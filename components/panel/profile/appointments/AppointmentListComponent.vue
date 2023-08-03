@@ -51,7 +51,7 @@
 
 <script>
 import AppointmentItemComponent from "~/components/panel/profile/appointments/AppointmentItemComponent";
-import AppointmentFormComponent from "~/components/panel/appointment/AppointmentForm/AppointmentFormComponent";
+import AppointmentFormComponent from "~/components/panel/appointment/AppointmentForm/AppointmentFormComponentV2";
 
 export default {
   name: "AppointmentListComponent",

@@ -304,6 +304,29 @@
                         </span>
                       </v-tooltip>
                     </td>
+                    <td>
+                      <v-tooltip
+                        v-if="i.doctor"
+                        bottom
+                      >
+                        <template v-slot:activator="{ on, attrs }">
+                          <div
+                            v-bind="attrs"
+                            v-on="on"
+                            :class="getErjaClass(i)"
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="14.286" viewBox="0 0 20 14.286">
+                              <path class="a"
+                                    d="M52,97.429a1.423,1.423,0,0,1-.419,1.01L40.153,109.867a1.428,1.428,0,0,1-2.02,0l-5.714-5.714a1.428,1.428,0,1,1,2.02-2.02l4.7,4.706,10.42-10.42A1.427,1.427,0,0,1,52,97.429Z"
+                                    transform="translate(-32 -96)"/>
+                            </svg>
+                          </div>
+                        </template>
+                        <span>
+                            {{ getErjaType(i) }}
+                          </span>
+                      </v-tooltip>
+                    </td>
                     <td class="text-center">
                       <span
                         @click="openAppointmentModal(i)"
@@ -395,7 +418,7 @@
           </v-row>
         </v-card>
       </v-col>
-      <appointment-form-component
+      <appointment-form-component-v2
         :open="showAppointmentModal"
         :item="item"
         @close="closeAppointmentModal"
@@ -435,7 +458,7 @@
 </template>
 <script>
 import PazireshLinkBox from "~/components/panel/orgnization/paziresh/PazireshLinkBox";
-import AppointmentFormComponent from "~/components/panel/appointment/AppointmentForm/AppointmentFormComponent";
+import AppointmentFormComponentV2 from "~/components/panel/appointment/AppointmentForm/AppointmentFormComponentV2";
 import DataTableComponent from "~/components/panel/global/DataTableComponent";
 import DoctorPazireshHeader from "~/components/panel/orgnization/paziresh/DoctorPazireshHeader";
 import AdminDeleteUsersComponent from "~/components/admin/global/AdminDeleteUsersComponent";
@@ -449,7 +472,7 @@ export default {
     AdminDeleteUsersComponent,
     DoctorPazireshHeader,
     DataTableComponent,
-    AppointmentFormComponent,
+    AppointmentFormComponentV2,
     PazireshLinkBox
   },
   layout: 'panel',
@@ -500,6 +523,7 @@ export default {
         'ساعت',
         'ارجاع به رادیولوژی',
         'ارجاع به فتوگرافی',
+        'ارجاع به متخصص',
         'وضعیت',
       ],
       headers: [
@@ -658,7 +682,18 @@ export default {
     openAppointmentModalItem(item, type) {
       if (this.resulted(item, type)) {
         this.results = []
-        const t = type == 1 ? 'photography' : 'radiology'
+        let t = 'doctor'
+        switch (type) {
+          case 1:
+            t = 'photography'
+            break
+          case 2:
+            t = 'laboratory'
+            break
+          case 3:
+            t = 'radiology'
+            break
+        }
         this.$store.dispatch('appointments/getAppointmentResults', {
           id: item.id,
           type: t
@@ -729,6 +764,8 @@ export default {
         return appointment.l_admission_at != "" && appointment.l_result_at != "" && appointment.l_admission_at != null && appointment.l_result_at != null
       } else if (type == 3) {
         return appointment.r_admission_at != "" && appointment.r_result_at != "" && appointment.r_admission_at != null && appointment.r_result_at != null
+      } else if(this.isReDoctor(appointment)) {
+        return appointment.d_admission_at != "" && appointment.d_result_at != "" && appointment.d_admission_at != null && appointment.d_result_at != null
       } else {
         return (appointment.p_admission_at != "" && appointment.p_result_at != "" && appointment.p_admission_at != null && appointment.p_result_at != null) ||
           (appointment.l_admission_at != "" && appointment.l_result_at != "" && appointment.l_admission_at != null && appointment.l_result_at) ||
@@ -742,6 +779,8 @@ export default {
         return appointment.l_admission_at != "" && appointment.l_admission_at != null
       } else if (type == 3) {
         return appointment.r_admission_at != "" && appointment.r_admission_at != null
+      } else if (this.isReDoctor(appointment)) {
+        return appointment.d_admission_at != "" && appointment.d_admission_at != null
       }
       return appointment.p_admission_at != "" && appointment.p_admission_at != null ||
         appointment.l_admission_at != "" && appointment.l_admission_at != null ||
@@ -755,6 +794,8 @@ export default {
         return !appointment.l_admission_at
       } else if (profession_id == 3) {
         return !appointment.r_admission_at
+      } else if (this.isReDoctor(appointment)) {
+        return !appointment.d_admission_at
       }
       return appointment.waiting
     },
@@ -786,7 +827,11 @@ export default {
           return '/images/profile/man.svg'
         }
       }
-    }
+    },
+    isReDoctor(appointment) {
+      if (!this.loginUser) return false;
+      return this.loginUser.organization.id == appointment.doctor_id;
+    },
   },
   computed: {
     mini() {

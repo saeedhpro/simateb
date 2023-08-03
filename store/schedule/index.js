@@ -68,7 +68,7 @@ export const actions = {
       })
   },
   updateSchedule(ctx, data) {
-    return this.$axios.put(`/schedules/${data.id}`, data)
+    return this.$axios.put(`/organizations/schedules/${data.id}`, data)
       .then(res => {
         return Promise.resolve(res)
       })

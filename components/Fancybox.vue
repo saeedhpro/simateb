@@ -1,7 +1,7 @@
 <template>
   <div
     ref="container"
-    class="d-flex flex-row"
+    class="d-flex flex-row flex-wrap"
   >
     <slot />
   </div>
