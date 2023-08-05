@@ -29,7 +29,7 @@
               >
                 <template v-slot:body>
                   <tr v-for="(i, n) in onlineUsers" :key="n">
-                    <td class="text-center">{{ n + 1 | persianDigit }}</td>
+                    <td class="text-center">{{ n + 1 }}</td>
                     <td class="text-center">
                       <div class="table-row flex flex-row align-center justify-start">
                         <span><nuxt-link :to="`/admin/profile/${i.id}`">{{
@@ -37,10 +37,10 @@
                           }}</nuxt-link></span>
                       </div>
                     </td>
-                    <td class="text-center">{{ i.tel | persianDigit }}</td>
-                    <td class="text-center">{{ i.user_group ? i.user_group.name : '-' | persianDigit }}</td>
+                    <td class="text-center">{{ i.tel }}</td>
+                    <td class="text-center">{{ i.user_group ? i.user_group.name : '-' }}</td>
                     <td class="text-center">
-                      {{ i.last_login_ago | persianDigit }}
+                      {{ i.last_login_ago }}
                     </td>
                   </tr>
                 </template>
@@ -78,7 +78,7 @@
               >
                 <template v-slot:body>
                   <tr v-for="(i, n) in onlinePatients" :key="n">
-                    <td class="text-center">{{ n + 1 | persianDigit }}</td>
+                    <td class="text-center">{{ n + 1 }}</td>
                     <td class="text-center">
                       <div class="table-row flex flex-row align-center justify-start">
                         <span><nuxt-link :to="`/admin/profile/${i.id}`">{{
@@ -86,10 +86,10 @@
                           }}</nuxt-link></span>
                       </div>
                     </td>
-                    <td class="text-center">{{ i.tel | persianDigit }}</td>
-                    <td class="text-center">{{ i.user_group ? i.user_group.name : '-' | persianDigit }}</td>
+                    <td class="text-center">{{ i.tel }}</td>
+                    <td class="text-center">{{ i.user_group ? i.user_group.name : '-' }}</td>
                     <td class="text-center">
-                      {{ i.last_login_ago | persianDigit }}
+                      {{ i.last_login_ago }}
                     </td>
                   </tr>
                 </template>

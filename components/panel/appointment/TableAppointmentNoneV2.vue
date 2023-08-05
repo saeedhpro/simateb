@@ -1,7 +1,7 @@
 <template>
   <div
     class="table-appointment-none"
-    :class="{'is-friday': isFriday}"
+    :class="{'is-friday': isFriday, 'is-holiday': isHoliday}"
   >
     <div
       class="time"
@@ -31,6 +31,10 @@ export default {
       default: false,
     },
     isFriday: {
+      type: Boolean,
+      default: false,
+    },
+    isHoliday: {
       type: Boolean,
       default: false,
     },

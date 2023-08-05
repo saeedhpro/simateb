@@ -18,7 +18,7 @@
           >
             <template v-slot:body>
               <tr dir="ltr" v-for="(list, n) in wireList" :key="n">
-                <td v-for="(i, m) in list" :key="m" class="text-center cursor-pointer" @click="addToDoctorDo(i.action)">{{ i.title | persianDigit }}</td>
+                <td v-for="(i, m) in list" :key="m" class="text-center cursor-pointer" @click="addToDoctorDo(i.action)">{{ i.title }}</td>
               </tr>
             </template>
           </data-table-component>

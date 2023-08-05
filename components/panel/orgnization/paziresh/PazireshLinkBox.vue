@@ -35,6 +35,7 @@
       :open="showPazireshModal"
       @close="closePazireshModal"
       @created="createdPazireshModal"
+      :is-surgery="false"
     />
   </v-row>
 </template>

@@ -8,9 +8,9 @@
         v-if="forOrganization"
       >
         <div class="img-box">
-          <span class="item-index">{{ index + 1 | persianDigit }}</span>
+          <span class="item-index">{{ index + 1 }}</span>
           <button
-            class="edit-butto;n"
+            class="edit-button"
             @click="openUpdateModal"
           >
             ویرایش
@@ -228,7 +228,7 @@
             <div class="slide-show-image">
               <img :src="selectedImages[selectedIndex]" v-hammer:swipe.horizontal="onTouchStart">
             </div>
-          </div><table-appointment-v2
+          </div>
         </div>
       </div>
     </v-dialog>
@@ -274,13 +274,22 @@ export default {
     photographyId: {
       type: Number,
     },
+    doctorId: {
+      type: Number,
+    },
     pAdmissionAt: {
+      type: String,
+    },
+    dAdmissionAt: {
       type: String,
     },
     lAdmissionAt: {
       type: String,
     },
     pResultAt: {
+      type: String,
+    },
+    dResultAt: {
       type: String,
     },
     lResultAt: {
@@ -378,6 +387,7 @@ export default {
       ],
       radiologyResultList: [],
       photographyResultList: [],
+      doctorResultList: [],
       images: [],
       showSlides: false,
       autoPlaySlide: false,
@@ -409,6 +419,17 @@ export default {
       })
         .then((res) => {
           this.photographyResultList = res.data
+        })
+      .catch(err => {
+        console.log(err, "error")
+      })
+      type = "doctor"
+      this.$store.dispatch('appointments/getAppointmentResults', {
+        id: this.id,
+        type: type
+      })
+        .then((res) => {
+          this.doctorResultList = res.data
         })
       .catch(err => {
         console.log(err, "error")
@@ -487,7 +508,11 @@ export default {
     },
     forOrganization() {
       const orgID = this.loginUser.organization_id
-      return this.loginUser.is_admin || orgID == this.organizationId || orgID == this.radiologyId || orgID == this.photographyId
+      return orgID == this.organizationId
+        // || orgID == this.radiologyId || orgID == this.photographyId
+    },
+    isReDoctor() {
+      return this.loginUser.organization_id == this.doctorId
     },
     resulted() {
       const type = this.loginUser.organization.profession_id;
@@ -497,6 +522,8 @@ export default {
         return this.lAdmissionAt != "" && this.lResultAt != "" && this.lAdmissionAt != null && this.lResultAt != null
       } else if (type == 3) {
         return this.rAdmissionAt != "" && this.rResultAt != "" && this.rAdmissionAt != null && this.rResultAt != null
+      } else if (isReDoctor) {
+        return this.dAdmissionAt != "" && this.dResultAt != "" && this.dAdmissionAt != null && this.dResultAt != null
       } else {
         return (this.pAdmissionAt != "" && this.pResultAt != "" && this.pAdmissionAt != null && this.pResultAt != null) ||
           (this.lAdmissionAt != "" && this.lResultAt != "" && this.lAdmissionAt != null && this.lResultAt) ||
@@ -511,6 +538,8 @@ export default {
         return this.lAdmissionAt != "" && this.lAdmissionAt != null
       } else if (type == 3) {
         return this.rAdmissionAt != "" && this.rAdmissionAt != null
+      } else if (isReDoctor) {
+        return this.dAdmissionAt != "" && this.dAdmissionAt != null
       }
       return this.pAdmissionAt != "" && this.pAdmissionAt != null ||
         this.lAdmissionAt != "" && this.lAdmissionAt != null ||

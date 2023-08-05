@@ -88,7 +88,7 @@
               >
                 <template v-slot:body>
                   <tr v-for="(i, n) in schedules.data" :key="n">
-                    <td class="text-center">{{ (search.page - 1) * 10 + n + 1 | persianDigit }}</td>
+                    <td class="text-center">{{ (search.page - 1) * 10 + n + 1 }}</td>
                     <td class="text-center">
                       <span class="file-id vip">
                         {{

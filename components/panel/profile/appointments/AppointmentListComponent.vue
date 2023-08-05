@@ -20,10 +20,13 @@
         :photography-cases="i.photography_cases"
         :radiology-id="i.radiology_id"
         :photography-id="i.photography_id"
+        :doctor-id="i.doctor_id"
         :p-result-at="i.p_result_at"
         :r-result-at="i.r_result_at"
+        :d-result-at="i.d_result_at"
         :p-admission-at="i.p_admission_at"
         :r-admission-at="i.r_admission_at"
+        :d-admission-at="i.d_admission_at"
         :waiting="i.waiting"
         @updated="onUpdate(i)"
       />

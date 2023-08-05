@@ -72,7 +72,7 @@
               >
                 <template v-slot:body>
                   <tr v-for="(i, n) in organizations.data" :key="n">
-                    <td class="text-center">{{ (search.page - 1) * 10 + n + 1 | persianDigit }}</td>
+                    <td class="text-center">{{ (search.page - 1) * 10 + n + 1 }}</td>
                     <td class="text-center">
                       <div class="table-row flex flex-row align-center justify-start">
                         <input type="checkbox"
@@ -86,11 +86,11 @@
                           }}</nuxt-link></span>
                       </div>
                     </td>
-                    <td class="text-center">{{ i.phone | persianDigit }}</td>
-                    <td class="text-center">{{ i.profession ? i.profession.name : '-' | persianDigit }}</td>
-                    <td class="text-center">{{ `${i.sms_credit} (${i.sms_price})` | persianDigit }}</td>
+                    <td class="text-center">{{ i.phone }}</td>
+                    <td class="text-center">{{ i.profession ? i.profession.name : '-' }}</td>
+                    <td class="text-center">{{ `${i.sms_credit} (${i.sms_price})` }}</td>
                     <td class="text-center">
-                      {{ i.created_at_ago ? i.created_at_ago : '-' | persianDigit }}
+                      {{ i.created_at_ago ? i.created_at_ago : '-' }}
                     </td>
                     <td class="text-center">{{
                         i.staff ? `${i.staff.fname} ${i.staff.lname}` : '-' | persianDigit

@@ -98,7 +98,7 @@
               >
                 <template v-slot:body>
                   <tr v-for="(i, n) in payments.data" :key="n">
-                    <td class="text-center">{{ (page - 1) * 10 + n + 1 | persianDigit }}</td>
+                    <td class="text-center">{{ (page - 1) * 10 + n + 1 }}</td>
                     <td class="text-center">
                       <div class="table-row flex flex-row align-center justify-start">
                         <input type="checkbox"
@@ -125,11 +125,11 @@
                     </td>
                     <td class="text-center">
                       <span class="file-id main">
-                          {{ getPayType(i.paytype) | persianDigit }}
+                          {{ getPayType(i.paytype) }}
                       </span>
                     </td>
                     <td class="text-center">
-                      {{ getPaidFor(i.paid_for) | persianDigit }}
+                      {{ getPaidFor(i.paid_for) }}
                     </td>
                   </tr>
                 </template>

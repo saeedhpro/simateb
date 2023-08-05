@@ -14,7 +14,7 @@
           <v-divider inset/>
           <div class="page-actions-secondary">
             <span class="title-main">اعتبار:</span>
-            <span class="title-second">{{ loginUser.organization.sms_credit | toPersianCurrency('', 1) }}</span>
+            <span class="title-second">{{ loginUser.organization.sms_credit | toPersianCurrency('', 0) }}</span>
             <span class="title-main">تومان</span>
           </div>
         </div>
@@ -112,13 +112,18 @@ export default {
       }
     }
   },
+  mounted() {
+    this.getUser()
+  },
   methods: {
+    getUser() {
+      this.$store.dispatch('getOwn')
+    },
     doPay() {
       const price = parseInt(this.price.toString().replaceAll('ریال', '').trim().replaceAll(',', ''))
       const data = {
         'amount': price / 10,
       }
-      console.log(data)
       this.$axios.post('/payment', data)
         .then(res => {
           console.log(res, "res")

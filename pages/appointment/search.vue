@@ -249,7 +249,7 @@
               >
                 <template v-slot:body>
                   <tr v-for="(i, n) in appointments.data" :key="n">
-                    <td class="text-center">{{ (search.page - 1) * 10 + n + 1 | persianDigit }}</td>
+                    <td class="text-center">{{ (search.page - 1) * 10 + n + 1 }}</td>
                     <td class="text-center">
                       <div class="table-row flex flex-row align-center justify-start">
                         <input type="checkbox"
@@ -268,11 +268,11 @@
                         </span>
                       </div>
                     </td>
-                    <td class="text-center">{{ i.user && i.user.tel ? i.user.tel : '-' | persianDigit }}</td>
-                    <td class="text-center">{{ i.user && i.user.file_id ? i.user.file_id : '-' | persianDigit }}</td>
-                    <td class="text-center">{{ $moment.utc(i.start_at).local().format('jYYYY/jM/jDD') | persianDigit }}</td>
+                    <td class="text-center">{{ i.user && i.user.tel ? i.user.tel : '-' }}</td>
+                    <td class="text-center">{{ i.user && i.user.file_id ? i.user.file_id : '-' }}</td>
+                    <td class="text-center">{{ $moment.utc(i.start_at).local().format('jYYYY/jM/jDD') }}</td>
                     <td class="text-center">
-                      {{ i.start_at_time_fa | persianDigit }}
+                      {{ i.start_at_time_fa }}
                     </td>
                     <td class="text-center">
                       <span

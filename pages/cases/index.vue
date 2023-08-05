@@ -237,14 +237,14 @@
               >
                 <template v-slot:body>
                   <tr v-for="(i, n) in cases.data" :key="n">
-                    <td class="text-center">{{ (search.page - 1) * 10 + n + 1 | persianDigit }}</td>
+                    <td class="text-center">{{ (search.page - 1) * 10 + n + 1 }}</td>
                     <td class="text-center">
                       <span class="file-id">
                         {{ i.name ? i.name : '-'  }}
                       </span>
                     </td>
-                    <td class="text-center">{{ i.duration | persianDigit }}</td>
-                    <td class="text-center">{{ i.is_limited ? i.limitation : '-' | persianDigit }}</td>
+                    <td class="text-center">{{ i.duration }}</td>
+                    <td class="text-center">{{ i.is_limited ? i.limitation : '-' }}</td>
                     <td class="text-center flex flex-row justify-space-around align-center">
                       <button @click="editCase(i)" class="action-buttons">
                         <v-icon size="16">mdi-pencil-outline</v-icon>

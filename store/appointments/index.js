@@ -38,6 +38,9 @@ export const mutations = {
   setResults(state, results) {
     state.results = results
   },
+  removeResult(state, data) {
+    state.results = state.results.filter(i => i != data.image)
+  },
   setReferedResults(state, results) {
     state.referedResults = results
   }
@@ -115,6 +118,9 @@ export const actions = {
       .catch(err => {
         return Promise.reject(err)
       })
+  },
+  removeResult(ctx, data) {
+    ctx.commit('removeResult', data)
   },
   getAppointmentReferedResults(ctx, data) {
     return this.$axios.get(`/appointments/${data.id}/results/refered`)

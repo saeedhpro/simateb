@@ -213,7 +213,7 @@
                       >
                         <div
                           class="header-date"
-                          :class="{'is-today': isToday(i), 'is-friday': isFriday(i)}"
+                          :class="{'is-today': isToday(i), 'is-friday': isFriday(i), 'is-holiday': isHoliday(i)}"
                           @click="openPazireshModal(`${year}/${month}/${i} ${getTime(0)}`)"
                         >
                           {{ getToday(i) }}
@@ -235,6 +235,7 @@
                           v-if="list[j][i] && !list[j][i].is_empty"
                           :class="{'is-today': isToday(j + 1)}"
                           :is-friday="isFriday(j + 1)"
+                          :is-holiday="isHoliday(j + 1)"
                           :case-type="list[j][i].case_type"
                           :user-full-name="list[j][i].user_full_name"
                           :start-at-time-fa="list[j][i].start_at_time_fa"
@@ -247,8 +248,9 @@
                         <table-appointment-none-v2
                           v-else
                           :data-label="list[j][i]"
-                          :class="{'is-today': isToday(j + 1), 'data': i, 'show-hour': showHour}"
+                          :class="{'surgeries' : true, 'is-today': isToday(j + 1), 'data': i, 'show-hour': showHour}"
                           :is-friday="isFriday(j + 1)"
+                          :is-holiday="isHoliday(j + 1)"
                           :start-at="list[j][i] ? list[j][i].start_at_time_fa : getTime(i)"
                           :show-hour="showHour"
                           :index="i"
@@ -684,6 +686,18 @@ export default {
       const d = moment.from(`${this.year}/${this.month}/${day}`, "fa", "jYYYY/jMM/jDD");
       return d.format("dddd") === 'جمعه'
     },
+    isHoliday(day) {
+      let isHoliday = false
+      for (let i = 0; i < this.holidays.length; i++) {
+        const d = moment(`${this.year}/${this.month}/${day}`, "YYYY/MM/DD").format("YYYYMMDD");
+        const hdate = moment.from(this.holidays[i].hdate, "en", "YYYY/MM/DD").format("YYYYMMDD");
+        if (d == hdate) {
+          isHoliday = true
+          break
+        }
+      }
+      return isHoliday
+    },
     getTime(day) {
       const wh = this.que.work_hour
       const start = wh.start
@@ -770,6 +784,9 @@ export default {
     },
     cases() {
       return this.$store.getters['cases/getCaseTypes']
+    },
+    holidays() {
+      return this.$store.getters['holidays/getHolidays']
     },
     workHour() {
       return this.$store.getters['organizations/getOrganizationWorkHour']

@@ -32,7 +32,7 @@
           <v-divider inset/>
           <div class="page-actions-secondary">
             <span class="title-main">اعتبار:</span>
-            <span class="title-second">{{ loginUser.organization.sms_credit | toPersianCurrency('', 1) }}</span>
+            <span class="title-second">{{ loginUser.organization.sms_credit | toPersianCurrency('', 0) }}</span>
             <span class="title-main">تومان</span>
           </div>
           <nuxt-link to="/messages/pay" class="page-actions second-button">
@@ -66,7 +66,7 @@
                   v-model="selectedAll"
                 ></v-checkbox>
                 <div class="selected-count" v-if="selectedMessages.length > 0">
-                  {{ selectedMessages.length | persianDigit }}
+                  {{ selectedMessages.length }}
                 </div>
                 <v-select
                   outlined
@@ -264,7 +264,7 @@
               >
                 <template v-slot:body>
                   <tr v-for="(i, n) in messages.data" :key="n">
-                    <td class="text-center">{{ (search.page - 1) * 10 + n + 1 | persianDigit }}</td>
+                    <td class="text-center">{{ (search.page - 1) * 10 + n + 1 }}</td>
                     <td class="text-center">
                       <div class="table-row flex flex-row align-center justify-start">
                         <input type="checkbox"
@@ -280,14 +280,14 @@
                         </div>
                       </div>
                     </td>
-                    <td class="text-center">{{ i.user ? i.user.tel : '-' | persianDigit }}</td>
-                    <td class="text-center">{{ i.msg ? i.msg : '-' | persianDigit }}</td>
+                    <td class="text-center">{{ i.user ? i.user.tel : '-' }}</td>
+                    <td class="text-center">{{ i.msg ? i.msg : '-' }}</td>
                     <td class="text-center">{{
                         i.staff ? `${i.staff.fname} ${i.staff.lname}` : '-' | persianDigit
                       }}
                     </td>
                     <td class="text-center">
-                      {{ i.created ? i.created_ago : '-' | persianDigit }}
+                      {{ i.created ? i.created_ago : '-' }}
                     </td>
                     <td class="text-center"><span class="message"
                                                   :class="{'message-sent': i.sent, 'message-not-sent': !i.sent}">{{
@@ -371,6 +371,7 @@ export default {
   mounted() {
     this.paginate()
     this.getUsers()
+    this.getUser()
     if (this.loginUser) {
       this.showEtebar = this.loginUser.organization.sms_credit < 1000
     }
@@ -440,6 +441,9 @@ export default {
     },
     getUsers() {
       this.$store.dispatch('users/getUsers')
+    },
+    getUser() {
+      this.$store.dispatch('getOwn')
     },
     itemSelected(e) {
       this.selectedUsers = e
