@@ -291,7 +291,6 @@ export default {
     },
     setInitDateValue() {
       let date = this.initialValue
-      console.log(date, "data")
       if (this.type == 'time') {
         date = `${this.$moment().format("YYYY/MM/DD")} ${date}`
       }

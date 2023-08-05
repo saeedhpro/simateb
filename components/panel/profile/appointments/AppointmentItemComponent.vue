@@ -82,23 +82,23 @@
                 </span>
               </div>
               <div class="prescription-box" v-if="radiologyCases">
-                رادیولوژی:
+                رادیولوژی {{ radiologyName }}:
                 <span
                   v-for="(p, n) in radiologyCasesArray"
                   :key="n"
                   class="prescription radiology"
-                  :class="{'resulted': resulted}"
+                  :class="{'resulted': resulted, 'admissioned': admissioned}"
                 >
                   {{ p  }}
                 </span>
               </div>
               <div class="prescription-box" v-if="photographyCases">
-                فتوگرافی:
+                فتوگرافی {{ photographyName }}:
                 <span
                   v-for="(p, n) in photographyCasesArray"
                   :key="n"
                   class="prescription photography"
-                  :class="{'resulted': resulted}"
+                  :class="{'resulted': resulted, 'admissioned': admissioned}"
                 >
                   {{ p  }}
                 </span>
@@ -273,6 +273,12 @@ export default {
     },
     photographyId: {
       type: Number,
+    },
+    radiology: {
+      type: Object,
+    },
+    photography: {
+      type: Object,
     },
     doctorId: {
       type: Number,
@@ -503,6 +509,12 @@ export default {
     photographyCasesArray() {
       return this.photographyCases && this.photographyCases.length ? this.photographyCases.split(',') : []
     },
+    photographyName() {
+      return this.photography ? this.photography.name : ''
+    },
+    radiologyName() {
+      return this.radiology ? this.radiology.name : ''
+    },
     loginUser() {
       return this.$store.getters['login/getUser']
     },
@@ -522,7 +534,7 @@ export default {
         return this.lAdmissionAt != "" && this.lResultAt != "" && this.lAdmissionAt != null && this.lResultAt != null
       } else if (type == 3) {
         return this.rAdmissionAt != "" && this.rResultAt != "" && this.rAdmissionAt != null && this.rResultAt != null
-      } else if (isReDoctor) {
+      } else if (this.isReDoctor) {
         return this.dAdmissionAt != "" && this.dResultAt != "" && this.dAdmissionAt != null && this.dResultAt != null
       } else {
         return (this.pAdmissionAt != "" && this.pResultAt != "" && this.pAdmissionAt != null && this.pResultAt != null) ||
@@ -538,7 +550,7 @@ export default {
         return this.lAdmissionAt != "" && this.lAdmissionAt != null
       } else if (type == 3) {
         return this.rAdmissionAt != "" && this.rAdmissionAt != null
-      } else if (isReDoctor) {
+      } else if (this.isReDoctor) {
         return this.dAdmissionAt != "" && this.dAdmissionAt != null
       }
       return this.pAdmissionAt != "" && this.pAdmissionAt != null ||

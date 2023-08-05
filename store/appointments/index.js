@@ -126,7 +126,6 @@ export const actions = {
     return this.$axios.get(`/appointments/${data.id}/results/refered`)
       .then(res => {
         const data = res.data;
-        console.log(data, "data")
         ctx.commit('setReferedResults', data)
         return Promise.resolve(res)
       })

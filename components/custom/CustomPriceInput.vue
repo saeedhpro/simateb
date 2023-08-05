@@ -53,7 +53,7 @@ export default {
     },
     fa() {
       if (this.data) {
-        return this.$num2persian(this.data) + ' تومان'
+        return this.data + ' تومان'
       }
       return ''
     }

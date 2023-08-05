@@ -1182,10 +1182,26 @@ table {
           margin-right: 5px;
 
           &.radiology {
-            &.resulted {
+            &.admissioned {
               background: #EBF0FF 0 0 no-repeat padding-box;
               border: 0.5px solid #5063FF;
               color: #5063FF;
+            }
+          }
+
+          &.photography {
+            &.admissioned {
+              background: #EBF0FF 0 0 no-repeat padding-box;
+              border: 0.5px solid #5063FF;
+              color: #5063FF;
+            }
+          }
+
+          &.radiology {
+            &.resulted {
+              background: #EBFFEC 0 0 no-repeat padding-box;
+              border: 0.5px solid #388E3C;
+              color: #388E3C;
             }
           }
 

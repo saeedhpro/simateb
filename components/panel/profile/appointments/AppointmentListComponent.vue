@@ -19,7 +19,9 @@
         :radiology-cases="i.radiology_cases"
         :photography-cases="i.photography_cases"
         :radiology-id="i.radiology_id"
+        :radiology="i.radiology"
         :photography-id="i.photography_id"
+        :photography="i.photography"
         :doctor-id="i.doctor_id"
         :p-result-at="i.p_result_at"
         :r-result-at="i.r_result_at"
@@ -48,6 +50,7 @@
       @close="closeUpdateModal"
       @remove="paginate"
       @done="doneUpdateModal"
+      :is-surgery="false"
     />
   </div>
 </template>
