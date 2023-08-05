@@ -249,14 +249,14 @@
               >
                 <template v-slot:body>
                   <tr v-for="(i, n) in holidays.data" :key="n">
-                    <td class="text-center">{{ (search.page - 1) * 10 + n + 1 | persianDigit }}</td>
+                    <td class="text-center">{{ (search.page - 1) * 10 + n + 1 }}</td>
                     <td class="text-center">
                       <span class="file-id main">
                         {{ i.hdate ? $moment(i.hdate).format("jYYYY/jMM/jDD") : '-'  }}
                       </span>
                     </td>
-                    <td class="text-center">{{ i.title ? i.title : '-' | persianDigit }}</td>
-                    <td class="text-center">{{ i.organization ? i.organization.name : '-' | persianDigit }}</td>
+                    <td class="text-center">{{ i.title ? i.title : '-' }}</td>
+                    <td class="text-center">{{ i.organization ? i.organization.name : '-' }}</td>
                     <td class="text-center flex flex-row justify-space-around align-center">
                       <button v-if="i.organization" @click="editHoliday(i)" class="action-buttons">
                         <v-icon size="16">mdi-pencil-outline</v-icon>

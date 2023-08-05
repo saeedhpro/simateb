@@ -58,7 +58,7 @@
                         </span>
                       </div>
                       <div class="phone-box second">
-                        <span>{{ appointment.user ? `${appointment.user.tel}` : '-' | persianDigit }}</span>
+                        <span>{{ appointment.user ? `${appointment.user.tel}` : '-' }}</span>
                       </div>
                       <div class="phone-box second"
                         v-if="isDoctor && !isReDoctor"
@@ -72,7 +72,7 @@
                            v-if="!isReDoctor"
                       >
                         <span class="small">کد پذیرش: </span>
-                        <span>{{ showCode ? `${appointment.code}` : '-' | persianDigit }}</span>
+                        <span>{{ showCode ? `${appointment.code}` : '-' }}</span>
                       </div>
                     </div>
                   </v-col>
@@ -95,7 +95,7 @@
                     <span class="small">
                           پزشک:
                     </span>
-                    <span>{{ appointment.organization ? appointment.organization.name : '-' | persianDigit }}</span>
+                    <span>{{ appointment.organization ? appointment.organization.name : '-' }}</span>
                   </div>
                   <div class="phone-box second" v-else>
                     <span class="small">
@@ -142,7 +142,7 @@
                           کد اپ:
                     </span>
                     <span v-if="appointment.appcode">
-                      {{ appointment.appcode | persianDigit }}
+                      {{ appointment.appcode }}
                     </span>
                     <div class="d-flex flex-row align-center" style="width: 100%" v-else>
                       <div>غیر فعال</div>
@@ -396,7 +396,8 @@
                         class="prescription-image"
                         :src="i"
                         alt=""
-                        width="100" height="75" />
+                        width="100" height="75"
+                      />
                     </a>
                   </Fancybox>
                 </v-row>
@@ -445,9 +446,10 @@
                       :key="n"
                       data-fancybox="gallery"
                       :href="i"
-                      class="fancybox-item"
+                      class="fancybox-item result-image"
                       :data-fancybox-index="n"
                     >
+                      <v-icon @click.prevent="removeResultImage(i, n)" class="remove-result-image" color="red">mdi-delete</v-icon>
                       <img
                         class="prescription-image"
                         :src="i"
@@ -929,7 +931,7 @@
                 >
                   <template v-slot:body>
                     <tr  v-for="(p,i) in prescriptionList" :key="i">
-                      <td class="text-center">{{ i + 1 | persianDigit }}</td>
+                      <td class="text-center">{{ i + 1 }}</td>
                       <td class="text-center">
                         <span
                           v-for="(p,i) in toList(p.prescription)"
@@ -1338,6 +1340,7 @@ export default {
         },
       ],
       newFiles: [],
+      deletedResults: [],
       prescriptionList: [],
       headers: [
         '',
@@ -1383,9 +1386,9 @@ export default {
       this.resetForm();
     },
     done() {
-      this.resetForm();
+      this.$emit('done')
       setTimeout(() => {
-        this.$emit('done')
+        this.resetForm();
       }, 100)
     },
     resetForm() {
@@ -1595,16 +1598,17 @@ export default {
         })
     },
     sendResult() {
-      if (this.newFiles.length == 0) {
-        return
-      }
+      // if (this.newFiles.length == 0) {
+      //   return
+      // }
       if (!this.appointment.user_id) {
         this.loading()
         return
       }
       const data = {
         id: this.appointment.id,
-        results: this.newFiles
+        results: this.newFiles,
+        deleted_results: this.deletedResults
       }
       this.$store.dispatch('appointments/sendAppointmentResults', data)
         .then(() => {
@@ -1864,6 +1868,19 @@ export default {
     },
     toList(p) {
       return p.length > 0 ? p.split('-') : [];
+    },
+    removeResultImage(image, index) {
+      const first = image.split(':')[0]
+      if (first == 'data') {
+        this.newFiles = this.newFiles.splice(index, 1)
+      } else {
+        this.$store.dispatch('appointments/removeResult', {
+          image: image,
+          index: index
+        })
+        const list = image.split('/');
+        this.deletedResults.push(list[list.length - 1])
+      }
     }
   },
   computed: {

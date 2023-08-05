@@ -32,7 +32,7 @@
                 >
                   <v-icon size="medium">mdi-arrow-right</v-icon>
                 </v-btn>
-                <span class="selected-year" @click="toggleYearBox">{{ jYear | persianDigit }}</span>
+                <span class="selected-year" @click="toggleYearBox">{{ jYear }}</span>
                 <v-btn
                   dense
                   icon
@@ -291,6 +291,7 @@ export default {
     },
     setInitDateValue() {
       let date = this.initialValue
+      console.log(date, "data")
       if (this.type == 'time') {
         date = `${this.$moment().format("YYYY/MM/DD")} ${date}`
       }
@@ -313,11 +314,11 @@ export default {
       }
       const format = this.getFormat
       const enFormat = this.getEnFormat
-      const date =  moment.from(this.dateFormatted, "fa", format).utc().format(enFormat)
+      const date =  moment.from(this.dateFormatted, "fa", format).format(enFormat)
       const isValid = this.isValidDate(date)
       if (isValid) {
         this.date = this.$moment(date)
-        const selectedDay = moment(`${this.dateFormatted}`, format).utc().locale("en").format(enFormat)
+        const selectedDay = moment(`${this.dateFormatted}`, format).locale("en").format(enFormat)
         this.$emit('select', selectedDay)
         this.$emit('input', selectedDay)
       }
@@ -329,9 +330,13 @@ export default {
       this.open = false
     },
     acceptChosenDate() {
-      // const day = moment.from(this.$moment().format("YYYY/MM/DD HH:mm:ss"), "en", "YYYY/MM/DD HH:mm:ss").add(1, "jDay").utc().format("jDD")
-      // this.selectDay(day)
-      this.selectDay(this.selectedDay, true)
+      if (this.selectedDay == '') {
+        const day = moment.from(this.$moment().format("YYYY/MM/DD HH:mm:ss"), "en", "YYYY/MM/DD HH:mm:ss").format("jDD")
+        this.selectDay(day)
+      } else {
+        const day = moment.from(this.selectedDay, "en", "YYYY/MM/DD HH:mm:ss").format("jDD")
+        this.selectDay(day)
+      }
     },
     nextMonth() {
       this.date = moment(`${this.jYear}/${this.jMonth}/${this.jDay} ${this.hour}:${this.minute}:00`, "jYYYY/jMM/jDD HH:mm:ss").add(1, "jMonth").locale("en").format("YYYY/MM/DD HH:mm:ss")

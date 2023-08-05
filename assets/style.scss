@@ -156,6 +156,14 @@ table {
 }
 .fancybox-item {
   margin: 5px;
+  &.result-image {
+    position: relative;
+    .remove-result-image {
+      position: absolute;
+      top: -12px;
+      right: -12px;
+    }
+  }
 }
 .login-box {
   display: flex;
@@ -1040,6 +1048,7 @@ table {
       position: relative;
       height: 100%;
       min-height: 172px;
+      display: flex;
 
       .item-index {
         position: absolute;
@@ -2046,8 +2055,13 @@ table {
     justify-content: center;
     cursor: pointer;
     &.is-today {
-      background: #FAFFFA 0% 0% no-repeat padding-box;
+      background: #FAFFFA 0 0 no-repeat padding-box;
       border: 1px solid #388E3C;
+    }
+    &.is-holiday {
+      background: #F44336 0 0 no-repeat padding-box !important;
+      border: 1px solid #EBEBEB !important;
+      color: #FFFFFF !important;
     }
   }
 }
@@ -2119,6 +2133,11 @@ table {
         &.is-friday {
           background: #FFFAFA 0 0 no-repeat padding-box !important;
           border: 1px solid #F44336 !important;
+        }
+        &.is-holiday {
+          background: #F44336 0 0 no-repeat padding-box !important;
+          border: 1px solid #EBEBEB !important;
+          color: #FFFFFF !important;
         }
       }
     }
@@ -2232,8 +2251,9 @@ table {
   }
 
   &.is-holiday {
-    background: #F44336 0 0 no-repeat padding-box;
-    border: 1px solid #EBEBEB;
+    background: #F44336 0 0 no-repeat padding-box !important;
+    border: 1px solid #EBEBEB !important;
+    color: #FFFFFF !important;
   }
 
   &.is-today {

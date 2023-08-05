@@ -25,13 +25,13 @@
                 >
                   <div class="detail-box">
                     <div class="name-box">
-                      <span>{{ `${organization.name}` | persianDigit }}</span>
+                      <span>{{ `${organization.name}` }}</span>
                     </div>
                     <div class="name-box">
-                      <span>{{ organization.phone | persianDigit }}</span>
+                      <span>{{ organization.phone }}</span>
                     </div>
                     <div class="name-box">
-                      <span>{{ organization.profession.name | persianDigit }}</span>
+                      <span>{{ organization.profession.name }}</span>
                     </div>
                   </div>
                 </v-col>
@@ -44,7 +44,7 @@
               <div class="description-box">
                 <div class="title">توضیحات</div>
                 <div class="description">
-                  {{ organization.info | persianDigit }}
+                  {{ organization.info }}
                 </div>
                 <div class="action-box">
                   <v-spacer />

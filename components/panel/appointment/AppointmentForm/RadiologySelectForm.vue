@@ -209,14 +209,14 @@
                           />
                           <div class="selected-items-box">
                             <div class="selected-items-row top">
-                              <div class="left">{{ selectedLeftTopDents.join(',') | persianDigit }}</div>
+                              <div class="left">{{ selectedLeftTopDents.join(',') }}</div>
                               <v-divider vertical/>
-                              <div class="right">{{ selectedRightTopDents.join(',') | persianDigit }}</div>
+                              <div class="right">{{ selectedRightTopDents.join(',') }}</div>
                             </div>
                             <div class="selected-items-row">
-                              <div class="left">{{ selectedLeftBottomDents.join(',') | persianDigit }}</div>
+                              <div class="left">{{ selectedLeftBottomDents.join(',') }}</div>
                               <v-divider vertical/>
-                              <div class="right">{{ selectedRightBottomDents.join(',') | persianDigit }}</div>
+                              <div class="right">{{ selectedRightBottomDents.join(',') }}</div>
                             </div>
                             <div class="remove-dents" @click="removeDents('Periapical')"><v-icon>mdi-close</v-icon></div>
                           </div>
@@ -396,14 +396,14 @@
                               />
                               <div class="selected-items-box">
                                 <div class="selected-items-row top">
-                                  <div class="left">{{ selectedCBCTLeftTopDents.join(',') | persianDigit }}</div>
+                                  <div class="left">{{ selectedCBCTLeftTopDents.join(',') }}</div>
                                   <v-divider vertical/>
-                                  <div class="right">{{ selectedCBCTRightTopDents.join(',') | persianDigit }}</div>
+                                  <div class="right">{{ selectedCBCTRightTopDents.join(',') }}</div>
                                 </div>
                                 <div class="selected-items-row">
-                                  <div class="left">{{ selectedCBCTLeftBottomDents.join(',') | persianDigit }}</div>
+                                  <div class="left">{{ selectedCBCTLeftBottomDents.join(',') }}</div>
                                   <v-divider vertical/>
-                                  <div class="right">{{ selectedCBCTRightBottomDents.join(',') | persianDigit }}</div>
+                                  <div class="right">{{ selectedCBCTRightBottomDents.join(',') }}</div>
                                 </div>
                                 <div class="remove-dents" @click="removeDents('CBCT')"><v-icon>mdi-close</v-icon></div>
                               </div>

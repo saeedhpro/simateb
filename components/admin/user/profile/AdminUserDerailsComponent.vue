@@ -29,7 +29,7 @@
                       <div class="label-box">نام و نام خانوادگی:</div>
                     </v-col>
                     <v-col cols="6">
-                      <div class="value-box">{{ `${user.full_name}` | persianDigit }}</div>
+                      <div class="value-box">{{ `${user.full_name}` }}</div>
                     </v-col>
                   </v-row>
                   <v-row style="width: 100%" v-if="user.age > 0">
@@ -37,7 +37,7 @@
                       <div class="label-box">سن:</div>
                     </v-col>
                     <v-col cols="6">
-                      <div class="value-box">{{ user.age | persianDigit }} سال</div>
+                      <div class="value-box">{{ user.age }} سال</div>
                     </v-col>
                   </v-row>
                   <v-row style="width: 100%">
@@ -45,7 +45,7 @@
                       <div class="label-box">شماره موبایل:</div>
                     </v-col>
                     <v-col cols="6">
-                      <div class="value-box">{{ user.tel | persianDigit }}</div>
+                      <div class="value-box">{{ user.tel }}</div>
                     </v-col>
                   </v-row>
                   <v-row style="width: 100%">
@@ -53,7 +53,7 @@
                       <div class="label-box">مطب:</div>
                     </v-col>
                     <v-col cols="6">
-                      <div class="value-box">{{ user.organization ? user.organization.name : '-' | persianDigit }}</div>
+                      <div class="value-box">{{ user.organization ? user.organization.name : '-' }}</div>
                     </v-col>
                   </v-row>
                   <v-row style="width: 100%">
@@ -62,7 +62,7 @@
                     </v-col>
                     <v-col cols="6">
                       <div class="value-box file-id-box">
-                        پرونده <span class="file-id">{{ user.file_id ? user.file_id : '-' | persianDigit }}</span>
+                        پرونده <span class="file-id">{{ user.file_id ? user.file_id : '-' }}</span>
                       </div>
                     </v-col>
                   </v-row>
@@ -76,7 +76,7 @@
                       <div class="label-box">کد ملی:</div>
                     </v-col>
                     <v-col cols="6">
-                      <div class="value-box">{{ user.cardno ? user.cardno : '-' | persianDigit }}</div>
+                      <div class="value-box">{{ user.cardno ? user.cardno : '-' }}</div>
                     </v-col>
                   </v-row>
                   <v-row style="width: 100%">
@@ -95,7 +95,7 @@
                       <div class="label-box">استان:</div>
                     </v-col>
                     <v-col cols="6">
-                      <div class="value-box">{{ user.province ? user.province.name : '-' | persianDigit }}</div>
+                      <div class="value-box">{{ user.province ? user.province.name : '-' }}</div>
                     </v-col>
                   </v-row>
                   <v-row style="width: 100%">
@@ -103,7 +103,7 @@
                       <div class="label-box">شهرستان:</div>
                     </v-col>
                     <v-col cols="6">
-                      <div class="value-box">{{ user.county ? user.county.name : '-' | persianDigit }}</div>
+                      <div class="value-box">{{ user.county ? user.county.name : '-' }}</div>
                     </v-col>
                   </v-row>
                   <v-row style="width: 100%">
@@ -111,7 +111,7 @@
                       <div class="label-box">شهر:</div>
                     </v-col>
                     <v-col cols="6">
-                      <div class="value-box">{{ user.city ? user.city.name : '-' | persianDigit }}</div>
+                      <div class="value-box">{{ user.city ? user.city.name : '-' }}</div>
                     </v-col>
                   </v-row>
                   <v-row style="width: 100%">
@@ -119,7 +119,7 @@
                       <div class="label-box">آدرس:</div>
                     </v-col>
                     <v-col cols="6">
-                      <div class="value-box">{{ user.address ? user.address : '-' | persianDigit }}</div>
+                      <div class="value-box">{{ user.address ? user.address : '-' }}</div>
                     </v-col>
                   </v-row>
                 </v-col>

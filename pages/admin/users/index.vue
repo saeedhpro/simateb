@@ -43,7 +43,7 @@
                   v-model="selectedAll"
                 ></v-checkbox>
                 <div class="selected-count" v-if="selectedUsers.length > 0">
-                  {{ selectedUsers.length | persianDigit }}
+                  {{ selectedUsers.length }}
                 </div>
                 <v-select
                   outlined
@@ -104,7 +104,7 @@
               >
                 <template v-slot:body>
                   <tr v-for="(i, n) in users.data" :key="n">
-                    <td class="text-center">{{ (search.page - 1) * 10 + n + 1 | persianDigit }}</td>
+                    <td class="text-center">{{ (search.page - 1) * 10 + n + 1 }}</td>
                     <td class="text-center">
                       <div class="table-row flex flex-row align-center justify-start">
                         <input type="checkbox"
@@ -119,9 +119,9 @@
                           }}</nuxt-link></span>
                       </div>
                     </td>
-                    <td class="text-center">{{ i.tel ? i.tel : '-' | persianDigit }}</td>
-                    <td class="text-center">{{ i.user_group ? i.user_group.name : '-' | persianDigit }}</td>
-                    <td class="text-center">{{ i.age ? i.age : '-' | persianDigit }}</td>
+                    <td class="text-center">{{ i.tel ? i.tel : '-' }}</td>
+                    <td class="text-center">{{ i.user_group ? i.user_group.name : '-' }}</td>
+                    <td class="text-center">{{ i.age ? i.age : '-' }}</td>
                     <td class="text-center" style="color: #000000">
                       <span v-if="i.organization">
                         <nuxt-link :to="`/admin/organizations/${i.organization.id}`">{{
@@ -130,10 +130,10 @@
                       </span>
                       <span v-else>-</span>
                     <td class="text-center">
-                      {{ i.created_at_ago | persianDigit }}
+                      {{ i.created_at_ago }}
                     </td>
                     <td class="text-center">
-                      {{ i.last_login_ago | persianDigit }}
+                      {{ i.last_login_ago }}
                     </td>
                   </tr>
                 </template>

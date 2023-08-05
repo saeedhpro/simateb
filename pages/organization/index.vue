@@ -31,7 +31,7 @@
                   v-model="selectedAll"
                 ></v-checkbox>
                 <div class="selected-count" v-if="selectedItems.length > 0">
-                  {{ selectedItems.length | persianDigit }}
+                  {{ selectedItems.length }}
                 </div>
                 <v-select
                   outlined
@@ -233,7 +233,7 @@
               >
                 <template v-slot:body>
                   <tr v-for="(i, n) in appointments.data" :key="n" :class="{'waiting': waiting(i)}">
-                    <td class="text-center">{{ (search.page - 1) * 10 + n + 1 | persianDigit }}</td>
+                    <td class="text-center">{{ (search.page - 1) * 10 + n + 1 }}</td>
                     <td class="text-center">
                       <div class="table-row flex flex-row align-center justify-start">
                         <img
@@ -245,15 +245,15 @@
                         </span>
                       </div>
                     </td>
-                    <td class="text-center">{{ i.user && i.user.tel ? i.user.tel : '-' | persianDigit }}</td>
+                    <td class="text-center">{{ i.user && i.user.tel ? i.user.tel : '-' }}</td>
                     <td class="text-center">
                       <nuxt-link :to="i.user ? `/profile/${i.user.id}` : '#'" class="file-id cursor-pointer">{{
                           i.user && i.user.file_id ? i.user.file_id : '-' | persianDigit
                         }}</nuxt-link>
                     </td>
-                    <td class="text-center">{{ i.case_type ? i.case_type : '-' | persianDigit }}</td>
+                    <td class="text-center">{{ i.case_type ? i.case_type : '-' }}</td>
                     <td class="text-center">
-                      {{ i.start_at_time_fa | persianDigit }}
+                      {{ i.start_at_time_fa }}
 <!--                      {{ moment.from(i.start_at, "en", "YYYY/MM/DDTHH:mm:ssZ").locale("fa").format("HH:mm")  }}-->
                     </td>
                     <td class="text-center">
@@ -363,7 +363,7 @@
               >
                 <template v-slot:body>
                   <tr v-for="(i, n) in appointments.data" :key="n" :class="{'waiting': waiting(i)}">
-                    <td class="text-center">{{ (search.page - 1) * 10 + n + 1 | persianDigit }}</td>
+                    <td class="text-center">{{ (search.page - 1) * 10 + n + 1 }}</td>
                     <td class="text-center">
                       <div class="table-row flex flex-row align-center justify-start">
                         <input type="checkbox"
@@ -381,13 +381,13 @@
                         </span>
                       </div>
                     </td>
-                    <td class="text-center">{{ i.user && i.user.tel ? i.user.tel : '-' | persianDigit }}</td>
-                    <td class="text-center"><nuxt-link :to="i.user ? `/profile/${i.user.id}` : '#'"  class="file-id">{{ i.code ? i.code : '-' | persianDigit }}</nuxt-link></td>
+                    <td class="text-center">{{ i.user && i.user.tel ? i.user.tel : '-' }}</td>
+                    <td class="text-center"><nuxt-link :to="i.user ? `/profile/${i.user.id}` : '#'"  class="file-id">{{ i.code ? i.code : '-' }}</nuxt-link></td>
                     <td class="text-center">
-                      {{ i.start_at_ago_fa | persianDigit }}
+                      {{ i.start_at_ago_fa }}
                     </td>
-                    <td class="text-center">{{ getCases(i) | persianDigit }}</td>
-                    <td class="text-center">{{ i.organization ? i.organization.name : '-' | persianDigit }}</td>
+                    <td class="text-center">{{ getCases(i) }}</td>
+                    <td class="text-center">{{ i.organization ? i.organization.name : '-' }}</td>
                     <td class="text-center">
                       <span
                         v-if="resulted(i)"
@@ -454,7 +454,7 @@
         :id="`item${n}`"
       >
       </a>
-    </Fancybox><custom-date
+    </Fancybox>
   </v-container>
 </template>
 <script>

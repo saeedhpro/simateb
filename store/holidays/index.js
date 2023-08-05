@@ -42,7 +42,7 @@ export const actions = {
   getHolidays(ctx) {
     return this.$axios.get(`/organizations/holidays`)
       .then(res => {
-        const data = res.data;
+        const data = res.data.data;
         ctx.commit('setHolidays', data)
         return Promise.resolve(res)
       })

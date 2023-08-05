@@ -58,7 +58,7 @@
                         </span>
                       </div>
                       <div class="phone-box second">
-                        <span>{{ appointment.user ? `${appointment.user.tel}` : '-' | persianDigit }}</span>
+                        <span>{{ appointment.user ? `${appointment.user.tel}` : '-' }}</span>
                       </div>
                       <div class="phone-box second">
                         <span class="small">شماره پرونده: </span>
@@ -68,7 +68,7 @@
                       </div>
                       <div class="phone-box second">
                         <span class="small">کد پذیرش: </span>
-                        <span>{{ showCode ? `${appointment.code}` : '-' | persianDigit }}</span>
+                        <span>{{ showCode ? `${appointment.code}` : '-' }}</span>
                       </div>
                     </div>
                   </v-col>
@@ -91,7 +91,7 @@
                     <span class="small">
                           پزشک:
                     </span>
-                    <span>{{ appointment.organization ? appointment.organization.name : '-' | persianDigit }}</span>
+                    <span>{{ appointment.organization ? appointment.organization.name : '-' }}</span>
                   </div>
                   <div class="phone-box second" v-else>
                     <span class="small">
@@ -136,7 +136,7 @@
                           کد اپ:
                     </span>
                     <span v-if="appointment.appcode">
-                      {{ appointment.appcode | persianDigit }}
+                      {{ appointment.appcode }}
                     </span>
                     <div class="d-flex flex-row align-center" style="width: 100%" v-else>
                       <div>غیر فعال</div>
@@ -811,7 +811,7 @@
                 >
                   <template v-slot:body>
                     <tr  v-for="(p,i) in prescriptionList" :key="i">
-                      <td class="text-center">{{ i + 1 | persianDigit }}</td>
+                      <td class="text-center">{{ i + 1 }}</td>
                       <td class="text-center">
                         <span
                           v-for="(p,i) in toList(p.prescription)"
