@@ -374,7 +374,7 @@ export default {
         phone: this.item.phone,
         phone1: this.item.phone1,
         instagram: this.item.instagram,
-        sms_price: this.item.sms_price,
+        sms_price: parseInt(this.item.sms_price),
         sms_credit: this.item.sms_credit,
         case_types: this.item.case_types,
         known_as: this.item.known_as,
