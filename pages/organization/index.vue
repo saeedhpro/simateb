@@ -773,7 +773,8 @@ export default {
       } else {
         return (appointment.p_admission_at != "" && appointment.p_result_at != "" && appointment.p_admission_at != null && appointment.p_result_at != null) ||
           (appointment.l_admission_at != "" && appointment.l_result_at != "" && appointment.l_admission_at != null && appointment.l_result_at) ||
-          (appointment.r_admission_at != "" && appointment.r_result_at != "" && appointment.r_admission_at != null && appointment.r_result_at != null);
+          (appointment.r_admission_at != "" && appointment.r_result_at != "" && appointment.r_admission_at != null && appointment.r_result_at != null) ||
+          (appointment.d_admission_at != "" && appointment.d_result_at != "" && appointment.d_admission_at != null && appointment.d_result_at != null);
       }
     },
     admissioned(appointment, type) {
@@ -788,7 +789,8 @@ export default {
       }
       return appointment.p_admission_at != "" && appointment.p_admission_at != null ||
         appointment.l_admission_at != "" && appointment.l_admission_at != null ||
-        appointment.r_admission_at != "" && appointment.r_admission_at != null;
+        appointment.r_admission_at != "" && appointment.r_admission_at != null ||
+        appointment.d_admission_at != "" && appointment.d_admission_at != null;
     },
     waiting(appointment) {
       const profession_id = this.loginUser.organization.profession_id;

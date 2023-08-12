@@ -706,18 +706,13 @@
                   >
                     رزرو
                   </button>
-                  <v-col
-                    cols="12"
-                    sm="3"
+                  <button
                     v-if="isReDoctor && admissioned"
+                    class="send-button form-button"
+                    @click="doAction('result')"
                   >
-                    <button
-                      class="send-button form-button"
-                      @click="doAction('result')"
-                    >
-                      ارسال نتایج
-                    </button>
-                  </v-col>
+                    ارسال نتایج
+                  </button>
 <!--                  <button-->
 <!--                    class="action-bar-button"-->
 <!--                    @click="doAction('update')"-->
