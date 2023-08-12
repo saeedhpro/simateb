@@ -1383,32 +1383,35 @@ export default {
     },
     closeForm() {
       this.$emit('close')
-      this.resetForm();
+      this.resetForm(true);
     },
     done() {
       this.$emit('done')
       setTimeout(() => {
-        this.resetForm();
+        this.resetForm(true);
       }, 100)
     },
-    resetForm() {
+    resetForm(close = false) {
       if (!this.item) return
       this.newFiles = []
-      this.getAppointment()
-        .then(res => {
-          const app = res.data.data;
-          this.setAppointment(app)
-          this.getResults()
-          if(this.isReDoctor) {
-            this.getReferedResults()
-          }
-        })
-        .catch(err => {
-          this.closeForm()
-        })
-        .finally(() => {
-          this.loaded = true
-        })
+      if (!close) {
+        this.getAppointment()
+          .then(res => {
+            const app = res.data.data;
+            this.setAppointment(app)
+            this.getResults()
+            if(this.isReDoctor) {
+              this.getReferedResults()
+            }
+          })
+          .catch(err => {
+          })
+          .finally(() => {
+            this.loaded = true
+          })
+      } else {
+        this.loaded = true
+      }
     },
     getAppointment() {
       return this.$store.dispatch('appointments/getAppointment', this.item.id)
