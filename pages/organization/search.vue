@@ -252,7 +252,7 @@
                     </td>
                     <td class="text-center">
                       <v-tooltip
-                        v-if="i.radiology"
+                        v-if="i.radiology && !i.doctor"
                         bottom
                       >
                         <template v-slot:activator="{ on, attrs }">
@@ -276,7 +276,7 @@
                     </td>
                     <td class="text-center">
                       <v-tooltip
-                        v-if="i.photography"
+                        v-if="i.photography && !i.doctor"
                         bottom
                       >
                         <template v-slot:activator="{ on, attrs }">
@@ -699,8 +699,9 @@ export default {
             return appointment.l_admission_at != "" && appointment.l_result_at != "" && appointment.l_admission_at != null && appointment.l_result_at != null
           case 3:
             return appointment.r_admission_at != "" && appointment.r_result_at != "" && appointment.r_admission_at != null && appointment.r_result_at != null
-          default:
-            return false;
+        }
+        if (this.isReDoctor(appointment)) {
+          return appointment.d_admission_at != null && appointment.d_admission_at != "" && appointment.d_result_at != "" && appointment.d_result_at != null
         }
       }
     },
@@ -715,7 +716,10 @@ export default {
       } else if (this.isReDoctor(appointment)) {
         return appointment.d_admission_at != "" && appointment.d_admission_at != null
       }
-      return false;
+      return appointment.p_admission_at != "" && appointment.p_admission_at != null ||
+        appointment.l_admission_at != "" && appointment.l_admission_at != null ||
+        appointment.r_admission_at != "" && appointment.r_admission_at != null ||
+        appointment.d_admission_at != "" && appointment.d_admission_at != null;
     },
     waiting(appointment) {
       if (this.isReDoctor(appointment) && (appointment.d_admission_at == "" || appointment.d_admission_at == null)) {
