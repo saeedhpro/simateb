@@ -9,6 +9,7 @@ export const state = () => ({
     total_pages: 0,
     meta: {
       total: 0,
+      last_page: 1,
     }
   },
   appointment: null,

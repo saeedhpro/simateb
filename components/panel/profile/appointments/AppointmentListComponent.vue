@@ -5,6 +5,7 @@
         v-for="(i,n) in list.data"
         :key="n"
         :index="n"
+        :page="page"
         :id="i.id"
         :created_at="i.created_at"
         :start_at="i.start_at"
@@ -39,7 +40,7 @@
         <v-pagination
           dir="ltr"
           v-model="page"
-          :length="list.meta.total"
+          :length="list.meta.last_page"
           :total-visible="5"
         ></v-pagination>
       </div>
@@ -48,7 +49,7 @@
       :open="showUpdateModal"
       :item="item"
       @close="closeUpdateModal"
-      @remove="paginate"
+      @remove="paginate(1)"
       @done="doneUpdateModal"
       :is-surgery="false"
     />
@@ -121,8 +122,8 @@ export default {
     }
   },
   watch: {
-    page() {
-      this.paginate()
+    page(val) {
+      this.paginate(val)
     }
   }
 }
