@@ -445,6 +445,12 @@ export default {
   },
   mounted() {
     this.getProvinces()
+      .then(() => {
+        this.getCounties(this.province.id)
+          .then(() => {
+            this.getCities(this.county.id)
+          })
+      })
     this.getOrganizations()
     this.getUserGroups()
     this.resetForm()
@@ -583,9 +589,14 @@ export default {
         error = 'فیلد شهر اجباری است'
         isValid = false
       }
-      if (!this.form.cardno) {
-        this.errors.cardno = 'فیلد کدملی اجباری است'
-        error = 'فیلد کدملی اجباری است'
+      // if (!this.form.cardno) {
+      //   this.errors.cardno = 'فیلد کدملی اجباری است'
+      //   error = 'فیلد کدملی اجباری است'
+      //   isValid = false
+      // }
+      if (!this.codeMelliCheck(this.form.cardno)) {
+        this.errors.cardno = 'فیلد کدملی صحیح نیست'
+        error = 'فیلد کدملی صحیح نیست'
         isValid = false
       }
       // if (this.form.tel1 && !this.$checkPhoneNumber(this.form.tel1, true)) {
@@ -636,13 +647,13 @@ export default {
       }
     },
     getProvinces() {
-      this.$store.dispatch('provinces/getList')
+      return this.$store.dispatch('provinces/getList')
     },
     getCounties(id) {
-      this.$store.dispatch('provinces/getCounties', id)
+      return this.$store.dispatch('provinces/getCounties', id)
     },
     getCities(id) {
-      this.$store.dispatch('provinces/getCities', id)
+      return this.$store.dispatch('provinces/getCities', id)
     },
     getOrganizations() {
       this.$store.dispatch('admin/organizations/getOrganizations')
