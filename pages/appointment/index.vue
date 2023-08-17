@@ -250,7 +250,7 @@
                         <table-appointment-none-v2
                           v-else
                           :data-label="list[j][i]"
-                          :class="{'is-today': isToday(j + 1), 'data': i, 'show-hour': showHour}"
+                          :class="{'is-today': isToday(j + 1), 'data': i, 'show-hour': true}"
                           :is-friday="isFriday(j + 1)"
                           :is-holiday="isHoliday(j + 1)"
                           :start-at="list[j][i] ? list[j][i].start_at_time_fa : getTime(i)"
