@@ -8,7 +8,7 @@
         v-if="forOrganization"
       >
         <div class="img-box">
-          <span class="item-index">{{ index + 1 }}</span>
+          <span class="item-index">{{ ((page - 1) * 10) + (index + 1) }}</span>
           <button
             class="edit-button"
             @click="openUpdateModal"
@@ -240,6 +240,11 @@ import Fancybox from "~/components/Fancybox";
 export default {
   name: "AppointmentItemComponent",
   props: {
+    page: {
+      type: Number,
+      required: true,
+      default: 1,
+    },
     index: {
       type: Number,
       required: true,
