@@ -713,12 +713,6 @@
                   >
                     ارسال نتایج
                   </button>
-<!--                  <button-->
-<!--                    class="action-bar-button"-->
-<!--                    @click="doAction('update')"-->
-<!--                  >-->
-<!--                    ذخیره-->
-<!--                  </button>-->
                 </v-menu>
               </v-col>
             </v-row>

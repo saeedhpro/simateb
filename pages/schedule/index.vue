@@ -92,7 +92,7 @@
                     <td class="text-center">
                       <span class="file-id vip">
                         {{
-                          i.start_at | toPersianDate('YYYY/MM/DD')
+                          i.start_at_fa
                         }}
                       </span>
                     </td>
@@ -102,7 +102,7 @@
                       </span>
                       <span>
                         {{
-                          $moment(i.start_at, "YYYY/MM/DD HH:mm:ss").format("HH:mm") | persianDigit
+                          i.start_at_time_fa
                         }}
                       </span>
                       <span>
@@ -110,7 +110,7 @@
                       </span>
                       <span>
                         {{
-                          $moment(i.end_at, "YYYY/MM/DD HH:mm:ss").format("HH:mm") | persianDigit
+                          i.end_at_time_fa
                         }}
                       </span>
                     </td>
@@ -623,8 +623,31 @@ export default {
         organization_id: null,
       }
     },
+    validateForm(form) {
+      let isValid = true
+      if (!form.date) {
+        isValid = false
+        this.$toast.error('تاریخ را وارد کنید')
+      }
+      if (!form.start) {
+        isValid = false
+        this.$toast.error('زمان شروع را وارد کنید')
+      }
+      if (!form.end) {
+        isValid = false
+        this.$toast.error('زمان پایان را وارد کنید')
+      }
+      if (!form.case_type) {
+        isValid = false
+        this.$toast.error('خدمت را انتخاب کنید')
+      }
+      return isValid
+    },
     createSchedule() {
       const type = this.create ? 'schedule/createSchedule' : 'schedule/updateSchedule'
+      if (!this.validateForm(this.form)) {
+        return
+      }
       this.$store.dispatch(type, {
         id: this.form.id,
         start_at: `${this.form.date} ${this.form.start}`,

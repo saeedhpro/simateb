@@ -289,7 +289,7 @@
       :start="workHour.start"
       :end="workHour.end"
       :period="workHour.period"
-      :organizationId="workHour.organization_id"
+      :organization-id="workHour.organization_id"
       @close="closeShowWorkHour"
       v-if="showWorkHour"
     />
@@ -671,8 +671,8 @@ export default {
       this.showWorkHour = !this.showWorkHour
     },
     closeShowWorkHour() {
-      this.toggleShowWorkHour()
       this.action = null
+      this.toggleShowWorkHour()
     },
     customLabel(item) {
       return item.fname

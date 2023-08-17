@@ -333,8 +333,16 @@ export default {
         const day = moment.from(this.$moment().format("YYYY/MM/DD HH:mm:ss"), "en", "YYYY/MM/DD HH:mm:ss").format("jDD")
         this.selectDay(day)
       } else {
-        const day = moment.from(this.selectedDay, "en", "YYYY/MM/DD HH:mm:ss").format("jDD")
-        this.selectDay(day)
+        if (this.type == 'datetime') {
+          const day = moment.from(this.selectedDay, "en", "YYYY/MM/DD HH:mm:ss").format("jDD")
+          this.selectDay(day)
+        } else if (this.type == 'date') {
+          const day = moment.from(`${this.selectedDay} 00:00:00`, "en", "YYYY/MM/DD HH:mm:ss").format("jDD")
+          this.selectDay(day)
+        } else if (this.type == 'time') {
+          const day = moment.from(`${moment().format("YYYY/MM/DD")} ${this.selectedDay}`, "en", "YYYY/MM/DD HH:mm:ss").format("jDD")
+          this.selectDay(day)
+        }
       }
     },
     nextMonth() {
@@ -381,28 +389,31 @@ export default {
     },
     selectDay(day, accepted = false) {
       if (!day || this.disabled) return
+      let hour = this.hour.toString().length === 2 ? this.hour.toString() : `0${this.hour}`
+      let minute = this.minute.toString().length === 2 ? this.minute.toString() : `0${this.minute}`
       if (!this.dayIsDisabled(day)) {
         const dStr = this.$moment(this.date).format('jYYYY/jMM')
         let selectedDay = ''
         if (this.type === 'datetime') {
-          this.dateFormatted = `${dStr}/${day} ${this.hour}:${this.minute}`
-          selectedDay = moment(`${dStr}/${day} ${this.hour}:${this.minute}`, this.getFormat).locale("en").format(this.getEnFormat)
-          this.selectedDay = moment(`${dStr}/${day} ${this.hour}:${this.minute}:00`, "jYYYY/jMM/jDD HH:mm:ss").locale("en").format("YYYY/MM/DD HH:mm:ss")
+          this.dateFormatted = `${dStr}/${day} ${hour}:${minute}`
+          selectedDay = moment(`${dStr}/${day} ${hour}:${minute}`, this.getFormat).locale("en").format(this.getEnFormat)
+          this.selectedDay = moment(`${dStr}/${day} ${hour}:${minute}:00`, "jYYYY/jMM/jDD HH:mm:ss").locale("en").format("YYYY/MM/DD HH:mm:ss")
         } else if (this.type === 'date') {
           if (accepted) {
             const jDay = this.$moment(this.date).format('jDD')
             this.dateFormatted = `${dStr}/${jDay}`
             selectedDay = moment(`${dStr}/${jDay}`, this.getFormat).locale("en").format(this.getEnFormat)
-            this.selectedDay = moment(`${dStr}/${jDay} ${this.hour}:${this.minute}:00`, "jYYYY/jMM/jDD HH:mm:ss").locale("en").format("YYYY/MM/DD HH:mm:ss")
+            this.selectedDay = moment(`${dStr}/${jDay} ${hour}:${minute}:00`, "jYYYY/jMM/jDD HH:mm:ss").locale("en").format("YYYY/MM/DD HH:mm:ss")
           } else {
             this.dateFormatted = `${dStr}/${day}`
             selectedDay = moment(`${dStr}/${day}`, this.getFormat).locale("en").format(this.getEnFormat)
-            this.selectedDay = moment(`${dStr}/${day} ${this.hour}:${this.minute}:00`, "jYYYY/jMM/jDD HH:mm:ss").locale("en").format("YYYY/MM/DD HH:mm:ss")
+            this.selectedDay = moment(`${dStr}/${day} ${hour}:${minute}:00`, "jYYYY/jMM/jDD HH:mm:ss").locale("en").format("YYYY/MM/DD HH:mm:ss")
           }
         } else if (this.type === 'time') {
-          this.dateFormatted = `${this.hour}:${this.minute}`
-          selectedDay = moment(`${this.dateFormatted}`, this.getFormat).locale("en").format(this.getEnFormat)
-          this.selectedDay = moment(`${this.$moment().format('YYYY/MM/DD')} ${this.hour}:${this.minute}:00`, "jYYYY/jMM/jDD HH:mm:ss").locale("en").format("YYYY/MM/DD HH:mm:ss")
+          let date = moment(`${this.$moment().format('YYYY/MM/DD')} ${hour}:${minute}:00`, "YYYY/MM/DD HH:mm:ss")
+          this.dateFormatted = date.format("HH:mm")
+          selectedDay = moment(`${this.$moment().format('YYYY/MM/DD')} ${this.dateFormatted}`, this.getFormat).locale("en").format(this.getEnFormat)
+          this.selectedDay = date.format("YYYY/MM/DD HH:mm:ss")
         }
         this.closeCalendar()
         this.$emit('select', selectedDay)

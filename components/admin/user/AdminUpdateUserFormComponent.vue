@@ -499,6 +499,12 @@ export default {
   mounted() {
     this.resetForm()
     this.getProvinces()
+      .then(() => {
+          this.getCounties(this.item.province_id)
+            .then(() => {
+              this.getCities(this.item.county_id)
+            })
+      })
     this.getOrganizations()
     this.getUserGroups()
   },
@@ -710,7 +716,7 @@ export default {
       return this.$store.dispatch('provinces/getList')
     },
     getCounties(id) {
-      this.$store.dispatch('provinces/getCounties', id)
+      return this.$store.dispatch('provinces/getCounties', id)
     },
     getCities(id) {
       this.$store.dispatch('provinces/getCities', id)

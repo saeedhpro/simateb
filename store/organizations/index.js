@@ -8,6 +8,7 @@ export const state = () => ({
     start: '',
     end: '',
     period: 15,
+    organization_id: 0,
   },
 })
 
@@ -29,6 +30,7 @@ export const mutations = {
       start: workHour.start,
       end: workHour.end,
       period: parseInt(workHour.period),
+      organization_id: workHour.organization_id,
     }
   },
 }
@@ -67,7 +69,7 @@ export const actions = {
     return this.$axios.get(`/organizations/${id}/work`)
       .then(res => {
         const data = res.data;
-          ctx.commit('setOrganizationWorkHour', data)
+        ctx.commit('setOrganizationWorkHour', data)
         return Promise.resolve(res)
       })
       .catch(err => {

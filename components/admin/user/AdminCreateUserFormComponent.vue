@@ -481,6 +481,12 @@ export default {
   },
   mounted() {
     this.getProvinces()
+      .then(() => {
+        this.getCounties(this.province.id)
+          .then(() => {
+            this.getCities(this.county.id)
+          })
+      })
     this.getOrganizations()
     this.getUserGroups()
   },
@@ -680,13 +686,13 @@ export default {
       return isValid;
     },
     getProvinces() {
-      this.$store.dispatch('provinces/getList')
+      return this.$store.dispatch('provinces/getList')
     },
     getCounties(id) {
-      this.$store.dispatch('provinces/getCounties', id)
+      return this.$store.dispatch('provinces/getCounties', id)
     },
     getCities(id) {
-      this.$store.dispatch('provinces/getCities', id)
+      return this.$store.dispatch('provinces/getCities', id)
     },
     getOrganizations() {
       this.$store.dispatch('admin/organizations/getOrganizations')
