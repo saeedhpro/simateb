@@ -39,7 +39,17 @@ export default {
   components: {WorkHourComponent, CreateAppointmentFormComponent},
   layout: 'panel',
   middleware: 'auth',
+  mounted() {
+    this.getUsers()
+    this.getCaseTypes()
+  },
   methods: {
+    getUsers() {
+      this.$store.dispatch('users/getUsers')
+    },
+    getCaseTypes() {
+      this.$store.dispatch('cases/getCaseTypes', {type: 1})
+    },
     togglePazireshModal() {
       this.showPazireshModal = !this.showPazireshModal
     },
@@ -60,7 +70,10 @@ export default {
       this.appointmentID = 0
     },
     getAppointmentList() {
-
+      this.loadList = false
+      setTimeout(() => {
+        this.loadList = true
+      }, 200)
     }
   },
   computed: {
@@ -95,7 +108,15 @@ export default {
       set(val) {
         this.$store.dispatch('appointment/setShowItemModal', val)
       }
-    }
+    },
+    loadList: {
+      get() {
+        return this.$store.getters['appointment/getLoadList'];
+      },
+      set(val) {
+        return this.$store.dispatch('appointment/setLoadList', val);
+      },
+    },
   }
 }
 </script>
