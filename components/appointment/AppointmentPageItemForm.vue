@@ -1360,7 +1360,7 @@ export default {
       return moment
     },
     visitDate() {
-      return moment.from(this.appointment.start_at,'en','YYYY/MM/DD HH:mm:ss').format('dddd - DD MMMM')
+      return moment.from(this.appointment.start_at,'en','YYYY/MM/DD HH:mm:ss').locale('fa').format('dddd - DD MMMM')
     },
     visitHour() {
       return moment.from(this.appointment.start_at,'en','YYYY/MM/DD HH:mm:ss').format('HH:mm')

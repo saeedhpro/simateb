@@ -115,6 +115,7 @@ export default {
       limits: [],
       days: [],
       maxLength: 0,
+      appointments: [],
     }
   },
   mounted() {
@@ -147,8 +148,8 @@ export default {
   },
   methods: {
     async getAppointmentList() {
-      const start = this.startDate.format("YYYY/MM/DD")
-      const end = this.endDate.format("YYYY/MM/DD")
+      const start = this.startDate.clone().locale('en').format("YYYY/MM/DD")
+      const end = this.endDate.clone().locale('en').format("YYYY/MM/DD")
       const res = await this.$axios.get(`/appointments/que/v4?start=${start}&end=${end}`)
       if (res.status == 200) {
         const data = res.data
@@ -156,6 +157,13 @@ export default {
         this.limits = data.limits
         this.setDays(appointments)
       }
+    },
+    sameDay(firstDate, endDate) {
+      let first = moment(firstDate).locale('fa')
+      let end = moment(endDate).locale('fa')
+      return first.jYear() == end.jYear() &&
+        first.jMonth() == end.jMonth() &&
+        first.jDay() == end.jDay()
     },
     setDays(appointments) {
       this.loading = true
@@ -182,7 +190,7 @@ export default {
       let list = appointments
       let today = moment().locale('fa').format("YYYYMMDD")
       let maxLength = dayLength
-      while(startDay.isBefore(lastDay.format("YYYY/MM/DD"))) {
+      while(startDay.locale('en').isBefore(lastDay.locale('en').format("YYYY/MM/DD"))) {
         days[i] = []
         let dayStart = startDay.clone()
         dayStart = dayStart.set({
@@ -197,7 +205,50 @@ export default {
           second: this.workHour.end.substring(6,9),
         })
         if (this.showHour) {
+          let days = [];
+          let monthDates = [];
+          let default_duration = 20
+          let maxWorkTime = new Date('2019-01-10 ' + this.workHour.end);
+          let minWorkTime = new Date('2019-01-10 ' + this.workHour.start);
 
+          let duration = moment.duration(moment(maxWorkTime).diff(minWorkTime));
+          let minutes = duration.asMinutes();
+          let queIndexMax = Math.floor(minutes / default_duration);
+          let normalTimeSpan = queIndexMax;
+
+          let queCounter = 0;
+          for (let i = 0; i < 42; i++) {
+            days[i] = [];
+            let baseDate = moment(monthDates[i]).seconds(0).hours(moment(minWorkTime).hours()).minutes(moment(minWorkTime).minutes());
+            for (let k = 0; k <= normalTimeSpan || (appointments[queCounter] && this.sameDay(new Date(appointments[queCounter].start_at), baseDate.toDate())); k++) {
+              if (appointments[queCounter] &&
+                (!baseDate.isBefore(appointments[queCounter].start_at)
+                  || (k > normalTimeSpan)
+                )) {//day matches to this gap
+                days[i].push(appointments[queCounter]);
+                baseDate.add(appointments[queCounter].duration, 'minutes');
+                queCounter++;
+                //marking that day as a work day
+                if (monthDates[i]) {
+                  monthDates[i].isWorkDay = true;
+                }
+                if (k > normalTimeSpan) {
+                  // $scope.queIndexMax++;
+                }
+              } else {
+                days[i].push({
+                  start_at: moment(baseDate),
+                  empty: true
+                });
+                baseDate.add(default_duration, 'minutes');
+              }
+
+            }
+          }
+          queIndexMax = Math.max.apply(Math, days.map(function (a) {
+            return a.length;
+          }));
+          this.days = days
         } else {
           for (let j = 0; j < dayLength; j++) {
             if (list.length > 0) {
@@ -219,7 +270,7 @@ export default {
                     is_friday: jDate.isoWeekday() == 5,
                     is_holiday: isHoliday,
                     is_today: jDate.format("YYYYMMDD") == today,
-                    start_at: jDate.format('YYYY/MM/DD HH:mm:ss'),
+                    start_at: startAt.format('YYYY/MM/DD HH:mm:ss'),
                     index: j,
                   })
                   list.shift()
@@ -241,7 +292,7 @@ export default {
                 is_friday: jDate.isoWeekday() == 5,
                 is_holiday: isHoliday,
                 is_today: jDate.format("YYYYMMDD") == today,
-                start_at: jDate.format('YYYY/MM/DD HH:mm:ss'),
+                start_at: s.format('YYYY/MM/DD HH:mm:ss'),
                 index: j,
               })
             } else {
@@ -259,7 +310,7 @@ export default {
                 is_friday: jDate.locale('fa').isoWeekday() == 5,
                 is_holiday: isHoliday,
                 is_today: jDate.locale('fa').format("YYYYMMDD") == today,
-                start_at: jDate.locale('fa').format('YYYY/MM/DD HH:mm:ss'),
+                start_at: s.format('YYYY/MM/DD HH:mm:ss'),
                 index: j,
               })
             }
@@ -288,7 +339,7 @@ export default {
             is_friday: jDate.isoWeekday() == 5,
             is_holiday: isHoliday,
             is_today: jDate.format("YYYYMMDD") == today,
-            start_at: jDate.format('YYYY/MM/DD HH:mm:ss'),
+            start_at: dayStart.format('YYYY/MM/DD HH:mm:ss'),
             index: j,
           })
         }
@@ -300,7 +351,7 @@ export default {
       let holidays = this.holidays
       const days = []
       let day = this.startDate.clone().startOf("jMonth")
-      while (day.isBefore(this.endDate.clone().format('YYYY/MM/DD HH:mm:ss'))) {
+      while (day.locale('en').isBefore(this.endDate.clone().locale('en').format('YYYY/MM/DD HH:mm:ss'))) {
         let isHoliday = false
         for (let i = 0; i < holidays.length; i++) {
           if (day.format("YYYY-MM-DD") == holidays[i].hdate) {
@@ -315,7 +366,7 @@ export default {
           is_today: jDate.locale('fa').format("YYYYMMDD") == moment().locale('fa').format("YYYYMMDD"),
           title: jDate.locale('fa').format("dddd"),
           sub_title: jDate.locale('fa').format("jDD jMMMM"),
-          start_at: `${jDate.locale('fa').format('YYYY/MM/DD')} ${this.workHour.start}`
+          start_at: `${day.format('YYYY/MM/DD')} ${this.workHour.start}`
         })
         day = day.add(1, 'jDay')
       }
@@ -429,11 +480,27 @@ export default {
         return this.$store.getters['appointment/getMonth']
       },
     },
+    getLimits() {
+      let limitList = []
+      for (let i = 0; i < this.days.length; i++) {
+        limitList = []
+        for (let j = 0; j < this.days[i].length; j++) {
+
+        }
+      }
+      return limitList
+    }
   },
   watch: {
     loadList(val) {
+      if (val) {
         this.setHeaderDays()
         this.getAppointmentList()
+      }
+    },
+    showHour(val) {
+      this.setHeaderDays()
+      this.getAppointmentList()
     },
   }
 }
