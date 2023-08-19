@@ -270,13 +270,14 @@ export default {
             break
           }
         }
+        let jDate = day.clone()
         days.push({
-          is_friday: day.isoWeekday() == 5,
+          is_friday: jDate.locale('fa').isoWeekday() == 5,
           is_holiday: isHoliday,
-          is_today: day.format("YYYYMMDD") == moment().format("YYYYMMDD"),
-          title: day.locale('fa').format("dddd"),
-          sub_title: day.locale('fa').format("jDD jMMMM"),
-          start_at: `${day.locale('fa').format('YYYY/MM/DD')} ${this.workHour.start}`
+          is_today: jDate.format("YYYYMMDD") == moment().format("YYYYMMDD"),
+          title: jDate.locale('fa').format("dddd"),
+          sub_title: jDate.locale('fa').format("jDD jMMMM"),
+          start_at: `${jDate.locale('fa').format('YYYY/MM/DD')} ${this.workHour.start}`
         })
         day = day.add(1, 'jDay')
       }
