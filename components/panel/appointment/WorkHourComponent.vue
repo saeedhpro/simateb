@@ -1,6 +1,7 @@
 <template>
   <v-dialog
     v-model="show"
+    v-if="show"
     persistent
     max-width="1056px"
   >
@@ -30,23 +31,25 @@
             >
               <div class="create-update-model-input-box">
                 <label>ساعت شروع</label>
-                <custom-date-input
-                  :type="'time'"
-                  v-model="work.start"
-                  :initial-value="work.start"
-                />
-<!--                <date-picker-->
+<!--                <custom-date-input-->
+<!--                  :type="'time'"-->
 <!--                  v-model="work.start"-->
-<!--                  format="HH:mm:ss"-->
-<!--                  display-format="HH:mm:ss"-->
-<!--                  editable-->
-<!--                  class="date-picker"-->
-<!--                  type="time"-->
-<!--                >-->
-<!--                  <template v-slot:label>-->
-<!--                    <img src="/images/form/datepicker.svg">-->
-<!--                  </template>-->
-<!--                </date-picker>-->
+<!--                  :initial-value="work.start"-->
+<!--                  @input="(val)=>onChange({name: 'start', val: val})"-->
+<!--                />-->
+                <date-picker
+                  v-model="work.start"
+                  format="HH:mm:ss"
+                  display-format="HH:mm:ss"
+                  editable
+                  class="date-picker"
+                  type="time"
+                  @input="(val)=>onChange({name: 'start', val: val})"
+                >
+                  <template v-slot:label>
+                    <img src="/images/form/datepicker.svg">
+                  </template>
+                </date-picker>
               </div>
             </v-col>
             <v-col
@@ -55,23 +58,25 @@
             >
               <div class="create-update-model-input-box">
                 <label>ساعت پایان</label>
-                <custom-date-input
-                  :type="'time'"
-                  v-model="work.end"
-                  :initial-value="work.end"
-                />
-<!--                <date-picker-->
+<!--                <custom-date-input-->
+<!--                  :type="'time'"-->
 <!--                  v-model="work.end"-->
-<!--                  format="HH:mm:ss"-->
-<!--                  display-format="HH:mm:00"-->
-<!--                  editable-->
-<!--                  class="date-picker"-->
-<!--                  type="time"-->
-<!--                >-->
-<!--                  <template v-slot:label>-->
-<!--                    <img src="/images/form/datepicker.svg">-->
-<!--                  </template>-->
-<!--                </date-picker>-->
+<!--                  :initial-value="work.end"-->
+<!--                  @input="(val)=>onChange({name: 'end', val: val})"-->
+<!--                />-->
+                <date-picker
+                  v-model="work.end"
+                  format="HH:mm:ss"
+                  display-format="HH:mm:00"
+                  editable
+                  class="date-picker"
+                  type="time"
+                  @input="(val)=>onChange({name: 'end', val: val})"
+                >
+                  <template v-slot:label>
+                    <img src="/images/form/datepicker.svg">
+                  </template>
+                </date-picker>
               </div>
             </v-col>
             <v-col
@@ -81,6 +86,7 @@
               <custom-text-input
                 :label="'بازه زمانی'"
                 v-model="work.period"
+                @input="(val)=>onChange({name: 'period', val: val})"
               />
             </v-col>
           </v-row>
@@ -125,10 +131,6 @@
 export default {
   name: "WorkHourComponent",
   props: {
-    open: {
-      type: Boolean,
-      default: false,
-    },
     start: {
       type: String,
       default: "00:00:00",
@@ -149,36 +151,65 @@ export default {
   data() {
     return {
       work: {
-        start: this.start,
-        end: this.end,
-        period: this.period,
-        organization_id: this.organizationId,
+        start: '',
+        end: '',
+        period: 15,
+        organization_id: 0,
       }
     }
   },
   methods: {
     close() {
-      this.$emit('close')
+      // this.$emit('close')
+      this.$store.dispatch('appointment/setShowWorkHour', false)
     },
     save() {
-      this.$store.dispatch('organizations/updateOrganizationWorkHour', this.work)
+      this.$store.dispatch('organizations/updateOrganizationWorkHour', this.workHour)
+        .then(() => {
+          this.$toast.success('با موفقیت انجام شد')
+        })
       .finally((res) => {
         this.close()
       })
+    },
+    onChange(e) {
+      let work = {
+        ...this.work,
+      }
+      work[e.name] = e.val
+      return this.$store.dispatch('appointment/setWorkHour', work)
     }
   },
   computed: {
     show: {
       get() {
-        return this.open
+        return this.$store.getters['appointment/getShowWorkHour']
       },
       set(val) {
         if (!val) {
           this.close()
         }
       }
+    },
+    workHour: {
+      get() {
+        return this.$store.getters['appointment/getWorkHour']
+      },
+      set(val) {
+
+      }
     }
   },
+  watch: {
+    workHour(val) {
+      this.work = {
+        start: val.start,
+        end: val.end,
+        period: val.period,
+        organization_id: val.organization_id,
+      }
+    },
+  }
 }
 </script>
 

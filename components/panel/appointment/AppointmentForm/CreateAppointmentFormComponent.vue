@@ -268,7 +268,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.show, "show", "3")
   },
   methods: {
     closeForm() {

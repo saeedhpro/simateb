@@ -13,7 +13,7 @@
             <img src="/images/pages/search-icon.svg" alt="users">
             <span class="title">جستجو نوبت ها</span>
           </nuxt-link>
-          <nuxt-link to="/appointment/surgeries" class="page-header">
+          <nuxt-link to="/appointment/surgeries" class="page-header" v-if="canSeeSurgeries">
             <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
               <defs>
                 <style>.a.index,.b.index{fill:#5063ff;}.a.index{opacity:.12;}.b.index{opacity:1;}</style>
@@ -38,6 +38,17 @@
         </div>
       </v-col>
     </v-row>
+<!--    <v-row>-->
+<!--      <v-col>-->
+<!--        {{ selectedTime }}-->
+<!--        <custom-date-input-->
+<!--          :type="'datetime'"-->
+<!--          :jump-minute="15"-->
+<!--          v-model="selectedTime"-->
+<!--          :initial-value="selectedTime"-->
+<!--        />-->
+<!--      </v-col>-->
+<!--    </v-row>-->
     <v-row>
       <v-col
         cols="12"
@@ -160,12 +171,10 @@
             <v-col
               cols="12"
             >
-              <div>
-                <v-simple-table
-                  fixed-header
+              <div style="overflow-x: scroll" id="table-wrapper" ref="table-wrapper">
+                <table
                   class="appointment-table"
                 >
-                  <template v-slot:default>
                     <thead
                       v-if="showCaseType"
                     >
@@ -180,14 +189,17 @@
                         >
                           <div
                             class="header-case-type"
-                            v-for="(l,n) in que.limits"
-                            :key="n"
+                            v-for="(l,n2) in que.limits"
+                            :key="n2"
                           >
                             <div>
                               {{ l.name  }}
                             </div>
-                            <span>
-                              {{ l.limitation  }}
+                            <span
+                              class="ltr"
+                              :class="{'is-red': getLimit(l, n) < 0, 'is-zero': getLimit(l, n) == 0}"
+                            >
+                              {{ getLimit(l, n) }}
                             </span>
                           </div>
                         </div>
@@ -203,8 +215,8 @@
                       >
                         <div
                           class="header-date"
-                          :class="{'is-today': isToday(i), 'is-friday': isFriday(i)}"
-                          @click="openPazireshModal(`${year}/${month}/${i + 1} ${getTime(0)}`)"
+                          :class="{'is-today': isToday(i), 'is-friday': isFriday(i), 'is-holiday': isHoliday(i)}"
+                          @click="openPazireshModal(`${year}/${month}/${i} ${getTime(0)}`)"
                         >
                           {{ getToday(i) }}
                           {{ i  }}
@@ -215,37 +227,41 @@
                     </thead>
                     <tbody>
                     <tr
-                        v-for="(items, i) in maxLength"
-                        :key="i"
+                      v-for="(items, i) in maxLength"
+                      :key="i"
                     >
                       <td
                         v-for="(item, j) in list.length"
                       >
                         <table-appointment-v2
-                          v-if="list[j][i]"
-                          :class="{'is-today': isToday(j + 1), 'is-friday': isFriday(j + 1)}"
+                          v-if="list[j][i] && !list[j][i].is_empty"
+                          :class="{'is-today': isToday(j + 1)}"
+                          :is-friday="isFriday(j + 1)"
+                          :is-holiday="isHoliday(j + 1)"
                           :case-type="list[j][i].case_type"
                           :user-full-name="list[j][i].user_full_name"
                           :start-at-time-fa="list[j][i].start_at_time_fa"
                           :day="j"
                           :month="month"
                           :year="year"
+                          :index="i"
                           @click.native="openItem(list[j][i].id)"
                         />
                         <table-appointment-none-v2
                           v-else
-                          :class="{'is-today': isToday(j + 1), 'is-friday': isFriday(j + 1), 'show-hour': showHour}"
-                          :start-at="getTime(i)"
+                          :data-label="list[j][i]"
+                          :class="{'is-today': isToday(j + 1), 'data': i, 'show-hour': true}"
+                          :is-friday="isFriday(j + 1)"
+                          :is-holiday="isHoliday(j + 1)"
+                          :start-at="list[j][i] ? list[j][i].start_at_time_fa : getTime(i)"
                           :show-hour="showHour"
-                          :day="j"
-                          :month="month"
-                          :year="year"
+                          :index="i"
+                          @click.native="showHour ? list[j][i] ? openPazireshModal(list[j][i].start_at): openPazireshModal(`${year}/${month}/${i + 1} ${getTime(i)}`) : () => {}"
                         />
                       </td>
                     </tr>
                     </tbody>
-                  </template>
-                </v-simple-table>
+                </table>
               </div>
             </v-col>
           </v-row>
@@ -253,27 +269,27 @@
       </v-col>
     </v-row>
     <create-appointment-form-component
+      :is-surgery="false"
       v-if="showPazireshModal"
       :open="showPazireshModal"
       :init-time="initTime"
       @close="closePazireshModal"
       @created="createdPazireshModal"
-      :is-surgery="false"
     />
     <appointment-form-component
+      :is-surgery="false"
       :open="showAppointmentModal"
       :item="item"
       @close="closeAppointmentModal"
       @remove="getAppointmentList"
       @done="doAppointment"
-      :is-surgery="false"
     />
     <work-hour-component
       :open="showWorkHour"
       :start="workHour.start"
       :end="workHour.end"
       :period="workHour.period"
-      :organizationId="workHour.organization_id"
+      :organization-id="workHour.organization_id"
       @close="closeShowWorkHour"
       v-if="showWorkHour"
     />
@@ -302,12 +318,13 @@ export default {
     TableAppointmentV2,
     CaseTypeCheckboxComponent,
     DataTableComponent,
-    AppointmentFormComponent
+    AppointmentFormComponent,
   },
   layout: 'panel',
   middleware: 'auth',
   data() {
     return {
+      selectedTime: '2023/07/10 21:47',
       ttt: '',
       showPazireshModal: false,
       showAppointmentModal: false,
@@ -479,6 +496,32 @@ export default {
     this.getUsers()
     this.getOrganizationWorkHour()
     this.getCaseTypes()
+    const slider = this.$refs["table-wrapper"];
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    slider.addEventListener('mousedown', (e) => {
+      isDown = true;
+      slider.classList.add('active');
+      startX = e.pageX - slider.offsetLeft;
+      scrollLeft = slider.scrollLeft;
+    });
+    slider.addEventListener('mouseleave', () => {
+      isDown = false;
+      slider.classList.remove('active');
+    });
+    slider.addEventListener('mouseup', () => {
+      isDown = false;
+      slider.classList.remove('active');
+    });
+    slider.addEventListener('mousemove', (e) => {
+      if(!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - slider.offsetLeft;
+      const walk = (x - startX) * 3; //scroll-fast
+      slider.scrollLeft = scrollLeft - walk;
+    });
   },
   methods: {
     getOrganizationWorkHour() {
@@ -516,10 +559,10 @@ export default {
     },
     openItem(id) {
       this.$axios.get(`/appointments/${id}`)
-      .then(res => {
-        this.item = res.data.data
-        this.toggleAppointmentModal()
-      })
+        .then(res => {
+          this.item = res.data.data
+          this.toggleAppointmentModal()
+        })
     },
     toggleAppointmentModal() {
       this.showAppointmentModal = !this.showAppointmentModal
@@ -559,7 +602,7 @@ export default {
     toggleShowHour() {
       this.showHour = !this.showHour
       if (this.showHour) {
-        this.list = this.que.clock_ques
+        this.list = this.clockQues()
       } else {
         this.list = this.que.ques
       }
@@ -570,11 +613,11 @@ export default {
     },
     getAppointmentList() {
       this.calcDate()
-      this.$store.dispatch('appointments/getQueV2', this.search)
+      this.$store.dispatch('appointments/getQueV3', this.search)
         .then(res => {
           this.que = res.data
           if (this.showHour) {
-            this.list = this.que.clock_ques
+            this.list = this.clockQues()
           } else {
             this.list = this.que.ques
           }
@@ -628,8 +671,8 @@ export default {
       this.showWorkHour = !this.showWorkHour
     },
     closeShowWorkHour() {
-      this.toggleShowWorkHour()
       this.action = null
+      this.toggleShowWorkHour()
     },
     customLabel(item) {
       return item.fname
@@ -647,7 +690,20 @@ export default {
     },
     isFriday(day) {
       const d = moment.from(`${this.year}/${this.month}/${day}`, "fa", "jYYYY/jMM/jDD");
-      return d.format("dddd") === 'جمعه'
+      return d.isoWeekday() == 5
+      // return d.format("dddd") === 'جمعه'
+    },
+    isHoliday(day) {
+      let isHoliday = false
+      for (let i = 0; i < this.holidays.length; i++) {
+        const d = moment(`${this.year}/${this.month}/${day}`, "YYYY/MM/DD").format("YYYYMMDD");
+        const hdate = moment.from(this.holidays[i].hdate, "en", "YYYY/MM/DD").format("YYYYMMDD");
+        if (d == hdate) {
+          isHoliday = true
+          break
+        }
+      }
+      return isHoliday
     },
     getTime(day) {
       const wh = this.que.work_hour
@@ -700,14 +756,25 @@ export default {
               baseDate.add(this.que.default_duration, 'minutes');
             }
           }
-          queIndexMax = Math.max.apply(Math, ques[i].map(function (a) {
-            return a ? a.length : 0;
-          }));
-          this.que.clock_max_length = queIndexMax
+          queIndexMax = ques[i].map(function (a) {
+            return a ? a : 0;
+          });
+          // this.que.clock_max_length = 16
         }
       }
+      // console.log(this.que.clock_max_length, "clock_max_length")
+      // this.que.clock_ques = ques
       return this.que.clock_ques
     },
+    getLimit(limit, n) {
+      if (this.que.ques.length < n) {
+        return limit.limitation
+      }
+      this.que.ques[n].filter(i =>{
+        return i.case_type == limit.name
+      })
+      return limit.limitation - this.que.ques[n].filter(i => i.case_type == limit.name).length
+    }
   },
   computed: {
     maxLength() {
@@ -725,6 +792,9 @@ export default {
     cases() {
       return this.$store.getters['cases/getCaseTypes']
     },
+    holidays() {
+      return this.$store.getters['holidays/getHolidays']
+    },
     workHour() {
       return this.$store.getters['organizations/getOrganizationWorkHour']
     },
@@ -741,6 +811,11 @@ export default {
         }
       }
     },
+    canSeeSurgeries() {
+      if (!this.loginUser) return true
+      const profession_id = this.loginUser.organization.profession_id
+      return !(profession_id == 5 || profession_id == 7)
+    }
   },
 }
 </script>

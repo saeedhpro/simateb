@@ -266,7 +266,6 @@ export default {
     }
   },
   mounted() {
-    this.resetForm()
   },
   methods: {
     closeForm() {
@@ -278,8 +277,7 @@ export default {
       this.resetForm();
     },
     resetForm() {
-      // let date = moment.from(this.item.start_at, "en", "YYYY/MM/DDTHH:mm:ssZ").utc(true).format("YYYY/MM/DD HH:mm:ss")
-      // date = moment.from(date, 'fa', 'YYYY/MM/DD HH:mm:ss').locale('en').format("YYYY/MM/DD HH:mm:ss")
+      if (!this.item) return
       let date = this.item.start_at
       this.appointment = {
         id: this.item.id,
@@ -420,6 +418,9 @@ export default {
         this.appointment.tel = this.user.tel
       }
     },
+    item() {
+      this.resetForm()
+    }
   }
 }
 </script>

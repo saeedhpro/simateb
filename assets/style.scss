@@ -47,6 +47,10 @@ button:disabled {
   cursor: not-allowed;
 }
 
+.loading-card {
+  min-height: 350px;
+}
+
 .status-box {
   text-align: center;
   font: normal normal normal 14px/25px IRANYekanRegular !important;
@@ -2073,6 +2077,10 @@ table {
     &.is-today {
       background: #FAFFFA 0 0 no-repeat padding-box;
       border: 1px solid #388E3C;
+    }
+    &.is-friday {
+      background: #FFF7EB 0 0 no-repeat padding-box !important;
+      border: 1px solid #EBEBEB !important;
     }
     &.is-holiday {
       background: #F44336 0 0 no-repeat padding-box !important;

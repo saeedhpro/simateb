@@ -28,7 +28,6 @@
 </template>
 
 <script>
-import moment from "jalali-moment";
 
 export default {
   name: "TableAppointmentV2",
