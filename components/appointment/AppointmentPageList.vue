@@ -14,6 +14,37 @@
         <table
           class="appointment-table"
         >
+          <thead
+            v-if="showCaseType"
+          >
+          <tr>
+            <th
+              v-for="(i, n) in headerDays.length"
+              :key="n"
+              class="header-case-type-th text-center"
+            >
+              <div
+                class="header-case-type-box"
+              >
+                <div
+                  class="header-case-type"
+                  v-for="(l,n2) in limits"
+                  :key="n2"
+                >
+                  <div>
+                    {{ l.name  }}
+                  </div>
+                  <span
+                    class="ltr"
+                    :class="{'is-red': getLimit(l, n) < 0, 'is-zero': getLimit(l, n) == 0}"
+                  >
+                              {{ getLimit(l, n) }}
+                            </span>
+                </div>
+              </div>
+            </th>
+          </tr>
+          </thead>
           <thead>
             <tr>
               <th
@@ -81,6 +112,7 @@ export default {
     return {
       loading: false,
       headerDays: [],
+      limits: [],
       days: [],
       maxLength: 0,
     }
@@ -119,7 +151,9 @@ export default {
       const end = this.endDate.format("YYYY/MM/DD")
       const res = await this.$axios.get(`/appointments/que/v4?start=${start}&end=${end}`)
       if (res.status == 200) {
-        const appointments = res.data.data
+        const data = res.data
+        const appointments = data.appointments
+        this.limits = data.limits
         this.setDays(appointments)
       }
     },
@@ -294,6 +328,15 @@ export default {
     openItem(id) {
       this.appointmentID = id
       this.showItemModal = true
+    },
+    getLimit(limit, index) {
+      if (this.days.length < index) {
+        return limit.limitation
+      }
+      this.days[index].filter(i =>{
+        return i.case_type == limit.name
+      })
+      return limit.limitation - this.days[index].filter(i => i.case_type == limit.name).length
     }
   },
   computed: {
@@ -334,6 +377,14 @@ export default {
       },
       set(val) {
         return this.$store.dispatch('appointment/setShowHour', val);
+      }
+    },
+    showCaseType: {
+      get() {
+        return this.$store.getters['appointment/getShowCaseType'];
+      },
+      set(val) {
+        return this.$store.dispatch('appointment/setShowCaseType', val);
       }
     },
     initTime: {

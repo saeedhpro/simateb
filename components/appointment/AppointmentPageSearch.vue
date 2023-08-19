@@ -217,7 +217,7 @@ export default {
         this.years.push(i)
       }
       this.startDate = moment().startOf("jMonth")
-      this.endDate = moment().add(1, 'jMonth').startOf("jMonth").add(10, 'jDay')
+      this.endDate = moment().endOf("jMonth").add(11, 'jDay')
       await this.getOrganizationHolidays(this.startDate, this.endDate)
       this.loadList = true
       this.loading = false
@@ -243,7 +243,7 @@ export default {
       this.startDate = date.clone()
       let thisMonth = moment().locale('fa')
       if (thisMonth.jYear() == this.year && thisMonth.jMonth() == (this.month - 1)) {
-        this.endDate = date.clone().add(1, 'jMonth').startOf("jMonth").add(10, 'jDay')
+        this.endDate = date.clone().endOf("jMonth").add(11, 'jDay')
       } else {
         this.endDate = date.clone().endOf('jMonth').clone()
       }
