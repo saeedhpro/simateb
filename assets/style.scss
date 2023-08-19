@@ -2083,9 +2083,9 @@ table {
       border: 1px solid #EBEBEB !important;
     }
     &.is-holiday {
-      background: #F44336 0 0 no-repeat padding-box !important;
+      background: #ff9c95 0 0 no-repeat padding-box !important;
       border: 1px solid #EBEBEB !important;
-      color: #FFFFFF !important;
+      color: #000000 !important;
     }
   }
 }
@@ -2159,9 +2159,9 @@ table {
           border: 1px solid #F44336 !important;
         }
         &.is-holiday {
-          background: #F44336 0 0 no-repeat padding-box !important;
+          background: #ff9c95 0 0 no-repeat padding-box !important;
           border: 1px solid #EBEBEB !important;
-          color: #FFFFFF !important;
+          color: #000000 !important;
         }
       }
     }
@@ -2211,7 +2211,8 @@ table {
   }
 
   &.is-holiday {
-    background: #F44336 0 0 no-repeat padding-box;
+    background: #ff9c95 0 0 no-repeat padding-box;
+    //background: #F44336 0 0 no-repeat padding-box;
     border: 1px solid #EBEBEB;
   }
 
@@ -2275,9 +2276,9 @@ table {
   }
 
   &.is-holiday {
-    background: #F44336 0 0 no-repeat padding-box !important;
+    background: #ff9c95 0 0 no-repeat padding-box !important;
     border: 1px solid #EBEBEB !important;
-    color: #FFFFFF !important;
+    color: #000000 !important;
   }
 
   &.is-today {

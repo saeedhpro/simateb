@@ -74,7 +74,6 @@
 import moment from "jalali-moment";
 import TableAppointmentNoneV2 from "~/components/panel/appointment/TableAppointmentNoneV2.vue";
 import TableAppointmentV2 from "~/components/panel/appointment/TableAppointmentV2.vue";
-
 export default {
   name: "AppointmentPageList",
   components: {TableAppointmentV2, TableAppointmentNoneV2},
@@ -262,8 +261,8 @@ export default {
     setHeaderDays() {
       let holidays = this.holidays
       const days = []
-      let day = moment().startOf("jMonth").clone()
-      while (day.isBefore(this.endDate.clone().add(1, 'day').format('YYYY/MM/DD HH:mm:ss'))) {
+      let day = this.startDate.clone().startOf("jMonth")
+      while (day.isBefore(this.endDate.clone().format('YYYY/MM/DD HH:mm:ss'))) {
         let isHoliday = false
         for (let i = 0; i < holidays.length; i++) {
           if (day.format("YYYY-MM-DD") == holidays[i].hdate) {
@@ -275,9 +274,9 @@ export default {
           is_friday: day.isoWeekday() == 5,
           is_holiday: isHoliday,
           is_today: day.format("YYYYMMDD") == moment().format("YYYYMMDD"),
-          title: day.format("dddd"),
-          sub_title: day.format("jDD jMMMM"),
-          start_at: `${day.format('YYYY/MM/DD')} ${this.workHour.start}`
+          title: day.locale('fa').format("dddd"),
+          sub_title: day.locale('fa').format("jDD jMMMM"),
+          start_at: `${day.locale('fa').format('YYYY/MM/DD')} ${this.workHour.start}`
         })
         day = day.add(1, 'jDay')
       }
@@ -296,11 +295,17 @@ export default {
     loadList: {
       get() {
         return this.$store.getters['appointment/getLoadList']
+      },
+      set(val) {
+        this.$store.dispatch('appointment/setLoadList', val)
       }
     },
     startDate: {
       get() {
         return this.$store.getters['appointment/getStartDate']
+      },
+      set(val) {
+        return this.$store.dispatch('appointment/setStartDate', val)
       }
     },
     endDate: {
@@ -357,15 +362,23 @@ export default {
       set(val) {
         this.$store.dispatch('appointment/setShowItemModal', val)
       }
-    }
+    },
+    year: {
+      get() {
+        return this.$store.getters['appointment/getYear']
+      },
+    },
+    month: {
+      get() {
+        return this.$store.getters['appointment/getMonth']
+      },
+    },
   },
   watch: {
     loadList(val) {
-      if (val) {
         this.setHeaderDays()
         this.getAppointmentList()
-      }
-    }
+    },
   }
 }
 </script>
