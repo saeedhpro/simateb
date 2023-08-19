@@ -38,17 +38,6 @@ export default {
       set(val) {
         return this.$store.dispatch('appointment/setLoadList', val);
       },
-      year(year) {
-        this.loadList = false
-        let date = this.startDate.clone()
-        date = date.jYear(year - 1)
-        this.startDate = date
-        setTimeout(() => {
-          this.loadList = true
-        }, 200)
-      },
-      month(month) {
-      }
     },
   }
 }

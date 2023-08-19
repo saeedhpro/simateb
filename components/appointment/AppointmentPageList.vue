@@ -146,7 +146,7 @@ export default {
       let dayLength = this.showHour ? minutes / period : 13
       const days = []
       let list = appointments
-      let today = moment().format("YYYYMMDD")
+      let today = moment().locale('fa').format("YYYYMMDD")
       let maxLength = dayLength
       while(startDay.isBefore(lastDay.format("YYYY/MM/DD"))) {
         days[i] = []
@@ -178,13 +178,14 @@ export default {
                       break
                     }
                   }
+                  let jDate = startAt.clone().locale('fa')
                   days[i].push({
                     ...app,
                     is_empty: false,
-                    is_friday: startAt.isoWeekday() == 5,
+                    is_friday: jDate.isoWeekday() == 5,
                     is_holiday: isHoliday,
-                    is_today: startAt.format("YYYYMMDD") == today,
-                    start_at: startAt.format('YYYY/MM/DD HH:mm:ss'),
+                    is_today: jDate.format("YYYYMMDD") == today,
+                    start_at: jDate.format('YYYY/MM/DD HH:mm:ss'),
                     index: j,
                   })
                   list.shift()
@@ -200,12 +201,13 @@ export default {
                   break
                 }
               }
+              let jDate = s.clone().locale('fa')
               days[i].push({
                 is_empty: true,
-                is_friday: s.isoWeekday() == 5,
+                is_friday: jDate.isoWeekday() == 5,
                 is_holiday: isHoliday,
-                is_today: s.format("YYYYMMDD") == today,
-                start_at: s.format('YYYY/MM/DD HH:mm:ss'),
+                is_today: jDate.format("YYYYMMDD") == today,
+                start_at: jDate.format('YYYY/MM/DD HH:mm:ss'),
                 index: j,
               })
             } else {
@@ -217,12 +219,13 @@ export default {
                   break
                 }
               }
+              let jDate = s.clone().locale('fa')
               days[i].push({
                 is_empty: true,
-                is_friday: s.isoWeekday() == 5,
+                is_friday: jDate.locale('fa').isoWeekday() == 5,
                 is_holiday: isHoliday,
-                is_today: s.format("YYYYMMDD") == today,
-                start_at: s.format('YYYY/MM/DD HH:mm:ss'),
+                is_today: jDate.locale('fa').format("YYYYMMDD") == today,
+                start_at: jDate.locale('fa').format('YYYY/MM/DD HH:mm:ss'),
                 index: j,
               })
             }
@@ -245,12 +248,13 @@ export default {
               break
             }
           }
+          let jDate = dayStart.clone().locale('fa')
           days[i].push({
             is_empty: true,
-            is_friday: dayStart.isoWeekday() == 5,
+            is_friday: jDate.isoWeekday() == 5,
             is_holiday: isHoliday,
-            is_today: dayStart.format("YYYYMMDD") == today,
-            start_at: dayStart.format('YYYY/MM/DD HH:mm:ss'),
+            is_today: jDate.format("YYYYMMDD") == today,
+            start_at: jDate.format('YYYY/MM/DD HH:mm:ss'),
             index: j,
           })
         }
