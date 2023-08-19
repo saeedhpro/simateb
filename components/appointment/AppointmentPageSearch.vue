@@ -235,8 +235,18 @@ export default {
         this.loadList = true
       }, 200)
     },
-    onYearChanged() {
-      this.$store.dispatch('appointment/setYear', this.year)
+    async onYearChanged() {
+      await this.$store.dispatch('appointment/setYear', this.year)
+      this.loadList = false
+      let date = this.startDate.clone()
+      date = date.jYear(this.year - 1)
+      this.startDate = date.clone()
+      date = date.endOf('jMonth').clone()
+      this.endDate = date.clone()
+      await this.getOrganizationHolidays(this.startDate, this.endDate)
+      setTimeout(() => {
+        this.loadList = true
+      }, 200)
     },
     toggleShowHour() {
       this.showHour = !this.showHour
