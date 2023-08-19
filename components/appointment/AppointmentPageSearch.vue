@@ -239,10 +239,14 @@ export default {
       await this.$store.dispatch('appointment/setYear', this.year)
       this.loadList = false
       let date = this.startDate.clone()
-      date = date.jYear(this.year - 1)
+      date = date.jYear(this.year)
       this.startDate = date.clone()
-      date = date.endOf('jMonth').clone()
-      this.endDate = date.clone()
+      let thisMonth = moment().locale('fa')
+      if (thisMonth.jYear() == this.year && thisMonth.jMonth() == (this.month - 1)) {
+        this.endDate = date.clone().add(1, 'jMonth').startOf("jMonth").add(10, 'jDay')
+      } else {
+        this.endDate = date.clone().endOf('jMonth').clone()
+      }
       await this.getOrganizationHolidays(this.startDate, this.endDate)
       setTimeout(() => {
         this.loadList = true
