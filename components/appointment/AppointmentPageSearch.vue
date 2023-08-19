@@ -114,15 +114,16 @@
     v-else
   >
     <v-col>
-      <v-progress-circular />
+      <loading-card />
     </v-col>
   </v-row>
 </template>
 <script>
 import moment from "jalali-moment";
-
+import LoadingCard from "~/components/global/LoadingCard.vue";
 export default {
   name: "AppointmentPageSearch",
+  components: {LoadingCard},
   data() {
     return {
       loading: false,
@@ -221,11 +222,31 @@ export default {
       this.loadList = true
       this.loading = false
     },
-    onMonthChanged() {
-      this.$store.dispatch('appointment/setMonth', this.month)
+    async onMonthChanged() {
+      await this.$store.dispatch('appointment/setMonth', this.month)
+      this.loadList = false
+      let date = this.startDate.clone()
+      date = date.jMonth(this.month - 1)
+      this.startDate = date.clone()
+      date = date.endOf('jMonth').clone()
+      this.endDate = date.clone()
+      await this.getOrganizationHolidays(this.startDate, this.endDate)
+      setTimeout(() => {
+        this.loadList = true
+      }, 200)
     },
-    onYearChanged() {
-      this.$store.dispatch('appointment/setYear', this.year)
+    async onYearChanged() {
+      await this.$store.dispatch('appointment/setYear', this.year)
+      this.loadList = false
+      let date = this.startDate.clone()
+      date = date.jYear(this.year - 1)
+      this.startDate = date.clone()
+      date = date.endOf('jMonth').clone()
+      this.endDate = date.clone()
+      await this.getOrganizationHolidays(this.startDate, this.endDate)
+      setTimeout(() => {
+        this.loadList = true
+      }, 200)
     },
     toggleShowHour() {
       this.showHour = !this.showHour
