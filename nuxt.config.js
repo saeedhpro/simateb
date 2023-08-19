@@ -50,7 +50,7 @@ export default {
     defaultLocale: 'fa',
     locales: ['fa'],
     timezone: {
-      matchZones: ['Iran'],
+      matchZones: ['Asia/Tehran'],
       startYear: 1800,
       endYear: 2100
     }
