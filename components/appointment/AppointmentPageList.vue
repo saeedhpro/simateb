@@ -38,8 +38,8 @@
                     class="ltr"
                     :class="{'is-red': getLimit(l, n) < 0, 'is-zero': getLimit(l, n) == 0}"
                   >
-                              {{ getLimit(l, n) }}
-                            </span>
+                    {{ getLimit(l, n) }}
+                  </span>
                 </div>
               </div>
             </th>
@@ -86,11 +86,12 @@
               />
               <appointment-page-table-empty-item
                 v-else
-                :index="days[j][i].index"
+                :index="i"
                 :is-friday="days[j][i].is_friday"
                 :is-holiday="days[j][i].is_holiday"
                 :is-today="days[j][i].is_today"
                 :show-hour="showHour"
+                :start-at-time-fa="days[j][i].start_at_time_fa"
                 @click.native="showHour ? openPazireshModal(days[j][i].start_at) : () => {}"
               />
             </td>
@@ -158,13 +159,6 @@ export default {
         this.setDays(appointments)
       }
     },
-    sameDay(firstDate, endDate) {
-      let first = moment(firstDate).locale('fa')
-      let end = moment(endDate).locale('fa')
-      return first.jYear() == end.jYear() &&
-        first.jMonth() == end.jMonth() &&
-        first.jDay() == end.jDay()
-    },
     setDays(appointments) {
       this.loading = true
       let holidays = this.holidays
@@ -204,51 +198,150 @@ export default {
           minute: this.workHour.end.substring(3,5),
           second: this.workHour.end.substring(6,9),
         })
+        let dayEndTime = dayEnd.clone().set({
+          hour: 23,
+          minute: 59,
+          second: 59,
+        })
         if (this.showHour) {
-          let days = [];
-          let monthDates = [];
           let default_duration = 20
-          let maxWorkTime = new Date('2019-01-10 ' + this.workHour.end);
-          let minWorkTime = new Date('2019-01-10 ' + this.workHour.start);
-
-          let duration = moment.duration(moment(maxWorkTime).diff(minWorkTime));
+          let duration = moment.duration(moment(dayEnd).diff(dayStart));
           let minutes = duration.asMinutes();
-          let queIndexMax = Math.floor(minutes / default_duration);
-          let normalTimeSpan = queIndexMax;
-
-          let queCounter = 0;
-          for (let i = 0; i < 42; i++) {
-            days[i] = [];
-            let baseDate = moment(monthDates[i]).seconds(0).hours(moment(minWorkTime).hours()).minutes(moment(minWorkTime).minutes());
-            for (let k = 0; k <= normalTimeSpan || (appointments[queCounter] && this.sameDay(new Date(appointments[queCounter].start_at), baseDate.toDate())); k++) {
-              if (appointments[queCounter] &&
-                (!baseDate.isBefore(appointments[queCounter].start_at)
-                  || (k > normalTimeSpan)
-                )) {//day matches to this gap
-                days[i].push(appointments[queCounter]);
-                baseDate.add(appointments[queCounter].duration, 'minutes');
-                queCounter++;
-                //marking that day as a work day
-                if (monthDates[i]) {
-                  monthDates[i].isWorkDay = true;
-                }
-                if (k > normalTimeSpan) {
-                  // $scope.queIndexMax++;
-                }
-              } else {
-                days[i].push({
-                  start_at: moment(baseDate),
-                  empty: true
-                });
-                baseDate.add(default_duration, 'minutes');
-              }
-
+          let boxDuration = default_duration
+          let dayLength = parseInt(minutes / default_duration)
+          let boxStart = dayStart.clone().locale('en')
+          let jDate = dayStart.clone().locale('fa')
+          let isToday = jDate.format("YYYYMMDD") == today
+          let isFriday = jDate.isoWeekday() == 5
+          let isHoliday = false
+          for (let h = 0; h < holidays.length; h++) {
+            if (dayStart.format("YYYY-MM-DD") == holidays[h].hdate) {
+              isHoliday = true
+              break
             }
           }
-          queIndexMax = Math.max.apply(Math, days.map(function (a) {
-            return a.length;
-          }));
-          this.days = days
+          if (list.length > 0) {
+            let j = 0;
+            while(list.length > 0) {
+              boxDuration = default_duration
+              let app = list[0]
+              let startAt = moment(app.start_at,'YYYY/MM/DD HH:mm:ss')
+              if (startAt.locale('en').format("YYYYMMDD") === dayStart.format("YYYYMMDD")) {
+                if (startAt.locale('en').isBefore(dayStart.locale('en').format('YYYY/MM/DD HH:mm'))) {
+                  days[i].push({
+                    ...app,
+                    is_empty: false,
+                    is_friday: isFriday,
+                    is_holiday: isHoliday,
+                    is_today: isToday,
+                    start_at: startAt.locale('en').format('YYYY/MM/DD HH:mm:ss'),
+                    index: j,
+                  })
+                  j++
+                  list.shift()
+                } else if (startAt.locale('en').isBefore(dayEnd.locale('en').format('YYYY/MM/DD HH:mm'))) {
+                  if (startAt.locale('en').isSameOrBefore(boxStart.locale('en').format('YYYY/MM/DD HH:mm'))) {
+                    days[i].push({
+                      ...app,
+                      is_empty: false,
+                      is_friday: isFriday,
+                      is_holiday: isHoliday,
+                      is_today: isToday,
+                      start_at: startAt.locale('en').format('YYYY/MM/DD HH:mm:ss'),
+                      index: j,
+                    })
+                    j++
+                    list.shift()
+                    boxDuration = app.duration
+                    boxStart = boxStart.add(boxDuration, 'minutes')
+                  } else {
+                    days[i].push({
+                      is_empty: true,
+                      is_friday: isFriday,
+                      is_holiday: isHoliday,
+                      is_today: isToday,
+                      start_at: boxStart.locale('en').format('YYYY/MM/DD HH:mm:ss'),
+                      start_at_time_fa: boxStart.locale('en').format('HH:mm'),
+                      index: j,
+                    })
+                    boxStart = boxStart.add(boxDuration, 'minutes')
+                    j++
+                  }
+                } else {
+                  days[i].push({
+                    ...app,
+                    is_empty: false,
+                    is_friday: isFriday,
+                    is_holiday: isHoliday,
+                    is_today: isToday,
+                    start_at: startAt.locale('en').format('YYYY/MM/DD HH:mm:ss'),
+                    index: j,
+                  })
+                  j++
+                  list.shift()
+                }
+              } else {
+                let j = 0;
+                while(boxStart.isBefore(dayEnd.format('YYYY/MM/DD HH:mm:ss')) || boxStart.isSame(dayEnd.format('YYYY/MM/DD HH:mm:ss'))) {
+                  days[i].push({
+                    is_empty: true,
+                    is_friday: isFriday,
+                    is_holiday: isHoliday,
+                    is_today: isToday,
+                    start_at: boxStart.locale('en').format('YYYY/MM/DD HH:mm:ss'),
+                    start_at_time_fa: boxStart.locale('en').format('HH:mm'),
+                    index: j,
+                  })
+                  j++
+                  boxStart = boxStart.add(boxDuration, 'minutes')
+                }
+                if (boxStart.isAfter(dayEnd.format('YYYY/MM/DD HH:mm:ss'))) {
+                  while(boxStart.isSameOrBefore(dayEndTime)) {
+                    days[i].push({
+                      is_empty: true,
+                      is_friday: isFriday,
+                      is_holiday: isHoliday,
+                      is_today: isToday,
+                      start_at: boxStart.locale('en').format('YYYY/MM/DD HH:mm:ss'),
+                      start_at_time_fa: boxStart.locale('en').format('HH:mm'),
+                      index: j,
+                    })
+                    j++
+                    boxStart = boxStart.add(boxDuration, 'minutes')
+                  }
+                  break
+                }
+              }
+            }
+            while (boxStart.isSameOrBefore(dayEndTime.format('YYYY/MM/DD HH:mm:ss'))) {
+              days[i].push({
+                is_empty: true,
+                is_friday: isFriday,
+                is_holiday: isHoliday,
+                is_today: isToday,
+                start_at: boxStart.locale('en').format('YYYY/MM/DD HH:mm:ss'),
+                start_at_time_fa: boxStart.locale('en').format('HH:mm'),
+                index: j,
+              })
+              j++
+              boxStart = boxStart.add(boxDuration, 'minutes')
+            }
+          } else {
+            let j = 0;
+            while(boxStart.isSameOrBefore(dayEnd.format('YYYY/MM/DD HH:mm:ss'))) {
+              days[i].push({
+                is_empty: true,
+                is_friday: isFriday,
+                is_holiday: isHoliday,
+                is_today: isToday,
+                start_at: boxStart.locale('en').format('YYYY/MM/DD HH:mm:ss'),
+                start_at_time_fa: boxStart.locale('en').format('HH:mm'),
+                index: j,
+              })
+              j++
+              boxStart = boxStart.add(boxDuration, 'minutes')
+            }
+          }
         } else {
           for (let j = 0; j < dayLength; j++) {
             if (list.length > 0) {
@@ -293,6 +386,7 @@ export default {
                 is_holiday: isHoliday,
                 is_today: jDate.format("YYYYMMDD") == today,
                 start_at: s.format('YYYY/MM/DD HH:mm:ss'),
+                start_at_time_fa: jDate.locale('en').format('HH:mm'),
                 index: j,
               })
             } else {
@@ -311,12 +405,13 @@ export default {
                 is_holiday: isHoliday,
                 is_today: jDate.locale('fa').format("YYYYMMDD") == today,
                 start_at: s.format('YYYY/MM/DD HH:mm:ss'),
+                start_at_time_fa: jDate.locale('en').format('HH:mm'),
                 index: j,
               })
             }
           }
         }
-        startDay = startDay.add(1, 'day')
+        startDay = startDay.add(1, 'days')
         if (days[i].length > maxLength) {
           maxLength = days[i].length
         }
@@ -340,6 +435,7 @@ export default {
             is_holiday: isHoliday,
             is_today: jDate.format("YYYYMMDD") == today,
             start_at: dayStart.format('YYYY/MM/DD HH:mm:ss'),
+            start_at_time_fa: dayStart.locale('en').format('HH:mm'),
             index: j,
           })
         }

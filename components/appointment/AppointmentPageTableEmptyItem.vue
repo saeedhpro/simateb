@@ -1,7 +1,7 @@
 <template>
   <div
     class="table-appointment-none"
-    :class="{'is-friday': isFriday, 'is-holiday': isHoliday, 'is-today': isToday}"
+    :class="{'is-friday': isFriday, 'is-holiday': isHoliday, 'is-today': isToday, 'show-hour': showHour}"
   >
     <div
       class="time"
