@@ -166,7 +166,6 @@ export default {
     }
   },
   mounted() {
-    moment.updateLocale('en', 'en')
     if (this.loadList) {
       const slider = this.$refs["table-wrapper"];
       let isDown = false;
@@ -203,9 +202,8 @@ export default {
       const res = await this.$axios.get(`/appointments/que/v4?start=${start}&end=${end}`)
       if (res.status == 200) {
         const data = res.data
-        const appointments = data.appointments
-        this.appointments = appointments
-        this.limits = data.limits
+        await this.$store.dispatch('appointment/setAppointments',data.appointments)
+        await this.$store.dispatch('appointment/setLimits', data.limits)
         if (this.showHour) {
           this.timeBaseDays = this.calcTimeBaseDays()
         } else {
@@ -281,6 +279,8 @@ export default {
       ]
       let today = moment().locale('fa').format("YYYYMMDD")
       let maxLength = dayLength
+      // moment.updateLocale('en', 'en')
+      moment.locale('en')
       while(startDay.locale('en').isBefore(lastDay.locale('en').format("YYYY/MM/DD"))) {
         days[i] = []
         let dayStart = startDay.clone()
@@ -602,16 +602,25 @@ export default {
     endDate: {
       get() {
         return this.$store.getters['appointment/getEndDate']
+      },
+      set(val) {
+        return this.$store.dispatch('appointment/setEndDate', val)
       }
     },
     workHour: {
       get() {
         return this.$store.getters['appointment/getWorkHour']
+      },
+      set(val) {
+        return this.$store.dispatch('appointment/setWorkHour', val)
       }
     },
     holidays: {
       get() {
         return this.$store.getters['appointment/getHolidays']
+      },
+      set(val) {
+        return this.$store.dispatch('appointment/setHolidays', val)
       }
     },
     showHour: {
@@ -666,10 +675,16 @@ export default {
       get() {
         return this.$store.getters['appointment/getYear']
       },
+      set(val) {
+        return this.$store.dispatch('appointment/setYear', val)
+      },
     },
     month: {
       get() {
         return this.$store.getters['appointment/getMonth']
+      },
+      set(val) {
+        return this.$store.dispatch('appointment/setMonth', val)
       },
     },
     limitList() {
