@@ -260,7 +260,7 @@
                         />
                         <img :src="getLogo(i)">
                         <span><nuxt-link :to="`/profile/${i.id}`">{{
-                            `${i.fname} ${i.lname}` | persianDigit
+                            `${i.fname} ${i.lname}`
                           }}</nuxt-link></span>
                       </div>
                     </td>
@@ -268,7 +268,7 @@
                     <td class="text-center"><span
                       class="text-center file-id">
                       <nuxt-link :to="`/profile/${i.id}`" class="file-id cursor-pointer">{{
-                          i.file_id ? i.file_id : '-' | persianDigit
+                          i.file_id ? i.file_id : '-'
                       }}</nuxt-link>
                     </span>
                     </td>
@@ -307,7 +307,7 @@
                         />
                         <img :src="getLogo(i)">
                         <span><nuxt-link :to="`/profile/${i.id}`">{{
-                            `${i.fname} ${i.lname}` | persianDigit
+                            `${i.fname} ${i.lname}`
                           }}</nuxt-link></span>
                       </div>
                     </td>

@@ -235,7 +235,7 @@
                           :src="getLogo(i)">
                         <span>
                           <a class="select-item-search" @click="openItem(i)">{{
-                              i.user ? `${i.user.fname} ${i.user.lname}` : '-' | persianDigit
+                              i.user ? `${i.user.fname} ${i.user.lname}` : '-'
                             }}</a>
                         </span>
                       </div>
@@ -243,7 +243,7 @@
                     <td class="text-center">{{ i.user && i.user.tel ? i.user.tel : '-' }}</td>
                     <td class="text-center">
                       <nuxt-link :to="i.user ? `/profile/${i.user.id}` : '#'" class="file-id cursor-pointer">{{
-                          i.user && i.user.file_id ? i.user.file_id : '-' | persianDigit
+                          i.user && i.user.file_id ? i.user.file_id : '-'
                         }}</nuxt-link>
                     </td>
                     <td class="text-center">{{ i.case_type ? i.case_type : '-' }}</td>
@@ -366,10 +366,10 @@
                           :src="getLogo(i)">
                         <span>
                           <a v-if="!isDoctor" @click="openItem(i)">{{
-                              i.user ? `${i.user.fname} ${i.user.lname}` : '-' | persianDigit
+                              i.user ? `${i.user.fname} ${i.user.lname}` : '-'
                             }}</a>
                           <nuxt-link v-if="isDoctor && i.user" :to="`/profile/${i.user.id}`">{{
-                              i.user ? `${i.user.fname} ${i.user.lname}` : '-' | persianDigit
+                              i.user ? `${i.user.fname} ${i.user.lname}` : '-'
                             }}</nuxt-link>
                           <span v-else></span>
                         </span>

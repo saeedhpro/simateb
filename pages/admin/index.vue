@@ -33,7 +33,7 @@
                     <td class="text-center">
                       <div class="table-row flex flex-row align-center justify-start">
                         <span><nuxt-link :to="`/admin/profile/${i.id}`">{{
-                            `${i.fname} ${i.lname}` | persianDigit
+                            `${i.fname} ${i.lname}`
                           }}</nuxt-link></span>
                       </div>
                     </td>
@@ -82,7 +82,7 @@
                     <td class="text-center">
                       <div class="table-row flex flex-row align-center justify-start">
                         <span><nuxt-link :to="`/admin/profile/${i.id}`">{{
-                            `${i.fname} ${i.lname}` | persianDigit
+                            `${i.fname} ${i.lname}`
                           }}</nuxt-link></span>
                       </div>
                     </td>

@@ -262,7 +262,7 @@
                           :src="getLogo(i)">
                         <span>
                           <nuxt-link v-if="i.user" :to="`/profile/${i.user.id}`">{{
-                              `${i.user.fname} ${i.user.lname}` | persianDigit
+                              `${i.user.fname} ${i.user.lname}`
                             }}</nuxt-link>
                           <span v-else></span>
                         </span>

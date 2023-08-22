@@ -274,7 +274,7 @@
                         />
                         <div class="mr-2">
                           <nuxt-link :to="`/profile/${i.user ? i.user.id : 1}`">{{
-                              i.user ? `${i.user.fname} ${i.user.lname}` : '-' | persianDigit
+                              i.user ? `${i.user.fname} ${i.user.lname}` : '-'
                             }}
                           </nuxt-link>
                         </div>
@@ -283,7 +283,7 @@
                     <td class="text-center">{{ i.user ? i.user.tel : '-' }}</td>
                     <td class="text-center">{{ i.msg ? i.msg : '-' }}</td>
                     <td class="text-center">{{
-                        i.staff ? `${i.staff.fname} ${i.staff.lname}` : '-' | persianDigit
+                        i.staff ? `${i.staff.fname} ${i.staff.lname}` : '-'
                       }}
                     </td>
                     <td class="text-center">
@@ -291,7 +291,7 @@
                     </td>
                     <td class="text-center"><span class="message"
                                                   :class="{'message-sent': i.sent, 'message-not-sent': !i.sent}">{{
-                        getStatus(i.sent) | persianDigit
+                        getStatus(i.sent)
                       }}</span></td>
                   </tr>
                 </template>

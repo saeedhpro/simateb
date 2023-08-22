@@ -115,7 +115,7 @@
                         />
                         <img :src="getLogo(i)">
                         <span><nuxt-link :to="`/admin/profile/${i.id}`">{{
-                            `${i.fname} ${i.lname}` | persianDigit
+                            `${i.fname} ${i.lname}`
                           }}</nuxt-link></span>
                       </div>
                     </td>
@@ -125,7 +125,7 @@
                     <td class="text-center" style="color: #000000">
                       <span v-if="i.organization">
                         <nuxt-link :to="`/admin/organizations/${i.organization.id}`">{{
-                            i.organization.name | persianDigit
+                            i.organization.name
                           }}</nuxt-link>
                       </span>
                       <span v-else>-</span>

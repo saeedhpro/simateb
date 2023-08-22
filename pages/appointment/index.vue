@@ -73,7 +73,7 @@ export default {
       this.loadList = false
       setTimeout(() => {
         this.loadList = true
-      }, 200)
+      }, 300)
     }
   },
   computed: {

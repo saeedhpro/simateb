@@ -101,18 +101,18 @@
                         />
                         <img :src="i.logo_link ? i.logo_link : 'https://randomuser.me/api/portraits/men/88.jpg'">
                         <span><nuxt-link :to="`/admin/organizations/${i.id}`">{{
-                            `${i.name}` | persianDigit
+                            `${i.name}`
                           }}</nuxt-link></span>
                       </div>
                     </td>
                     <td class="text-center">{{ i.phone }}</td>
                     <td class="text-center">{{ i.profession ? i.profession.name : '-' }}</td>
-                    <td class="text-center">{{ `${i.sms_credit} (${i.sms_price})` }}</td>
+                    <td class="text-center">{{ `${i.sms_credit} (${parseInt(i.sms_price)})` }}</td>
                     <td class="text-center">
                       {{ i.created_at_ago ? i.created_at_ago : '-' }}
                     </td>
                     <td class="text-center">{{
-                        i.staff ? `${i.staff.fname} ${i.staff.lname}` : '-' | persianDigit
+                        i.staff ? `${i.staff.fname} ${i.staff.lname}` : '-'
                       }}
                     </td>
                   </tr>

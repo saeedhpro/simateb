@@ -85,7 +85,7 @@
                     </v-col>
                     <v-col cols="6">
                       <div class="value-box">{{
-                          user.birth_date_jallali ? user.birth_date_jallali : '-' | persianDigit
+                          user.birth_date_jallali ? user.birth_date_jallali : '-'
                         }}
                       </div>
                     </v-col>

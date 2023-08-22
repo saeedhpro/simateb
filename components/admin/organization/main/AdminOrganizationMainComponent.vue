@@ -84,7 +84,7 @@
                   />
                   <img :src="i.logo ? i.logo : 'https://randomuser.me/api/portraits/men/88.jpg'">
                   <span class="cursor-pointer" @click="editUser(i)">{{
-                      `${i.fname} ${i.lname}` | persianDigit
+                      `${i.fname} ${i.lname}`
                     }}</span>
                 </div>
               </td>
@@ -92,7 +92,7 @@
               <td class="text-center"><span
                 class="text-center file-id">
                 <nuxt-link :to="`/admin/profile/${i.id}`" class="file-id cursor-pointer">{{
-                  i.file_id ? i.file_id : '-' | persianDigit
+                  i.file_id ? i.file_id : '-'
                 }}</nuxt-link>
                 </span>
               </td>
