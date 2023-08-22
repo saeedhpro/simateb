@@ -148,6 +148,9 @@ export const actions = {
   setLimits(ctx, val) {
     ctx.commit('setLimits', val)
   },
+  setHolidays(ctx, val) {
+    ctx.commit('setHolidays', val)
+  },
 }
 
 export const getters = {
