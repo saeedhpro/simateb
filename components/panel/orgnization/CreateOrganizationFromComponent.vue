@@ -467,7 +467,6 @@ export default {
       this.organization.rel_organizations = this.organization.rel_organizations.filter(i => i.rel_organization.id !== val.id)
     },
     addRel(val) {
-      console.log(val, "val")
       this.organization.rel_organizations.push({
         organization: this.organization,
         organization_id: this.organization.id,

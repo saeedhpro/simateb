@@ -64,25 +64,6 @@
             <v-col
               cols="12"
             >
-              <div class="create-update-model-input-box">
-                <label>تاریخ</label>
-                <date-picker
-                  v-model="form.hdate"
-                  format="YYYY-MM-DD HH:mm"
-                  display-format="jYYYY/jMM/jDD HH:mm"
-                  editable
-                  class="date-picker"
-                  type="datetime"
-                >
-                  <template v-slot:label>
-                    <img src="/images/form/datepicker.svg">
-                  </template>
-                </date-picker>
-              </div>
-            </v-col>
-            <v-col
-              cols="12"
-            >
               <data-table-component
                 :headers="headers"
                 :page="search.page"
