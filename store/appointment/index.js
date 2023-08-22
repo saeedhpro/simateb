@@ -20,6 +20,8 @@ export const state = () => ({
   showPazireshModal: false,
   appointmentID: 0,
   showItemModal: false,
+  appointments: [],
+  limits: [],
 })
 
 export const mutations = {
@@ -69,6 +71,12 @@ export const mutations = {
   },
   setShowItemModal(state, showItemModal) {
     state.showItemModal = showItemModal
+  },
+  setAppointments(state, appointments) {
+    state.appointments = appointments
+  },
+  setLimits(state, limits) {
+    state.limits = limits
   },
 }
 
@@ -134,6 +142,12 @@ export const actions = {
   setShowItemModal(ctx, val) {
     ctx.commit('setShowItemModal', val)
   },
+  setAppointments(ctx, val) {
+    ctx.commit('setAppointments', val)
+  },
+  setLimits(ctx, val) {
+    ctx.commit('setLimits', val)
+  },
 }
 
 export const getters = {
@@ -178,5 +192,11 @@ export const getters = {
   },
   getShowItemModal(state) {
     return state.showItemModal
+  },
+  getAppointments(state) {
+    return state.appointments
+  },
+  getLimits(state) {
+    return state.limits
   }
 }

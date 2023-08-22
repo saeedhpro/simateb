@@ -11,7 +11,7 @@
         <div class="nav-bar">
           <div v-if="loginUser" class="user-profile-box d-none d-sm-flex">
             <img :src="loginUser.logo" />
-            <span class="user-full-name">{{ `${loginUser.fname} ${loginUser.lname}` | persianDigit}}</span>
+            <span class="user-full-name">{{ `${loginUser.fname} ${loginUser.lname}` }}</span>
             <v-menu
               offset-y
             >

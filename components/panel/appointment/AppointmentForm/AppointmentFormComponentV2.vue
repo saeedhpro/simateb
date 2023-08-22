@@ -51,7 +51,7 @@
                     <div class="detail-box">
                       <div class="name-box">
                         <nuxt-link :to="appointment.user ? `/profile/${appointment.user.id}` : '#'">{{
-                            appointment.user ? `${appointment.user.fname} ${appointment.user.lname}` : '-' | persianDigit
+                            appointment.user ? `${appointment.user.fname} ${appointment.user.lname}` : '-'
                           }}</nuxt-link>
                         <span class="small" v-if="appointment.user && appointment.user.age > 0">
                           {{ `(${appointment.user.age} سال)` }}
@@ -65,7 +65,7 @@
                       >
                         <span class="small">شماره پرونده: </span>
                         <span class="file-id">{{
-                            appointment.user && appointment.user.file_id ? appointment.user.file_id : '-' | persianDigit
+                            appointment.user && appointment.user.file_id ? appointment.user.file_id : '-'
                           }}</span>
                       </div>
                       <div class="phone-box second"
@@ -103,7 +103,7 @@
                     </span>
                     <span>
                       {{
-                        moment.from(appointment.start_at, "en", "YYYY/MM/DDTHH:mm:ssZ").format("HH:mm") | persianDigit
+                        moment.from(appointment.start_at, "en", "YYYY/MM/DDTHH:mm:ssZ").format("HH:mm")
                       }}</span>
                   </div>
                   <div

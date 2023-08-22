@@ -1,8 +1,7 @@
 <template>
   <div class="create-update-model-input-box" :class="{'has-error': error}">
     <label v-if="label">{{ label }}</label>
-<!--    <input v-money="money" :type="type" v-model.lazy="data" :autocomplete="type === 'password' ? 'new-password' : 'off'">-->
-    <input v-model="data">
+    <input v-model="data" @focusin="onFocusIn" @focusout="onFocusOut">
     <span class="create-update-modal-input-error" v-if="error">{{ error }}</span>
     <span class="create-update-modal-input-error">{{ fa }}</span>
   </div>
@@ -30,15 +29,15 @@ export default {
       default: "",
     },
   },
-  data() {
-    return {
-      money: {
-        decimal: '.',
-        thousands: ',',
-        suffix: ' ',
-        prefix: '',
-        precision: 0,
-        masked: false
+  methods: {
+    onFocusIn() {
+      if (this.value == 0) {
+        this.data = ''
+      }
+    },
+    onFocusOut() {
+      if (this.value == 0) {
+        this.data = 0
       }
     }
   },
@@ -53,9 +52,9 @@ export default {
     },
     fa() {
       if (this.data) {
-        return this.data + ' تومان'
+        return this.$num2persian(this.data) + ' تومان'
       }
-      return ''
+      return this.$num2persian(0) + ' تومان'
     }
   }
 }
