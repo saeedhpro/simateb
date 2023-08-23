@@ -3,7 +3,7 @@
     <label v-if="label">{{ label }}</label>
     <div class="custom-date-input-box">
       <div class="date-input-box">
-        <input v-model="dateFormatted" @input="onDateChange" maxlength="16" type="text" pattern="YYYY/MM/DD HH:mm" :placeholder="placeholder"/>
+        <input v-model="dateFormatted" @input="onDateChange" maxlength="16" type="text" pattern="YYYY/MM/DD HH:mm"/>
         <img @click="openCalendar" alt="" src="/images/form/datepicker.svg">
       </div>
     </div>
@@ -277,6 +277,7 @@ export default {
     }
   },
   mounted() {
+    moment.locale('en')
     this.setInitDateValue()
   },
   methods: {
@@ -292,7 +293,7 @@ export default {
     setInitDateValue() {
       let date = this.initialValue
       if (this.type == 'time') {
-        date = `${this.$moment().format("YYYY/MM/DD")} ${date}`
+        date = `${moment().format("YYYY/MM/DD")} ${date}`
       }
       if (date && this.isValidDate(date)) {
         this.date = date

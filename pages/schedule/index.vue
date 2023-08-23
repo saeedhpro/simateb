@@ -531,15 +531,21 @@ export default {
   layout: "panel",
   middleware: "auth",
   components: {AppointmentReserveComponent, CustomRadioBox, DataTableComponent},
-  mounted() {
+  async mounted() {
+    await this.getWorkHour()
     const year = parseInt(moment().local().format("jYYYY"))
     const month = parseInt(moment().local().format("jMM"))
     this.year = year
     this.month = month
     this.paginate()
     this.setCases()
+    this.form.start = this.workHour.start
+    this.form.end = this.workHour.end
   },
   methods: {
+    async getWorkHour() {
+      return this.$store.dispatch('appointment/getOrganizationWorkHour', this.loginUser.organization_id)
+    },
     setCases() {
       const cases = this.loginUser.organization.case_types;
       this.case_types = cases ? cases.split(",") : []
@@ -558,9 +564,12 @@ export default {
       if (month < 10) {
         month = `0${month}`
       }
+      let startDay = moment(`${year}/${month}/01`, 'jYYYY/jMM/jDD', 'fa').locale('en')
+      let endDay = startDay.clone().endOf('jMonth').locale('en')
       this.$store.dispatch('schedule/getList', {
         ...this.search,
-        date: `${this.year}/${month}/01`
+        start: startDay.format('YYYY/MM/DD'),
+        end: endDay.format('YYYY/MM/DD')
       })
     },
     paginate(page = 1) {
@@ -628,6 +637,8 @@ export default {
         app: 0,
         organization_id: null,
       }
+      this.form.start = this.workHour.start
+      this.form.end = this.workHour.end
     },
     validateForm(form) {
       let isValid = true
@@ -835,7 +846,14 @@ export default {
     loginUser() {
       return this.$store.getters['login/getUser']
     },
-
+    workHour: {
+      get() {
+        return this.$store.getters['appointment/getWorkHour']
+      },
+      set(val) {
+        return this.$store.dispatch('appointment/setWorkHour', val)
+      }
+    },
     years() {
       const years = [];
       const year = parseInt(this.$moment().format("jYYYY")) + 10;
