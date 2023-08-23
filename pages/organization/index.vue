@@ -418,13 +418,22 @@
           </v-row>
         </v-card>
       </v-col>
-      <appointment-form-component-v2
-        :open="showAppointmentModal"
-        :item="item"
+<!--      <appointment-form-component-v2-->
+<!--        :open="showAppointmentModal"-->
+<!--        :item="item"-->
+<!--        :is-surgery="false"-->
+<!--        @close="closeAppointmentModal"-->
+<!--        @done="doneAppointmentModal"-->
+<!--        @remove="paginate"-->
+<!--      />-->
+      <appointment-page-item-form
+        :id="appointmentID"
         :is-surgery="false"
+        v-if="showAppointmentModal"
+        :open="showAppointmentModal"
         @close="closeAppointmentModal"
-        @done="doneAppointmentModal"
         @remove="paginate"
+        @done="doneAppointmentModal"
       />
       <admin-delete-users-component
         :open="showDelete"
@@ -518,6 +527,7 @@ export default {
       showAppointmentModal: false,
       showDelete: false,
       showSmsModal: false,
+      appointmentID: 0,
       doctorHeaders: [
         '',
         'بیمار',
@@ -681,6 +691,7 @@ export default {
     },
     openAppointmentModal(item) {
       this.item = item
+      this.appointmentID = item.id
       this.toggleAppointmentModal()
     },
     openAppointmentModalItem(item, type) {
@@ -719,14 +730,14 @@ export default {
       this.toggleAppointmentModal()
       setTimeout(() => {
         this.item = null
+        this.appointmentID = 0
       }, 100)
     },
     doneAppointmentModal() {
-      this.toggleAppointmentModal()
       if (this.item) {
+        this.appointmentID = this.item.id
         this.getAppointmentList()
       }
-      this.item = null
     },
     toggleAppointmentModal() {
       this.showAppointmentModal = !this.showAppointmentModal
