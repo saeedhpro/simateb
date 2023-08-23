@@ -252,8 +252,10 @@
                 md="6"
               >
                 <div class="create-update-model-input-box">
-                  <label>ظرفیت Doctor</label>
-                  <input type="number" v-model="form.count">
+                  <custom-number-input
+                    label="ظرفیت Doctor"
+                    v-model="form.count"
+                  />
                 </div>
               </v-col>
               <v-col
@@ -262,8 +264,10 @@
                 md="6"
               >
                 <div class="create-update-model-input-box">
-                  <label>ظرفیت Site</label>
-                  <input type="number" v-model="form.site">
+                  <custom-number-input
+                    label="ظرفیت Site"
+                    v-model="form.site"
+                  />
                 </div>
               </v-col>
               <v-col
@@ -272,8 +276,10 @@
                 md="6"
               >
                 <div class="create-update-model-input-box">
-                  <label>ظرفیت App</label>
-                  <input type="number" v-model="form.app">
+                  <custom-number-input
+                    label="ظرفیت App"
+                    v-model="form.app"
+                  />
                 </div>
               </v-col>
               <v-col
