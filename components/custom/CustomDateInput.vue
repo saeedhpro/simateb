@@ -533,13 +533,13 @@ export default {
       if (!this.faDate) {
         return ""
       }
-      return moment.from(this.faDate, "fa", "jYYYY/jMM/jDD").format("MMMM")
+      return moment.from(this.faDate, "fa", "jYYYY/jMM/jDD").locale('fa').format("MMMM")
     },
     faDaysInMonth() {
       if (!this.faDate) {
         return 0
       }
-      return moment.from(this.faDate, "fa", "jYYYY/jMM").jDaysInMonth()
+      return moment.from(this.faDate, "fa", "jYYYY/jMM").locale('fa').jDaysInMonth()
     },
     monthDays() {
       let days = []
