@@ -1279,7 +1279,17 @@ export default {
         })
         .finally(() => {
           this.loading = false
-          this.closeForm()
+          this.getAppointment(this.id)
+        })
+    },
+    createAppCode() {
+      if (this.appointment.appcode) {
+        this.loading = false
+        return
+      }
+      this.$store.dispatch('appointments/createAppointmentAppCode', this.appointment.id)
+        .then((res) => {
+          this.appointment.appcode = res.data
         })
     },
     doWaiting() {
