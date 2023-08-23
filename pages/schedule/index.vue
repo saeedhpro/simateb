@@ -755,7 +755,7 @@ export default {
         page: 1,
       },
       form: {
-        date: '',
+        date: moment().locale('en').format('YYYY/MM/DD'),
         start: '08:00:00',
         end: '10:00:00',
         id: null,

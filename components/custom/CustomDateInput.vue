@@ -74,7 +74,7 @@
                   <v-icon size="medium">mdi-arrow-right</v-icon>
                 </v-btn>
                 <span class="custom-date-picker-content-title" v-if="faDate">
-                  <span>{{ faDate | toPersianDate('MMMM') }} {{jYear}}</span>
+                  <span>{{ faDateString }} {{jYear}}</span>
                 </span>
                 <v-btn
                   dense
@@ -373,7 +373,7 @@ export default {
       if (this.selectedDay) {
         const dStr = this.$moment(this.date).format('jYYYY/jMM')
         const d = `${dStr}/${day}`.replaceAll('/', '')
-        const date = moment.from(this.$moment(this.selectedDay).format("YYYY/MM/DD HH:mm:ss"), "en", "YYYY/MM/DD HH:mm:ss").utc().format("jYYYYjMMjDD")
+        const date = moment.from(this.$moment(this.selectedDay).format("YYYY/MM/DD HH:mm:ss"), "en", "YYYY/MM/DD HH:mm:ss").locale('en').format("jYYYYjMMjDD")
         return date === d
       }
       return false
@@ -382,12 +382,13 @@ export default {
       if (this.date && day) {
         const dStr = this.$moment(this.date).format('jYYYY/jMM')
         const d = `${dStr}/${day}`.replaceAll('/', '')
-        const date = moment.from(this.$moment().format("YYYY/MM/DD HH:mm:ss"), "en", "YYYY/MM/DD HH:mm:ss").utc().format("jYYYYjMMjDD")
+        const date = moment.from(this.$moment().format("YYYY/MM/DD HH:mm:ss"), "en", "YYYY/MM/DD HH:mm:ss").locale('en').format("jYYYYjMMjDD")
        return date === d
       }
       return false
     },
     selectDay(day, accepted = false) {
+      moment.locale('en')
       if (!day || this.disabled) return
       let hour = this.hour.toString().length === 2 ? this.hour.toString() : `0${this.hour}`
       let minute = this.minute.toString().length === 2 ? this.minute.toString() : `0${this.minute}`
@@ -412,7 +413,9 @@ export default {
         } else if (this.type === 'time') {
           let date = moment(`${this.$moment().format('YYYY/MM/DD')} ${hour}:${minute}:00`, "YYYY/MM/DD HH:mm:ss")
           this.dateFormatted = date.format("HH:mm")
-          selectedDay = moment(`${this.$moment().format('YYYY/MM/DD')} ${this.dateFormatted}`, this.getFormat).locale("en").format(this.getEnFormat)
+          selectedDay = moment(`${moment().format('YYYY/MM/DD')} ${this.dateFormatted}`, this.getFormat)
+          let hourMinute = this.dateFormatted.split(':')
+          selectedDay = moment().locale('en').set({hour: parseInt(hourMinute[0]), minute: parseInt(hourMinute[1])}).format(this.getEnFormat)
           this.selectedDay = date.format("YYYY/MM/DD HH:mm:ss")
         }
         this.closeCalendar()
@@ -524,7 +527,13 @@ export default {
       if (!this.date) {
         return ""
       }
-      return this.$moment(this.date).locale("fa").format('jYYYY/jMM/jDD')
+      return this.$moment(this.date).locale("en").format('jYYYY/jMM/jDD')
+    },
+    faDateString() {
+      if (!this.faDate) {
+        return ""
+      }
+      return moment.from(this.faDate, "fa", "jYYYY/jMM/jDD").format("MMMM")
     },
     faDaysInMonth() {
       if (!this.faDate) {
