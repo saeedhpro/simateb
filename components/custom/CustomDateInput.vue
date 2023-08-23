@@ -533,7 +533,7 @@ export default {
       if (!this.faDate) {
         return ""
       }
-      return moment.from(this.faDate, "fa", "jYYYY/jMM/jDD").locale('fa').format("MMMM")
+      return moment.from(this.faDate, "fa", "jYYYY/jMM/jDD").locale('fa').format("jMMMM")
     },
     faDaysInMonth() {
       if (!this.faDate) {
