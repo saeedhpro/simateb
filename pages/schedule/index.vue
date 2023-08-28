@@ -171,23 +171,25 @@
               >
                 <div class="create-update-model-input-box">
                   <label>تاریخ</label>
+                  <date-picker
+                    v-if="create"
+                    v-model="form.dates"
+                    format="YYYY-MM-DD"
+                    display-format="jYYYY/jMM/jDD"
+                    class="date-picker"
+                    multiple
+                    :auto-submit="false"
+                  >
+                    <template v-slot:label>
+                      <img src="/images/form/datepicker.svg">
+                    </template>
+                  </date-picker>
                   <custom-date-input
+                    v-else
                     :type="'date'"
                     v-model="form.date"
                     :initial-value="form.date"
                   />
-<!--                  <date-picker-->
-<!--                    v-model="form.date"-->
-<!--                    format="YYYY-MM-DD"-->
-<!--                    display-format="jYYYY/jMM/jDD"-->
-<!--                    editable-->
-<!--                    class="date-picker"-->
-<!--                    type="date"-->
-<!--                  >-->
-<!--                    <template v-slot:label>-->
-<!--                      <img src="/images/form/datepicker.svg">-->
-<!--                    </template>-->
-<!--                  </date-picker>-->
                 </div>
               </v-col>
               <v-col
@@ -613,6 +615,7 @@ export default {
         app: schedule.app,
         case_type: schedule.case_type,
         organization_id: schedule.organization_id,
+        dates: []
       }
       this.toggleCreateModal()
     },
@@ -629,20 +632,29 @@ export default {
     },
     clearForm() {
       this.form = {
+        start: this.workHour.start,
+        end: this.workHour.end,
+        case_type: '',
         id: null,
+        date: '',
         start_at: '',
         end_at: '',
         count: 0,
         site: 0,
         app: 0,
         organization_id: null,
+        dates: [],
       }
       this.form.start = this.workHour.start
       this.form.end = this.workHour.end
     },
     validateForm(form) {
       let isValid = true
-      if (!form.date) {
+      if (this.create && form.dates.length == 0) {
+        isValid = false
+        this.$toast.error('تاریخ را وارد کنید')
+      }
+      if (!this.create && !form.date) {
         isValid = false
         this.$toast.error('تاریخ را وارد کنید')
       }
@@ -665,16 +677,20 @@ export default {
       if (!this.validateForm(this.form)) {
         return
       }
-      this.$store.dispatch(type, {
+      let data = {
         id: this.form.id,
         start_at: `${this.form.date} ${this.form.start}`,
+        start: this.form.start,
         end_at: `${this.form.date} ${this.form.end}`,
+        end: this.form.end,
         count: parseInt(this.form.count),
         site: parseInt(this.form.site),
         app: parseInt(this.form.app),
         case_type: this.form.case_type,
         organization_id: this.form.organization_id ? parseInt(this.form.organization_id) : parseInt(this.loginUser.organization_id),
-      })
+        dates: this.form.dates,
+      }
+      this.$store.dispatch(type, data)
         .then(() => {
           setTimeout(() => {
             this.closeForm()
@@ -783,6 +799,7 @@ export default {
         app: 0,
         case_type: '',
         organization_id: null,
+        dates: [],
       },
       lastDay: 0,
       month: 1,

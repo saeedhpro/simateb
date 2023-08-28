@@ -124,6 +124,12 @@ import LoadingCard from "~/components/global/LoadingCard.vue";
 export default {
   name: "AppointmentPageSearch",
   components: {LoadingCard},
+  props: {
+    isSurgery: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       loading: false,
@@ -271,9 +277,15 @@ export default {
           })
           break;
         case 3:
-          this.$router.push({
-            path: '/cases'
-          })
+          if (this.isSurgery) {
+            this.$router.push({
+              path: '/cases/surgeries'
+            })
+          } else {
+            this.$router.push({
+              path: '/cases'
+            })
+          }
           break;
         case 4:
           this.openShowWorkHour()

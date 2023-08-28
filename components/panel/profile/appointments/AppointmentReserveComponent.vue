@@ -89,6 +89,8 @@
                 <custom-phone-number-input
                   :label="'شماره موبایل'"
                   v-model="form.tel"
+                  :error="errors.tel"
+                  @input="errors.tel = ''"
                 />
               </v-col>
               <v-col
@@ -116,6 +118,8 @@
                     :type="'date'"
                     v-model="form.birth_date"
                     :initial-value="form.birth_date"
+                    :error="errors.birth_date"
+                    @input="errors.birth_date = ''"
                   />
                 </div>
               </v-col>
@@ -229,6 +233,10 @@ export default{
         lname: '',
         organization_id: '',
         case_type: '',
+        start_at: '',
+        birth_date: '',
+        gender: '',
+        tel: '',
       },
     }
   },
@@ -269,6 +277,9 @@ export default{
         organization_id: this.form.organization_id.id,
         case_type: this.form.case_type.name
       }
+      if(!this.validateForm(data)) {
+        return
+      }
       this.$store.dispatch('appointments/reserveAppointmentForDoctor', data)
         .then(res => {
           this.closeForm()
@@ -276,6 +287,50 @@ export default{
         .catch(err => {
           console.log(err, "err")
         })
+    },
+    validateForm(form) {
+      let isValid = true
+      if (!form.fname) {
+        isValid = false
+        this.errors.fname = 'نام بیمار را وارد کنید'
+        this.$toast.error('نام بیمار را وارد کنید')
+      }
+      if (!form.lname) {
+        isValid = false
+        this.errors.lname = 'نام خانوادگی بیمار را وارد کنید'
+        this.$toast.error('نام خانوادگی بیمار را وارد کنید')
+      }
+      if (!form.organization_id) {
+        isValid = false
+        this.errors.organization_id = 'پزشک را انتخاب کنید'
+        this.$toast.error('پزشک را انتخاب کنید')
+      }
+      if (!form.case_type) {
+        isValid = false
+        this.errors.case_type = 'نوع خدمت را انتخاب کنید'
+        this.$toast.error('نوع خدمت را انتخاب کنید')
+      }
+      if (!form.tel) {
+        isValid = false
+        this.errors.tel = 'شماره موبایل بیمار را وارد کنید'
+        this.$toast.error('شماره موبایل بیمار را وارد کنید')
+      }
+      if (!form.gender) {
+        isValid = false
+        this.errors.gender = 'جنسیت بیمار را انتخاب کنید'
+        this.$toast.error('جنسیت بیمار را انتخاب کنید')
+      }
+      if (!form.birth_date) {
+        isValid = false
+        this.errors.birth_date = 'تاریخ تولد بیمار را وارد کنید'
+        this.$toast.error('تاریخ تولد بیمار را وارد کنید')
+      }
+      if (!form.start_at) {
+        isValid = false
+        this.errors.start_at = 'تاریخ رزرو وقت را وارد کنید'
+        this.$toast.error('تاریخ رزرو وقت را وارد کنید')
+      }
+      return isValid
     },
     getOrganizations() {
       this.$axios.get('/organizations/type')
@@ -285,9 +340,13 @@ export default{
     },
     getCaseTypes(val) {
       // this.$axios.get(`/organizations/${this.loginUser.organization_id}/cases`)
-      this.$axios.get(`/organizations/${val.id}/cases`)
+      this.$axios.get(`/organizations/${val.id}/cases/v2`)
         .then(res => {
-          this.case_types = res.data.data
+          const cases = res.data.data
+          this.case_types = cases.map(i => ({
+            id: i,
+            name: i
+          }))
         })
     },
     getWindows(caseType) {

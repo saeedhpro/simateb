@@ -268,6 +268,7 @@ export default {
     }
   },
   mounted() {
+    this.getCaseTypes()
   },
   methods: {
     closeForm() {

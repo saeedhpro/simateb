@@ -471,9 +471,11 @@ export default {
     this.resetForm()
     this.getProvinces()
       .then(() => {
-        this.getCounties(this.item.province_id)
+        let provinceId = this.item.province_id ?? this.province.id
+        this.getCounties(provinceId)
           .then(() => {
-            this.getCities(this.item.county_id)
+            let countyId = this.item.county_id ?? this.county.id
+            this.getCities(countyId)
           })
       })
     this.getOrganizations()

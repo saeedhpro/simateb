@@ -62,7 +62,7 @@ export const actions = {
       })
   },
   createSchedule(ctx, data) {
-    return this.$axios.post(`/organizations/schedules?`, data)
+    return this.$axios.post(`/organizations/schedules/multiple`, data)
       .then(res => {
         return Promise.resolve(res)
       })

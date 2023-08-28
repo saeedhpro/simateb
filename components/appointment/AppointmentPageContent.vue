@@ -8,9 +8,11 @@
       >
         <appointment-page-search
           v-if="!loading"
+          :is-surgery="isSurgery"
         />
         <appointment-page-list
           v-if="!loading"
+          :is-surgery="isSurgery"
         />
       </v-card>
     </v-col>
@@ -19,6 +21,12 @@
 <script>
 export default {
   name: "AppointmentPageComponent",
+  props: {
+    isSurgery: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       loading: true

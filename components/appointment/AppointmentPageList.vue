@@ -155,6 +155,12 @@ import LoadingCard from "~/components/global/LoadingCard.vue";
 export default {
   name: "AppointmentPageList",
   components: {LoadingCard, TableAppointmentV2, TableAppointmentNoneV2},
+  props: {
+    isSurgery: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       loading: false,
@@ -199,7 +205,11 @@ export default {
     async getAppointmentList() {
       const start = this.startDate.clone().locale('en').format("YYYY/MM/DD")
       const end = this.endDate.clone().locale('en').format("YYYY/MM/DD")
-      const res = await this.$axios.get(`/appointments/que/v4?start=${start}&end=${end}`)
+      let url = `/appointments/que/v4?start=${start}&end=${end}`
+      if (this.isSurgery) {
+        url += `&ct=جراحی`
+      }
+      const res = await this.$axios.get(url)
       if (res.status == 200) {
         const data = res.data
         await this.$store.dispatch('appointment/setAppointments',data.appointments)
