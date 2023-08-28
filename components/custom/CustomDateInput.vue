@@ -1,5 +1,5 @@
 <template>
-  <div class="create-update-model-input-box">
+  <div class="create-update-model-input-box" :class="{'has-error': error}">
     <label v-if="label">{{ label }}</label>
     <div class="custom-date-input-box">
       <div class="date-input-box">
@@ -197,6 +197,7 @@
         </template>
       </v-dialog>
     </div>
+    <span class="create-update-modal-input-error" v-if="error">{{ error }}</span>
   </div>
 </template>
 
@@ -239,7 +240,11 @@ export default {
     type: {
       type: String,
       default: 'datetime'
-    }
+    },
+    error: {
+      type: String,
+      default: ""
+    },
   },
   data() {
     return {

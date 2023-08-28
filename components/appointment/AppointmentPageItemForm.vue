@@ -1248,7 +1248,7 @@ export default {
       const data = {
         ...this.appointment,
         results: this.newFiles,
-        start_at: this.item.start_at,
+        start_at: this.appointment.start_at,
       }
       delete data.staff
       delete data.organization
@@ -1318,7 +1318,7 @@ export default {
       const data = {
         ...this.appointment,
         results: this.newFiles,
-        start_at: this.item.start_at,
+        start_at: this.appointment.start_at,
       }
       delete data.staff
       delete data.organization
