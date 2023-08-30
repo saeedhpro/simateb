@@ -3,7 +3,7 @@
     <v-app-bar
       :clipped-left="clipped"
       app
-      height="84"
+      height="auto"
       color="#3D3D66"
     >
       <v-app-bar-nav-icon class="d-flex d-md-none open-drawer" @click.stop="rightDrawer = !rightDrawer" />

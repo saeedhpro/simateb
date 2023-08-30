@@ -144,6 +144,48 @@
                 </div>
               </v-col>
             </v-row>
+            <v-row
+              v-if="!isVerified"
+            >
+              <v-col
+                cols="12"
+                sm="6"
+                md="4"
+              >
+                <button
+                  class="second-button"
+                  @click="sendCode"
+                  v-if="!sent"
+                >
+                  ارسال کد تایید
+                </button>
+                <button
+                  class="main-button"
+                  @click="verifyCode"
+                  v-else
+                >
+                  تایید
+                </button>
+              </v-col>
+            </v-row>
+            <v-row
+              v-if="!isVerified"
+            >
+              <v-col
+                cols="12"
+                sm="6"
+                md="4"
+                v-if="sent"
+              >
+                <custom-text-input
+                  v-model="code"
+                  :error="errors.code"
+                  @input="errors.code = ''"
+                  label="کد تایید"
+                />
+                <span>{{ time }}</span>
+              </v-col>
+            </v-row>
           </v-container>
         </v-card-text>
         <v-card-actions>
@@ -184,6 +226,7 @@
                     <button
                       class="main-button"
                       @click="save"
+                      :disabled="!isVerified"
                     >
                       رزرو وقت
                     </button>
@@ -215,6 +258,11 @@ export default{
   data() {
     return {
       loaded: false,
+      isVerified: false,
+      sent: false,
+      code: '',
+      time: 60,
+      interval: null,
       form: {
         fname: '',
         lname: '',
@@ -237,6 +285,7 @@ export default{
         birth_date: '',
         gender: '',
         tel: '',
+        code: '',
       },
     }
   },
@@ -245,6 +294,62 @@ export default{
     this.getOrganizations()
   },
   methods: {
+    sendCode() {
+      if (!this.form.organization_id) {
+        this.$toast.error('پزشک را انتخاب کنید')
+        return
+      }
+      if (!this.form.tel) {
+        this.$toast.error('شماره موبایل را کنید')
+        return
+      }
+      const data = {
+        'ref_organization_id': this.form.organization_id.id,
+        'organization_id': this.loginUser.organization_id,
+        'tel': this.form.tel,
+      };
+      this.$axios.post('/organizations/appointments/reserve/code', data)
+        .then(res=> {
+          this.$toast.success('کد تایید برای شما ارسال شد')
+          this.sent = true
+          const self = this
+          this.time = 60
+          this.interval = setInterval(function(){
+            if (self.time == 0) {
+              clearInterval(self.interval)
+              this.time = 60
+              if (!self.isVerified) {
+                self.sent = false
+              }
+              this.code = ''
+            } else {
+              self.time -= 1
+            }
+          }, 1000);
+        })
+    },
+    verifyCode() {
+      const data = {
+        'tel': this.form.tel,
+        'code': this.code,
+        'organization_id': this.loginUser.organization_id,
+      };
+      this.$axios.post('/organizations/appointments/reserve/code/verify', data)
+        .then(res => {
+          this.isVerified = true
+          this.$toast.success('احراز هویت شما با موفقیت انجام شد')
+        })
+        .catch(err => {
+          this.$toast.error('کد احراز هویت وارد شده صحیح نیست یا منقضی شده است')
+          this.sent = false
+          this.isVerified = false
+        })
+        .finally(() => {
+          this.time = 60
+          this.code = ''
+          clearInterval(this.interval)
+        })
+    },
     closeForm() {
       this.$emit('close')
       this.resetErrors()
@@ -256,6 +361,11 @@ export default{
         lname: '',
         organization_id: '',
         case_type: '',
+        start_at: '',
+        birth_date: '',
+        gender: '',
+        tel: '',
+        code: '',
       }
     },
     resetForm() {
@@ -267,8 +377,11 @@ export default{
         gender: '',
         tel: '',
         birth_date: '',
+        code: '',
         start_at: '',
       }
+      this.sent = false
+      this.isVerified = false
       this.resetErrors()
     },
     save() {
