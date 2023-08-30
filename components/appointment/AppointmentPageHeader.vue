@@ -25,7 +25,8 @@
           <span class="title">جدول جراحی</span>
         </nuxt-link>
 
-        <v-divider inset/>
+        <v-divider class="d-none d-lg-flex" inset/>
+        <v-spacer class="d-none d-sm-flex d-lg-none"/>
         <div class="page-actions"
              @click="togglePazireshModal"
         >

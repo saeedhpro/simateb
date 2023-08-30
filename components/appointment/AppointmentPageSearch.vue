@@ -2,8 +2,8 @@
   <v-row class="search-box" v-if="!loading">
     <v-col
       cols="12"
-      sm="2"
-      md="1"
+      sm="4"
+      md="2"
     >
       <div class="right-box">
         <v-select
@@ -19,8 +19,8 @@
     </v-col>
     <v-col
       cols="12"
-      sm="2"
-      md="1"
+      sm="4"
+      md="2"
     >
       <div class="right-box">
         <v-select
@@ -36,8 +36,8 @@
     </v-col>
     <v-col
       cols="12"
-      sm="3"
-      md="1"
+      sm="4"
+      md="2"
     >
       <div class="right-box">
         <div class="mt-4 tafkik">نمایش به تفکیک:</div>
@@ -45,8 +45,8 @@
     </v-col>
     <v-col
       cols="12"
-      sm="3"
-      md="1"
+      sm="4"
+      md="2"
     >
       <div class="right-box">
         <button
@@ -70,8 +70,8 @@
     </v-col>
     <v-col
       cols="12"
-      sm="3"
-      md="1"
+      sm="4"
+      md="2"
     >
       <div class="right-box">
         <button
