@@ -46,7 +46,7 @@
         </div>
       </v-col>
       <v-col
-        cols="12"
+        cols="10"
         :sm="isPatient ? 9 : 8"
         :md="isPatient ? 5 : 4"
       >
@@ -68,7 +68,7 @@
         </div>
       </v-col>
       <v-col
-        cols="12"
+        cols="2"
         sm="4"
         md="1"
         v-if="!isPatient"

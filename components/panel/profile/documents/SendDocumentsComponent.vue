@@ -27,7 +27,7 @@
         <img src="/images/profile/chooseimg.svg">
         <span>افزودن عکس</span>
       </div>
-      <div class="choose-image mr-2">
+      <div class="choose-image">
         <button class="main-button" :style="{maxWidth: '160px'}" @click="save">ذخیره</button>
       </div>
     </div>

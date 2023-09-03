@@ -6,7 +6,8 @@
       <v-col
         cols="12"
         sm="12"
-        md="3"
+        md="5"
+        lg="4"
       >
         <div class="right-box">
           <v-checkbox
@@ -35,7 +36,8 @@
       <v-col
         cols="12"
         sm="12"
-        md="5"
+        md="6"
+        lg="5"
       >
         <div class="page-main-actions-left">
           <div class="result-count">

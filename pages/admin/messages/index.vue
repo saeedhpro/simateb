@@ -4,14 +4,15 @@
   >
     <v-row>
       <v-col align-self="center">
-        <div class="page-header-box">
+        <div class="page-header-box messages">
           <div class="page-header">
             <img src="/images/pages/sms.svg" alt="">
             <span class="title">
             پیامک ها
           </span>
           </div>
-          <v-divider inset/>
+          <v-divider class="d-none d-lg-flex" inset/>
+          <v-spacer class="d-none d-sm-flex d-lg-none"/>
           <div class="page-actions"
                @click="toggleCreateModal"
           >
@@ -32,7 +33,8 @@
             <v-col
               cols="12"
               sm="12"
-              md="3"
+              md="5"
+              lg="4"
             >
               <div class="right-box">
                 <v-checkbox
@@ -61,7 +63,8 @@
             <v-col
               cols="12"
               sm="12"
-              md="5"
+              md="6"
+              lg="5"
             >
               <div class="page-main-actions-left">
                 <div class="result-count">

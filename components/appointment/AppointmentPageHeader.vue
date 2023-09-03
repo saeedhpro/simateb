@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col align-self="center">
-      <div class="page-header-box">
+      <div class="page-header-box" :class="{'surgeries': isSurgeries}">
         <nuxt-link to="/appointment" class="page-header">
           <img src="/images/pages/users.svg" alt="users">
           <span class="title">جدول نوبت دهی</span>
@@ -13,7 +13,7 @@
         <nuxt-link to="/appointment/surgeries" class="page-header" v-if="canSeeSurgeries">
           <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
             <defs>
-              <style>.a.index,.b.index{fill:#5063ff;}.a.index{opacity:.12;}.b.index{opacity:1;}</style>
+              <style>.a.index,.b.index{fill:#388E3C;}.a.index{opacity:.12;}.b.index{opacity:1;}</style>
             </defs>
             <g transform="translate(-1316 -132)">
               <rect class="a index" width="40" height="40" rx="20" transform="translate(1316 132)"/>
@@ -47,7 +47,12 @@ export default {
   },
   computed: {
     canSeeSurgeries() {
-      return false
+      if (!this.loginUser) return true
+      const profession_id = this.loginUser.organization.profession_id
+      return !(profession_id == 5 || profession_id == 7)
+    },
+    isSurgeries() {
+      return this.$route.path == '/appointment/surgeries'
     }
   }
 }

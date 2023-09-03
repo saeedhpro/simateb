@@ -4,11 +4,25 @@ html, main {
   direction: rtl;
   background: #F1F2F5 0 0 no-repeat padding-box;
 }
+.full-width {
+  width: 100%;
+}
 main {
   margin-top: 64px !important;
 }
 .open-drawer {
   display: none !important;
+}
+
+.send-documents-component {
+  .choose-image:last-child {
+    margin-right: 8px !important;
+  }
+}
+.user-payments-component {
+  .page-actions {
+    min-width: auto !important;
+  }
 }
 .dir-rtl {
   direction: rtl !important;
@@ -1671,7 +1685,7 @@ table {
   letter-spacing: 0;
   color: #757575;
   padding: 8px;
-  width: 100%;
+  //width: 100%;
 }
 
 .remove-button {
@@ -3479,7 +3493,7 @@ table {
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    margin: 0 20px;
+    margin: 0 20px 8px 20px;
 
     &.selected {
       background: #F6F7FF 0 0 no-repeat padding-box;
@@ -3742,6 +3756,75 @@ table {
 }
 @media only screen and (min-width: 600px) and (max-width: 1264px) {
   .page-header-box {
+    &.messages {
+      justify-content: space-between;
+      &.pay {
+        .page-header {
+          width: auto;
+        }
+      }
+      .page-header, .page-actions, .page-actions-secondary {
+        width: 175px !important;
+        margin: 5px;
+        max-width: inherit !important;
+        min-width: inherit !important;
+        img {
+          width: 32px;
+        }
+      }
+      .page-actions:last-child {
+        margin-left: 5px !important;
+      }
+      hr {
+        display: none !important;
+      }
+    }
+    &.organization {
+      justify-content: space-between;
+      .page-header, .page-actions, .page-actions-secondary {
+        width: 175px !important;
+        margin: 5px;
+        max-width: inherit !important;
+        min-width: inherit !important;
+        img {
+          width: 32px;
+        }
+      }
+      .page-actions:last-child {
+        margin-left: 5px !important;
+      }
+    }
+    &.admin-organization {
+      justify-content: space-between;
+      .page-header, .page-actions, .page-actions-secondary {
+        width: auto !important;
+        margin: 5px;
+        max-width: inherit !important;
+        min-width: inherit !important;
+        img {
+          width: 32px;
+        }
+      }
+      .page-actions:last-child {
+        margin-left: 5px !important;
+      }
+    }
+
+    &.appointment-search {
+      justify-content: space-between;
+      .page-header, .page-actions, .page-actions-secondary {
+        width: 175px !important;
+        margin: 5px;
+        max-width: inherit !important;
+        min-width: inherit !important;
+        img {
+          width: 32px;
+        }
+      }
+      .page-actions:last-child {
+        margin-left: 5px !important;
+      }
+    }
     .page-header {
       padding: 8px 12px;
     }
@@ -3776,6 +3859,15 @@ table {
   main {
     margin-top: 160px !important;
   }
+  .send-documents-component {
+    .action-box {
+      flex-wrap: wrap !important;
+    }
+    .choose-file, .choose-image {
+      margin: 1px !important;
+      width: 32% !important;
+    }
+  }
   .nav-bar {
     &.second {
       .links {
@@ -3798,15 +3890,160 @@ table {
       }
     }
   }
+  .page-header-box {
+    &.messages {
+      justify-content: space-between;
+
+      .page-header, .page-actions, .page-actions-secondary {
+        width: calc(50% - 10px) !important;
+        margin: 5px !important;
+        max-width: inherit !important;
+        min-width: inherit !important;
+      }
+
+      .page-actions:last-child {
+        margin-left: 5px !important;
+      }
+
+      hr {
+        display: none !important;
+      }
+    }
+    &.organization {
+      justify-content: space-between;
+
+      .page-header, .page-actions, .page-actions-secondary {
+        width: calc(50% - 10px) !important;
+        margin: 5px !important;
+        max-width: inherit !important;
+        min-width: inherit !important;
+      }
+
+      .page-actions:last-child {
+        margin-left: 5px !important;
+      }
+    }
+    &.admin-organization {
+      justify-content: space-between;
+
+      .page-header, .page-actions, .page-actions-secondary {
+        width: calc(50% - 10px) !important;
+        margin: 5px !important;
+        max-width: inherit !important;
+        min-width: inherit !important;
+      }
+
+      .page-actions:last-child {
+        margin-left: 5px !important;
+      }
+    }
+    &.appointment-search {
+      justify-content: space-between;
+
+      .page-header, .page-actions, .page-actions-secondary {
+        width: calc(50% - 10px) !important;
+        margin: 5px !important;
+        max-width: inherit !important;
+        min-width: inherit !important;
+      }
+
+      .page-actions:last-child {
+        margin-left: 5px !important;
+      }
+    }
+    &.surgeries {
+      justify-content: space-between;
+
+      .page-header, .page-actions, .page-actions-secondary {
+        width: calc(50% - 10px) !important;
+        margin: 5px !important;
+        max-width: inherit !important;
+        min-width: inherit !important;
+      }
+
+      .page-actions:last-child {
+        margin-left: 5px !important;
+      }
+    }
+    &.schedule {
+      justify-content: space-between;
+
+      .page-header, .page-actions, .page-actions-secondary {
+        width: calc(50% - 10px) !important;
+        margin: 5px !important;
+        max-width: inherit !important;
+        min-width: inherit !important;
+      }
+
+      .page-actions:last-child {
+        margin-left: 5px !important;
+      }
+    }
+  }
 }
 @media only screen and (max-width: 600px) {
   main {
     margin-top: 84px !important;
   }
   .open-drawer {
-    display: flex;
+    display: flex !important;
+  }
+  .send-documents-component {
+    .action-box {
+      flex-wrap: wrap !important;
+    }
+    .choose-file, .choose-image {
+      margin: 1px !important;
+      width: 48% !important;
+    }
   }
   .page-header-box {
+    &.messages {
+      justify-content: space-between;
+
+      .page-header, .page-actions, .page-actions-secondary {
+        width: 100% !important;
+        margin: 5px !important;
+        max-width: inherit !important;
+        min-width: inherit !important;
+      }
+
+      .page-actions:last-child {
+        margin-left: 5px !important;
+      }
+
+      hr {
+        display: none !important;
+      }
+    }
+    &.organization {
+      justify-content: space-between;
+
+      .page-header, .page-actions, .page-actions-secondary {
+        width: 100% !important;
+        margin: 5px !important;
+        max-width: inherit !important;
+        min-width: inherit !important;
+      }
+
+      .page-actions:last-child {
+        margin-left: 5px !important;
+      }
+    }
+    &.appointment-search {
+      justify-content: space-between;
+
+      .page-header, .page-actions, .page-actions-secondary {
+        width: 100% !important;
+        margin: 5px !important;
+        max-width: inherit !important;
+        min-width: inherit !important;
+      }
+
+      .page-actions:last-child {
+        margin-left: 5px !important;
+      }
+    }
     .page-header {
       padding: 8px 12px;
       width: 100%;

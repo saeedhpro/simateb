@@ -10,7 +10,10 @@
           <v-row>
             <v-col
               cols="12"
-              md="2"
+              sm="4"
+              md="3"
+              lg="2"
+              xl="2"
             >
               <div class="payment-detail">
                 <span>مجموع هزینه درمان:</span>
@@ -19,7 +22,10 @@
             </v-col>
             <v-col
               cols="12"
-              md="2"
+              sm="4"
+              md="3"
+              lg="2"
+              xl="2"
             >
               <div class="payment-detail">
                 <span>مجموع پرداخت‌ها:</span>
@@ -28,23 +34,23 @@
             </v-col>
             <v-col
               cols="12"
-              md="2"
+              sm="4"
+              md="3"
+              lg="2"
+              xl="2"
             >
               <div class="payment-detail">
                 <span>باقیمانده:</span>
                 <span>{{ duePayment > 0 ? (duePayment - total.total) : 0 | toPersianCurrency('تومان', 0) }}</span>
               </div>
             </v-col>
-            <v-col
-              cols="12"
-              md="2"
-            >
-
-            </v-col>
             <v-spacer/>
             <v-col
               cols="12"
-              md="2"
+              sm="4"
+              md="3"
+              lg="3"
+              xl="2"
             >
               <div class="page-actions"
                    style="min-width: 220px"
@@ -59,7 +65,8 @@
             <v-col
               cols="12"
               sm="12"
-              md="3"
+              md="5"
+              lg="4"
             >
               <div class="right-box">
                 <v-checkbox

@@ -4,7 +4,7 @@
   >
     <admin-header-component/>
     <v-main
-      class="px-10"
+      class="px-10 admin"
     >
       <Nuxt/>
     </v-main>

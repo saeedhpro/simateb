@@ -4,14 +4,15 @@
   >
     <v-row>
       <v-col align-self="center">
-        <div class="page-header-box">
+        <div class="page-header-box schedule">
           <div class="page-header">
             <img src="/images/pages/users.svg" alt="organizations">
             <span class="title">
             نوبت دهی اینترنتی (VIP)
           </span>
           </div>
-          <v-divider inset/>
+          <v-divider class="d-none d-lg-flex" inset/>
+          <v-spacer class="d-none d-sm-flex d-lg-none"/>
           <div class="page-actions second-button"
                @click="openCasesModal"
           >
@@ -43,8 +44,9 @@
           <v-row class="search-box">
             <v-col
               cols="12"
-              sm="3"
-              md="1"
+              sm="6"
+              md="4"
+              lg="3"
             >
               <div class="right-box">
                 <v-select
@@ -60,8 +62,9 @@
             </v-col>
             <v-col
               cols="12"
-              sm="3"
-              md="1"
+              sm="6"
+              md="4"
+              lg="3"
             >
               <div class="right-box">
                 <v-select
