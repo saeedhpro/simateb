@@ -98,11 +98,11 @@
             <v-spacer/>
             <v-col
               cols="12"
-              sm="3"
+              sm="4"
               md="3"
             >
               <button
-                class="second-button"
+                class="second-button full-width"
                 @click="close"
               >
                 بستن
@@ -111,7 +111,7 @@
             <v-col
               cols="12"
               sm="4"
-              md="4"
+              md="3"
             >
               <button
                 class="main-button"

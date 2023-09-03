@@ -1,6 +1,6 @@
 <template>
   <div class="organization-content">
-    <div class="page-header-box">
+    <div class="page-header-box organization">
       <nuxt-link :to="`/admin/organizations/${organization.id}`" class="page-header">
         <img src="/images/pages/users.svg" alt="users">
         <span class="title">بیماران</span>
@@ -13,9 +13,9 @@
         <img src="/images/pages/about.svg" alt="users">
         <span class="title">درباره موسسه</span>
       </nuxt-link>
-      <v-divider inset :style="{'margin-left': canSee ? '72px' : '0'}"/>
+      <v-divider class="d-none d-lg-flex" :style="{'margin-left': canSee ? '72px' : '0'}" inset/>
+      <v-spacer class="d-none d-sm-flex d-lg-none"/>
       <div class="page-actions"
-           style="min-width: 220px"
            @click="toggleAddUserModal"
            v-if="canSee"
       >

@@ -22,14 +22,14 @@
             </button>
           </div>
         </div>
-        <div class="page-header-box">
+        <div class="page-header-box messages">
           <div class="page-header">
             <img src="/images/pages/sms.svg" alt="organizations">
             <span class="title">
             پیام ها
           </span>
           </div>
-          <v-divider inset/>
+          <v-divider inset class="divider"/>
           <div class="page-actions-secondary">
             <span class="title-main">اعتبار:</span>
             <span class="title-second">{{ loginUser.organization.sms_credit | toPersianCurrency('', 0) }}</span>
@@ -59,7 +59,8 @@
             <v-col
               cols="12"
               sm="12"
-              md="3"
+              md="5"
+              lg="4"
             >
               <div class="right-box">
                 <v-checkbox
@@ -88,7 +89,7 @@
             <v-col
               cols="12"
               sm="12"
-              md="5"
+              md="6"
             >
               <div class="page-main-actions-left">
                 <div class="result-count">

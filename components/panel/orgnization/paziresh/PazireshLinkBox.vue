@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col align-self="center">
-      <div class="page-header-box">
+      <div class="page-header-box organization">
         <nuxt-link to="/organization" class="page-header">
           <img src="/images/pages/calendar.svg" alt="users">
           <span class="title">

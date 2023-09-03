@@ -229,7 +229,7 @@
                   <div class="detail-box">
                     <div class="phone-box">
                     <span class="small">
-                          افدامات فعلی:
+                          اقدامات فعلی:
                     </span>
                     </div>
                   </div>

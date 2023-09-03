@@ -4,7 +4,7 @@
   >
     <v-row>
       <v-col align-self="center">
-        <div class="page-header-box">
+        <div class="page-header-box appointment-search">
           <nuxt-link to="/appointment" class="page-header">
             <img src="/images/pages/users.svg" alt="users">
             <span class="title">جدول نوبت دهی</span>
@@ -28,7 +28,8 @@
             <span class="title">جدول جراحی</span>
           </nuxt-link>
 
-          <v-divider inset/>
+          <v-divider class="d-none d-lg-flex" inset/>
+          <v-spacer class="d-flex d-lg-none" inset/>
           <div class="page-actions-secondary"
           >
             <span class="title-main">
@@ -47,7 +48,8 @@
             <v-col
               cols="12"
               sm="12"
-              md="3"
+              md="5"
+              lg="4"
             >
               <div class="right-box">
                 <v-checkbox
@@ -73,7 +75,7 @@
             <v-col
               cols="12"
               sm="12"
-              md="5"
+              md="6"
             >
               <div class="page-main-actions-left">
                 <div class="result-count">

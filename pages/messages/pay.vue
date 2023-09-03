@@ -4,14 +4,15 @@
   >
     <v-row>
       <v-col align-self="center">
-        <div class="page-header-box">
+        <div class="page-header-box messages pay">
           <div class="page-header">
             <img src="/images/pages/sms.svg" alt="organizations">
             <span class="title">
             افزایش اعتبار پیامک
           </span>
           </div>
-          <v-divider inset/>
+          <v-divider class="d-none d-lg-flex" inset/>
+          <v-spacer class="d-none d-sm-flex d-lg-none"/>
           <div class="page-actions-secondary">
             <span class="title-main">اعتبار:</span>
             <span class="title-second">{{ loginUser.organization.sms_credit | toPersianCurrency('', 0) }}</span>
@@ -43,31 +44,31 @@
                   class="price-item"
                   :class="{'selected': price === 20000}"
                   @click="selectPrice(20000)">
-                  {{ 20000 | toPersianCurrency }}
+                  {{ 20000 | toPersianCurrency('ریال', 0) }}
                 </div>
                 <div
                   class="price-item"
                   :class="{'selected': price === 50000}"
                   @click="selectPrice(50000)">
-                  {{ 50000 | toPersianCurrency }}
+                  {{ 50000 | toPersianCurrency('ریال', 0) }}
                 </div>
                 <div
                   class="price-item"
                   :class="{'selected': price === 100000}"
                   @click="selectPrice(100000)">
-                  {{ 100000 | toPersianCurrency }}
+                  {{ 100000 | toPersianCurrency('ریال', 0) }}
                 </div>
                 <div
                   class="price-item"
                   :class="{'selected': price === 150000}"
                   @click="selectPrice(150000)">
-                  {{ 150000 | toPersianCurrency }}
+                  {{ 150000 | toPersianCurrency('ریال', 0) }}
                 </div>
                 <div
                   class="price-item"
                   :class="{'selected': price === 200000}"
                   @click="selectPrice(200000)">
-                  {{ 200000 | toPersianCurrency }}
+                  {{ 200000 | toPersianCurrency('ریال', 0) }}
                 </div>
               </div>
             </v-col>

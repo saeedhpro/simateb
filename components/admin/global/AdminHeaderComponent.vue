@@ -6,10 +6,10 @@
       height="auto"
       color="#3D3D66"
     >
-      <v-app-bar-nav-icon class="d-flex d-md-none open-drawer" @click.stop="rightDrawer = !rightDrawer" />
+      <v-app-bar-nav-icon class="open-drawer" @click.stop="rightDrawer = !rightDrawer" />
       <v-container fluid>
-        <div class="nav-bar justify-start">
-          <div v-if="loginUser" class="user-profile-box d-none d-sm-flex">
+        <div class="nav-bar">
+          <div v-if="loginUser" class="user-profile-box">
             <img :src="loginUser.logo" />
             <span class="user-full-name">{{ `${loginUser.fname} ${loginUser.lname}` }}</span>
             <v-menu
@@ -43,7 +43,26 @@
               </v-list>
             </v-menu>
           </div>
-          <div class="links d-none d-md-flex mx-auto">
+          <div class="links">
+            <nuxt-link to="/admin" :class="{'none' : notExactAdmin}">
+              <span class="title">داشبورد</span>
+            </nuxt-link>
+            <nuxt-link to="/admin/users">
+              <span class="title">کاربران</span>
+            </nuxt-link>
+            <nuxt-link to="/admin/organizations">
+              <span class="title">موسسات</span>
+            </nuxt-link>
+            <nuxt-link to="/admin/messages">
+              <span class="title">پیامک ها</span>
+            </nuxt-link>
+            <nuxt-link to="/admin/holidays">
+              <span class="title">تعطیلات رسمی</span>
+            </nuxt-link>
+          </div>
+        </div>
+        <div class="nav-bar second">
+          <div class="links">
             <nuxt-link to="/admin" :class="{'none' : notExactAdmin}">
               <span class="title">داشبورد</span>
             </nuxt-link>
