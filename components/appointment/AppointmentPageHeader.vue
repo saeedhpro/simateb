@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col align-self="center">
-      <div class="page-header-box" :class="{'surgeries': isSurgeries}">
+      <div class="page-header-box" :class="{'surgeries': isSurgeries, 'appointment': isAppointment}">
         <nuxt-link to="/appointment" class="page-header">
           <img src="/images/pages/users.svg" alt="users">
           <span class="title">جدول نوبت دهی</span>
@@ -10,7 +10,7 @@
           <img src="/images/pages/search-icon.svg" alt="users">
           <span class="title">جستجو نوبت ها</span>
         </nuxt-link>
-        <nuxt-link to="/appointment/surgeries" class="page-header" v-if="canSeeSurgeries">
+        <nuxt-link to="/appointment/surgeries" class="page-header" v-show="canSeeSurgeries">
           <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
             <defs>
               <style>.a.index,.b.index{fill:#388E3C;}.a.index{opacity:.12;}.b.index{opacity:1;}</style>
@@ -26,7 +26,7 @@
         </nuxt-link>
 
         <v-divider class="d-none d-lg-flex" inset/>
-        <v-spacer class="d-none d-sm-flex d-lg-none"/>
+        <v-spacer class="d-none d-sm-flex d-lg-none" v-if="!canSeeSurgeries"/>
         <div class="page-actions"
              @click="togglePazireshModal"
         >
@@ -46,6 +46,9 @@ export default {
     }
   },
   computed: {
+    loginUser() {
+      return this.$store.getters['login/getUser']
+    },
     canSeeSurgeries() {
       if (!this.loginUser) return true
       const profession_id = this.loginUser.organization.profession_id
@@ -53,6 +56,9 @@ export default {
     },
     isSurgeries() {
       return this.$route.path == '/appointment/surgeries'
+    },
+    isAppointment() {
+      return this.$route.path == '/appointment' || this.$route.path == '/appointment/search'
     }
   }
 }

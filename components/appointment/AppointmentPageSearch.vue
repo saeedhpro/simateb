@@ -2,7 +2,7 @@
   <v-row class="search-box" v-if="!loading">
     <v-col
       cols="12"
-      sm="4"
+      sm="3"
       md="2"
     >
       <div class="right-box">
@@ -14,12 +14,13 @@
           item-text="label"
           v-model="month"
           @change="onMonthChanged"
+          height="44px"
         ></v-select>
       </div>
     </v-col>
     <v-col
       cols="12"
-      sm="4"
+      sm="3"
       md="2"
     >
       <div class="right-box">
@@ -38,6 +39,7 @@
       cols="12"
       sm="4"
       md="2"
+      class="hidden-sm-and-down"
     >
       <div class="right-box">
         <div class="mt-4 tafkik">نمایش به تفکیک:</div>
@@ -45,7 +47,7 @@
     </v-col>
     <v-col
       cols="12"
-      sm="4"
+      sm="2"
       md="2"
     >
       <div class="right-box">
@@ -70,7 +72,7 @@
     </v-col>
     <v-col
       cols="12"
-      sm="4"
+      sm="2"
       md="2"
     >
       <div class="right-box">
@@ -96,7 +98,7 @@
     <v-spacer v-if="!mini"/>
     <v-col
       cols="12"
-      sm="4"
+      sm="2"
       md="2"
     >
       <v-select
