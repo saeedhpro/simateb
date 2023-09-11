@@ -29,7 +29,7 @@
           </nuxt-link>
 
           <v-divider class="d-none d-lg-flex" inset/>
-          <v-spacer class="d-flex d-lg-none" inset/>
+          <v-spacer class="d-flex d-lg-none" v-if="!canSeeSurgeries"/>
           <div class="page-actions-secondary"
           >
             <span class="title-main">
@@ -47,7 +47,7 @@
           <v-row class="search-box">
             <v-col
               cols="12"
-              sm="12"
+              sm="6"
               md="5"
               lg="4"
             >
@@ -74,7 +74,7 @@
             <v-spacer />
             <v-col
               cols="12"
-              sm="12"
+              sm="6"
               md="6"
             >
               <div class="page-main-actions-left">

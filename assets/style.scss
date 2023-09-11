@@ -799,7 +799,7 @@ table {
       display: flex;
 
       span {
-        font: normal normal bold 16px/28px IRANYekanRegular !important;
+        font: normal normal bold 16px/28px IRANYekanRegular;
         margin-left: 5px;
       }
     }
@@ -1933,7 +1933,7 @@ table {
       min-width: 75px;
 
       span {
-        font: normal normal bold 16px/28px IRANYekanRegular !important;
+        font: normal normal bold 16px/28px IRANYekanRegular;
         margin-left: 5px;
       }
     }
@@ -2279,7 +2279,7 @@ table {
   justify-content: center;
   width: 100%;
   padding: 5px;
-  //cursor: pointer;
+  cursor: pointer;
   min-height: 86px;
   &.show-hour {
     cursor: pointer !important;
@@ -3859,6 +3859,131 @@ table {
   main {
     margin-top: 160px !important;
   }
+  .v-input.v-select {
+    &.v-input--is-label-active {
+      .v-select__slot {
+        label {
+          top: 18px !important;
+        }
+      }
+    }
+    label, .v-select__selection {
+      font-size: 12px !important;
+    }
+    fieldset, .v-select__slot {
+      height: 44px !important;
+    }
+    .v-select__slot {
+      label {
+        top: 10px !important;
+      }
+    }
+    .v-input__append-inner {
+      margin-top: 10px !important;
+    }
+  }
+  .theme--light.v-data-table {
+    .v-data-table__wrapper {
+      table {
+        thead {
+          tr {
+            th {
+              min-width: 120px;
+              white-space: nowrap !important;
+              &:first-child {
+                min-width: 30px;
+              }
+            }
+          }
+        }
+        tbody {
+          tr {
+            td {
+              img {
+                height: 32px;
+                width: 32px;
+              }
+              font-size: 13px;
+              span {
+                white-space: nowrap !important;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .search-box {
+    .right-box {
+      .do-action-btn {
+        min-width: 90px !important;
+        margin-right: 5px;
+        padding: 8px;
+        font-size: 12px !important;
+        height: 40px !important;
+      }
+      .v-input--checkbox {
+        margin-top: 4px !important;
+      }
+    }
+    .result-count {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      min-width: auto !important;
+      margin-left: 5px;
+      font: normal normal normal 12px/14px IRANYekanRegular !important;
+      span {
+        font: normal normal bold 12px/14px IRANYekanRegular !important;
+      }
+    }
+    .page-search-box {
+      font-size: 13px !important;
+      height: 44px;
+
+      svg {
+        display: none !important;
+      }
+      .search-input {
+        padding: 4px 4px 4px 4px;
+        margin-right: 0;
+        font: normal normal normal 12px/18px IRANYekanRegular !important;
+      }
+      .search-button {
+        min-width: 32px;
+        height: 32px;
+      }
+      .search-filter {
+        height: 32px;
+        margin-right: 5px;
+        padding: 4px 8px;
+        width: 60px;
+      }
+    }
+  }
+  .profile-page {
+    .profile-tabs-header {
+      .v-item-group {
+        .v-tab {
+          width: auto;
+          font: normal normal normal 12px/18px IRANYekanRegular !important;
+          img {
+            height: 32px;
+            width: 32px;
+            margin-left: 0;
+          }
+        }
+      }
+    }
+  }
+  .show-button {
+    font-size: 12px !important;
+    height: 40px !important;
+    svg {
+      margin-left: 5px;
+    }
+  }
   .send-documents-component {
     .action-box {
       flex-wrap: wrap !important;
@@ -3895,10 +4020,19 @@ table {
       justify-content: space-between;
 
       .page-header, .page-actions, .page-actions-secondary {
-        width: calc(50% - 10px) !important;
+        width: calc(25% - 10px) !important;
         margin: 5px !important;
         max-width: inherit !important;
         min-width: inherit !important;
+        justify-content: flex-start;
+        height: 44px !important;
+        img {
+          height: 32px;
+          margin-left: 5px;
+        }
+        .title, .title-main {
+          font: normal normal normal 12px/18px IRANYekanRegular !important;
+        }
       }
 
       .page-actions:last-child {
@@ -3913,10 +4047,19 @@ table {
       justify-content: space-between;
 
       .page-header, .page-actions, .page-actions-secondary {
-        width: calc(50% - 10px) !important;
+        width: calc(25% - 10px) !important;
         margin: 5px !important;
         max-width: inherit !important;
         min-width: inherit !important;
+        justify-content: flex-start;
+        height: 44px !important;
+        img {
+          height: 32px;
+          margin-left: 5px;
+        }
+        .title, .title-main {
+          font: normal normal normal 12px/18px IRANYekanRegular !important;
+        }
       }
 
       .page-actions:last-child {
@@ -3927,10 +4070,19 @@ table {
       justify-content: space-between;
 
       .page-header, .page-actions, .page-actions-secondary {
-        width: calc(50% - 10px) !important;
+        width: calc(25% - 10px) !important;
         margin: 5px !important;
         max-width: inherit !important;
         min-width: inherit !important;
+        justify-content: flex-start;
+        height: 44px !important;
+        img {
+          height: 32px;
+          margin-left: 5px;
+        }
+        .title, .title-main {
+          font: normal normal normal 12px/18px IRANYekanRegular !important;
+        }
       }
 
       .page-actions:last-child {
@@ -3941,10 +4093,42 @@ table {
       justify-content: space-between;
 
       .page-header, .page-actions, .page-actions-secondary {
-        width: calc(50% - 10px) !important;
+        width: calc(25% - 10px) !important;
         margin: 5px !important;
         max-width: inherit !important;
         min-width: inherit !important;
+        justify-content: flex-start;
+        height: 44px !important;
+        img {
+          height: 32px;
+          margin-left: 5px;
+        }
+        .title, .title-main {
+          font: normal normal normal 12px/18px IRANYekanRegular !important;
+        }
+      }
+
+      .page-actions:last-child {
+        margin-left: 5px !important;
+      }
+    }
+    &.appointment {
+      justify-content: space-between;
+
+      .page-header, .page-actions, .page-actions-secondary {
+        width: calc(25% - 10px) !important;
+        margin: 5px !important;
+        max-width: inherit !important;
+        min-width: inherit !important;
+        justify-content: flex-start;
+        height: 44px !important;
+        img {
+          height: 32px;
+          margin-left: 5px;
+        }
+        .title, .title-main {
+          font: normal normal normal 12px/18px IRANYekanRegular !important;
+        }
       }
 
       .page-actions:last-child {
@@ -3955,10 +4139,19 @@ table {
       justify-content: space-between;
 
       .page-header, .page-actions, .page-actions-secondary {
-        width: calc(50% - 10px) !important;
+        width: calc(25% - 10px) !important;
         margin: 5px !important;
         max-width: inherit !important;
         min-width: inherit !important;
+        justify-content: flex-start;
+        height: 44px !important;
+        img {
+          height: 32px;
+          margin-left: 5px;
+        }
+        .title, .title-main {
+          font: normal normal normal 12px/18px IRANYekanRegular !important;
+        }
       }
 
       .page-actions:last-child {
@@ -3969,10 +4162,19 @@ table {
       justify-content: space-between;
 
       .page-header, .page-actions, .page-actions-secondary {
-        width: calc(50% - 10px) !important;
+        width: calc(25% - 10px) !important;
         margin: 5px !important;
         max-width: inherit !important;
         min-width: inherit !important;
+        justify-content: flex-start;
+        height: 44px !important;
+        img {
+          height: 32px;
+          margin-left: 5px;
+        }
+        .title, .title-main {
+          font: normal normal normal 12px/18px IRANYekanRegular !important;
+        }
       }
 
       .page-actions:last-child {
