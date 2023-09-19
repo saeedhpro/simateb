@@ -3756,6 +3756,20 @@ table {
   }
 }
 @media only screen and (min-width: 600px) and (max-width: 1264px) {
+  .nav-bar .links a:hover .title,
+  .nav-bar .links a.nuxt-link-exact-active .title,
+  .nav-bar .links a.nuxt-link-active:not(.none) .title,
+  .nav-bar .user-profile-box .user-full-name,
+  .nav-bar .organization-box .organization-name {
+    //font: normal normal bold 16px/35px IRANYekanRegular !important;
+    font-size: 75% !important;
+  }
+  .nav-bar .organization-box,
+  .nav-bar .user-profile-box {
+    img {
+      height: 32px !important;
+    }
+  }
   .show-button {
     min-width: 100px !important;
     font-weight: normal !important;
