@@ -1,6 +1,6 @@
 <template>
   <v-app light dir="rtl">
-    <v-main>
+    <v-main class="login-page">
       <Nuxt />
     </v-main>
   </v-app>
