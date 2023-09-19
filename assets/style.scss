@@ -2049,6 +2049,7 @@ table {
   justify-content: center;
   width: 110px;
   height: 56px;
+  outline: none !important;
   &.active {
     background: #F6F7FF 0% 0% no-repeat padding-box;
     border: 1px solid #5063FF;
