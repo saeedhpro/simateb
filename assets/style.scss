@@ -3739,7 +3739,11 @@ table {
     }
   }
 }
-
+.login-page {
+  main {
+    margin-top: 0!important;
+  }
+}
 @media only screen and (min-width: 1264px) {
   header, .v-toolbar__content {
     height: 84px !important;
