@@ -43,7 +43,8 @@ export default {
   buildModules: [
     // https://go.nuxtjs.dev/vuetify
     ['@nuxtjs/vuetify', {rtl: true}],
-    'nuxt-moment-jalaali'
+    'nuxt-moment-jalaali',
+    '@nuxtjs/pwa'
   ],
 
   moment: {
@@ -70,7 +71,13 @@ export default {
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
+    meta: {
+      title: 'سیماطب',
+      author: 'سعید حیدری',
+    },
     manifest: {
+      name: 'سیماطب',
+      short_name: 'سیماطب',
       lang: 'fa'
     }
   },
