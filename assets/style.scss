@@ -2047,7 +2047,7 @@ table {
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  width: 110px;
+  min-width: 105px;
   height: 56px;
   outline: none !important;
   &.active {
@@ -3756,6 +3756,18 @@ table {
   }
 }
 @media only screen and (min-width: 600px) and (max-width: 1264px) {
+  .show-button {
+    min-width: 100px !important;
+    font-weight: normal !important;
+    &.active {
+      font-weight: normal !important;
+    }
+    svg {
+      height: 14px;
+      width: 14px;
+    }
+  }
+
   .page-header-box {
     &.messages {
       justify-content: space-between;
