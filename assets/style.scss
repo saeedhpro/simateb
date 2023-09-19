@@ -3756,6 +3756,15 @@ table {
   }
 }
 @media only screen and (min-width: 600px) and (max-width: 1264px) {
+  .v-toolbar__content {
+    padding: 5px !important;
+  }
+  .nav-bar.second .links {
+    margin-top: 0 !important;
+  }
+  main {
+    margin-top: 120px !important;
+  }
   .nav-bar .links a:hover .title,
   .nav-bar .links a.nuxt-link-exact-active .title,
   .nav-bar .links a.nuxt-link-active:not(.none) .title,
@@ -3883,8 +3892,39 @@ table {
 }
 
 @media only screen and (min-width: 600px) and (max-width: 832px) {
+  .v-toolbar__content {
+    padding: 5px !important;
+  }
+  .nav-bar.second .links {
+    margin-top: 0 !important;
+  }
+  .nav-bar .links a:hover .title,
+  .nav-bar .links a.nuxt-link-exact-active .title,
+  .nav-bar .links a.nuxt-link-active:not(.none) .title,
+  .nav-bar .user-profile-box .user-full-name,
+  .nav-bar .organization-box .organization-name {
+    //font: normal normal bold 16px/35px IRANYekanRegular !important;
+    font-size: 75% !important;
+  }
+  .nav-bar .organization-box,
+  .nav-bar .user-profile-box {
+    img {
+      height: 32px !important;
+    }
+  }
+  .show-button {
+    min-width: 100px !important;
+    font-weight: normal !important;
+    &.active {
+      font-weight: normal !important;
+    }
+    svg {
+      height: 14px;
+      width: 14px;
+    }
+  }
   main {
-    margin-top: 160px !important;
+    margin-top: 120px !important;
   }
   .v-input.v-select {
     &.v-input--is-label-active {
@@ -4211,6 +4251,37 @@ table {
   }
 }
 @media only screen and (max-width: 600px) {
+  .v-toolbar__content {
+    padding: 5px !important;
+  }
+  .nav-bar.second .links {
+    margin-top: 0 !important;
+  }
+  .nav-bar .links a:hover .title,
+  .nav-bar .links a.nuxt-link-exact-active .title,
+  .nav-bar .links a.nuxt-link-active:not(.none) .title,
+  .nav-bar .user-profile-box .user-full-name,
+  .nav-bar .organization-box .organization-name {
+    //font: normal normal bold 16px/35px IRANYekanRegular !important;
+    font-size: 75% !important;
+  }
+  .nav-bar .organization-box,
+  .nav-bar .user-profile-box {
+    img {
+      height: 32px !important;
+    }
+  }
+  .show-button {
+    min-width: 100px !important;
+    font-weight: normal !important;
+    &.active {
+      font-weight: normal !important;
+    }
+    svg {
+      height: 14px;
+      width: 14px;
+    }
+  }
   main {
     margin-top: 84px !important;
   }
