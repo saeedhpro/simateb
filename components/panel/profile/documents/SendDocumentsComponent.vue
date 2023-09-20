@@ -28,7 +28,8 @@
         <span>افزودن عکس</span>
       </div>
       <div class="choose-image">
-        <button class="main-button" :style="{maxWidth: '160px'}" @click="save">ذخیره</button>
+        <span>ذخیره</span>
+<!--        <button class="main-button" :style="{maxWidth: '160px'}" @click="save">ذخیره</button>-->
       </div>
     </div>
     <files-list-component

@@ -34,7 +34,7 @@
             <v-row>
               <v-col
                 cols="12"
-                sm="6"
+                sm="4"
                 md="4"
               >
                 <div class="create-update-model-input-box full-height" style="max-height: 175px">
@@ -75,7 +75,7 @@
               </v-col>
               <v-col
                 cols="12"
-                sm="6"
+                sm="8"
                 md="8"
               >
                 <v-row>
