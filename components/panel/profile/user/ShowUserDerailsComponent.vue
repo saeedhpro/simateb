@@ -8,6 +8,7 @@
         <v-row>
           <v-col
             cols="12"
+            sm="6"
             md="2"
           >
             <img
@@ -16,6 +17,7 @@
           </v-col>
           <v-col
             cols="12"
+            sm="6"
             md="10"
           >
             <div class="detail-box">
@@ -70,6 +72,7 @@
                 <v-col
                   cols="12"
                   md="8"
+                  class="hidden-sm-and-down"
                 >
                   <v-row style="width: 100%">
                     <v-col cols="6">

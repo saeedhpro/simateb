@@ -3759,6 +3759,55 @@ table {
     }
   }
 }
+@media only screen and (max-width: 1264px) {
+  .medical-tabs-box {
+    .create-update-model-input-box {
+      label {
+        font: normal normal normal 12px/14px IRANYekanRegular !important;
+      }
+    }
+    .dent-top, .dent-bottom {
+      img {
+        height: 60px !important;
+      }
+    }
+  }
+  .send-documents-component {
+    .action-box {
+      .choose-file, .choose-image {
+        height: 42px !important;
+        padding: 6px 12px !important;
+        min-width: 100px !important;
+        font: normal normal bold 12px/18px IRANYekanRegular !important;
+        img {
+          height: 32px;
+          width: 32px;
+          top: 4px !important;
+          right: 8px !important;
+        }
+      }
+    }
+  }
+  .user-payments-component .payment-detail {
+    font: normal normal 500 14px/20px IRANYekanRegular !important;
+  }
+  .medical-tabs-header .v-item-group .v-tab {
+    font: normal normal normal 10px/14px IRANYekanRegular !important;
+  }
+  .item-checkbox-component {
+    margin-right: 6px;
+    margin-bottom: 6px;
+    padding: 8px 10px;
+    label {
+      font: normal normal normal 10px/15px IRANYekanRegular !important
+    }
+    span.img {
+      height: 14px;
+      width: 14px;
+      margin-right: 6px;
+    }
+  }
+}
 @media only screen and (min-width: 600px) and (max-width: 1264px) {
   .v-toolbar__content {
     padding: 5px !important;
