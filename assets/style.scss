@@ -3794,7 +3794,21 @@ table {
     }
   }
 }
+.search-input {
+  outline: none !important;
+}
 @media only screen and (max-width: 1264px) {
+  .create-update-model-input-box {
+    label {
+      font: normal normal bold 12px/18px IRANYekanRegular !important;
+    }
+  }
+  .second-button, .main-button {
+    font: normal normal bold 12px/18px IRANYekanRegular !important;
+  }
+  .v-input__append-inner {
+    margin-left: -5px !important;
+  }
   .profile-page .profile-details .action-box .more-action-button {
     padding: 16px !important;
   }
