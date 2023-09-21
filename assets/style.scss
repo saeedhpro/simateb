@@ -3795,6 +3795,13 @@ table {
   }
 }
 @media only screen and (max-width: 1264px) {
+  .profile-page .profile-details .action-box .more-action-button {
+    padding: 16px !important;
+  }
+  .profile-appointment-list-component .profile-appointment-item-component .img-box .edit-button {
+    font: normal normal normal 12px/18px IRANYekanRegular !important;
+    padding: 4px;
+  }
   .profile-appointment-list-component {
     .profile-appointment-item-component {
       .appointment-details {
