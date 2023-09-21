@@ -567,8 +567,8 @@ export default {
             j++
             boxStart = boxStart.add(boxDuration, 'minutes')
           }
-          // dayStart = dayStart.add(1, 'days')
-          // dayEnd = dayEnd.add(1, 'days')
+          dayStart = dayStart.add(1, 'days')
+          dayEnd = dayEnd.add(1, 'days')
           // console.log(isToday, '----' ,jDate.format("YYYYMMDD"), '----', today)
         }
         if (days[i].length > maxLength) {
