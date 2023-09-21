@@ -14,6 +14,16 @@
             <img
               class="profile-image"
               :src="getLogo(user)">
+            <div
+              class="hidden-lg-and-up user-details-box small"
+            >
+              <div class="label-box">استان:</div>
+              <div class="value-box">{{ user.province ? user.province.name : '-' }}</div>
+              <div class="label-box">شهرستان:</div>
+              <div class="value-box">{{ user.county ? user.county.name : '-' }}</div>
+              <div class="label-box">شهر:</div>
+              <div class="value-box">{{ user.city ? user.city.name : '-' }}</div>
+            </div>
           </v-col>
           <v-col
             cols="12"
@@ -153,12 +163,6 @@
               </div>
               <div class="label-box">تاریخ تولد:</div>
               <div class="value-box">{{user.birth_date ? $moment(user.birth_date).format("jYYYY/jMM/jDD") : '-' }}</div>
-              <div class="label-box">استان:</div>
-              <div class="value-box">{{ user.province ? user.province.name : '-' }}</div>
-              <div class="label-box">شهرستان:</div>
-              <div class="value-box">{{ user.county ? user.county.name : '-' }}</div>
-              <div class="label-box">شهر:</div>
-              <div class="value-box">{{ user.city ? user.city.name : '-' }}</div>
               <div class="label-box">آدرس:</div>
               <div class="value-box">{{ user.address ? user.address : '-' }}</div>
             </div>

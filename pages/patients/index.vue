@@ -4,7 +4,7 @@
   >
     <v-row>
       <v-col align-self="center">
-        <div class="page-header-box">
+        <div class="page-header-box organization">
           <div class="page-header">
             <img src="/images/pages/users.svg" alt="users">
             <span class="title">
@@ -278,10 +278,6 @@
                       {{ i.created_at_ago }}
                     </td>
                     <td class="text-center" v-else>-</td>
-                    <td class="text-center" v-if="i.last_login">
-                      {{ i.last_login_ago }}
-                    </td>
-                    <td class="text-center" v-else>-</td>
                   </tr>
                 </template>
                 <template v-slot:notfound>
@@ -318,10 +314,6 @@
                     <td class="text-center">{{ i.age ? i.age : '-' }}</td>
                     <td class="text-center" v-if="i.created">
                       {{ i.created_at_ago }}
-                    </td>
-                    <td class="text-center" v-else>-</td>
-                    <td class="text-center" v-if="i.last_login">
-                      {{ i.last_login_ago }}
                     </td>
                     <td class="text-center" v-else>-</td>
                   </tr>
@@ -390,7 +382,6 @@ export default {
         'پرونده',
         'سن',
         'ثبت در سیستم',
-        'آخرین ورود',
       ],
       headers: [
         '',
@@ -399,7 +390,6 @@ export default {
         'پزشک',
         'سن',
         'ثبت در سیستم',
-        'آخرین ورود',
       ],
       action: null,
       search: {
