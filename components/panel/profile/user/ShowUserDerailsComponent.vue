@@ -19,6 +19,7 @@
             cols="12"
             sm="6"
             md="10"
+            class="hidden-md-and-down"
           >
             <div class="detail-box">
               <v-row>
@@ -127,6 +128,39 @@
                   </v-row>
                 </v-col>
               </v-row>
+            </div>
+          </v-col>
+          <v-col
+            cols="12"
+            sm="6"
+            md="10"
+            class="hidden-lg-and-up"
+          >
+            <div
+              class="user-details-box"
+            >
+              <div class="label-box">نام و نام خانوادگی:</div>
+              <div class="value-box">{{ `${user.fname} ${user.lname}` }}</div>
+              <div class="label-box" v-if="user.age > 0">سن:</div>
+              <div class="value-box" v-if="user.age > 0">{{ user.age }} سال</div>
+              <div class="label-box">شماره موبایل:</div>
+              <div class="value-box">{{ user.tel }}</div>
+              <div class="label-box">شماره تماس:</div>
+              <div class="value-box">{{ user.tel1 ? user.tel1 : '-' }}</div>
+              <div class="label-box">شماره پرونده:</div>
+              <div class="value-box file-id-box">
+                پرونده <span class="file-id">{{ user.file_id ? user.file_id : '-' }}</span>
+              </div>
+              <div class="label-box">تاریخ تولد:</div>
+              <div class="value-box">{{user.birth_date ? $moment(user.birth_date).format("jYYYY/jMM/jDD") : '-' }}</div>
+              <div class="label-box">استان:</div>
+              <div class="value-box">{{ user.province ? user.province.name : '-' }}</div>
+              <div class="label-box">شهرستان:</div>
+              <div class="value-box">{{ user.county ? user.county.name : '-' }}</div>
+              <div class="label-box">شهر:</div>
+              <div class="value-box">{{ user.city ? user.city.name : '-' }}</div>
+              <div class="label-box">آدرس:</div>
+              <div class="value-box">{{ user.address ? user.address : '-' }}</div>
             </div>
           </v-col>
         </v-row>
