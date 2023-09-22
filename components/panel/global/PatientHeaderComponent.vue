@@ -34,7 +34,7 @@
           </div>
           <v-spacer />
           <div class="organization-box">
-            <img src="/images/header/hospital.svg">
+            <img alt="" :src="getOrganizationLogo">
             <div class="organization-name">{{ loginUser.organization.name }}</div>
           </div>
         </div>
@@ -56,6 +56,9 @@ export default {
     loginUser() {
       return this.$store.getters['login/getUser']
     },
+    getOrganizationLogo() {
+      return this.loginUser.organization.logo_link ?? '/images/header/hospital.svg';
+    }
   }
 }
 </script>

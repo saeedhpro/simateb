@@ -554,6 +554,22 @@ export default {
           }
         } else {
           let j = 0;
+          if(this.appointments.length != 0) {
+            dayStart = dayStart.add(1, 'days')
+            dayEnd = dayEnd.add(1, 'days')
+            boxStart = dayStart.clone().locale('en')
+
+            jDate = dayStart.clone().locale('fa')
+            isToday = jDate.format("YYYYMMDD") == today
+            isFriday = jDate.isoWeekday() == 5
+            isHoliday = false
+            for (let h = 0; h < holidays.length; h++) {
+              if (dayStart.format("YYYY-MM-DD") == holidays[h].hdate) {
+                isHoliday = true
+                break
+              }
+            }
+          }
           while(boxStart.isSameOrBefore(dayEnd.format('YYYY/MM/DD HH:mm'))) {
             days[i].push({
               is_empty: true,
@@ -567,9 +583,10 @@ export default {
             j++
             boxStart = boxStart.add(boxDuration, 'minutes')
           }
-          dayStart = dayStart.add(1, 'days')
-          dayEnd = dayEnd.add(1, 'days')
-          // console.log(isToday, '----' ,jDate.format("YYYYMMDD"), '----', today)
+          if(this.appointments.length == 0) {
+            dayStart = dayStart.add(1, 'days')
+            dayEnd = dayEnd.add(1, 'days')
+          }
         }
         if (days[i].length > maxLength) {
           maxLength = days[i].length

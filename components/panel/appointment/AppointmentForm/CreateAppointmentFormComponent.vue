@@ -42,7 +42,7 @@
                     v-model="appointment.start_at"
                     inputFormat="YYYY-MM-DD HH:mm:ss"
                     format="YYYY/MM/DD HH:mm:ss"
-                    display-format="HH:mm --- jYYYY/jMM/jDD"
+                    display-format="jYYYY/jMM/jDD HH:mm"
                     editable
                     class="date-picker"
                     type="datetime"
@@ -116,8 +116,8 @@
             </v-row>
             <v-row>
               <v-col
-                cols="12"
-                sm="3"
+                cols="6"
+                sm="2"
                 md="2"
                 v-for="(c,n) in cases"
                 :key="n"

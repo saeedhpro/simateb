@@ -324,7 +324,7 @@ export default {
   },
   watch: {
     selectedUsers(items) {
-      this.form.numbers = items.map(i => i.tel)
+      this.form.numbers = items.map(i => i ? i.tel : "")
     },
     type(val) {
       if (!val) {
