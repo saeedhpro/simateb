@@ -40,7 +40,7 @@
                 <date-picker
                   v-model="work.start"
                   format="HH:mm:ss"
-                  display-format="HH:mm:ss"
+                  display-format="HH:mm"
                   editable
                   class="date-picker"
                   type="time"
@@ -67,7 +67,7 @@
                 <date-picker
                   v-model="work.end"
                   format="HH:mm:ss"
-                  display-format="HH:mm:00"
+                  display-format="HH:mm"
                   editable
                   class="date-picker"
                   type="time"

@@ -73,7 +73,7 @@
             </nuxt-link>
           </div>
           <div class="organization-box">
-            <img src="/images/header/hospital.svg">
+            <img alt="" :src="getOrganizationLogo">
             <div class="organization-name">{{ loginUser.organization.name }}</div>
           </div>
         </div>
@@ -176,6 +176,9 @@ export default {
     },
     isDoctor() {
       return this.loginUser.organization_id != 1 && this.loginUser.organization_id != 2 && this.loginUser.organization_id != 3
+    },
+    getOrganizationLogo() {
+      return this.loginUser.organization.logo_link ?? '/images/header/hospital.svg';
     }
   }
 }

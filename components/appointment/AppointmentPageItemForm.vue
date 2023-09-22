@@ -38,11 +38,12 @@
             <v-row>
               <v-col
                 cols="12"
-                md="6"
+                sm="6"
               >
                 <v-row>
                   <v-col
-                    cols="12"
+                    cols="6"
+                    sm="6"
                     md="4"
                   >
                     <img
@@ -50,7 +51,8 @@
                       :src="getLogo(appointment)">
                   </v-col>
                   <v-col
-                    cols="12"
+                    cols="6"
+                    sm="6"
                     md="8"
                   >
                     <div class="detail-box">
@@ -85,7 +87,7 @@
               </v-col>
               <v-col
                 cols="12"
-                md="6"
+                sm="6"
               >
                 <div class="detail-box">
                   <div class="phone-box">
