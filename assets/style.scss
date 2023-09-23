@@ -4434,6 +4434,13 @@ table {
   }
 }
 @media only screen and (max-width: 600px) {
+  .search-box .page-main-actions-left .result-count {
+    min-width: 50px !important;
+    font: normal normal normal 10px/25px IRANYekanRegular !important;
+    span {
+      font: normal normal bold 14px/25px IRANYekanRegular;
+    }
+  }
   .v-toolbar__content {
     padding: 5px !important;
   }
@@ -4485,7 +4492,7 @@ table {
       justify-content: space-between;
 
       .page-header, .page-actions, .page-actions-secondary {
-        width: 100% !important;
+        width: 47% !important;
         margin: 5px !important;
         max-width: inherit !important;
         min-width: inherit !important;
@@ -4499,11 +4506,13 @@ table {
         display: none !important;
       }
     }
-    &.organization {
+    &.organization, &.appointment {
       justify-content: space-between;
-
+      .v-divider {
+        display: none !important;
+      }
       .page-header, .page-actions, .page-actions-secondary {
-        width: 100% !important;
+        width: 47% !important;
         margin: 5px !important;
         max-width: inherit !important;
         min-width: inherit !important;
@@ -4517,7 +4526,7 @@ table {
       justify-content: space-between;
 
       .page-header, .page-actions, .page-actions-secondary {
-        width: 100% !important;
+        width: 47% !important;
         margin: 5px !important;
         max-width: inherit !important;
         min-width: inherit !important;
@@ -4528,7 +4537,7 @@ table {
       }
     }
     .page-header {
-      padding: 8px 12px;
+      padding: 8px 0;
       width: 100%;
       margin: 0 0 5px 0;
     }
