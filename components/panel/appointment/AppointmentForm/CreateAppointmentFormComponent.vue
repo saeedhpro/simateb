@@ -269,6 +269,9 @@ export default {
   },
   mounted() {
     this.getCaseTypes()
+    let newTime = this.$roundUpTo(this.$moment())
+    newTime = this.$moment(newTime)
+    this.appointment.start_at = this.initTime ? this.initTime : newTime.format("YYYY/MM/DD HH:mm:ss")
   },
   methods: {
     closeForm() {

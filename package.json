@@ -15,6 +15,7 @@
     "cookie-universal-nuxt": "^2.1.5",
     "core-js": "^3.19.3",
     "jalali-moment": "^3.3.11",
+    "moment-round": "^1.0.1",
     "num2persian": "^3.2.2",
     "nuxt": "^2.15.8",
     "nuxt-moment-jalaali": "^1.6.2",
