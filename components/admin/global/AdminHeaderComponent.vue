@@ -89,13 +89,41 @@
       fixed
     >
       <v-list>
-        <v-list-item>
-          <v-list-item-action>
-            <v-icon light>
-              mdi-repeat
-            </v-icon>
-          </v-list-item-action>
-          <v-list-item-title>Switch drawer (click me)</v-list-item-title>
+        <v-list-item
+          to="/admin"
+          :class="{'none' : notExactAdmin}"
+        >
+          <v-list-item-title class="title">
+            داشبورد
+          </v-list-item-title>
+        </v-list-item>
+        <v-list-item
+          to="/admin/users"
+        >
+          <v-list-item-title class="title">
+            کاربران
+          </v-list-item-title>
+        </v-list-item>
+        <v-list-item
+          to="/admin/organizations"
+        >
+          <v-list-item-title class="title">
+            موسسات
+          </v-list-item-title>
+        </v-list-item>
+        <v-list-item
+          to="/admin/messages"
+        >
+          <v-list-item-title class="title">
+            پیامک ها
+          </v-list-item-title>
+        </v-list-item>
+        <v-list-item
+          to="/admin/holidays"
+        >
+          <v-list-item-title class="title">
+            تعطیلات رسمی
+          </v-list-item-title>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>

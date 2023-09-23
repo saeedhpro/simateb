@@ -258,14 +258,14 @@
                                class="table-selectable-checkbox"
                                v-model="selectedItems"
                                :value="i.id"
-                               :ripple="false"
                         />
                         <img
+                          alt=""
                           :src="getLogo(i)">
                         <span>
-                          <nuxt-link v-if="i.user" :to="`/profile/${i.user.id}`">{{
+                          <span class="cursor-pointer" v-if="i.user" @click="openItem(i)">{{
                               `${i.user.fname} ${i.user.lname}`
-                            }}</nuxt-link>
+                            }}</span>
                           <span v-else></span>
                         </span>
                       </div>
@@ -301,6 +301,13 @@
       :open="showPazireshModal"
       @close="closePazireshModal"
     />
+    <appointment-page-item-form
+      :id="item.id"
+      :is-surgery="false"
+      v-if="showAppointmentModal"
+      :open="showAppointmentModal"
+      @close="closeItem"
+    />
   </v-container>
 </template>
 
@@ -322,6 +329,8 @@ export default {
       showFilterModal: false,
       showPazireshModal: false,
       selectedItems: [],
+      item: null,
+      showAppointmentModal: false,
       actions: [
         {
           id: 0,
@@ -490,6 +499,16 @@ export default {
           return '/images/profile/man.svg'
         }
       }
+    },
+    openItem(item) {
+      this.item = item
+      this.showAppointmentModal = true
+    },
+    closeItem() {
+      this.showAppointmentModal = false
+      setTimeout(() => {
+        this.item = null
+      }, 200)
     }
   },
   computed: {
