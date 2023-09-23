@@ -41,3 +41,7 @@ Vue.prototype.$enDigit = (value) => {
   }
   return result
 }
+Vue.prototype.$roundUpTo = (date) => {
+  const roundTo = 1000 * 60 * 15
+  return Math.ceil(date / roundTo) * roundTo
+}
