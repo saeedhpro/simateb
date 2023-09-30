@@ -31,6 +31,7 @@
           <v-container
             v-if="loading"
           >
+            <LoadingCard />
           </v-container>
           <v-container
             v-else
@@ -123,7 +124,7 @@
                           وضعیت فعلی:
                     </span>
                     <span
-                      v-if="resulted"
+                      v-if="resulted && canSeeResulted"
                       class="status-box resulted"
                     >نتایج ارسال شده</span>
                     <span
@@ -578,7 +579,7 @@
                 v-if="appointment.status == 0"
               >
                 <button
-                  class="second-button"
+                  class="second-button full-width"
                   @click="resetForm"
                 >
                   پاک کردن فرم
@@ -604,7 +605,7 @@
                 v-if="!isDoctor"
               >
                 <button
-                  class="second-button"
+                  class="second-button full-width"
                   @click="closeForm"
                 >
                   بستن
@@ -629,7 +630,7 @@
                 v-if="isDoctor"
               >
                 <button
-                  class="second-button"
+                  class="second-button full-width"
                   @click="closeForm"
                 >
                   بستن
@@ -738,7 +739,7 @@
                 sm="3"
               >
                 <button
-                  class="second-button"
+                  class="second-button full-width"
                   @click="closeForm"
                 >
                   بستن
@@ -1070,7 +1071,7 @@ export default {
       if (data.type == 'prescription') {
         this.appointment.prescription = data.prescription
       } else {
-        this.appointment.future_prescription = data.future_prescription
+        this.appointment.future_prescription = data.prescription
       }
       this.closeDoctorPrescription()
     },
@@ -1425,6 +1426,12 @@ export default {
           (!!this.appointment.l_admission_at && !!this.appointment.l_result_at) ||
           (!!this.appointment.d_admission_at && !!this.appointment.d_result_at)
       }
+    },
+    canSeeResulted() {
+      return this.loginUser.organization_id == this.appointment.photography_id ||
+        this.loginUser.organization_id == this.appointment.radiology_id ||
+        this.loginUser.organization_id == this.appointment.laboratory_id ||
+        this.loginUser.organization_id == this.appointment.doctor_id
     },
     waiting() {
       if (!this.isDoctor) {

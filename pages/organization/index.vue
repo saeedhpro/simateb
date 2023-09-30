@@ -182,7 +182,7 @@
                               md="3"
                             >
                               <button
-                                class="second-button"
+                                class="second-button full-width"
                                 @click="clearFilterForm"
                               >
                                 پاک کردن فرم
@@ -195,7 +195,7 @@
                               md="3"
                             >
                               <button
-                                class="second-button"
+                                class="second-button full-width"
                                 @click="closeFilterModal"
                               >
                                 بستن
@@ -331,17 +331,14 @@
                     </td>
                     <td class="text-center">
                       <span
-                        @click="openAppointmentModal(i)"
-                        v-if="resulted(i)"
+                        v-if="resulted(i) && canSeeResulted(i)"
                         class="status-box resulted pointer"
                       >نتایج ارسال شده</span>
                       <span
-                        @click="openAppointmentModal(i)"
                         v-else-if="waiting(i)"
                         class="status-box waiting"
                       >در انتظار مراجعه</span>
                       <span
-                        @click="openAppointmentModal(i)"
                         v-else
                         class="status-box"
                         :style="{
@@ -392,7 +389,7 @@
                     <td class="text-center">{{ i.organization ? i.organization.name : '-' }}</td>
                     <td class="text-center">
                       <span
-                        v-if="resulted(i)"
+                        v-if="resulted(i) && canSeeResulted(i)"
                         class="status-box resulted"
                       >نتایج ارسال شده</span>
                       <span
@@ -716,13 +713,17 @@ export default {
           type: t
         })
         .then(res => {
-          this.results = [
-            ...res.data,
-          ]
-          setTimeout(() => {
-            const item = document.getElementById('item0')
-            item.click()
-          }, 300)
+          if (res.data.length == 0) {
+            this.$toast.error('نتایج یافت نشد')
+          } else {
+            this.results = [
+              ...res.data,
+            ]
+            setTimeout(() => {
+              const item = document.getElementById('item0')
+              item.click()
+            }, 300)
+          }
         })
         // this.item = item
         // this.toggleAppointmentModal()
@@ -851,6 +852,12 @@ export default {
       if (!this.loginUser) return false;
       return this.loginUser.organization.id == appointment.doctor_id;
     },
+    canSeeResulted(i) {
+      return this.loginUser.organization_id == i.photography_id ||
+        this.loginUser.organization_id == i.radiology_id ||
+        this.loginUser.organization_id == i.laboratory_id ||
+        this.loginUser.organization_id == i.doctor_id
+    }
   },
   computed: {
     mini() {

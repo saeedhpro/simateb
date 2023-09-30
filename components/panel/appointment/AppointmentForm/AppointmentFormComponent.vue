@@ -475,7 +475,7 @@
                 v-if="appointment.status == 0"
               >
                 <button
-                  class="second-button"
+                  class="second-button full-width"
                   @click="resetForm"
                 >
                   پاک کردن فرم
@@ -500,7 +500,7 @@
                 v-if="!isDoctor"
               >
                 <button
-                  class="second-button"
+                  class="second-button full-width"
                   @click="closeForm"
                 >
                   بستن
@@ -525,7 +525,7 @@
                 v-if="isDoctor"
               >
                 <button
-                  class="second-button"
+                  class="second-button full-width"
                   @click="closeForm"
                 >
                   بستن
@@ -628,7 +628,7 @@
                 sm="3"
               >
                 <button
-                  class="second-button"
+                  class="second-button full-width"
                   @click="closeForm"
                 >
                   بستن
@@ -763,7 +763,7 @@
                 md="3"
               >
                 <button
-                  class="second-button"
+                  class="second-button full-width"
                   @click="closeActionForm"
                 >
                   بستن
@@ -847,7 +847,7 @@
                 md="3"
               >
                 <button
-                  class="second-button"
+                  class="second-button full-width"
                   @click="showPrescriptionList = false"
                 >
                   بستن

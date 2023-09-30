@@ -153,7 +153,7 @@
                 md="4"
               >
                 <button
-                  class="second-button"
+                  class="second-button full-width"
                   @click="sendCode"
                   v-if="!sent"
                 >
@@ -197,7 +197,7 @@
                 md="3"
               >
                 <button
-                  class="second-button"
+                  class="second-button full-width"
                   @click="resetForm"
                 >
                   پاک کردن فرم
@@ -210,7 +210,7 @@
                 md="3"
               >
                 <button
-                  class="second-button"
+                  class="second-button full-width"
                   @click="closeForm"
                 >
                   بستن

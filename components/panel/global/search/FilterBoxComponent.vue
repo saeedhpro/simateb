@@ -98,7 +98,7 @@
               md="3"
             >
               <button
-                class="second-button"
+                class="second-button full-width"
                 @click="clearForm"
               >
                 پاک کردن فرم
@@ -111,7 +111,7 @@
               md="3"
             >
               <button
-                class="second-button"
+                class="second-button full-width"
                 @click="closeFilterModal"
               >
                 بستن
