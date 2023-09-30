@@ -1750,7 +1750,9 @@ table {
   padding: 8px;
   width: 100%;
 }
-
+.login-page {
+  margin-top: 0 !important;
+}
 .create-update-model-input-box {
   display: flex;
   flex-direction: column;
@@ -1808,9 +1810,9 @@ table {
   }
 
   input:focus {
-    outline: none !important;
-    //border: 1px solid #5063FF;
-    border: none;
+    //outline: none !important;
+    border: 1px solid #5063FF;
+    //border: none;
   }
 
   .file-input {

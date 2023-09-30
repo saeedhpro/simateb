@@ -173,7 +173,7 @@
                               md="3"
                             >
                               <button
-                                class="second-button"
+                                class="second-button full-width"
                                 @click="clearForm"
                               >پاک کردن فرم
                               </button>
@@ -185,7 +185,7 @@
                               md="3"
                             >
                               <button
-                                class="second-button"
+                                class="second-button full-width"
                                 @click="closeFilterModal"
                               >
                                 بستن
@@ -325,7 +325,7 @@
                     </td>
                     <td class="text-center">
                       <span
-                        v-if="resulted(i)"
+                        v-if="resulted(i) && canSeeResulted(i)"
                         class="status-box resulted"
                       >نتایج ارسال شده</span>
                       <span
@@ -390,7 +390,7 @@
                     <td class="text-center">{{ i.organization ? i.organization.name : '-' }}</td>
                     <td class="text-center">
                       <span
-                        v-if="resulted(i)"
+                        v-if="resulted(i) && canSeeResulted(i)"
                         class="status-box resulted"
                       >نتایج ارسال شده</span>
                       <span
@@ -439,6 +439,20 @@
       @selected="itemSelected"
       @close="closeSmsForm"
     />
+    <Fancybox
+      :options="options"
+    >
+      <a
+        v-for="(i,n) in results"
+        :key="n"
+        data-fancybox="gallery"
+        :href="i"
+        class="fancybox-item"
+        :data-fancybox-index="n"
+        :id="`item${n}`"
+      >
+      </a>
+    </Fancybox>
   </v-container>
 </template>
 
@@ -548,6 +562,18 @@ export default {
           background: '#FFF9EB'
         }
       ],
+      results: [],
+      options: {
+        showClass:"f-scaleIn",
+        hideClass: "f-scaleOut",
+        animated: true,
+        thumbs: {
+          autoStart : true,
+          type: "classic",
+          axis: 'y',
+          parentEl: '.fancybox__container',
+        },
+      },
     }
   },
   mounted() {
@@ -755,9 +781,39 @@ export default {
     },
     openAppointmentModalItem(item, type) {
       if (this.resulted(item, type)) {
-        this.item = item
-        this.toggleAppointmentModal()
-      }
+          this.results = []
+          let t = 'doctor'
+          switch (type) {
+            case 1:
+              t = 'photography'
+              break
+            case 2:
+              t = 'laboratory'
+              break
+            case 3:
+              t = 'radiology'
+              break
+          }
+          this.$store.dispatch('appointments/getAppointmentResults', {
+            id: item.id,
+            type: t
+          })
+            .then(res => {
+              if (res.data.length == 0) {
+                this.$toast.error('نتایج یافت نشد')
+              } else {
+                this.results = [
+                  ...res.data,
+                ]
+                setTimeout(() => {
+                  const item = document.getElementById('item0')
+                  item.click()
+                }, 300)
+              }
+            })
+          // this.item = item
+          // this.toggleAppointmentModal()
+        }
     },
     getErjaType(appointment, type) {
       if (this.resulted(appointment, type)) {
@@ -768,6 +824,12 @@ export default {
         return 'پذیرش نشده'
       }
     },
+    canSeeResulted(i) {
+      return this.loginUser.organization_id == i.photography_id ||
+        this.loginUser.organization_id == i.radiology_id ||
+        this.loginUser.organization_id == i.laboratory_id ||
+        this.loginUser.organization_id == i.doctor_id
+    }
   },
   computed: {
     loginUser() {

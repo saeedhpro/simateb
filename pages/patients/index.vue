@@ -199,7 +199,7 @@
                               md="3"
                             >
                               <button
-                                class="second-button"
+                                class="second-button full-width"
                                 @click="clearFilterForm"
                               >پاک کردن فرم
                               </button>
@@ -211,7 +211,7 @@
                               md="3"
                             >
                               <button
-                                class="second-button"
+                                class="second-button full-width"
                                 @click="closeFilterModal"
                               >
                                 بستن

@@ -165,7 +165,7 @@
                 md="3"
               >
                 <button
-                  class="second-button"
+                  class="second-button full-width"
                   @click="closeShowDoctorFrom"
                 >
                   بستن
