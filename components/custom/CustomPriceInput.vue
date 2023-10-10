@@ -1,7 +1,7 @@
 <template>
   <div class="create-update-model-input-box" :class="{'has-error': error}">
     <label v-if="label">{{ label }}</label>
-    <input v-model="data" @focusin="onFocusIn" @focusout="onFocusOut">
+    <input :disabled="disabled" v-model="data" @focusin="onFocusIn" @focusout="onFocusOut">
     <span class="create-update-modal-input-error" v-if="error">{{ error }}</span>
     <span class="create-update-modal-input-error">{{ fa }}</span>
   </div>
@@ -23,6 +23,14 @@ export default {
     max: {
       type: Number,
       default: 2147483647,
+    },
+    min: {
+      type: Number,
+      default: -2147483646,
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
     value: {
       type: [String, Object, Number],

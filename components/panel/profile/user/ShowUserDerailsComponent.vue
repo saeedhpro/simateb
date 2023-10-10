@@ -12,10 +12,12 @@
             md="2"
           >
             <img
+              @click="openImageChooser"
               class="profile-image"
               :src="getLogo(user)">
             <div
               class="hidden-lg-and-up user-details-box small"
+              v-if="isDoctor"
             >
               <div class="label-box">استان:</div>
               <div class="value-box">{{ user.province ? user.province.name : '-' }}</div>
@@ -61,7 +63,7 @@
                       <div class="value-box">{{ user.tel }}</div>
                     </v-col>
                   </v-row>
-                  <v-row style="width: 100%">
+                  <v-row v-if="isDoctor" style="width: 100%">
                     <v-col cols="6">
                       <div class="label-box">شماره تماس:</div>
                     </v-col>
@@ -69,7 +71,7 @@
                       <div class="value-box">{{ user.tel1 ? user.tel1 : '-' }}</div>
                     </v-col>
                   </v-row>
-                  <v-row style="width: 100%">
+                  <v-row v-if="isDoctor" style="width: 100%">
                     <v-col cols="6">
                       <div class="label-box">شماره پرونده:</div>
                     </v-col>
@@ -79,21 +81,7 @@
                       </div>
                     </v-col>
                   </v-row>
-                </v-col>
-                <v-col
-                  cols="12"
-                  md="8"
-                  class="hidden-sm-and-down"
-                >
-                  <v-row style="width: 100%">
-                    <v-col cols="6">
-                      <div class="label-box">کد ملی:</div>
-                    </v-col>
-                    <v-col cols="6">
-                      <div class="value-box">{{ user.cardno }}</div>
-                    </v-col>
-                  </v-row>
-                  <v-row style="width: 100%">
+                  <v-row v-if="!isDoctor"  style="width: 100%">
                     <v-col cols="6">
                       <div class="label-box">تاریخ تولد:</div>
                     </v-col>
@@ -104,7 +92,32 @@
                       </div>
                     </v-col>
                   </v-row>
-                  <v-row style="width: 100%">
+                </v-col>
+                <v-col
+                  cols="12"
+                  md="8"
+                  class="hidden-sm-and-down"
+                >
+                  <v-row v-if="isDoctor" style="width: 100%">
+                    <v-col cols="6">
+                      <div class="label-box">کد ملی:</div>
+                    </v-col>
+                    <v-col cols="6">
+                      <div class="value-box">{{ user.cardno }}</div>
+                    </v-col>
+                  </v-row>
+                  <v-row v-if="isDoctor"  style="width: 100%">
+                    <v-col cols="6">
+                      <div class="label-box">تاریخ تولد:</div>
+                    </v-col>
+                    <v-col cols="6">
+                      <div class="value-box">{{
+                          user.birth_date ? $moment(user.birth_date).format("jYYYY/jMM/jDD") : '-'
+                        }}
+                      </div>
+                    </v-col>
+                  </v-row>
+                  <v-row v-if="isDoctor" style="width: 100%">
                     <v-col cols="6">
                       <div class="label-box">استان:</div>
                     </v-col>
@@ -112,7 +125,7 @@
                       <div class="value-box">{{ user.province ? user.province.name : '-' }}</div>
                     </v-col>
                   </v-row>
-                  <v-row style="width: 100%">
+                  <v-row v-if="isDoctor" style="width: 100%">
                     <v-col cols="6">
                       <div class="label-box">شهرستان:</div>
                     </v-col>
@@ -120,7 +133,7 @@
                       <div class="value-box">{{ user.county ? user.county.name : '-' }}</div>
                     </v-col>
                   </v-row>
-                  <v-row style="width: 100%">
+                  <v-row v-if="isDoctor"  style="width: 100%">
                     <v-col cols="6">
                       <div class="label-box">شهر:</div>
                     </v-col>
@@ -128,7 +141,7 @@
                       <div class="value-box">{{ user.city ? user.city.name : '-' }}</div>
                     </v-col>
                   </v-row>
-                  <v-row style="width: 100%">
+                  <v-row v-if="isDoctor" style="width: 100%">
                     <v-col cols="6">
                       <div class="label-box">آدرس:</div>
                     </v-col>
@@ -221,7 +234,7 @@
             >
               <v-icon>
                 mdi-pencil-outline
-              </v-icon>
+              </v-icon>2px
               <span>ویرایش اطلاعات</span>
             </div>
           </div>
@@ -258,6 +271,84 @@
       @remove="removeNext"
       @close="remove"
     />
+    <crop-image-component
+      ref="crop"
+      @changed="cropped"
+      @imaged="imaged"
+      @newImage="openImageChooser"
+    />
+    <input
+      type="file"
+      ref="file"
+      name="image"
+      hidden
+      accept="image/*"
+      @change="setCropImage"
+    >
+    <v-dialog
+      v-model="showUpdateImage"
+      persistent
+      max-width="1056px"
+    >
+      <v-card
+        class="create-update-modal"
+      >
+        <v-card-title
+          class="create-update-modal-title-box"
+        >
+          <div class="create-update-modal-title">
+            <button
+              @click="closeUpdateImageForm"
+              class="create-update-modal-close"
+            >
+              <v-icon>mdi-close</v-icon>
+            </button>
+            <span>ویرایش عکس پروفایل بیمار</span>
+          </div>
+          <v-spacer/>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-img
+              :src="image"
+              max-height="200px"
+              max-width="200px"
+            />
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-container>
+            <v-row>
+              <v-spacer/>
+              <v-col
+                cols="12"
+                sm="3"
+                md="3"
+              >
+                <button
+                  class="second-button full-width"
+                  @click="closeUpdateImageForm"
+                >
+                  بستن
+                </button>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="4"
+                md="4"
+              >
+                <button
+                  class="main-button"
+                  @click="updateProfile"
+                >
+                  ذخیره
+                </button>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -267,10 +358,12 @@ import UpdateUserFormComponent from "~/components/panel/profile/user/UpdateUserF
 import AdminUpdateUserFormComponent from "~/components/admin/user/AdminUpdateUserFormComponent";
 import DeleteUserModalComponent from "~/components/global/delete/DeleteUserModalComponent";
 import AlertDeleteUserModalComponent from "~/components/global/alert/AlertDeleteUserModalComponent";
+import CropImageComponent from "~/components/panel/global/CropImageComponent.vue";
 
 export default {
   name: "ShowUserDerailsComponent",
   components: {
+    CropImageComponent,
     DeleteUserModalComponent,
     AlertDeleteUserModalComponent,
     AdminUpdateUserFormComponent, UpdateUserFormComponent, UserMedicalHistoryComponent
@@ -287,6 +380,8 @@ export default {
       showNextDelete: false,
       showHistoryModal: false,
       showUpdateModal: false,
+      showUpdateImage: false,
+      image: null,
     }
   },
   methods: {
@@ -342,6 +437,45 @@ export default {
           return '/images/profile/man.svg'
         }
       }
+    },
+    openImageChooser() {
+      if (this.loginUser.organization.profession_id != 1) {
+        return
+      }
+      this.$refs.file.value = null
+      this.$refs.file.click()
+    },
+    setCropImage(e) {
+      this.$refs.crop.setImage(e)
+    },
+    cropped(file) {
+    },
+    imaged(file) {
+      if (!file) return
+      this.image = file
+      this.showUpdateImage = true
+    },
+    closeUpdateImageForm() {
+      this.image = null
+      this.showUpdateImage = false
+    },
+    updateProfile() {
+      const data = {
+        image: this.image,
+        id: this.user.id
+      }
+      this.$store.dispatch('users/updateUserProfileImage', data)
+        .then(() => {
+          this.$toast.success('با موفقیت انجام شد');
+          this.closeUpdateImageForm()
+          this.$emit('updated');
+        })
+        .catch(err => {
+          this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
+        })
+        .finally(() => {
+          this.closeUpdateImageForm()
+        })
     }
   },
   computed: {

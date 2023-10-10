@@ -210,6 +210,15 @@ export const actions = {
         return Promise.reject(err)
       })
   },
+  updateUserProfileImage(ctx, data) {
+    return this.$axios.patch(`/users/${data.id}`, data)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
   removeUser(ctx, id) {
     return this.$axios.delete(`/users/${id}`)
       .then(res => {

@@ -43,6 +43,7 @@
               </v-list>
             </v-menu>
           </div>
+          <v-spacer />
           <div class="links">
             <nuxt-link to="/admin" :class="{'none' : notExactAdmin}">
               <span class="title">داشبورد</span>
@@ -59,7 +60,11 @@
             <nuxt-link to="/admin/holidays">
               <span class="title">تعطیلات رسمی</span>
             </nuxt-link>
+            <nuxt-link to="/admin/insurances">
+              <span class="title">بیمه</span>
+            </nuxt-link>
           </div>
+          <v-spacer />
         </div>
         <div class="nav-bar second">
           <div class="links">
@@ -77,6 +82,9 @@
             </nuxt-link>
             <nuxt-link to="/admin/holidays">
               <span class="title">تعطیلات رسمی</span>
+            </nuxt-link>
+            <nuxt-link to="/admin/insurances">
+              <span class="title">بیمه</span>
             </nuxt-link>
           </div>
         </div>

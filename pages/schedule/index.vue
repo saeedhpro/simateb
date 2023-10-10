@@ -202,25 +202,25 @@
               >
                 <div class="create-update-model-input-box">
                   <label>زمان شروع</label>
-                  <custom-date-input
-                    :type="'time'"
-                    v-model="form.start"
-                    :initial-value="form.start"
-                  />
-<!--                  <date-picker-->
+<!--                  <custom-date-input-->
+<!--                    :type="'time'"-->
 <!--                    v-model="form.start"-->
-<!--                    format="HH:mm:ss"-->
-<!--                    display-format="HH:mm:ss"-->
-<!--                    editable-->
-<!--                    class="date-picker"-->
-<!--                    :jump-minute="15"-->
-<!--                    :round-minute="true"-->
-<!--                    type="time"-->
-<!--                  >-->
-<!--                    <template v-slot:label>-->
-<!--                      <img src="/images/form/datepicker.svg">-->
-<!--                    </template>-->
-<!--                  </date-picker>-->
+<!--                    :initial-value="form.start"-->
+<!--                  />-->
+                  <date-picker
+                    v-model="form.start"
+                    format="HH:mm:ss"
+                    display-format="HH:mm:ss"
+                    editable
+                    class="date-picker"
+                    :jump-minute="15"
+                    :round-minute="true"
+                    type="time"
+                  >
+                    <template v-slot:label>
+                      <img src="/images/form/datepicker.svg">
+                    </template>
+                  </date-picker>
                 </div>
               </v-col>
               <v-col
@@ -230,25 +230,25 @@
               >
                 <div class="create-update-model-input-box">
                   <label>زمان پایان</label>
-                  <custom-date-input
-                    :type="'time'"
-                    v-model="form.end"
-                    :initial-value="form.end"
-                  />
-<!--                  <date-picker-->
+<!--                  <custom-date-input-->
+<!--                    :type="'time'"-->
 <!--                    v-model="form.end"-->
-<!--                    format="HH:mm:ss"-->
-<!--                    display-format="HH:mm:ss"-->
-<!--                    editable-->
-<!--                    class="date-picker"-->
-<!--                    :jump-minute="15"-->
-<!--                    :round-minute="true"-->
-<!--                    type="time"-->
-<!--                  >-->
-<!--                    <template v-slot:label>-->
-<!--                      <img src="/images/form/datepicker.svg">-->
-<!--                    </template>-->
-<!--                  </date-picker>-->
+<!--                    :initial-value="form.end"-->
+<!--                  />-->
+                  <date-picker
+                    v-model="form.end"
+                    format="HH:mm:ss"
+                    display-format="HH:mm:ss"
+                    editable
+                    class="date-picker"
+                    :jump-minute="15"
+                    :round-minute="true"
+                    type="time"
+                  >
+                    <template v-slot:label>
+                      <img src="/images/form/datepicker.svg">
+                    </template>
+                  </date-picker>
                 </div>
               </v-col>
               <v-col

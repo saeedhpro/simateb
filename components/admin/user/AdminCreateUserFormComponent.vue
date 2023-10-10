@@ -179,24 +179,24 @@
               >
                 <div class="create-update-model-input-box">
                   <label>تاریخ تولد</label>
-                  <custom-date-input
-                    :type="'date'"
-                    v-model="form.birth_date"
-                    :initial-value="form.birth_date"
-                  />
-<!--                  <date-picker-->
+<!--                  <custom-date-input-->
+<!--                    :type="'date'"-->
 <!--                    v-model="form.birth_date"-->
-<!--                    format="YYYY-MM-DD"-->
-<!--                    display-format="jYYYY/jMM/jDD"-->
-<!--                    editable-->
-<!--                    class="date-picker"-->
-<!--                    :jump-minute="15"-->
-<!--                    :round-minute="true"-->
-<!--                  >-->
-<!--                    <template v-slot:label>-->
-<!--                      <img src="/images/form/datepicker.svg">-->
-<!--                    </template>-->
-<!--                  </date-picker>-->
+<!--                    :initial-value="form.birth_date"-->
+<!--                  />-->
+                  <date-picker
+                    v-model="form.birth_date"
+                    format="YYYY-MM-DD"
+                    display-format="jYYYY/jMM/jDD"
+                    editable
+                    class="date-picker"
+                    :jump-minute="15"
+                    :round-minute="true"
+                  >
+                    <template v-slot:label>
+                      <img src="/images/form/datepicker.svg">
+                    </template>
+                  </date-picker>
                 </div>
               </v-col>
               <v-col

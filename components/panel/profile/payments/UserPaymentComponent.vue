@@ -52,7 +52,7 @@
               lg="3"
               xl="2"
             >
-              <div class="page-actions"
+              <div class="page-actions mr-auto"
                    style="min-width: 220px"
                    @click="openCreateModal"
               >
@@ -96,6 +96,13 @@
           <v-row>
             <v-col
               cols="12"
+              v-if="loading"
+            >
+              <LoadingCard />
+            </v-col>
+            <v-col
+              cols="12"
+              v-else
             >
               <data-table-component
                 :headers="headers"
@@ -205,23 +212,23 @@
               >
                 <div class="create-update-model-input-box">
                   <label>تاریخ</label>
-                  <custom-date-input
-                    :type="'datetime'"
-                    v-model="form.created"
-                    :initial-value="form.created"
-                  />
-<!--                  <date-picker-->
+<!--                  <custom-date-input-->
+<!--                    :type="'datetime'"-->
 <!--                    v-model="form.created"-->
-<!--                    format="YYYY-MM-DD HH:mm:ss"-->
-<!--                    display-format="HH:mm -&#45;&#45; jYYYY/jMM/jDD"-->
-<!--                    editable-->
-<!--                    type="datetime"-->
-<!--                    class="date-picker"-->
-<!--                  >-->
-<!--                    <template v-slot:label>-->
-<!--                      <img src="/images/form/datepicker.svg">-->
-<!--                    </template>-->
-<!--                  </date-picker>-->
+<!--                    :initial-value="form.created"-->
+<!--                  />-->
+                  <date-picker
+                    v-model="form.created"
+                    format="YYYY-MM-DD HH:mm:ss"
+                    display-format="jYYYY/jMM/jDD HH:mm"
+                    editable
+                    type="datetime"
+                    class="date-picker"
+                  >
+                    <template v-slot:label>
+                      <img src="/images/form/datepicker.svg">
+                    </template>
+                  </date-picker>
                 </div>
               </v-col>
               <v-col
@@ -326,22 +333,22 @@
               >
                 <div class="create-update-model-input-box">
                   <label>تاریخ چک</label>
-                  <custom-date-input
-                    :type="'date'"
-                    v-model="form.check_date"
-                    :initial-value="form.check_date"
-                  />
-<!--                  <date-picker-->
+<!--                  <custom-date-input-->
+<!--                    :type="'date'"-->
 <!--                    v-model="form.check_date"-->
-<!--                    format="YYYY-MM-DD"-->
-<!--                    display-format="jYYYY/jMM/jDD"-->
-<!--                    editable-->
-<!--                    class="date-picker"-->
-<!--                  >-->
-<!--                    <template v-slot:label>-->
-<!--                      <img src="/images/form/datepicker.svg">-->
-<!--                    </template>-->
-<!--                  </date-picker>-->
+<!--                    :initial-value="form.check_date"-->
+<!--                  />-->
+                  <date-picker
+                    v-model="form.check_date"
+                    format="YYYY-MM-DD"
+                    display-format="jYYYY/jMM/jDD"
+                    editable
+                    class="date-picker"
+                  >
+                    <template v-slot:label>
+                      <img src="/images/form/datepicker.svg">
+                    </template>
+                  </date-picker>
                 </div>
               </v-col>
               <v-col
@@ -414,10 +421,12 @@ import CustomMultiSelect from "~/components/custom/CustomMultiSelect";
 import CustomTextAreaInput from "~/components/custom/CustomTextAreaInput";
 import CustomTextInput from "~/components/custom/CustomTextInput";
 import AdminDeleteUsersComponent from "~/components/admin/global/AdminDeleteUsersComponent";
+import LoadingCard from "~/components/global/LoadingCard.vue";
 
 export default {
   name: "UserPaymentComponent",
   components: {
+    LoadingCard,
     AdminDeleteUsersComponent,
     CustomTextInput,
     CustomTextAreaInput, CustomMultiSelect, CustomPriceInput, SendSmsComponent, DataTableComponent
@@ -483,6 +492,7 @@ export default {
       showDelete: false,
       isUpdate: false,
       showCreateModal: false,
+      loading: false,
       form: {
         id: 0,
         user_id: this.userId,
@@ -732,10 +742,16 @@ export default {
       this.getUserPayments()
     },
     getUserPayments() {
+      this.loading = true
       this.$store.dispatch('payments/getList', {
         id: this.userId,
         page: this.page,
       })
+        .finally(() => {
+          setTimeout(() => {
+            this.loading = false
+          }, 300)
+        })
     },
     getUserPaymentsTotal() {
       this.$store.dispatch('payments/getUserPaymentsTotal', this.userId)

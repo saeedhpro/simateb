@@ -1,6 +1,11 @@
 <template>
   <div class="profile-appointment-list-component">
-    <div class="appointments-box" v-if="!loading">
+    <div
+      v-if="loading"
+    >
+      <LoadingCard />
+    </div>
+    <div class="appointments-box" v-else>
       <appointment-item-component
         v-for="(i,n) in list.data"
         :key="n"
@@ -45,24 +50,36 @@
         ></v-pagination>
       </div>
     </div>
-    <appointment-form-component
+    <appointment-page-item-form
+      :id="item.id"
+      :is-surgery="false"
+      v-if="item"
       :open="showUpdateModal"
-      :item="item"
       @close="closeUpdateModal"
       @remove="paginate(1)"
       @done="doneUpdateModal"
-      :is-surgery="false"
     />
+<!--    <appointment-form-component-->
+<!--      :open="showUpdateModal"-->
+<!--      :item="item"-->
+<!--      @close="closeUpdateModal"-->
+<!--      @remove="paginate(1)"-->
+<!--      @done="doneUpdateModal"-->
+<!--      :is-surgery="false"-->
+<!--    />-->
   </div>
 </template>
 
 <script>
 import AppointmentItemComponent from "~/components/panel/profile/appointments/AppointmentItemComponent";
 import AppointmentFormComponent from "~/components/panel/appointment/AppointmentForm/AppointmentFormComponentV2";
+import CreateAppointmentFormComponent
+  from "~/components/panel/appointment/AppointmentForm/CreateAppointmentFormComponent.vue";
+import LoadingCard from "~/components/global/LoadingCard.vue";
 
 export default {
   name: "AppointmentListComponent",
-  components: {AppointmentItemComponent, AppointmentFormComponent},
+  components: {LoadingCard, CreateAppointmentFormComponent, AppointmentItemComponent, AppointmentFormComponent},
   props: {
     userId: {
       type: Number,
@@ -98,7 +115,7 @@ export default {
       .finally(() =>{
         setTimeout(() => {
           this.loading = false
-        }, 250)
+        }, 300)
       })
     },
     onUpdate(item) {

@@ -116,23 +116,23 @@
                             >
                               <div class="create-update-model-input-box">
                                 <label>تاریخ ابتدا</label>
-                                <custom-date-input
-                                  :type="'date'"
-                                  v-model="search.start"
-                                  :initial-value="search.start"
-                                />
-<!--                                <date-picker-->
+<!--                                <custom-date-input-->
+<!--                                  :type="'date'"-->
 <!--                                  v-model="search.start"-->
-<!--                                  format="YYYY-MM-DD"-->
-<!--                                  display-format="jYYYY/jMM/jDD"-->
-<!--                                  editable-->
-<!--                                  class="date-picker"-->
-<!--                                  type="date"-->
-<!--                                >-->
-<!--                                  <template v-slot:label>-->
-<!--                                    <img src="/images/form/datepicker.svg">-->
-<!--                                  </template>-->
-<!--                                </date-picker>-->
+<!--                                  :initial-value="search.start"-->
+<!--                                />-->
+                                <date-picker
+                                  v-model="search.start"
+                                  format="YYYY-MM-DD"
+                                  display-format="jYYYY/jMM/jDD"
+                                  editable
+                                  class="date-picker"
+                                  type="date"
+                                >
+                                  <template v-slot:label>
+                                    <img src="/images/form/datepicker.svg">
+                                  </template>
+                                </date-picker>
                               </div>
                             </v-col>
                             <v-col
@@ -142,23 +142,23 @@
                             >
                               <div class="create-update-model-input-box">
                                 <label>تاریخ انتها</label>
-                                <custom-date-input
-                                  :type="'date'"
-                                  v-model="search.end"
-                                  :initial-value="search.end"
-                                />
-<!--                                <date-picker-->
+<!--                                <custom-date-input-->
+<!--                                  :type="'date'"-->
 <!--                                  v-model="search.end"-->
-<!--                                  format="YYYY-MM-DD"-->
-<!--                                  display-format="jYYYY/jMM/jDD"-->
-<!--                                  editable-->
-<!--                                  class="date-picker"-->
-<!--                                  type="date"-->
-<!--                                >-->
-<!--                                  <template v-slot:label>-->
-<!--                                    <img src="/images/form/datepicker.svg">-->
-<!--                                  </template>-->
-<!--                                </date-picker>-->
+<!--                                  :initial-value="search.end"-->
+<!--                                />-->
+                                <date-picker
+                                  v-model="search.end"
+                                  format="YYYY-MM-DD"
+                                  display-format="jYYYY/jMM/jDD"
+                                  editable
+                                  class="date-picker"
+                                  type="date"
+                                >
+                                  <template v-slot:label>
+                                    <img src="/images/form/datepicker.svg">
+                                  </template>
+                                </date-picker>
                               </div>
                             </v-col>
                           </v-row>
@@ -324,22 +324,22 @@
                       </v-tooltip>
                     </td>
                     <td class="text-center">
-                      <span
+                      <div
                         v-if="resulted(i) && canSeeResulted(i)"
                         class="status-box resulted"
-                      >نتایج ارسال شده</span>
-                      <span
+                      >نتایج ارسال شده</div>
+                      <div
                         v-else-if="waiting(i)"
                         class="status-box waiting"
-                      >در انتظار مراجعه</span>
-                      <span
+                      >در انتظار مراجعه</div>
+                      <div
                         v-else
                         class="status-box"
                         :style="{
                           'background-color': `${statuses[i.status - 1].background}`,
                           'color': `${statuses[i.status - 1].color}`
                         }"
-                      >{{ statuses[i.status - 1].title }}</span>
+                      >{{ statuses[i.status - 1].title }}</div>
                     </td>
                   </tr>
                 </template>
@@ -389,22 +389,22 @@
                     <td class="text-center">{{ getCases(i) }}</td>
                     <td class="text-center">{{ i.organization ? i.organization.name : '-' }}</td>
                     <td class="text-center">
-                      <span
+                      <div
                         v-if="resulted(i) && canSeeResulted(i)"
                         class="status-box resulted"
-                      >نتایج ارسال شده</span>
-                      <span
+                      >نتایج ارسال شده</div>
+                      <div
                         v-else-if="waiting(i)"
                         class="status-box waiting"
-                      >در انتظار مراجعه</span>
-                      <span
+                      >در انتظار مراجعه</div>
+                      <div
                         v-else
                         class="status-box"
                         :style="{
                           'background-color': `${statuses[i.status - 1].background}`,
                           'color': `${statuses[i.status - 1].color}`
                         }"
-                      >{{ statuses[i.status - 1].title }}</span>
+                      >{{ statuses[i.status - 1].title }}</div>
                     </td>
                   </tr>
                 </template>
@@ -417,13 +417,22 @@
         </v-card>
       </v-col>
     </v-row>
-    <appointment-form-component-v2
-      :open="showPazireshModal"
-      :item="item"
+<!--    <appointment-form-component-v2-->
+<!--      :open="showPazireshModal"-->
+<!--      :item="item"-->
+<!--      :is-surgery="false"-->
+<!--      @close="closePazireshModal"-->
+<!--      @done="doneAppointmentModal"-->
+<!--      @remove="getAppointmentList"-->
+<!--    />-->
+    <appointment-page-item-form
+      :id="item.id"
       :is-surgery="false"
+      v-if="item"
+      :open="showPazireshModal"
       @close="closePazireshModal"
-      @done="doneAppointmentModal"
       @remove="getAppointmentList"
+      @done="doneAppointmentModal"
     />
     <admin-delete-users-component
       :open="showDelete"
