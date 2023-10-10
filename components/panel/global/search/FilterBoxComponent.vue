@@ -41,23 +41,23 @@
             >
               <div class="create-update-model-input-box">
                 <label>تاریخ ابتدا</label>
-                <custom-date-input
-                  :type="'date'"
-                  v-model="search.start"
-                  :initial-value="search.start"
-                />
-<!--                <date-picker-->
+<!--                <custom-date-input-->
+<!--                  :type="'date'"-->
 <!--                  v-model="search.start"-->
-<!--                  format="YYYY-MM-DD"-->
-<!--                  display-format="jYYYY/jMM/jDD"-->
-<!--                  editable-->
-<!--                  class="date-picker"-->
-<!--                  type="date"-->
-<!--                >-->
-<!--                  <template v-slot:label>-->
-<!--                    <img src="/images/form/datepicker.svg">-->
-<!--                  </template>-->
-<!--                </date-picker>-->
+<!--                  :initial-value="search.start"-->
+<!--                />-->
+                <date-picker
+                  v-model="search.start"
+                  format="YYYY-MM-DD"
+                  display-format="jYYYY/jMM/jDD"
+                  editable
+                  class="date-picker"
+                  type="date"
+                >
+                  <template v-slot:label>
+                    <img src="/images/form/datepicker.svg">
+                  </template>
+                </date-picker>
               </div>
             </v-col>
             <v-col
@@ -67,23 +67,23 @@
             >
               <div class="create-update-model-input-box">
                 <label>تاریخ انتها</label>
-                <custom-date-input
-                  :type="'date'"
-                  v-model="search.end"
-                  :initial-value="search.end"
-                />
-<!--                <date-picker-->
+<!--                <custom-date-input-->
+<!--                  :type="'date'"-->
 <!--                  v-model="search.end"-->
-<!--                  format="YYYY-MM-DD"-->
-<!--                  display-format="jYYYY/jMM/jDD"-->
-<!--                  editable-->
-<!--                  class="date-picker"-->
-<!--                  type="date"-->
-<!--                >-->
-<!--                  <template v-slot:label>-->
-<!--                    <img src="/images/form/datepicker.svg">-->
-<!--                  </template>-->
-<!--                </date-picker>-->
+<!--                  :initial-value="search.end"-->
+<!--                />-->
+                <date-picker
+                  v-model="search.end"
+                  format="YYYY-MM-DD"
+                  display-format="jYYYY/jMM/jDD"
+                  editable
+                  class="date-picker"
+                  type="date"
+                >
+                  <template v-slot:label>
+                    <img src="/images/form/datepicker.svg">
+                  </template>
+                </date-picker>
               </div>
             </v-col>
           </v-row>

@@ -8,7 +8,7 @@
           <div class="page-header">
             <img src="/images/pages/users.svg" alt="organizations">
             <span class="title">
-            تعطیلات رسمی
+            بیمه
           </span>
           </div>
           <v-divider inset/>
@@ -30,48 +30,21 @@
                   >
                     <v-icon>mdi-close</v-icon>
                   </button>
-                  <span>فرم ایجاد تعطیلات</span>
+                  <span>فرم ایجاد بیمه</span>
                 </div>
                 <v-spacer/>
-                <div class="create-update-modal-regbox">
-                </div>
               </v-card-title>
               <v-card-text>
                 <v-container>
                   <v-row>
                     <v-col
                       cols="12"
-                      sm="6"
-                      md="6"
+                      sm="4"
+                      md="4"
                     >
                       <div class="create-update-model-input-box">
                         <label>عنوان</label>
-                        <input type="text" v-model="form.title">
-                      </div>
-                    </v-col>
-                    <v-col
-                      cols="12"
-                      sm="6"
-                      md="6"
-                    >
-                      <div class="create-update-model-input-box">
-                        <label>تاریخ</label>
-<!--                        <custom-date-input-->
-<!--                          :type="'date'"-->
-<!--                          v-model="form.hdate"-->
-<!--                          :initial-value="form.hdate"-->
-<!--                        />-->
-                        <date-picker
-                          v-model="form.hdate"
-                          format="YYYY-MM-DD"
-                          display-format="jYYYY/jMM/jDD"
-                          editable
-                          class="date-picker"
-                        >
-                          <template v-slot:label>
-                            <img src="/images/form/datepicker.svg">
-                          </template>
-                        </date-picker>
+                        <input type="text" v-model="form.name">
                       </div>
                     </v-col>
                   </v-row>
@@ -112,7 +85,7 @@
                     >
                       <button
                         class="main-button"
-                        @click="createHoliday"
+                        @click="createInsurance"
                       >
                         ذخیره
                       </button>
@@ -158,7 +131,7 @@
                       sm="12"
                       md="12"
                     >
-                      <div class="create-update-model-input-description">آیا از حذف کردن این تعطیلات اطمینان دارید؟
+                      <div class="create-update-model-input-description">آیا از حذف کردن این بیمه اطمینان دارید؟
                       </div>
                     </v-col>
                   </v-row>
@@ -199,8 +172,8 @@
           <div class="page-actions"
                @click="createModal"
           >
-            <img src="/images/pages/plus.svg" alt="organizations">
-            <span class="title-main">افزودن</span>
+            <img src="/images/pages/new-user.svg" alt="organizations">
+            <span class="title-main">بیمه جدید</span>
           </div>
         </div>
       </v-col>
@@ -212,31 +185,6 @@
         <v-card
           class="page-main-box"
         >
-          <v-row class="search-box">
-            <v-col
-              cols="12"
-              sm="6"
-              md="4"
-            >
-              <div class="create-update-model-input-box flex flex-row justify-start align-center">
-                <label class="mb-0 ml-2">سال</label>
-                <multiselect
-                  v-model="year"
-                  :options="years"
-                  :close-on-select="true"
-                  :show-labels="false">
-                  <template slot="singleLabel" slot-scope="props"><span
-                    class="option__desc"><span
-                    class="option__title">{{ `${props.option}` }}</span></span>
-                  </template>
-                  <template slot="option" slot-scope="props">
-                    <div class="option__desc"><span
-                      class="option__title">{{ `${props.option}` }}</span></div>
-                  </template>
-                </multiselect>
-              </div>
-            </v-col>
-          </v-row>
           <v-row>
             <v-col
               cols="12"
@@ -244,26 +192,19 @@
               <data-table-component
                 :headers="headers"
                 :page="search.page"
-                :total="holidays.meta.total"
+                :total="insurances.meta.total"
                 @paginate="paginate"
               >
                 <template v-slot:body>
-                  <tr v-for="(i, n) in holidays.data" :key="n">
+                  <tr v-for="(i, n) in insurances.data" :key="n">
                     <td class="text-center">{{ (search.page - 1) * 10 + n + 1 }}</td>
-                    <td class="text-center">
-                      <span class="file-id main">
-                        {{ i.hdate ? $moment(i.hdate).format("jYYYY/jMM/jDD") : '-'  }}
-                      </span>
-                    </td>
-                    <td class="text-center">{{ i.title ? i.title : '-' }}</td>
-                    <td class="text-center">{{ i.organization ? i.organization.name : '-' }}</td>
+                    <td class="text-center">{{ i.name ? i.name : '-' }}</td>
                     <td class="text-center flex flex-row justify-space-around align-center">
-                      <button v-if="i.organization" @click="editHoliday(i)" class="action-buttons">
+                      <button @click="editInsurance(i)" class="action-buttons">
                         <v-icon size="16">mdi-pencil-outline</v-icon>
                         <span>ویرایش</span>
                       </button>
                       <button
-                        v-if="i.organization"
                         @click="showRemoveItem(i.id)"
                         class="action-buttons">
                         <v-icon size="16">mdi-trash-can-outline</v-icon>
@@ -273,7 +214,7 @@
                   </tr>
                 </template>
                 <template v-slot:notfound>
-                  <div v-if="holidays.meta.total === 0">اطلاعاتی یافت نشد</div>
+                  <div v-if="insurances.meta.total === 0">اطلاعاتی یافت نشد</div>
                 </template>
               </data-table-component>
             </v-col>
@@ -291,8 +232,8 @@ import moment from "jalali-moment"
 export default {
   name: "index.vue",
   components: {DataTableComponent},
-  layout: 'panel',
-  middleware: 'auth',
+  layout: 'admin',
+  middleware: 'admin',
   data() {
     return {
       showFilterModal: false,
@@ -301,52 +242,31 @@ export default {
       create: false,
       headers: [
         '',
-        'تاریخ',
-        'عنوان',
-        'سازمان',
+        'نام',
         'عملیات',
       ],
       search: {
         q: '',
         page: 1,
-        start: '',
-        end: '',
       },
       form: {
-        hdate: "",
-        title: "",
+        name: "",
+        logo: "",
       },
-      year: 1398,
-      organization: null,
       selectedItem: null,
-      selectedHolidays: [],
+      selectedInsurances: [],
     }
   },
   mounted() {
-    this.getYear()
+    this.getInsuranceList()
   },
   methods: {
-    getYear() {
-      this.year = parseInt(this.$moment().format("jYYYY"))
-      this.changeYear()
-    },
-    changeYear() {
-      const start = moment.from(`${this.year}/01/01 00:00:00`, 'fa', 'YYYY/MM/DD HH:mm:ss')
-        .locale("en")
-        .format('YYYY-MM-DD HH:mm:ss')
-      const end = moment.from(`${this.year}/12/01 23:59:59`, 'fa', 'YYYY/MM/DD HH:mm:ss')
-        .locale("en")
-        .subtract("1 day").format('YYYY-MM-DD HH:mm:ss')
-      this.search.start = start
-      this.search.end = end
-      this.paginate()
-    },
     doAction() {
       if (!this.action) return
       switch (this.action) {
         case 1:
         case '1':
-          this.deleteHolidays(this.selectedHolidays)
+          this.deleteInsurances(this.selectedInsurances)
       }
     },
     closeForm() {
@@ -356,8 +276,6 @@ export default {
     clearFilterForm() {
       this.search = {
         page: this.search.page,
-        start: '',
-        end: '',
         q: '',
       }
     },
@@ -375,52 +293,60 @@ export default {
       this.create = true
       this.toggleCreateModal()
     },
-    editHoliday(holiday) {
+    editInsurance(insurance) {
       this.create = false
       this.form = {
-        id: holiday.id,
-        title: holiday.title,
-        hdate: this.$moment(holiday.hdate).format("YYYY-MM-DD"),
+        id: insurance.id,
+        name: insurance.name,
+        logo: insurance.logo,
       }
       this.toggleCreateModal()
     },
     paginate(page = 1) {
       this.search.page = page
-      this.getHolidayList()
+      this.getInsuranceList()
     },
-    getHolidayList() {
-      this.$store.dispatch('holidays/getList', this.search)
+    getInsuranceList() {
+      this.$store.dispatch('admin/insurances/getList', this.search)
     },
     getStatus(sent) {
       return sent ? 'ارسال شده' : 'ارسال نشد'
     },
     clearForm() {
       this.form = {
-        title: '',
-        hdate: '',
+        name: '',
+        logo: '',
       }
     },
-    createHoliday() {
-      const type = this.create ? 'holidays/createHoliday' : 'holidays/updateHoliday'
+    createInsurance() {
+      const type = this.create ? 'admin/insurances/createInsurance' : 'admin/insurances/updateInsurance'
       this.$store.dispatch(type, this.form)
         .then(() => {
+          this.$toast.success('با موفقیت انجام شد');
           setTimeout(() => {
             this.closeForm()
             this.showCreateModal = false
-            this.getHolidayList()
-          }, 50)
+            this.getInsuranceList()
+          }, 100)
+        })
+        .catch(err => {
+          this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
         })
     },
-    deleteHolidays(ids) {
-      this.$store.dispatch('holidays/deleteHoliday', {
+    deleteInsurances(ids) {
+      this.$store.dispatch('admin/insurances/deleteInsurance', {
         ids
       })
         .then(() => {
+          this.$toast.success('با موفقیت انجام شد');
           setTimeout(() => {
-            this.getHolidayList()
+            this.getInsuranceList()
             this.action = null
-            this.selectedHolidays = []
+            this.selectedInsurances = []
           }, 50)
+        })
+        .catch(err => {
+          this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
         })
     },
     showRemoveItem(id) {
@@ -436,52 +362,42 @@ export default {
     },
     removeItem() {
       if (!this.selectedItem) return
-      this.$store.dispatch('holidays/removeHoliday', this.selectedItem)
+      this.$store.dispatch('admin/insurances/removeInsurance', this.selectedItem)
+        .then(() => {
+          this.$toast.success('با موفقیت انجام شد');
+        })
+        .catch(err => {
+          this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
+        })
         .finally(() => {
           setTimeout(() => {
             this.toggleRemoveItemModal()
-            this.getHolidayList()
+            this.getInsuranceList()
           }, 50)
         })
     }
   },
   computed: {
-    holidays() {
-      return this.$store.getters['holidays/getList']
+    insurances() {
+      return this.$store.getters['admin/insurances/getList']
     },
     loginUser() {
       return this.$store.getters['login/getUser']
     },
-    users() {
-
-    },
     selectedAll: {
       get() {
-        return this.selectedHolidays.length > 0 && this.selectedHolidays.length === this.holidays.data.length
+        return this.selectedInsurances.length > 0 && this.selectedInsurances.length === this.insurances.data.length
       },
       set(bool) {
         if (bool) {
-          this.selectedHolidays = []
-          this.selectedHolidays = this.holidays.data.map(i => i.id)
+          this.selectedInsurances = []
+          this.selectedInsurances = this.holidays.data.map(i => i.id)
         } else {
-          this.selectedHolidays = []
+          this.selectedInsurances = []
         }
       }
     },
-    years() {
-      const years = [];
-      const year = parseInt(this.$moment().format("jYYYY")) + 10;
-      for (let i = 1398; i < year; i++) {
-        years.push(i)
-      }
-      return years
-    }
   },
-  watch: {
-    year() {
-      this.changeYear()
-    }
-  }
 }
 </script>
 

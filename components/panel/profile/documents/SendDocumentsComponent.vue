@@ -32,6 +32,11 @@
 <!--        <button class="main-button" :style="{maxWidth: '160px'}" @click="save">ذخیره</button>-->
       </div>
     </div>
+    <div
+      v-if="loading"
+    >
+      <LoadingCard />
+    </div>
     <files-list-component
       v-if="!loading"
       :files="newFiles"
@@ -161,10 +166,11 @@
 <script>
 import CropImageComponent from "~/components/panel/global/CropImageComponent";
 import FilesListComponent from "~/components/panel/profile/documents/FilesListComponent";
+import LoadingCard from "~/components/global/LoadingCard.vue";
 
 export default {
   name: "SendDocumentsComponent",
-  components: {FilesListComponent, CropImageComponent},
+  components: {LoadingCard, FilesListComponent, CropImageComponent},
   props: {
     userId: {
       type: Number,
@@ -210,7 +216,7 @@ export default {
       .finally(() => {
         setTimeout(() => {
           this.loading = false
-        }, 250)
+        }, 300)
       })
     },
     cropped(file) {

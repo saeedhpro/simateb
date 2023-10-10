@@ -21,7 +21,7 @@
             <span>فرم پذیرش</span>
           </div>
           <v-spacer/>
-          <div class="create-update-modal-edit-btn" @click="openEditModal">
+          <div v-if="isOwnDoctor"  class="create-update-modal-edit-btn" @click="openEditModal">
             <v-icon small> mdi-pencil</v-icon>
             <span>ویرایش</span>
           </div>
@@ -123,22 +123,22 @@
                     <span class="small">
                           وضعیت فعلی:
                     </span>
-                    <span
+                    <div
                       v-if="resulted && canSeeResulted"
                       class="status-box resulted"
-                    >نتایج ارسال شده</span>
-                    <span
+                    >نتایج ارسال شده</div>
+                    <div
                       v-else-if="waiting"
                       class="status-box waiting"
-                    >در انتظار مراجعه</span>
-                    <span
+                    >در انتظار مراجعه</div>
+                    <div
                       v-else
                       class="status-box"
                       :style="{
                           'background-color': `${statuses[appointment.status - 1].background}`,
                           'color': `${statuses[appointment.status - 1].color}`
                         }"
-                    >{{ statuses[appointment.status - 1].title }}</span>
+                    >{{ statuses[appointment.status - 1].title }}</div>
                   </div>
                   <div class="phone-box second d-flex flex-row align-center" style="width: 100%" v-if="admissioned && !isReDoctor">
                     <span class="small" style="width: 50px">
@@ -211,6 +211,37 @@
                   <div class="detail-box">
                     <div class="phone-box">
                       <span>{{ appointment.prescription }}</span>
+                    </div>
+                  </div>
+                </v-col>
+              </v-row>
+              <v-divider
+                v-if="canSeeInfo"
+                class="my-5"/>
+              <v-row
+                v-if="canSeeInfo"
+              >
+                <v-col
+                  cols="12"
+                  sm="4"
+                  md="2"
+                >
+                  <div class="detail-box">
+                    <div class="phone-box">
+                    <span class="small">
+                          توضیحات پذیرش:
+                    </span>
+                    </div>
+                  </div>
+                </v-col>
+                <v-col
+                  cols="12"
+                  sm="8"
+                  md="10"
+                >
+                  <div class="detail-box">
+                    <div class="phone-box">
+                      <span>{{ appointment.info }}</span>
                     </div>
                   </div>
                 </v-col>
@@ -312,6 +343,18 @@
                         rows="5"
                       ></textarea>
                   </div>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col
+                  cols="12"
+                >
+                  <appointment-insurance-box
+                    :insurance-id="appointment.insurance_id"
+                    :insurance="appointment.insurance"
+                    :total="10000"
+                    @onInsuranceChanged="onInsuranceChanged"
+                  />
                 </v-col>
               </v-row>
               <v-row
@@ -453,7 +496,7 @@
                       <img
                         class="prescription-image"
                         :src="i"
-                        alt=""
+                        :alt="n"
                         width="100" height="75" />
                     </a>
                   </Fancybox>
@@ -652,7 +695,7 @@
                       <span class="action-bar-content">
                         <span class="text-box">
                           <span
-                            v-if="resulted"
+                            v-if="resulted && canSeeResulted"
                           >
                             نتایج ارسال شده
                           </span>
@@ -863,6 +906,10 @@ export default {
         appcode: null,
         future_prescription: '',
         doctor_id: null,
+        insurance_price: 0,
+        patient_price: 0,
+        insurance_id: null,
+        insurance: null,
       },
       prescription: '',
       prescriptionList: [],
@@ -969,6 +1016,10 @@ export default {
           waiting: item.waiting,
           last_prescription: item.last_prescription ? item.last_prescription : '',
           d_desc: item.d_desc ? item.d_desc : '',
+          insurance_id: item.insurance_id,
+          insurance_price: item.insurance_price,
+          patient_price: item.patient_price,
+          insurance: item.insurance,
         }
         this.newFiles = []
         this.getAppointmentPrescription()
@@ -1098,6 +1149,11 @@ export default {
           break;
       }
     },
+    onInsuranceChanged(insurance) {
+      this.appointment.insurance_price = insurance.insurance_price
+      this.appointment.patient_price = insurance.patient_price
+      this.appointment.insurance_id = insurance.insurance_id
+    },
     setPhotographyCases(cases) {
       this.appointment.photography_cases = cases.join(',')
     },
@@ -1120,7 +1176,13 @@ export default {
     removeResultImage(image, index) {
       const first = image.split(':')[0]
       if (first == 'data') {
-        this.newFiles = this.newFiles.splice(index, 1)
+        const list = []
+        for (let i = 0; i < this.newFiles.length; i++) {
+          if (i == index) continue
+          list.push(this.newFiles[i])
+        }
+        this.newFiles = list
+        // this.newFiles = this.newFiles.splice(index, 1)
       } else {
         this.$store.dispatch('appointments/removeResult', {
           image: image,
@@ -1179,6 +1241,8 @@ export default {
       delete data.user
       delete data.radiology
       delete data.photography
+      delete data.insurance
+      console.log(data, "data")
       this.$store.dispatch('appointments/acceptAppointment', data)
         .then(() => {
           this.$toast.success('با موفقیت انجام شد');
@@ -1293,6 +1357,9 @@ export default {
       this.$store.dispatch('appointments/createAppointmentAppCode', this.appointment.id)
         .then((res) => {
           this.appointment.appcode = res.data
+        })
+        .finally(() => {
+          this.loading = false
         })
     },
     doWaiting() {
@@ -1433,6 +1500,9 @@ export default {
         this.loginUser.organization_id == this.appointment.laboratory_id ||
         this.loginUser.organization_id == this.appointment.doctor_id
     },
+    isOwnDoctor() {
+      return this.loginUser.organization_id == this.appointment.organization_id
+    },
     waiting() {
       if (!this.isDoctor) {
         const profession_id = this.loginUser.organization.profession_id;
@@ -1552,7 +1622,10 @@ export default {
     },
     listReferedResults() {
       return this.$store.getters['appointments/getReferedResults']
-    }
+    },
+    canSeeInfo() {
+      return this.loginUser.organization_id == this.appointment.organization_id
+    },
   },
 }
 </script>

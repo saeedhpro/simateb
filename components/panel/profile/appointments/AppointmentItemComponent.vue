@@ -5,7 +5,6 @@
         cols="12"
         sm="4"
         md="2"
-        v-if="forOrganization"
       >
         <div class="img-box">
           <span class="item-index">{{ ((page - 1) * 10) + (index + 1) }}</span>
@@ -20,8 +19,8 @@
 
       <v-col
         cols="12"
-        :sm="forOrganization ? 8 : 12"
-        :md="forOrganization ? 10 : 12"
+        sm="8"
+        md="10"
       >
         <div class="appointment-details">
           <v-row>
@@ -35,32 +34,32 @@
                     start_at_ago_fa
                   }}
                 </span>
-                <span>
+                <div>
                   <span class="circle"/>
                   {{ start_at_fa }}
                   <span class="circle"/>
-                </span>
+                </div>
 <!--                <span-->
 <!--                  v-if="resulted"-->
 <!--                  class="status-box resulted"-->
 <!--                >نتایج ارسال شده</span>-->
-                <span
+                <div
                   v-if="waiting"
                   class="status-box waiting"
-                >در انتظار مراجعه</span>
-                <span
+                >در انتظار مراجعه</div>
+                <div
                   v-else
                   class="status-box"
                   :style="{
                   'background-color': `${statuses[status - 1].background}`,
                   'color': `${statuses[status - 1].color}`
                 }"
-                >{{ statuses[status - 1].title  }}</span>
+                >{{ statuses[status - 1].title  }}</div>
               </div>
               <div class="case-type" v-if="caseType">
                 علت مراجعه: <span>{{ caseType  }}</span>
               </div>
-              <div class="code" v-if="info">
+              <div class="code" v-if="info && canSeeInfo">
                 توضیحات پذیرش: <span>{{ info  }}</span>
               </div>
               <div class="code" v-if="code">
@@ -505,6 +504,9 @@ export default {
     }
   },
   computed: {
+    canSeeInfo() {
+      return this.loginUser.organization_id == this.organizationId
+    },
     prescriptionArray() {
       return this.prescription && this.prescription.length ? this.prescription.split(' - ') : []
     },
@@ -522,11 +524,6 @@ export default {
     },
     loginUser() {
       return this.$store.getters['login/getUser']
-    },
-    forOrganization() {
-      const orgID = this.loginUser.organization_id
-      return orgID == this.organizationId
-        // || orgID == this.radiologyId || orgID == this.photographyId
     },
     isReDoctor() {
       return this.loginUser.organization_id == this.doctorId

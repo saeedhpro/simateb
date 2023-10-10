@@ -1,6 +1,11 @@
 <template>
   <div class="profile-photography-list-component">
-    <div class="photography-results-box">
+    <div
+      v-if="loading"
+    >
+      <LoadingCard />
+    </div>
+    <div v-else class="photography-results-box">
       <radiology-item-component
         v-for="(i,n) in list.data"
         :key="n"
@@ -12,10 +17,11 @@
 
 <script>
 import RadiologyItemComponent from "~/components/panel/profile/radiology/RadiologyItemComponent";
+import LoadingCard from "~/components/global/LoadingCard.vue";
 
 export default {
   name: "RadiologyListComponent",
-  components: {RadiologyItemComponent},
+  components: {LoadingCard, RadiologyItemComponent},
   props: {
     userId: {
       type: Number,
@@ -36,6 +42,7 @@ export default {
         total_rows: 0,
         total_pages: 0
       },
+      loading: false
     }
   },
   mounted () {
@@ -43,6 +50,7 @@ export default {
   },
   methods: {
     getList() {
+      this.loading = true
       this.$store.dispatch('users/getUserResultedAppointmentsList', {
         id: this.userId,
         type: 'radiology',
@@ -51,6 +59,11 @@ export default {
       .then((res) => {
         this.list = res.data
       })
+        .finally(() => {
+          setTimeout(() => {
+            this.loading = false
+          }, 300)
+        })
     }
   },
 }

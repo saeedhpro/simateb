@@ -120,22 +120,22 @@
                     <span class="small">
                           وضعیت فعلی:
                     </span>
-                    <span
+                    <div
                       v-if="resulted"
                       class="status-box resulted"
-                    >نتایج ارسال شده</span>
-                    <span
+                    >نتایج ارسال شده</div>
+                    <div
                       v-else-if="waiting"
                       class="status-box waiting"
-                    >در انتظار مراجعه</span>
-                    <span
+                    >در انتظار مراجعه</div>
+                    <div
                       v-else
                       class="status-box"
                       :style="{
                           'background-color': `${statuses[appointment.status - 1].background}`,
                           'color': `${statuses[appointment.status - 1].color}`
                         }"
-                    >{{ statuses[appointment.status - 1].title }}</span>
+                    >{{ statuses[appointment.status - 1].title }}</div>
                   </div>
                   <div class="phone-box second d-flex flex-row align-center" style="width: 100%" v-if="admissioned && !isReDoctor">
                     <span class="small" style="width: 50px">

@@ -202,6 +202,11 @@ export default {
           isAdmin: false,
         },
         {
+          link: '/insurances',
+          title: 'بیمه',
+          isAdmin: false,
+        },
+        {
           link: '/admin/reports',
           title: 'گزارش ها',
           isAdmin: true,

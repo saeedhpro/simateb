@@ -107,9 +107,10 @@ button:disabled {
   font: normal normal normal 14px/25px IRANYekanRegular !important;
   letter-spacing: 0;
   color: #293366;
-  padding: 4px 24px;
+  padding: 4px 8px;
   border-radius: 6px;
-
+  word-break: unset !important;
+  min-width: 120px !important;
   &.resulted {
     background-color: #2BC4A9;
     color: #FFFFFF !important;
@@ -120,11 +121,6 @@ button:disabled {
     color: #F5AC00 !important;
   }
 }
-
-tr.waiting {
-  background-color: #FFF9EB !important;
-}
-
 .open-drawer {
   i {
     color: #FFFFFF !important;
@@ -203,12 +199,18 @@ table {
     &:nth-child(even) {
       background: #FAFAFA 0 0 no-repeat padding-box !important;
     }
+    &.waiting {
+      background-color: #FFF9EB !important;
+    }
 
     td {
       border-right: 1px solid #EBEBEB !important;
       border-left: 1px solid #EBEBEB !important;
     }
   }
+}
+tr.waiting {
+  background-color: #FFF9EB !important;
 }
 .fancybox-item {
   margin: 5px;
@@ -1244,7 +1246,7 @@ table {
           background: #F0F0F5 0 0 no-repeat padding-box;
           border-radius: 6px;
           margin-right: 5px;
-
+          margin-bottom: 4px;
           &.radiology {
             &.admissioned {
               background: #EBF0FF 0 0 no-repeat padding-box;
