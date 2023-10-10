@@ -350,9 +350,9 @@
                   cols="12"
                 >
                   <appointment-insurance-box
+                    :total-price="appointment.total_price"
                     :insurance-id="appointment.insurance_id"
                     :insurance="appointment.insurance"
-                    :total="10000"
                     @onInsuranceChanged="onInsuranceChanged"
                   />
                 </v-col>
@@ -1019,6 +1019,7 @@ export default {
           insurance_id: item.insurance_id,
           insurance_price: item.insurance_price,
           patient_price: item.patient_price,
+          total_price: item.total_price,
           insurance: item.insurance,
         }
         this.newFiles = []
@@ -1153,6 +1154,7 @@ export default {
       this.appointment.insurance_price = insurance.insurance_price
       this.appointment.patient_price = insurance.patient_price
       this.appointment.insurance_id = insurance.insurance_id
+      this.appointment.total_price = insurance.total_price
     },
     setPhotographyCases(cases) {
       this.appointment.photography_cases = cases.join(',')
@@ -1242,7 +1244,6 @@ export default {
       delete data.radiology
       delete data.photography
       delete data.insurance
-      console.log(data, "data")
       this.$store.dispatch('appointments/acceptAppointment', data)
         .then(() => {
           this.$toast.success('با موفقیت انجام شد');

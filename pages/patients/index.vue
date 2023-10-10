@@ -462,10 +462,8 @@ export default {
       this.loading = true
       this.showFilterModal = false
       this.$store.dispatch('users/getPatients', this.search)
-        .then(() => {
-          setTimeout(() => {
-            this.loading = false
-          }, 300)
+        .finally(() => {
+          this.loading = false
         })
     },
     getAllUsers() {

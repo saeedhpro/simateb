@@ -7,13 +7,23 @@
         <v-expansion-panel-header
           class="wire-box-header"
         >
-          بیمه
+          اطلاعات پرداخت
         </v-expansion-panel-header>
         <v-expansion-panel-content class="px-0">
           <v-row>
             <v-col
               cols="12"
-              sm="4"
+              sm="3"
+            >
+              <custom-price-input
+                v-model="total"
+                label="مبلغ کل"
+                @input="onInsuranceChanged"
+              />
+            </v-col>
+            <v-col
+              cols="12"
+              sm="3"
             >
               <div class="create-update-model-input-box">
                 <label>بیمه</label>
@@ -26,13 +36,13 @@
                   height="32px"
                   dense
                   v-model="selectedInsurance"
-                  @change="onInsuranceChanged"
+                  @input="onInsuranceChanged"
                 ></v-select>
               </div>
             </v-col>
             <v-col
               cols="12"
-              sm="4"
+              sm="3"
             >
               <custom-price-input
                 :disabled="true"
@@ -42,7 +52,7 @@
             </v-col>
             <v-col
               cols="12"
-              sm="4"
+              sm="3"
             >
               <custom-price-input
                 :disabled="true"
@@ -62,7 +72,7 @@
 export default {
   name: "AppointmentInsuranceBox",
   props: {
-    total: {
+    totalPrice: {
       type: Number,
       default: 0
     },
@@ -71,12 +81,13 @@ export default {
       default: 0
     },
     insurance: {
-      type: Number,
+      type: Object,
       default: 0
     },
   },
   data() {
     return {
+      total: this.totalPrice,
       selectedInsurance: {
         id: this.insuranceId,
         percentage: this.insurance ? this.insurance.percentage : 0,
@@ -93,9 +104,10 @@ export default {
     },
     onInsuranceChanged(e) {
       this.$emit('onInsuranceChanged', {
-        insurance_id: e.id,
+        insurance_id: this.selectedInsurance.id,
         insurance_price: this.insurance_price,
         patient_price: this.patient_price,
+        total_price: parseFloat(this.total),
       })
     }
   },
