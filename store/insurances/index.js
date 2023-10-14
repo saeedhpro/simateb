@@ -25,6 +25,18 @@ export const state = () => ({
     total_rows: 0,
     total_pages: 0
   },
+  user_insurances: [],
+  user_insurance_list: {
+    data: [],
+    limit: 10,
+    page: 1,
+    sort: '',
+    meta: {
+      total: 0,
+    },
+    total_rows: 0,
+    total_pages: 0
+  },
 })
 
 export const mutations = {
@@ -42,6 +54,12 @@ export const mutations = {
   },
   setOwnInsuranceList(state, insurances) {
     state.own_insurance_list = insurances
+  },
+  setUserInsurances(state, insurances) {
+    state.user_insurances = insurances
+  },
+  setUserInsuranceList(state, insurances) {
+    state.user_insurance_list = insurances
   },
 }
 
@@ -62,28 +80,6 @@ export const actions = {
       .then(res => {
         const data = res.data.data;
         ctx.commit('setInsurances', data)
-        return Promise.resolve(res)
-      })
-      .catch(err => {
-        return Promise.reject(err)
-      })
-  },
-  getOwnInsurances(ctx, data) {
-    const d = Object.entries(data);
-    const arr = [];
-    for (let i = 0; i < d.length; i++) {
-      if (d[i][1]) {
-        arr.push(`${d[i][0]}=${d[i][1]}`)
-      }
-    }
-    return this.$axios.get(`/organizations/insurances?${arr.join('&')}`)
-      .then(res => {
-        const insurances = res.data;
-        if (data.page) {
-          ctx.commit('setOwnInsuranceList', insurances)
-        } else {
-          ctx.commit('setOwnInsurances', insurances.data)
-        }
         return Promise.resolve(res)
       })
       .catch(err => {
@@ -137,6 +133,28 @@ export const actions = {
         return Promise.reject(err)
       })
   },
+  getOwnInsurances(ctx, data) {
+    const d = Object.entries(data);
+    const arr = [];
+    for (let i = 0; i < d.length; i++) {
+      if (d[i][1]) {
+        arr.push(`${d[i][0]}=${d[i][1]}`)
+      }
+    }
+    return this.$axios.get(`/organizations/insurances?${arr.join('&')}`)
+      .then(res => {
+        const insurances = res.data;
+        if (data.page) {
+          ctx.commit('setOwnInsuranceList', insurances)
+        } else {
+          ctx.commit('setOwnInsurances', insurances.data)
+        }
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
   createOwnInsurance(ctx, data) {
     return this.$axios.post(`/organizations/insurances?`, data)
       .then(res => {
@@ -172,6 +190,73 @@ export const actions = {
       .catch(err => {
         return Promise.reject(err)
       })
+  },
+  getUserIndexInsurances(ctx, data) {
+    return this.$axios.get(`/users/${data.id}/insurances`)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  getUserInsurances(ctx, data) {
+    const d = Object.entries(data);
+    const arr = [];
+    for (let i = 0; i < d.length; i++) {
+      if (d[i][1]) {
+        arr.push(`${d[i][0]}=${d[i][1]}`)
+      }
+    }
+    return this.$axios.get(`/insurances?${arr.join('&')}`)
+      .then(res => {
+        const insurances = res.data;
+        if (data.page) {
+          ctx.commit('setUserInsuranceList', insurances)
+        } else {
+          ctx.commit('setUserInsurances', insurances.data)
+        }
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  createUserInsurance(ctx, data) {
+    return this.$axios.post(`/insurances?`, data)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  updateUserInsurance(ctx, data) {
+    return this.$axios.put(`/insurances/${data.id}`, data)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  removeUserInsurance(ctx, id) {
+    return this.$axios.delete(`/insurances/${id}`)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  deleteUserInsurance(ctx, data) {
+    return this.$axios.post(`/insurances/delete`, data)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
   }
 }
 
@@ -190,5 +275,11 @@ export const getters = {
   },
   getOwnInsuranceList(state) {
     return state.own_insurance_list
+  },
+  getUserInsurances(state) {
+    return state.user_insurances
+  },
+  getUserInsuranceList(state) {
+    return state.user_insurance_list
   },
 }
