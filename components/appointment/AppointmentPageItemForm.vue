@@ -352,7 +352,9 @@
                   <appointment-insurance-box
                     :total-price="appointment.total_price"
                     :insurance-id="appointment.insurance_id"
-                    :insurance="appointment.insurance"
+                    :user-insurance-id="appointment.user_insurance_id"
+                    :user-id="appointment.user_id"
+                    :insurance="appointment.user_insurance"
                     @onInsuranceChanged="onInsuranceChanged"
                   />
                 </v-col>
@@ -910,6 +912,8 @@ export default {
         patient_price: 0,
         insurance_id: null,
         insurance: null,
+        user_insurance_id: null,
+        user_insurance: null,
       },
       prescription: '',
       prescriptionList: [],
@@ -1017,10 +1021,12 @@ export default {
           last_prescription: item.last_prescription ? item.last_prescription : '',
           d_desc: item.d_desc ? item.d_desc : '',
           insurance_id: item.insurance_id,
+          user_insurance_id: item.user_insurance_id,
           insurance_price: item.insurance_price,
           patient_price: item.patient_price,
           total_price: item.total_price,
           insurance: item.insurance,
+          user_insurance: item.user_insurance,
         }
         this.newFiles = []
         this.getAppointmentPrescription()
@@ -1154,6 +1160,7 @@ export default {
       this.appointment.insurance_price = insurance.insurance_price
       this.appointment.patient_price = insurance.patient_price
       this.appointment.insurance_id = insurance.insurance_id
+      this.appointment.user_insurance_id = insurance.user_insurance_id
       this.appointment.total_price = insurance.total_price
     },
     setPhotographyCases(cases) {
@@ -1244,6 +1251,7 @@ export default {
       delete data.radiology
       delete data.photography
       delete data.insurance
+      delete data.user_insurance
       this.$store.dispatch('appointments/acceptAppointment', data)
         .then(() => {
           this.$toast.success('با موفقیت انجام شد');

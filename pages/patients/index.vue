@@ -459,12 +459,13 @@ export default {
       this.getUsersList()
     },
     getUsersList() {
-      this.loading = true
+      // this.loading = true
       this.showFilterModal = false
       this.$store.dispatch('users/getPatients', this.search)
-        .finally(() => {
-          this.loading = false
-        })
+        // .finally(() => {
+        //     this.loading = false
+        //   }, 200)
+        // })
     },
     getAllUsers() {
       this.$store.dispatch('users/getUsers')

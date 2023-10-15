@@ -207,6 +207,11 @@ export default {
           isAdmin: false,
         },
         {
+          link: '/treatments',
+          title: 'طرح درمان',
+          isAdmin: false,
+        },
+        {
           link: '/admin/reports',
           title: 'گزارش ها',
           isAdmin: true,

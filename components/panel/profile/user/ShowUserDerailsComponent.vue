@@ -234,7 +234,7 @@
             >
               <v-icon>
                 mdi-pencil-outline
-              </v-icon>2px
+              </v-icon>
               <span>ویرایش اطلاعات</span>
             </div>
           </div>

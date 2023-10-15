@@ -54,6 +54,13 @@
               <img src="/images/profile/pay.svg">
               پرداخت ها
             </v-tab>
+            <v-tab
+              class="insurance-tab"
+              v-if="canSee('doctor')"
+            >
+              <img src="/images/profile/pay.svg">
+              اطلاعات تکمیلی
+            </v-tab>
           </v-tabs>
         </v-container>
         <div
@@ -88,6 +95,11 @@
                 :fullName="`${user.fname} ${user.lname}`"
               />
             </v-tab-item>
+            <v-tab-item v-if="canSee('doctor')">
+              <user-insurance-component
+                :user-id="user.id"
+              />
+            </v-tab-item>
           </v-tabs-items>
         </div>
       </v-col>
@@ -114,12 +126,14 @@ import ShowUserDerailsComponent from "~/components/panel/profile/user/ShowUserDe
 import UserDerailsComponent from "~/components/panel/profile/user/UserDerailsComponent";
 import UserPaymentComponent from "~/components/panel/profile/payments/UserPaymentComponent";
 import DeleteUserModalComponent from "~/components/global/delete/DeleteUserModalComponent";
+import UserInsuranceComponent from "~/components/panel/profile/insurance/UserInsuranceComponent.vue";
 
 export default {
   name: "profile.vue",
   layout: "panel",
   middleware: "auth",
   components: {
+    UserInsuranceComponent,
     DeleteUserModalComponent,
     UserPaymentComponent,
     UserDerailsComponent,

@@ -29,7 +29,7 @@
                 <label>بیمه</label>
                 <v-select
                   outlined
-                  :items="ownInsurances"
+                  :items="user_insurances"
                   item-value="id"
                   item-text="name"
                   :return-object="true"
@@ -80,6 +80,14 @@ export default {
       type: Number,
       default: 0
     },
+    userInsuranceId: {
+      type: Number,
+      default: 0
+    },
+    userId: {
+      type: Number,
+      default: 0
+    },
     insurance: {
       type: Object,
       default: 0
@@ -89,22 +97,30 @@ export default {
     return {
       total: this.totalPrice,
       selectedInsurance: {
-        id: this.insuranceId,
+        id: this.userInsuranceId,
         percentage: this.insurance ? this.insurance.percentage : 0,
         name: this.insurance ? this.insurance.name : '',
-      }
+      },
+      user_insurances: []
     }
   },
   mounted() {
-    this.getOwnInsurances()
+    this.getUserInsurances()
+    console.log(this.selectedInsurance, "ins")
   },
   methods: {
-    getOwnInsurances() {
-      this.$store.dispatch('insurances/getOwnInsurances', {})
+    getUserInsurances() {
+      this.$store.dispatch('insurances/getUserIndexInsurances', {
+        id: this.userId,
+      })
+        .then(res => {
+          this.user_insurances = res.data.data
+        })
     },
     onInsuranceChanged(e) {
       this.$emit('onInsuranceChanged', {
-        insurance_id: this.selectedInsurance.id,
+        insurance_id: null,
+        user_insurance_id: this.selectedInsurance.id,
         insurance_price: this.insurance_price,
         patient_price: this.patient_price,
         total_price: parseFloat(this.total),
@@ -112,9 +128,6 @@ export default {
     }
   },
   computed: {
-    ownInsurances() {
-      return this.$store.getters['insurances/getOwnInsurances']
-    },
     insurance_price() {
       return this.total * this.selectedInsurance.percentage / 100
     },
