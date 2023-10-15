@@ -100,17 +100,12 @@
             <v-row>
               <v-col
                 cols="12"
-                sm="3"
+                sm="6"
               >
                 <custom-text-input
                   v-model="form.name"
                   label="عنوان"
                 />
-              </v-col>
-              <v-col
-                cols="12"
-                sm="6"
-              >
               </v-col>
             </v-row>
           </v-container>
