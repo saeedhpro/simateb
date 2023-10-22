@@ -255,6 +255,9 @@ export default {
         info: '',
         status: 0,
         user: null,
+        insurance_price: 0,
+        patient_price: 0,
+        total_price: 0,
       },
       errors: {
         start_at: '',
@@ -290,6 +293,9 @@ export default {
         info: this.item.info,
         status: this.item.status,
         user: this.item.user,
+        insurance_price: this.item.insurance_price,
+        patient_price: this.item.patient_price,
+        total_price: this.item.patient_price,
       }
       this.user = this.item.user
       this.resetErrors()
