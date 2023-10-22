@@ -295,7 +295,7 @@ export default {
         user: this.item.user,
         insurance_price: this.item.insurance_price,
         patient_price: this.item.patient_price,
-        total_price: this.item.patient_price,
+        total_price: this.item.total_price,
       }
       this.user = this.item.user
       this.resetErrors()
