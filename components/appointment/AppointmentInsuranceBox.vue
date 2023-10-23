@@ -106,7 +106,6 @@ export default {
   },
   mounted() {
     this.getUserInsurances()
-    console.log(this.selectedInsurance, "ins")
   },
   methods: {
     getUserInsurances() {
