@@ -311,8 +311,9 @@
                   </div>
                   <div class="mt-2 create-update-model-input-box">
                       <textarea
+                        :disabled="true"
                         class="prescription-textarea"
-                        v-model="appointment.prescription"
+                        v-model="doctorPrescription"
                         rows="5"
                       ></textarea>
                   </div>
@@ -846,6 +847,14 @@
       @close="closeDoctorPrescription"
       @done="addDoctorPrescription"
     />
+    <new-appointment-page-doctor-prescription-modal
+      :open="showNewDoctorPrescription"
+      :selected-actions="appointment.selected_actions"
+      :selected-dents="appointment.selected_dents"
+      @save="saveNewPrescription"
+      @close="closeDoctorPrescription"
+      @done="addDoctorPrescription"
+    />
     <update-appointment-form-component
       :open="showUpdateModal"
       v-if="appointment"
@@ -869,10 +878,13 @@ import CropImageComponent from "~/components/panel/global/CropImageComponent.vue
 import DeleteUserModalComponent from "~/components/global/delete/DeleteUserModalComponent.vue";
 import UpdateAppointmentFormComponent
   from "~/components/panel/appointment/AppointmentForm/UpdateAppointmentFormComponent.vue";
+import NewAppointmentPageDoctorPrescriptionModal
+  from "~/components/appointment/NewAppointmentPageDoctorPrescriptionModal.vue";
 
 export default {
   name: "AppointmentPageItemForm",
   components: {
+    NewAppointmentPageDoctorPrescriptionModal,
     UpdateAppointmentFormComponent,
     DeleteUserModalComponent, CropImageComponent, ReferBoxComponent, LoadingCard},
   props: {
@@ -914,6 +926,8 @@ export default {
         insurance: null,
         user_insurance_id: null,
         user_insurance: null,
+        selected_actions: [],
+        selected_dents: [],
       },
       prescription: '',
       prescriptionList: [],
@@ -921,6 +935,7 @@ export default {
       deletedResults: [],
       showPrescriptionList: false,
       showDoctorPrescription: false,
+      showNewDoctorPrescription: false,
       pType: 'prescription',
       showDeleteApp: false,
       showUpdateModal: false,
@@ -1027,6 +1042,8 @@ export default {
           total_price: item.total_price,
           insurance: item.insurance,
           user_insurance: item.user_insurance,
+          selected_actions: item.selected_actions ?? [],
+          selected_dents: item.selected_dents ?? [],
         }
         this.newFiles = []
         this.getAppointmentPrescription()
@@ -1108,7 +1125,8 @@ export default {
       switch (type) {
         case 'prescription':
           this.pType = 'prescription'
-          this.toggleDoctorPrescription()
+          this.toggleNewDoctorPrescription()
+          // this.toggleDoctorPrescription()
           break
         case 'future_prescription':
           this.pType = 'future_prescription'
@@ -1122,8 +1140,23 @@ export default {
     toggleDoctorPrescription() {
       this.showDoctorPrescription = !this.showDoctorPrescription
     },
+    toggleNewDoctorPrescription() {
+      this.showNewDoctorPrescription = !this.showNewDoctorPrescription
+    },
+    saveNewPrescription(item) {
+      this.appointment.selected_dents = item.selected_dents
+      this.appointment.selected_actions = item.selected_actions
+      this.closeNewDoctorPrescription()
+    },
     closeDoctorPrescription() {
-      this.showDoctorPrescription = false
+      if (this.type == 'prescription') {
+        this.closeNewDoctorPrescription()
+      } else {
+        this.showDoctorPrescription = false
+      }
+    },
+    closeNewDoctorPrescription() {
+      this.showNewDoctorPrescription = false
     },
     addDoctorPrescription(data) {
       if (data.type == 'prescription') {
@@ -1635,6 +1668,13 @@ export default {
     canSeeInfo() {
       return this.loginUser.organization_id == this.appointment.organization_id
     },
+    doctorPrescription() {
+      let list = [
+        ...this.appointment.selected_actions,
+        ...this.appointment.selected_dents,
+      ]
+      return list.join('\n')
+    }
   },
 }
 </script>
