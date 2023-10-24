@@ -345,6 +345,7 @@ export default {
         q: '',
         page: 1,
         user_id: this.userId,
+        is_active: 1
       },
       form: {
         id: 0,
@@ -384,6 +385,7 @@ export default {
         page: this.search.page,
         q: '',
         user_id: this.userId,
+        is_active: 1,
       }
     },
     closeFilterModal() {
@@ -423,7 +425,9 @@ export default {
       this.$store.dispatch('insurances/getUserInsurances', this.search)
     },
     getAllInsurancesList() {
-      this.$store.dispatch('insurances/getInsurances')
+      this.$store.dispatch('insurances/getOwnInsurances', {
+        is_active: 1
+      })
     },
     getStatus(sent) {
       return sent ? 'ارسال شده' : 'ارسال نشد'
@@ -493,6 +497,7 @@ export default {
       if (e) {
         this.form.insurance_id = e.id
         this.form.name = e.name
+        this.form.percentage = e.percentage
       } else {
         this.form.insurance_id = 0
       }
@@ -511,8 +516,11 @@ export default {
     insurances() {
       return this.$store.getters['insurances/getUserInsuranceList']
     },
+    userInsurances() {
+      return this.$store.getters['insurances/getUserInsurance']
+    },
     allInsurances() {
-      return this.$store.getters['insurances/getInsurances']
+      return this.$store.getters['insurances/getOwnInsurances']
     },
     loginUser() {
       return this.$store.getters['login/getUser']
