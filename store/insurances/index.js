@@ -75,7 +75,7 @@ export const actions = {
         return Promise.reject(err)
       })
   },
-  getInsurances(ctx) {
+  getInsurances(ctx, is_active) {
     return this.$axios.get(`/admin/insurances`)
       .then(res => {
         const data = res.data.data;
