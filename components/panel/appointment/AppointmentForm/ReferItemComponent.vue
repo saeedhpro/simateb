@@ -86,6 +86,7 @@
               <textarea
                 v-model="msg"
                 rows="4"
+                :disabled="!selectedItem"
               ></textarea>
             </div>
           </v-col>
@@ -207,6 +208,10 @@ export default {
       type: String,
       default: 'رادیولوژی',
     },
+    message: {
+      type: String,
+      default: '',
+    },
     refer: {
       type: Object,
       default: null,
@@ -230,6 +235,7 @@ export default {
     }
   },
   mounted() {
+    this.msg = this.message
     this.getList()
     if (this.items.length > 0) {
       this.doctorImages = [

@@ -373,6 +373,9 @@
                     :radio-items="radiologyCases"
                     :photo-items="photographyCases"
                     :doctor-items="doctorImages"
+                    :radiology-msg="appointment.radiology_msg"
+                    :photography-msg="appointment.photography_msg"
+                    :doctor-msg="appointment.doctor_msg"
                     @selected="itemSelected"
                     @setMsg="setMsg"
                     @setPhotographyCases="setPhotographyCases"
@@ -1011,6 +1014,7 @@ export default {
           photography_cases: item.photography_cases ? item.photography_cases : '',
           photography_id: item.photography_id,
           photography_msg: item.photography_msg ? item.photography_msg : '',
+          doctor_msg: item.doctor_msg ? item.doctor_msg : '',
           prescription: item.prescription ? item.prescription : '',
           r_admission_at: item.r_admission_at ? item.r_admission_at : '',
           r_imgs: item.r_imgs ? item.r_imgs : '',
@@ -1186,6 +1190,9 @@ export default {
           break;
         case 'radiology':
           this.appointment.radiology_msg = item.val
+          break;
+        case 'doctor':
+          this.appointment.doctor_msg = item.val
           break;
       }
     },
