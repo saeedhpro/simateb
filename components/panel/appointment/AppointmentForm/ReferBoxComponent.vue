@@ -20,6 +20,7 @@
                 type="radiology"
                 title="رادیولوژی"
                 :refer="radiology"
+                :message="radiologyMsg"
                 :items="radioItems"
                 @selected="itemSelected"
                 @setMsg="setMsg"
@@ -35,6 +36,7 @@
                 type="photography"
                 title="فتوگرافی"
                 :refer="photography"
+                :message="photographyMsg"
                 :items="photoItems"
                 @selected="itemSelected"
                 @setMsg="setMsg"
@@ -50,6 +52,7 @@
                 type="doctor"
                 title="متخصص"
                 :refer="doctor"
+                :message="doctorMsg"
                 :items="doctorItems"
                 @selected="itemSelected"
                 @setMsg="setMsg"
@@ -92,7 +95,19 @@ export default {
     radioItems: {
       type: Array,
       default: () => []
-    }
+    },
+    radiologyMsg: {
+      type: String,
+      default: "",
+    },
+    photographyMsg: {
+      type: String,
+      default: "",
+    },
+    doctorMsg: {
+      type: String,
+      default: "",
+    },
   },
   methods: {
     itemSelected(val) {
@@ -100,8 +115,8 @@ export default {
     },
     setMsg(val) {
       this.$emit('setMsg', {
-        val: val,
-        type: this.type,
+        val: val.val,
+        type: val.type,
       })
     },
     setPhotographyCases(cases) {
