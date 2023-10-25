@@ -54,10 +54,10 @@
                         <span>حذف</span>
                       </button>
                       <button
-                        @click="showItem(i.id)"
+                        @click="showItem(i)"
                         class="action-buttons">
-                        <v-icon size="16">mdi-eye-outline</v-icon>
-                        <span>مشاهده</span>
+                        <v-icon size="16">mdi-plus</v-icon>
+                        <span>افزودن زیرمجموعه</span>
                       </button>
                     </td>
                   </tr>
@@ -229,6 +229,97 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-dialog
+      v-model="showTreatmentModal"
+      max-width="1056px"
+      persistent
+    >
+      <v-card
+        class="create-update-modal"
+      >
+        <v-card-title
+          class="create-update-modal-title-box"
+        >
+          <div class="create-update-modal-title">
+            <button
+              @click="closeTreatmentModal"
+              class="create-update-modal-close"
+            >
+              <v-icon>mdi-close</v-icon>
+            </button>
+            <span>افزودن زیرمجموعه</span>
+          </div>
+          <v-spacer/>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <div class="inline-input-btn">
+              <div class="create-update-model-input-box d-inline-flex">
+                <label>عنوان</label>
+                <input type="text" v-model="treatment.name">
+              </div>
+              <div class="page-actions second-button inline-btn"
+                   @click="addTreatment"
+              >
+                <img src="/images/pages/plus-out.svg" alt="organizations">
+                <span class="title">{{ treatCreate ? 'افزودن' : 'ویرایش' }}</span>
+              </div>
+            </div>
+            <v-divider class="mt-4"/>
+            <div class="case-type-list">
+              <div class="case-type-item" v-for="(t, i) in treatments" :key="i">
+                <div class="case-item-name">
+                  {{ t.name }}
+                </div>
+                <div class="case-actions text-center flex flex-row justify-space-around align-center">
+                  <button @click="editTreatment(t, i)" class="action-buttons">
+                    <v-icon size="16">mdi-pencil-outline</v-icon>
+                    <span>ویرایش</span>
+                  </button>
+                  <button
+                    @click="removeTreatment(i)"
+                    class="action-buttons">
+                    <v-icon size="16">mdi-trash-can-outline</v-icon>
+                    <span>حذف</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-container>
+            <v-row>
+              <v-spacer/>
+              <v-col
+                cols="12"
+                sm="3"
+                md="3"
+              >
+                <button
+                  class="second-button full-width"
+                  @click="closeTreatmentModal"
+                >
+                  بستن
+                </button>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="4"
+                md="4"
+              >
+                <button
+                  class="main-button"
+                  @click="saveTreatments"
+                >
+                  ذخیره
+                </button>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -247,6 +338,8 @@ export default {
       showCreateModal: false,
       showRemoveItemModal: false,
       create: false,
+      treatCreate: true,
+      selectedIndex: -1,
       headers: [
         '',
         'عنوان',
@@ -260,15 +353,63 @@ export default {
         id: 0,
         name: "",
       },
+      treatment: {
+        id: 0,
+        name: "",
+      },
       selectedItem: null,
       selectedCategory: null,
       selectedCategories: [],
+      treatments: [],
+      showTreatmentModal: false,
+      item: null,
     }
   },
   mounted() {
     this.getCategoryList()
   },
   methods: {
+    closeTreatmentModal() {
+      this.treatments = []
+      this.showTreatmentModal = false
+      this.item = null
+    },
+    addTreatment() {
+      if (this.treatCreate) {
+        this.treatments.push(this.treatment)
+      } else {
+        this.treatments[this.selectedIndex].name = this.treatment.name
+        this.selectedIndex = -1
+      }
+      this.treatment = {
+        id: 0,
+        name: "",
+      }
+      this.treatCreate = true
+    },
+    editTreatment(treatment, index) {
+      let t = this.treatments[index]
+      this.treatment = {
+        id: t.id,
+        name: t.name,
+      }
+      this.treatCreate = false
+      this.selectedIndex = index
+    },
+    removeTreatment(index) {
+      this.treatments.splice(index, 1)
+    },
+    saveTreatments() {
+      this.$store.dispatch('treatments/createTreatmentList', {
+        category_id: this.item.id,
+        organization_id: this.item.organization_id,
+        list: this.treatments,
+      })
+        .finally(() => {
+          this.closeTreatmentModal()
+          this.getCategoryList()
+        })
+    },
     doAction() {
       if (!this.action) return
       switch (this.action) {
@@ -357,8 +498,14 @@ export default {
       this.selectedItem = id
       this.toggleRemoveItemModal()
     },
-    showItem(id) {
-      this.$router.push(`/treatments/${id}`)
+    showItem(item) {
+      for (let i = 0; i < item.actions.length; i++) {
+        this.treatments.push({
+          ...item.actions[i],
+        })
+      }
+      this.item = item
+      this.showTreatmentModal = true
     },
     cancelRemoveItem() {
       this.selectedItem = null
@@ -402,6 +549,55 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+
+.case-type-list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  .case-type-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+
+    .case-item-name {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-start;
+      margin: 5px;
+      padding: 5px;
+      width: 100%;
+    }
+
+    .case-actions {
+      width: 230px;
+    }
+  }
+}
+
+.inline-input-btn {
+  display: flex;
+  align-items: flex-end;
+  flex-direction: row;
+}
+
+.inline-btn {
+  max-width: 200px;
+  min-width: 100px;
+  margin-right: 10px;
+}
+
+.case-item-name {
+  background: #E6E6E6 0 0 no-repeat padding-box;
+  border-radius: 8px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+}
 
 </style>
