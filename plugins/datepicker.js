@@ -6,7 +6,8 @@ Vue.use(VuePersianDatetimePicker, {
     inputClass: 'form-control my-custom-class-name',
     placeholder: '',
     color: '#5063FF',
-    autoSubmit: true,
-    format: 'YYYY-MM-DD HH:mm:ss'
+    // autoSubmit: true,
+    format: 'YYYY-MM-DD HH:mm:ss',
+    editable: true
   }
 });

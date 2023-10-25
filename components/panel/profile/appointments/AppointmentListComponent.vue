@@ -24,6 +24,8 @@
         :prescription="i.prescription"
         :radiology-cases="i.radiology_cases"
         :photography-cases="i.photography_cases"
+        :radiology-msg="i.radiology_msg"
+        :photography-msg="i.photography_msg"
         :radiology-id="i.radiology_id"
         :radiology="i.radiology"
         :photography-id="i.photography_id"

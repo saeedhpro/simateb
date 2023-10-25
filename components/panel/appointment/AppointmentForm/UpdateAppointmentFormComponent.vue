@@ -1,5 +1,5 @@
 <template>
-  <div class="appointment-form-component" v-if="show">
+  <div class="appointment-form-component" v-if="show && item">
     <v-dialog
       v-model="show"
       persistent
@@ -48,6 +48,7 @@
                     type="datetime"
                     :jump-minute="15"
                     :round-minute="true"
+                    :show="showTime"
                     ref="start"
                   >
                     <template v-slot:label>
@@ -184,7 +185,7 @@
                       class="main-button"
                       @click="openAcceptModal"
                     >
-                      ذخیره
+                      ذخیره تغییرات
                     </button>
                   </v-col>
                 </v-row>
@@ -217,6 +218,7 @@ import CustomNationalCodeInput from "~/components/custom/CustomNationalCodeInput
 import CustomPhoneNumberInput from "~/components/custom/CustomPhoneNumberInput";
 import moment from "jalali-moment";
 import CustomDateInput from "~/components/custom/CustomDateInput";
+import {apps} from "~/ecosystem.config";
 
 export default {
   name: "UpdateAppointmentFormComponent",
@@ -266,9 +268,11 @@ export default {
       },
       user: null,
       showAcceptModal: false,
+      showTime: false,
     }
   },
   mounted() {
+    this.resetForm()
   },
   methods: {
     closeForm() {
@@ -337,14 +341,15 @@ export default {
     },
     openAcceptModal() {
       if (this.validateFrom()) {
-        this.toggleAcceptModal()
+        this.updateAppointment()
+        // this.toggleAcceptModal()
       }
     },
     toggleAcceptModal() {
       this.showAcceptModal = !this.showAcceptModal
     },
     updateAppointment() {
-      this.toggleAcceptModal()
+      // this.toggleAcceptModal()
       if (this.validateFrom()) {
         if (!this.appointment.user_id) {
           return
@@ -363,6 +368,9 @@ export default {
             this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
           })
       }
+    },
+    getStartAt(e) {
+      console.log(e, "e")
     }
   },
   computed: {
@@ -424,9 +432,9 @@ export default {
         this.appointment.tel = this.user.tel
       }
     },
-    item() {
-      this.resetForm()
-    }
+    // item() {
+    //   this.resetForm()
+    // }
   }
 }
 </script>
