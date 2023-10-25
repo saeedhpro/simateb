@@ -207,10 +207,23 @@
                   cols="12"
                   sm="8"
                   md="10"
+                  v-if="isDoctor"
                 >
                   <div class="detail-box">
                     <div class="phone-box">
                       <span>{{ appointment.prescription }}</span>
+                    </div>
+                  </div>
+                </v-col>
+                <v-col
+                  cols="12"
+                  sm="8"
+                  md="10"
+                  v-else
+                >
+                  <div class="detail-box">
+                    <div class="phone-box">
+                      <span>{{ appointment[profession+'_msg'] }}</span>
                     </div>
                   </div>
                 </v-col>
@@ -860,7 +873,7 @@
     />
     <update-appointment-form-component
       :open="showUpdateModal"
-      v-if="appointment"
+      v-if="appointment && showUpdateModal"
       :item="appointment"
       @close="closeUpdateModal"
       @done="doneUpdateModal"
@@ -963,10 +976,11 @@ export default {
     },
     done() {
       this.$emit('done')
-      this.loading = true
-      setTimeout(() => {
-        this.getAppointment(this.id)
-      }, 200)
+      // this.loading = true
+      this.closeUpdateModal()
+      // setTimeout(() => {
+      //   this.getAppointment(this.id)
+      // }, 200)
     },
     getAppointment(id) {
       this.$store.dispatch('appointments/getAppointment', id)

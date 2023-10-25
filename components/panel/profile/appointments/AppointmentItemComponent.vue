@@ -80,6 +80,14 @@
                   {{ p  }}
                 </span>
               </div>
+              <div class="prescription-box" v-if="!isDoctor && getMsg">
+                توضیحات پزشک:
+                <span
+                  class="prescription"
+                >
+                  {{ getMsg }}
+                </span>
+              </div>
               <div class="prescription-box" v-if="radiologyCases">
                 رادیولوژی {{ radiologyName }}:
                 <span
@@ -339,6 +347,14 @@ export default {
       type: String,
       required: true,
     },
+    radiologyMsg: {
+      type: String,
+      required: true,
+    },
+    photographyMsg: {
+      type: String,
+      required: true,
+    },
     waiting: {
       type: Boolean,
       default: false,
@@ -405,7 +421,11 @@ export default {
       selectedImg: null,
       selectedIndex: 0,
       selectedImages: [],
-      interval: null
+      interval: null,
+      professionMsg: {
+        photography_msg: this.photographyMsg,
+        radiology_msg: this.radiologyMsg,
+      }
     }
   },
   methods: {
@@ -528,6 +548,9 @@ export default {
     isReDoctor() {
       return this.loginUser.organization_id == this.doctorId
     },
+    isDoctor() {
+      return this.loginUser.organization_id == this.organizationId
+    },
     resulted() {
       const type = this.loginUser.organization.profession_id;
       if (type == 1) {
@@ -558,6 +581,21 @@ export default {
       return this.pAdmissionAt != "" && this.pAdmissionAt != null ||
         this.lAdmissionAt != "" && this.lAdmissionAt != null ||
         this.rAdmissionAt != "" && this.rAdmissionAt != null;
+    },
+    profession() {
+      const profession_id = this.loginUser.organization.profession_id;
+      switch (profession_id) {
+        case 1:
+          return 'photography';
+        case 2:
+          return 'laboratory';
+        case 3:
+          return 'radiology';
+      }
+      return 'photography';
+    },
+    getMsg() {
+      return this.professionMsg[this.profession+'_msg']
     }
   }
 }

@@ -13,7 +13,8 @@
           >
             <img
               class="profile-image"
-              :src="getLogo(user)">
+              alt=""
+              :src="getLogo">
             <div
               class="hidden-lg-and-up user-details-box small"
             >
@@ -287,17 +288,6 @@ export default {
           this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
         })
     },
-    getLogo(user) {
-      if (user.logo) {
-        return user.logo
-      } else {
-        if (user.gender == 'female') {
-          return '/images/profile/woman.svg'
-        } else {
-          return '/images/profile/man.svg'
-        }
-      }
-    }
   },
   computed: {
     loginUser() {
@@ -316,6 +306,17 @@ export default {
     isAdmin() {
       if (!this.loginUser) return false
       return this.loginUser.user_group_id === 2
+    },
+    getLogo() {
+      if (this.user.logo) {
+        return this.user.logo
+      } else {
+        if (this.user.gender == 'female') {
+          return '/images/profile/woman.svg'
+        } else {
+          return '/images/profile/man.svg'
+        }
+      }
     }
   },
 }
