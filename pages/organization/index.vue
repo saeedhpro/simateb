@@ -739,8 +739,11 @@ export default {
     doneAppointmentModal() {
       if (this.item) {
         this.appointmentID = this.item.id
-        this.search.q = ''
         this.getAppointmentList()
+        this.search.q = ''
+      }
+      if (!this.isDoctor) {
+        this.search.q = ''
       }
     },
     toggleAppointmentModal() {
