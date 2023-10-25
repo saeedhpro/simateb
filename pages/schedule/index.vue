@@ -772,6 +772,7 @@ export default {
       showCasesModal: false,
       showRemoveItemModal: false,
       showReserveForm: false,
+      selectedItem: null,
       create: false,
       editCT: false,
       editCTI: 0,

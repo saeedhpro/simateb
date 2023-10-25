@@ -415,6 +415,7 @@ export default {
         end_date: insurance.end_date,
         total: insurance.total,
       }
+      console.log(insurance.end_date, "end")
       this.toggleCreateModal()
     },
     paginate(page = 1) {

@@ -115,6 +115,15 @@ export const actions = {
         return Promise.reject(err)
       })
   },
+  createTreatmentList(ctx, data) {
+    return this.$axios.post(`/treatments/create`, data)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
   getCategory(ctx, id) {
     return this.$axios.get(`/categories/${id}`)
       .then(res => {
