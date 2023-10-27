@@ -13,7 +13,7 @@
           <v-row>
             <v-col
               cols="12"
-              sm="3"
+              sm="4"
             >
               <custom-price-input
                 v-model="total"
@@ -23,7 +23,7 @@
             </v-col>
             <v-col
               cols="12"
-              sm="3"
+              sm="4"
             >
               <div class="create-update-model-input-box">
                 <label>بیمه</label>
@@ -42,7 +42,7 @@
             </v-col>
             <v-col
               cols="12"
-              sm="3"
+              sm="4"
             >
               <custom-price-input
                 :disabled="true"
@@ -52,12 +52,21 @@
             </v-col>
             <v-col
               cols="12"
-              sm="3"
+              sm="4"
             >
               <custom-price-input
                 :disabled="true"
                 v-model="patient_price"
                 label="سهم بیمار"
+              />
+            </v-col>
+            <v-col
+              cols="12"
+              sm="4"
+            >
+              <custom-price-input
+                v-model="discount_price"
+                label="میزان تخفیف"
               />
             </v-col>
           </v-row>
@@ -73,6 +82,10 @@ export default {
   name: "AppointmentInsuranceBox",
   props: {
     totalPrice: {
+      type: Number,
+      default: 0
+    },
+    discountPrice: {
       type: Number,
       default: 0
     },
@@ -95,7 +108,8 @@ export default {
   },
   data() {
     return {
-      total: this.totalPrice,
+      total: this.totalPrice ?? 0,
+      discount_price: this.discountPrice ?? 0,
       selectedInsurance: {
         id: this.userInsuranceId,
         percentage: this.insurance ? this.insurance.percentage : 0,
@@ -123,6 +137,7 @@ export default {
         insurance_price: this.insurance_price,
         patient_price: this.patient_price,
         total_price: parseFloat(this.total),
+        discount_price: parseInt(this.discount_price),
       })
     }
   },
@@ -131,7 +146,7 @@ export default {
       return this.total * this.selectedInsurance.percentage / 100
     },
     patient_price() {
-      return this.total - this.insurance_price
+      return this.total - this.insurance_price - this.discount_price
     }
   }
 }

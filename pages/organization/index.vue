@@ -123,26 +123,26 @@
                               sm="4"
                               md="4"
                             >
-                              <div class="create-update-model-input-box">
-                                <label>تاریخ ابتدا</label>
-<!--                                <custom-date-input-->
-<!--                                  :type="'date'"-->
+                              <custom-date-picker-js
+                                label="تاریخ و ساعت پذیرش"
+                                v-model="search.start"
+                                type="date"
+                              />
+<!--                              <div class="create-update-model-input-box">-->
+<!--                                <label>تاریخ ابتدا</label>-->
+<!--                                <date-picker-->
 <!--                                  v-model="search.start"-->
-<!--                                  :initial-value="search.start"-->
-<!--                                />-->
-                                <date-picker
-                                  v-model="search.start"
-                                  format="YYYY-MM-DD"
-                                  display-format="jYYYY/jMM/jDD"
-                                  editable
-                                  class="date-picker"
-                                  type="date"
-                                >
-                                  <template v-slot:label>
-                                    <img src="/images/form/datepicker.svg">
-                                  </template>
-                                </date-picker>
-                              </div>
+<!--                                  format="YYYY-MM-DD"-->
+<!--                                  display-format="jYYYY/jMM/jDD"-->
+<!--                                  editable-->
+<!--                                  class="date-picker"-->
+<!--                                  type="date"-->
+<!--                                >-->
+<!--                                  <template v-slot:label>-->
+<!--                                    <img src="/images/form/datepicker.svg">-->
+<!--                                  </template>-->
+<!--                                </date-picker>-->
+<!--                              </div>-->
                             </v-col>
                             <v-col
                               cols="12"

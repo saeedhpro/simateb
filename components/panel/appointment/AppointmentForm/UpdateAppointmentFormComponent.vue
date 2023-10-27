@@ -30,34 +30,12 @@
                 sm="4"
                 md="4"
               >
-                <div class="create-update-model-input-box">
-                  <label>تاریخ و ساعت پذیرش</label>
-<!--                  <custom-date-input-->
-<!--                    :type="'datetime'"-->
-<!--                    :jump-minute="15"-->
-<!--                    v-model="appointment.start_at"-->
-<!--                    :initial-value="appointment.start_at"-->
-<!--                  />-->
-                  <date-picker
-                    v-model="appointment.start_at"
-                    inputFormat="YYYY-MM-DD HH:mm:ss"
-                    format="YYYY-MM-DD HH:mm:ss"
-                    display-format="jYYYY/jMM/jDD HH:mm"
-                    editable
-                    class="date-picker"
-                    type="datetime"
-                    :jump-minute="15"
-                    :round-minute="true"
-                    :show="showTime"
-                    ref="start"
-                  >
-                    <template v-slot:label>
-                      <img src="/images/form/datepicker.svg">
-                    </template>
-                  </date-picker>
-<!--                  <custom-date-input :initial-value="appointment.start_at" v-model="appointment.start_at" :jump-minute="12" />-->
-<!--                  <span class="create-update-modal-input-error" v-if="errors.start_at">{{ errors.start_at }}</span>-->
-                </div>
+                <custom-date-picker-js
+                  label="تاریخ و ساعت پذیرش"
+                  v-model="appointment.start_at"
+                  :jump-minute="15"
+                  :round-minute="true"
+                />
               </v-col>
               <v-col
                 cols="12"

@@ -8,6 +8,8 @@ Vue.use(VuePersianDatetimePicker, {
     color: '#5063FF',
     // autoSubmit: true,
     format: 'YYYY-MM-DD HH:mm:ss',
-    editable: true
+    editable: true,
+    locale: 'fa',
+    timezone: false
   }
 });

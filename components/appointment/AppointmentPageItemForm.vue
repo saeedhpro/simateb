@@ -365,6 +365,7 @@
                 >
                   <appointment-insurance-box
                     :total-price="appointment.total_price"
+                    :discount-price="appointment.discount_price"
                     :insurance-id="appointment.insurance_id"
                     :user-insurance-id="appointment.user_insurance_id"
                     :user-id="appointment.user_id"
@@ -938,6 +939,7 @@ export default {
         doctor_id: null,
         insurance_price: 0,
         patient_price: 0,
+        discount_price: 0,
         insurance_id: null,
         insurance: null,
         user_insurance_id: null,
@@ -1058,6 +1060,7 @@ export default {
           insurance_price: item.insurance_price,
           patient_price: item.patient_price,
           total_price: item.total_price,
+          discount_price: item.discount_price,
           insurance: item.insurance,
           user_insurance: item.user_insurance,
           selected_actions: item.selected_actions ?? [],
@@ -1216,6 +1219,7 @@ export default {
       this.appointment.insurance_id = insurance.insurance_id
       this.appointment.user_insurance_id = insurance.user_insurance_id
       this.appointment.total_price = insurance.total_price
+      this.appointment.discount_price = insurance.discount_price
     },
     setPhotographyCases(cases) {
       this.appointment.photography_cases = cases.join(',')
