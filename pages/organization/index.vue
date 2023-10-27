@@ -126,7 +126,6 @@
                               <custom-date-picker-js
                                 label="تاریخ و ساعت پذیرش"
                                 v-model="search.start"
-                                :jump-minute="15"
                                 type="date"
                               />
 <!--                              <div class="create-update-model-input-box">-->

@@ -34,6 +34,7 @@
                   label="تاریخ و ساعت پذیرش"
                   v-model="appointment.start_at"
                   :jump-minute="15"
+                  :round-minute="true"
                 />
               </v-col>
               <v-col

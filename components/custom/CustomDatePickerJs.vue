@@ -21,6 +21,7 @@
       @change="onDateSelected"
       :disablePast="disablePast"
       :jumpMinute="jumpMinute"
+      :roundMinute="roundMinute"
     />
   </div>
 </template>
@@ -56,6 +57,10 @@ export default {
       default: 1,
       max: 59,
       min: 1
+    },
+    roundMinute: {
+      type: Boolean,
+      default: false,
     },
     type: {
       type: String,
