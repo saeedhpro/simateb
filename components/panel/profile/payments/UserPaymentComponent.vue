@@ -17,7 +17,7 @@
             >
               <div class="payment-detail">
                 <span>مجموع هزینه درمان:</span>
-                <span>{{ duePayment | toPersianCurrency('تومان',0) }}</span>
+                <span>{{ total.due_total | toPersianCurrency('تومان',0) }}</span>
               </div>
             </v-col>
             <v-col
@@ -41,7 +41,7 @@
             >
               <div class="payment-detail">
                 <span>باقیمانده:</span>
-                <span>{{ duePayment > 0 ? (duePayment - total.total) : 0 | toPersianCurrency('تومان', 0) }}</span>
+                <span>{{ total.due_total > 0 ? (total.due_total - total.total) : 0 | toPersianCurrency('تومان', 0) }}</span>
               </div>
             </v-col>
             <v-spacer/>
@@ -61,38 +61,38 @@
               </div>
             </v-col>
           </v-row>
-          <v-row class="search-box">
-            <v-col
-              cols="12"
-              sm="12"
-              md="5"
-              lg="4"
-            >
-              <div class="right-box">
-                <v-checkbox
-                  v-model="selectedAll"
-                ></v-checkbox>
-                <div class="selected-count" v-if="selectedUsers.length > 0">
-                  {{ selectedUsers.length }}
-                </div>
-                <v-select
-                  outlined
-                  :items="actions"
-                  label="اقدام جمعی"
-                  item-value="id"
-                  item-text="label"
-                  v-model="action"
-                ></v-select>
-                <button
-                  class="do-action-btn"
-                  @click="doAction"
-                  :disabled="!action"
-                >انجام بده
-                </button>
-              </div>
-            </v-col>
-            <v-spacer/>
-          </v-row>
+<!--          <v-row class="search-box">-->
+<!--            <v-col-->
+<!--              cols="12"-->
+<!--              sm="12"-->
+<!--              md="5"-->
+<!--              lg="4"-->
+<!--            >-->
+<!--              <div class="right-box">-->
+<!--                <v-checkbox-->
+<!--                  v-model="selectedAll"-->
+<!--                ></v-checkbox>-->
+<!--                <div class="selected-count" v-if="selectedUsers.length > 0">-->
+<!--                  {{ selectedUsers.length }}-->
+<!--                </div>-->
+<!--                <v-select-->
+<!--                  outlined-->
+<!--                  :items="actions"-->
+<!--                  label="اقدام جمعی"-->
+<!--                  item-value="id"-->
+<!--                  item-text="label"-->
+<!--                  v-model="action"-->
+<!--                ></v-select>-->
+<!--                <button-->
+<!--                  class="do-action-btn"-->
+<!--                  @click="doAction"-->
+<!--                  :disabled="!action"-->
+<!--                >انجام بده-->
+<!--                </button>-->
+<!--              </div>-->
+<!--            </v-col>-->
+<!--            <v-spacer/>-->
+<!--          </v-row>-->
           <v-row>
             <v-col
               cols="12"
@@ -104,6 +104,7 @@
               cols="12"
               v-else
             >
+              <div class="mb-4 font-weight-bold ">پرداخت های بیمار:</div>
               <data-table-component
                 :headers="headers"
                 :page="page"
@@ -149,6 +150,51 @@
                 </template>
                 <template v-slot:notfound>
                   <div v-if="payments.meta.total === 0">اطلاعاتی یافت نشد</div>
+                </template>
+              </data-table-component>
+            </v-col>
+            <v-col
+              cols="12"
+              v-if="loading"
+            >
+              <LoadingCard />
+            </v-col>
+            <v-col
+              cols="12"
+              v-else
+            >
+              <div class="mb-4 font-weight-bold ">لیست پرداخت های بیمار:</div>
+              <data-table-component
+                :headers="priceHeaders"
+                :page="pagePrice"
+                :total="priceList.meta.total"
+                @paginate="paginatePrice"
+              >
+                <template v-slot:body>
+                  <tr v-for="(i, n) in priceList.data" :key="n">
+                    <td class="text-center">{{ (pagePrice - 1) * 10 + n + 1 }}</td>
+                    <td class="text-center">
+                      {{ getActions(i) }}
+                    </td>
+                    <td class="text-center dir-ltr">
+                      {{ i.start_at_fa ? i.start_at_fa : '-' }}
+                    </td>
+                    <td class="text-center">
+                      {{ i.total_price | toPersianCurrency('تومان', 0) }}
+                    </td>
+                    <td class="text-center">
+                      {{ i.insurance_price | toPersianCurrency('تومان', 0) }}
+                    </td>
+                    <td class="text-center">
+                      {{ i.patient_price | toPersianCurrency('تومان', 0) }}
+                    </td>
+                    <td class="text-center">
+                      {{ i.discount_price | toPersianCurrency('تومان', 0) }}
+                    </td>
+                  </tr>
+                </template>
+                <template v-slot:notfound>
+                  <div v-if="priceList.meta.total === 0">اطلاعاتی یافت نشد</div>
                 </template>
               </data-table-component>
             </v-col>
@@ -331,25 +377,13 @@
                 md="4"
                 v-if="form.paytype === 3"
               >
-                <div class="create-update-model-input-box">
-                  <label>تاریخ چک</label>
-<!--                  <custom-date-input-->
-<!--                    :type="'date'"-->
-<!--                    v-model="form.check_date"-->
-<!--                    :initial-value="form.check_date"-->
-<!--                  />-->
-                  <date-picker
-                    v-model="form.check_date"
-                    format="YYYY-MM-DD"
-                    display-format="jYYYY/jMM/jDD"
-                    editable
-                    class="date-picker"
-                  >
-                    <template v-slot:label>
-                      <img src="/images/form/datepicker.svg">
-                    </template>
-                  </date-picker>
-                </div>
+                <custom-date-picker-js
+                  label="تاریخ چک"
+                  v-model="form.check_date"
+                  :jump-minute="15"
+                  :round-minute="true"
+                  type="date"
+                />
               </v-col>
               <v-col
                 cols="12"
@@ -452,6 +486,7 @@ export default {
   data() {
     return {
       page: 1,
+      pagePrice: 1,
       items: [
         {
           id: 1,
@@ -470,6 +505,15 @@ export default {
         'کد پیگیری',
         'شکل پرداخت',
         'پرداخت برای',
+      ],
+      priceHeaders: [
+        '',
+        'نوع اقدام',
+        'تاریخ',
+        'مبلغ (تومان)',
+        'سهم بیمه',
+        'سهم بیمار',
+        'تخفیف',
       ],
       action: null,
       actions: [
@@ -493,6 +537,7 @@ export default {
       isUpdate: false,
       showCreateModal: false,
       loading: false,
+      loadingPrice: false,
       form: {
         id: 0,
         user_id: this.userId,
@@ -552,6 +597,7 @@ export default {
   },
   mounted() {
     this.paginate()
+    this.paginatePrice()
     this.getUserPaymentsTotal()
     this.getAllUsers()
   },
@@ -741,6 +787,22 @@ export default {
       this.page = page
       this.getUserPayments()
     },
+    paginatePrice(page = 1) {
+      this.page = page
+      this.getUserPrices()
+    },
+    getUserPrices() {
+      this.loading = true
+      this.$store.dispatch('appointments/getPriceList', {
+        id: this.userId,
+        page: this.pagePrice,
+      })
+        .finally(() => {
+          setTimeout(() => {
+            this.loadingPrice = false
+          }, 300)
+        })
+    },
     getUserPayments() {
       this.loading = true
       this.$store.dispatch('payments/getList', {
@@ -796,11 +858,20 @@ export default {
           return '/images/profile/man.svg'
         }
       }
+    },
+    getActions(item) {
+      let selectedActions = item.selected_actions ?? [];
+      let selectedDents = item.selected_dents ?? [];
+      let actions = [...selectedActions, ...selectedDents];
+      return actions.length > 0 ? actions.join(',') : '-';
     }
   },
   computed: {
     payments() {
       return this.$store.getters['payments/getList']
+    },
+    priceList() {
+      return this.$store.getters['appointments/getPriceList']
     },
     allUsers() {
       return this.$store.getters['users/getUsers']

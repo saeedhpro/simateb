@@ -173,32 +173,8 @@ export default {
   },
   mounted() {
     if (this.loadList) {
-      const slider = this.$refs["table-wrapper"];
-      let isDown = false;
-      let startX;
-      let scrollLeft;
-
-      slider.addEventListener('mousedown', (e) => {
-        isDown = true;
-        slider.classList.add('active');
-        startX = e.pageX - slider.offsetLeft;
-        scrollLeft = slider.scrollLeft;
-      });
-      slider.addEventListener('mouseleave', () => {
-        isDown = false;
-        slider.classList.remove('active');
-      });
-      slider.addEventListener('mouseup', () => {
-        isDown = false;
-        slider.classList.remove('active');
-      });
-      slider.addEventListener('mousemove', (e) => {
-        if(!isDown) return;
-        e.preventDefault();
-        const x = e.pageX - slider.offsetLeft;
-        const walk = (x - startX) * 3;
-        slider.scrollLeft = scrollLeft - walk;
-      });
+      this.$nextTick(()=>{
+      })
     }
   },
   methods: {
@@ -611,6 +587,38 @@ export default {
       this.maxTimeLength = maxLength
       return days;
     },
+    setSlider() {
+      setTimeout(() => {
+
+        const slider = document.getElementById('table-wrapper');
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+        if (slider) {
+          slider.addEventListener('mousedown', (e) => {
+            isDown = true;
+            slider.classList.add('active');
+            startX = e.pageX - slider.offsetLeft;
+            scrollLeft = slider.scrollLeft;
+          });
+          slider.addEventListener('mouseleave', () => {
+            isDown = false;
+            slider.classList.remove('active');
+          });
+          slider.addEventListener('mouseup', () => {
+            isDown = false;
+            slider.classList.remove('active');
+          });
+          slider.addEventListener('mousemove', (e) => {
+            if(!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - slider.offsetLeft;
+            const walk = (x - startX) * 3;
+            slider.scrollLeft = scrollLeft - walk;
+          });
+        }
+      }, 500)
+    }
   },
   computed: {
     loadList: {
@@ -752,6 +760,7 @@ export default {
       if (val) {
         this.setHeaderDays()
         this.getAppointmentList()
+        this.setSlider()
       }
     },
     showHour(val) {
@@ -760,7 +769,7 @@ export default {
       } else {
         this.simpleDays = this.calcSimpleDays()
       }
-    }
+    },
   }
 }
 </script>

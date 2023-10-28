@@ -12,6 +12,18 @@ export const state = () => ({
       last_page: 1,
     }
   },
+  priceList: {
+    data: [],
+    limit: 10,
+    page: 1,
+    sort: '',
+    total_rows: 0,
+    total_pages: 0,
+    meta: {
+      total: 0,
+      last_page: 1,
+    }
+  },
   appointment: null,
   que: {
     default_duration: 20,
@@ -44,6 +56,9 @@ export const mutations = {
   },
   setReferedResults(state, results) {
     state.referedResults = results
+  },
+  setPriceList(state, priceList) {
+    state.priceList = priceList
   }
 }
 
@@ -331,6 +346,17 @@ export const actions = {
         return Promise.reject(err)
       })
   },
+  getPriceList(ctx, data) {
+    return this.$axios.get(`/users/${data.id}/prices?page=${data.page}`)
+      .then(res => {
+        const data = res.data
+        ctx.commit('setPriceList', data)
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
 }
 
 export const getters = {
@@ -348,5 +374,8 @@ export const getters = {
   },
   getReferedResults(state) {
     return state.referedResults
+  },
+  getPriceList(state) {
+    return state.priceList
   }
 }

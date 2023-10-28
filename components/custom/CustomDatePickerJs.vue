@@ -72,13 +72,15 @@ export default {
     },
   },
   mounted() {
-    if (this.value) {
-      this.dateTime = moment.from(this.value, 'en', this.getEnFormat).locale('en')
-    } else {
-      this.dateTime = moment()
-    }
-    this.dateTimeStr = this.dateTime.format(this.getEnFormat)
-    this.formattedDate = this.dateTime.format(this.getFaFormat)
+    this.$nextTick(() => {
+      if (this.value) {
+        this.dateTime = moment.from(this.value, 'en', this.getEnFormat).locale('en')
+      } else {
+        this.dateTime = moment().locale('en')
+      }
+      this.dateTimeStr = this.dateTime.locale('en').format(this.getEnFormat)
+      this.formattedDate = this.dateTime.format(this.getFaFormat)
+    })
   },
   data() {
     return {
@@ -123,7 +125,7 @@ export default {
   watch: {
     dateTimeStr() {
       this.$emit('input', this.dateTimeStr)
-    }
+    },
   }
 }
 </script>
