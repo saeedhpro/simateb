@@ -980,6 +980,7 @@ export default {
       this.$emit('done')
       // this.loading = true
       this.closeUpdateModal()
+      this.closeForm()
       // setTimeout(() => {
       //   this.getAppointment(this.id)
       // }, 200)
