@@ -869,7 +869,7 @@
       :selected-actions="appointment.selected_actions"
       :selected-dents="appointment.selected_dents"
       @save="saveNewPrescription"
-      @close="closeDoctorPrescription"
+      @close="closeNewDoctorPrescription"
       @done="addDoctorPrescription"
     />
     <update-appointment-form-component

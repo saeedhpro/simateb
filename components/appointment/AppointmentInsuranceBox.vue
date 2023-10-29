@@ -146,7 +146,7 @@ export default {
       return this.total * this.selectedInsurance.percentage / 100
     },
     patient_price() {
-      return this.total - this.insurance_price - this.discount_price
+      return this.total - this.insurance_price
     }
   }
 }
