@@ -163,7 +163,7 @@
               cols="12"
               v-else
             >
-              <div class="mb-4 font-weight-bold ">لیست هزینه های بیمار:</div>
+              <div class="mb-4 font-weight-bold ">هزینه های بیمار:</div>
               <data-table-component
                 :headers="priceHeaders"
                 :page="pagePrice"
