@@ -43,7 +43,17 @@
                     <td class="text-center">{{ i.start_date_fa }}</td>
                     <td class="text-center">{{ i.end_date_fa }}</td>
                     <td class="text-center">{{ `${i.total} تومان` }}</td>
-                    <td class="text-center">{{ i.is_active ? 'فعال' : 'غیرفعال' }}</td>
+                    <td class="text-center">
+                      <span
+                        class="status-box px-4"
+                        :style="{
+                          'background-color': i.is_active ? '#2BC4A9' : '#F44336' ,
+                          'color': '#FFF',
+                        }"
+                      >
+                        {{ i.is_active ? 'فعال' : 'غیرفعال' }}
+                      </span>
+                    </td>
                     <td class="text-center flex flex-row justify-space-around align-center">
                       <button @click="editInsurance(i)" class="action-buttons">
                         <v-icon size="16">mdi-pencil-outline</v-icon>
@@ -153,39 +163,21 @@
                 cols="12"
                 sm="3"
               >
-                <div class="create-update-model-input-box">
-                  <label>تاریخ شروع</label>
-                  <date-picker
-                    v-model="form.start_date"
-                    format="YYYY-MM-DD"
-                    display-format="jYYYY/jMM/jDD"
-                    editable
-                    class="date-picker"
-                  >
-                    <template v-slot:label>
-                      <img src="/images/form/datepicker.svg">
-                    </template>
-                  </date-picker>
-                </div>
+                <custom-date-picker-js
+                  label="تاریخ شروع"
+                  v-model="form.start_date"
+                  type="date"
+                />
               </v-col>
               <v-col
                 cols="12"
                 sm="3"
               >
-                <div class="create-update-model-input-box">
-                  <label>تاریخ پایان</label>
-                  <date-picker
-                    v-model="form.end_date"
-                    format="YYYY-MM-DD"
-                    display-format="jYYYY/jMM/jDD"
-                    editable
-                    class="date-picker"
-                  >
-                    <template v-slot:label>
-                      <img src="/images/form/datepicker.svg">
-                    </template>
-                  </date-picker>
-                </div>
+                <custom-date-picker-js
+                  label="تاریخ پایان"
+                  v-model="form.end_date"
+                  type="date"
+                />
               </v-col>
             </v-row>
           </v-container>
@@ -345,7 +337,6 @@ export default {
         q: '',
         page: 1,
         user_id: this.userId,
-        is_active: 1
       },
       form: {
         id: 0,

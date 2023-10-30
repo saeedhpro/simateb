@@ -104,8 +104,13 @@ export default {
   methods: {
     onDateChange: debounce(function ($e) {
       let value = $e.target.value;
-      this.dateTime = moment.from(value, 'fa', this.getEnFormat).locale("en");
-      this.dateTimeStr = this.dateTime.format(this.getEnFormat)
+      if (value) {
+        this.dateTime = moment.from(value, 'fa', this.getEnFormat).locale("en");
+        this.dateTimeStr = this.dateTime.format(this.getEnFormat)
+      } else {
+        this.dateTime = null
+        this.dateTimeStr = ''
+      }
     }, 800),
     openCalendar() {
       this.show = true
