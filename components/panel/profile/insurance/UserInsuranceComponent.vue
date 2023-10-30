@@ -528,18 +528,6 @@ export default {
       }
     },
   },
-  watch: {
-    'form.start_date'(val) {
-      if (this.form.start_date == '' && this.form.end_date == '') {
-        this.form.is_active = 1
-      }
-    },
-    'form.end_date'(val) {
-      if (this.form.start_date == '' && this.form.end_date == '') {
-        this.form.is_active = 1
-      }
-    }
-  }
 }
 </script>
 <style scoped>
