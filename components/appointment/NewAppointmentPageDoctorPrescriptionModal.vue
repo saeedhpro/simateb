@@ -43,20 +43,22 @@
               <v-col
                 cols="12"
               >
+                <h3 class="font-weight-bold mb-4">عنوان:</h3>
                 <div
                   class="d-flex flex-row flex-wrap justify-start align-center "
                 >
                   <div
                     v-for="(c, i) in categories"
                     :key="i"
-                    @click="getCategoryTreatments(c.id)"
+                    @click="getCategoryTreatments(c)"
                     class="category-item d-flex flex-row justify-center align-center py-3 px-6"
-                    :class="{'is-selected': selected == c.name}"
+                    :class="{'is-selected': selected == c.id, 'has-item': isCategorySelected(c)}"
                   >
                     {{ c.name }}
                   </div>
                 </div>
                 <hr v-if="selected" class="mt-4 mb-8"/>
+                <h3 v-if="selected" class="font-weight-bold mb-4">شرح درمان:</h3>
                 <div class="d-flex flex-row flex-wrap justify-start align-center">
                   <div
                     v-for="(c, i) in actions"
@@ -169,18 +171,22 @@ export default {
           }
         })
     },
-    getCategoryTreatments(id) {
-      if (this.selected == id) {
+    getCategoryTreatments(c) {
+      if (this.selected == c.id) {
         this.selected = null
         this.actions = []
       } else {
-        this.$store.dispatch('treatments/getCategory', id)
-          .then(res => {
-            this.selected = id
-            this.actions = [
-              ...res.data.data.actions,
-            ]
-          })
+        this.selected = c.id
+        this.actions = [
+          ...c.actions,
+        ]
+        // this.$store.dispatch('treatments/getCategory', id)
+        //   .then(res => {
+        //     this.selected = id
+        //     this.actions = [
+        //       ...res.data.data.actions,
+        //     ]
+        //   })
       }
     },
     inList(item) {
@@ -212,6 +218,9 @@ export default {
         selected_dents: this.selected_dents,
         selected_actions: this.selected_actions,
       })
+    },
+    isCategorySelected(category) {
+      return this.selected_actions.some(r => category.actions.map(i => i.name).includes(r))
     }
   },
   computed: {
@@ -256,6 +265,11 @@ export default {
   font: normal normal bold 14px/14px IRANYekanRegular !important;
   margin-left: 5px;
   cursor: pointer;
+  &.has-item {
+    background-color: #2BC4A9;
+    color: #FFFFFF;
+    border: 1px solid #388E3C;
+  }
   &.is-selected {
     background-color: #5981ff;
     color: #FFFFFF;

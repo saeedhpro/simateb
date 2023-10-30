@@ -42,6 +42,11 @@
                   <tr v-for="(i, n) in categories.data" :key="n">
                     <td class="text-center">{{ (search.page - 1) * 10 + n + 1 }}</td>
                     <td class="text-center">{{ i.name ? i.name : '-' }}</td>
+                    <td class="text-center">
+                      <span class="file-id" v-for="(i,n) in getActions(i)" :key="n">
+                        {{ i }}
+                      </span>
+                    </td>
                     <td class="text-center flex flex-row justify-space-around align-center">
                       <button @click="editCategory(i)" class="action-buttons">
                         <v-icon size="16">mdi-pencil-outline</v-icon>
@@ -247,18 +252,22 @@
             >
               <v-icon>mdi-close</v-icon>
             </button>
-            <span>افزودن زیرمجموعه</span>
+            <span>افزودن زیرمجموعه:
+              {{ item ? item.name : '' }}
+            </span>
           </div>
           <v-spacer/>
         </v-card-title>
         <v-card-text>
           <v-container>
-            <div class="inline-input-btn">
-              <div class="create-update-model-input-box d-inline-flex">
+            <div class="inline-input-btn align-center">
+              <div class="create-update-model-input-box d-inline-flex" :class="{'has-error': errors.treatment_name}">
                 <label>عنوان</label>
                 <input type="text" v-model="treatment.name">
+                <span class="create-update-modal-input-error" v-if="errors.treatment_name">{{ errors.treatment_name }}</span>
               </div>
-              <div class="page-actions second-button inline-btn"
+              <div class="page-actions second-button inline-btn mt-2"
+                   style="height: 44px"
                    @click="addTreatment"
               >
                 <img src="/images/pages/plus-out.svg" alt="organizations">
@@ -343,6 +352,7 @@ export default {
       headers: [
         '',
         'عنوان',
+        'زیرمجموعه ها',
         'عملیات',
       ],
       search: {
@@ -356,6 +366,9 @@ export default {
       treatment: {
         id: 0,
         name: "",
+      },
+      errors: {
+        treatment_name: '',
       },
       selectedItem: null,
       selectedCategory: null,
@@ -373,8 +386,17 @@ export default {
       this.treatments = []
       this.showTreatmentModal = false
       this.item = null
+      this.treatment = {
+        id: 0,
+        name: "",
+      }
     },
     addTreatment() {
+      this.errors.treatment_name = ''
+      if (!this.treatment.name) {
+        this.errors.treatment_name = 'فیلد عنوان زیرمجموعه خالی است'
+        return
+      }
       if (this.treatCreate) {
         this.treatments.push(this.treatment)
       } else {
@@ -524,6 +546,9 @@ export default {
           }, 50)
         })
     },
+    getActions(item) {
+      return item.actions ? item.actions.map(i=>i.name) : []
+    }
   },
   computed: {
     categories() {
