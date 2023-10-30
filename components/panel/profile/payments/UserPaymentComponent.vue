@@ -199,6 +199,44 @@
               </data-table-component>
             </v-col>
           </v-row>
+          <v-row>
+            <v-col
+              cols="12"
+              sm="4"
+              md="3"
+              lg="2"
+              xl="2"
+            >
+              <div class="payment-detail">
+                <span>سهم بیمار:</span>
+                <span>{{ price.patient_price | toPersianCurrency('تومان',0) }}</span>
+              </div>
+            </v-col>
+            <v-col
+              cols="12"
+              sm="4"
+              md="3"
+              lg="2"
+              xl="2"
+            >
+              <div class="payment-detail">
+                <span>سهم بیمه:</span>
+                <span>{{ price.insurance_price | toPersianCurrency('تومان', 0) }}</span>
+              </div>
+            </v-col>
+            <v-col
+              cols="12"
+              sm="4"
+              md="3"
+              lg="2"
+              xl="2"
+            >
+              <div class="payment-detail">
+                <span>تخفیف:</span>
+                <span>{{ price.discount_price | toPersianCurrency('تومان', 0) }}</span>
+              </div>
+            </v-col>
+          </v-row>
         </v-card>
       </v-col>
     </v-row>
@@ -256,26 +294,11 @@
                 sm="6"
                 md="4"
               >
-                <div class="create-update-model-input-box">
-                  <label>تاریخ</label>
-<!--                  <custom-date-input-->
-<!--                    :type="'datetime'"-->
-<!--                    v-model="form.created"-->
-<!--                    :initial-value="form.created"-->
-<!--                  />-->
-                  <date-picker
-                    v-model="form.created"
-                    format="YYYY-MM-DD HH:mm:ss"
-                    display-format="jYYYY/jMM/jDD HH:mm"
-                    editable
-                    type="datetime"
-                    class="date-picker"
-                  >
-                    <template v-slot:label>
-                      <img src="/images/form/datepicker.svg">
-                    </template>
-                  </date-picker>
-                </div>
+                <custom-date-picker-js
+                  label="تاریخ"
+                  v-model="form.created"
+                  type="datetime"
+                />
               </v-col>
               <v-col
                 cols="12"
@@ -311,9 +334,14 @@
                 md="4"
               >
                 <div class="create-update-model-input-box">
-                  <custom-multi-select
-                    v-model="paidFor"
-                    :items="paidFors"
+<!--                  <custom-multi-select-->
+<!--                    v-model="paidFor"-->
+<!--                    :items="paidFors"-->
+<!--                    :error="errors.paidFor"-->
+<!--                    label="پرداخت برای"-->
+<!--                  />-->
+                  <custom-text-input
+                    v-model="form.paid_for"
                     :error="errors.paidFor"
                     label="پرداخت برای"
                   />
@@ -544,7 +572,7 @@ export default {
         created: this.$moment().format('YYYY/MM/DD HH:mm:ss'),
         amount: 0,
         paytype: 4,
-        paid_for: 1,
+        paid_for: '',
         paid_to: '',
         info: '',
         trace_code: '',
@@ -599,6 +627,7 @@ export default {
     this.paginate()
     this.paginatePrice()
     this.getUserPaymentsTotal()
+    this.getUserPriceTotal()
     this.getAllUsers()
   },
   methods: {
@@ -658,7 +687,7 @@ export default {
     },
     openUpdateModal(i) {
       this.payType = this.payTypes.find(item => item.id == i.paytype)
-      this.paidFor = this.paidFors.find(item => item.id == i.paid_for)
+      // this.paidFor = this.paidFors.find(item => item.id == i.paid_for)
       this.form = {
         id: i.id,
         user_id: this.userId,
@@ -818,6 +847,9 @@ export default {
     getUserPaymentsTotal() {
       this.$store.dispatch('payments/getUserPaymentsTotal', this.userId)
     },
+    getUserPriceTotal() {
+      this.$store.dispatch('payments/getUserPriceTotal', this.userId)
+    },
     getAllUsers() {
       this.$store.dispatch('users/getOrganizationUsers', this.organizationId)
     },
@@ -830,7 +862,7 @@ export default {
         case '2':
           return 'هزینه های جانبی'
         default:
-          return '-'
+          return paidFor
       }
     },
     getPayType(payType) {
@@ -891,6 +923,9 @@ export default {
     },
     total() {
       return this.$store.getters['payments/getUserPaymentsTotal']
+    },
+    price() {
+      return this.$store.getters['payments/getPrice']
     }
   },
   watch: {

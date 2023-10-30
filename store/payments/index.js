@@ -14,6 +14,11 @@ export const state = () => ({
   total: {
     total: 0,
     due_total: 0,
+  },
+  price: {
+    patient_price: 0,
+    insurance_price: 0,
+    discount_price: 0,
   }
 })
 
@@ -23,6 +28,9 @@ export const mutations = {
   },
   setUserPaymentsTotal(state, total) {
     state.total = total
+  },
+  getUserPriceTotal(state, price) {
+    state.price = price
   },
 }
 
@@ -43,6 +51,17 @@ export const actions = {
       .then(res => {
         const data = res.data;
         ctx.commit('setUserPaymentsTotal', data)
+        return Promise.resolve(data)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  getUserPriceTotal(ctx, id) {
+    return this.$axios.get(`/users/${id}/prices/total`)
+      .then(res => {
+        const data = res.data;
+        ctx.commit('getUserPriceTotal', data)
         return Promise.resolve(data)
       })
       .catch(err => {
@@ -84,5 +103,8 @@ export const getters = {
   },
   getUserPaymentsTotal(state) {
     return state.total
+  },
+  getPrice(state) {
+    return state.price
   },
 }
