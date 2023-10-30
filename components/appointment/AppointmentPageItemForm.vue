@@ -1373,6 +1373,7 @@ export default {
           this.done()
           this.loading = false
           this.closeForm()
+          this.closeForm()
         })
     },
     doUpdate() {
