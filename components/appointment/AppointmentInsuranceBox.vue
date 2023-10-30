@@ -115,7 +115,12 @@ export default {
         percentage: this.insurance ? this.insurance.percentage : 0,
         name: this.insurance ? this.insurance.name : '',
       },
-      user_insurances: []
+      user_insurances: [],
+      free: {
+        id: null,
+        percentage: 0,
+        name: 'آزاد',
+      }
     }
   },
   mounted() {
@@ -127,7 +132,10 @@ export default {
         id: this.userId,
       })
         .then(res => {
-          this.user_insurances = res.data.data
+          this.user_insurances = [
+            this.free,
+            ...res.data.data,
+          ]
         })
     },
     onInsuranceChanged(e) {
