@@ -67,6 +67,7 @@
               <custom-price-input
                 v-model="discount_price"
                 label="میزان تخفیف"
+                @input="onInsuranceChanged"
               />
             </v-col>
           </v-row>
