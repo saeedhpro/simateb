@@ -508,17 +508,11 @@ export default {
     insurances() {
       return this.$store.getters['insurances/getUserInsuranceList']
     },
-    userInsurances() {
-      return this.$store.getters['insurances/getUserInsurance']
-    },
     allInsurances() {
       return this.$store.getters['insurances/getOwnInsurances']
     },
     loginUser() {
       return this.$store.getters['login/getUser']
-    },
-    users() {
-
     },
     selectedAll: {
       get() {
@@ -534,6 +528,18 @@ export default {
       }
     },
   },
+  watch: {
+    'form.start_date'(val) {
+      if (this.form.start_date == '' && this.form.end_date == '') {
+        this.form.is_active = 1
+      }
+    },
+    'form.end_date'(val) {
+      if (this.form.start_date == '' && this.form.end_date == '') {
+        this.form.is_active = 1
+      }
+    }
+  }
 }
 </script>
 <style scoped>
