@@ -147,7 +147,11 @@ export default {
   },
   methods: {
     close() {
-      this.$emit('close')
+      this.$emit('save', {
+        selected_dents: this.selectedDents,
+        selected_actions: this.selectedActions,
+      })
+      // this.$emit('close')
     },
     addToDoctorDo(item) {
       let prescription = ''

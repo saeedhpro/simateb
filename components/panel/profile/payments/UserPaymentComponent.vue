@@ -297,6 +297,7 @@
                 <custom-date-picker-js
                   label="تاریخ"
                   v-model="form.created"
+                  v-if="showCreateModal"
                   type="datetime"
                 />
               </v-col>
@@ -411,6 +412,7 @@
                   :jump-minute="15"
                   :round-minute="true"
                   type="date"
+                  v-if="showCreateModal"
                 />
               </v-col>
               <v-col
@@ -692,7 +694,7 @@ export default {
         id: i.id,
         user_id: this.userId,
         created: i.created,
-        amount: i.amount,
+        amount: parseInt(i.amount),
         paytype: i.paytype,
         paid_for: i.paid_for,
         paid_to: i.paid_to,
@@ -757,6 +759,7 @@ export default {
               this.$toast.success('با موفقیت انجام شد');
               this.closeCreateModal()
               this.paginate()
+              this.paginatePrice()
             })
             .catch(err => {
               this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
