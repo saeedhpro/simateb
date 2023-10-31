@@ -9,12 +9,12 @@
     </div>
     <date-picker
       v-model="dateTimeStr"
-      format="YYYY-MM-DD HH:mm"
-      display-format="jYYYY/jMM/jDD HH:mm"
+      :format="getEnFormat"
+      :display-format="getFaFormat"
       editable
       :show="show"
       class="date-picker"
-      type="datetime"
+      :type="type"
       custom-input=".custom-input"
       ref="datepicker"
       @close="show=false"
@@ -75,11 +75,8 @@ export default {
     this.$nextTick(() => {
       if (this.value) {
         this.dateTime = moment.from(this.value, 'en', this.getEnFormat).locale('en')
-      } else {
-        this.dateTime = moment().locale('en')
+        // this.dateTimeStr = this.dateTime.locale('en').format(this.getEnFormat)
       }
-      this.dateTimeStr = this.dateTime.locale('en').format(this.getEnFormat)
-      this.formattedDate = this.dateTime.format(this.getFaFormat)
     })
   },
   data() {
@@ -87,8 +84,8 @@ export default {
       open: false,
       show: false,
       dateTime: null,
-      dateTimeStr: null,
-      formattedDate: null,
+      // dateTimeStr: null,
+      // formattedDate: null,
       enFormats: {
         'time': 'HH:mm',
         'date': 'YYYY/MM/DD',
@@ -106,17 +103,17 @@ export default {
       let value = $e.target.value;
       if (value) {
         this.dateTime = moment.from(value, 'fa', this.getEnFormat).locale("en");
-        this.dateTimeStr = this.dateTime.format(this.getEnFormat)
+        // this.dateTimeStr = this.dateTime.format(this.getEnFormat)
       } else {
         this.dateTime = null
-        this.dateTimeStr = ''
+        // this.dateTimeStr = ''
       }
     }, 800),
     openCalendar() {
       this.show = true
     },
     onDateSelected(dateTime) {
-      this.formattedDate = dateTime.format(this.getFaFormat)
+      // this.formattedDate = dateTime.format(this.getFaFormat)
     },
   },
   computed: {
@@ -125,12 +122,26 @@ export default {
     },
     getFaFormat() {
       return this.faFormats[this.type]
+    },
+    formattedDate() {
+      return this.dateTime ? this.dateTime.format(this.getFaFormat) : ''
+    },
+    dateTimeStr() {
+      return this.dateTime ? this.dateTime.locale('en').format(this.getEnFormat) : ''
     }
   },
   watch: {
     dateTimeStr() {
       this.$emit('input', this.dateTimeStr)
     },
+    value() {
+      // console.log(this.value, 'dssdds')
+      // if (!this.value) {
+      //   this.dateTimeStr = ''
+      //   this.formattedDate = null
+      //   this.dateTime = null
+      // }
+    }
   }
 }
 </script>

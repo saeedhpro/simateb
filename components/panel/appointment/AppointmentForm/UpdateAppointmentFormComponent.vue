@@ -235,9 +235,12 @@ export default {
         info: '',
         status: 0,
         user: null,
+        user_insurance_id: null,
         insurance_price: 0,
         patient_price: 0,
         total_price: 0,
+        selected_actions: [],
+        selected_dents: [],
       },
       errors: {
         start_at: '',
@@ -279,6 +282,9 @@ export default {
         patient_price: this.item.patient_price,
         total_price: this.item.total_price,
         discount_price: this.item.discount_price,
+        selected_actions: this.item.selected_actions,
+        selected_dents: this.item.selected_dents,
+        user_insurance_id: this.item.user_insurance_id,
       }
       this.user = this.item.user
       this.resetErrors()

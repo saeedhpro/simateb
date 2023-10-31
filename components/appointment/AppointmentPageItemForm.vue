@@ -865,6 +865,7 @@
       @done="addDoctorPrescription"
     />
     <new-appointment-page-doctor-prescription-modal
+      v-if="showNewDoctorPrescription"
       :open="showNewDoctorPrescription"
       :selected-actions="appointment.selected_actions"
       :selected-dents="appointment.selected_dents"
@@ -975,12 +976,13 @@ export default {
     doneUpdateModal() {
       this.showUpdateModal = false
       this.done()
+      this.closeForm()
     },
     done() {
       this.$emit('done')
       // this.loading = true
       this.closeUpdateModal()
-      this.closeForm()
+      // this.closeForm()
       // setTimeout(() => {
       //   this.getAppointment(this.id)
       // }, 200)
@@ -1373,7 +1375,6 @@ export default {
           this.done()
           this.loading = false
           this.closeForm()
-          this.closeForm()
         })
     },
     doUpdate() {
@@ -1401,7 +1402,6 @@ export default {
         .finally(() => {
           this.done()
           this.loading = false
-          this.closeForm()
           this.closeForm()
         })
     },

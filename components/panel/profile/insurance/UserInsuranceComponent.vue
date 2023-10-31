@@ -166,6 +166,7 @@
                 <custom-date-picker-js
                   label="تاریخ شروع"
                   v-model="form.start_date"
+                  v-if="showCreateModal"
                   type="date"
                 />
               </v-col>
@@ -176,6 +177,7 @@
                 <custom-date-picker-js
                   label="تاریخ پایان"
                   v-model="form.end_date"
+                  v-if="showCreateModal"
                   type="date"
                 />
               </v-col>
@@ -326,7 +328,7 @@ export default {
       headers: [
         '',
         'نام بیمه',
-        'درصد تخفیف',
+        'درصد بیمه',
         'زمان شروع',
         'زمان پایان',
         'سقف تعهد',
@@ -342,7 +344,7 @@ export default {
         id: 0,
         name: "",
         percentage: 0,
-        is_active: 0,
+        is_active: 1,
         user_id: this.userId,
         insurance_id: 0,
         start_date: '',
@@ -406,7 +408,6 @@ export default {
         end_date: insurance.end_date,
         total: insurance.total,
       }
-      console.log(insurance.end_date, "end")
       this.toggleCreateModal()
     },
     paginate(page = 1) {
@@ -429,7 +430,7 @@ export default {
         id: 0,
         name: "",
         percentage: 0,
-        is_active: 0,
+        is_active: 1,
         user_id: this.userId,
         insurance_id: 0,
         start_date: '',
@@ -447,6 +448,7 @@ export default {
         .then(() => {
           setTimeout(() => {
             this.closeForm()
+            this.clearForm()
             this.showCreateModal = false
             this.getInsuranceList()
           }, 50)

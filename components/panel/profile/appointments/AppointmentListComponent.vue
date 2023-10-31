@@ -128,11 +128,12 @@ export default {
       this.showUpdateModal = !this.showUpdateModal
     },
     closeUpdateModal() {
+      this.item = null
       this.toggleShowUpdateModal()
     },
     doneUpdateModal() {
       this.getUserAppointmentsList(this.userId, 1)
-      this.toggleShowUpdateModal()
+      // this.toggleShowUpdateModal()
     },
   },
   computed: {
