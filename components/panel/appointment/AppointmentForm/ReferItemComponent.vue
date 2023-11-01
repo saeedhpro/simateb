@@ -342,6 +342,15 @@ export default {
   },
   watch: {
     selectedItem(val) {
+      if (!val) {
+        if (this.type === 'photography') {
+          this.$emit('setPhotographyCases', [])
+        } else if(this.type === 'radiology') {
+          this.$emit('setRadiologyCases', [])
+        } else if(this.type === 'doctor') {
+          this.$emit('setLaboratoryCases', [])
+        }
+      }
       this.selected(val)
       this.notSelected = false
       if (this.type === 'photography') {
