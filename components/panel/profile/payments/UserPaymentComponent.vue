@@ -760,6 +760,8 @@ export default {
               this.closeCreateModal()
               this.paginate()
               this.paginatePrice()
+              this.getUserPaymentsTotal()
+              this.getUserPriceTotal()
             })
             .catch(err => {
               this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
