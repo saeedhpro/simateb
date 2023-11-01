@@ -113,6 +113,7 @@ export default {
       this.show = true
     },
     onDateSelected(dateTime) {
+      this.dateTime = dateTime
       // this.formattedDate = dateTime.format(this.getFaFormat)
     },
   },
