@@ -77,9 +77,9 @@ export default {
     dialogMaxWidth: {default: "600px"},
     // dialogMaxHeight: {default: "0.8vh"},
     dialogMaxHeight: {default: "600px"},
-    maxWidth: {default: 1200},
-    maxHeight: {default: 1200},
-    aspectRatio: 16 / 9,
+    maxWidth: {default: 3600},
+    maxHeight: {default: 3600},
+    aspectRatio: 9 / 16,
     // the URL of the blob image
     objectUrl: {default: ""}
   },
