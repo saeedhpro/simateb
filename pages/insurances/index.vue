@@ -43,7 +43,17 @@
                     <td class="text-center">{{ (search.page - 1) * 10 + n + 1 }}</td>
                     <td class="text-center">{{ i.name ? i.name : '-' }}</td>
                     <td class="text-center">{{ `${i.percentage} %` }}</td>
-                    <td class="text-center">{{ i.is_active ? 'فعال' : 'غیرفعال' }}</td>
+                    <td class="text-center">
+                       <span
+                         class="status-box px-4"
+                         :style="{
+                          'background-color': i.is_active ? '#2BC4A9' : '#F44336' ,
+                          'color': '#FFF',
+                        }"
+                       >
+                        {{ i.is_active ? 'فعال' : 'غیرفعال' }}
+                      </span>
+                    </td>
                     <td class="text-center flex flex-row justify-space-around align-center">
                       <button @click="editInsurance(i)" class="action-buttons">
                         <v-icon size="16">mdi-pencil-outline</v-icon>

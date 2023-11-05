@@ -37,6 +37,8 @@
         :p-admission-at="i.p_admission_at"
         :r-admission-at="i.r_admission_at"
         :d-admission-at="i.d_admission_at"
+        :selected-dents="i.selected_dents"
+        :selected-actions="i.selected_actions"
         :waiting="i.waiting"
         @updated="onUpdate(i)"
       />

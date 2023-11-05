@@ -62,7 +62,7 @@
               <div class="code" v-if="info && canSeeInfo">
                 توضیحات پذیرش: <span>{{ info  }}</span>
               </div>
-              <div class="code" v-if="code">
+              <div class="code" v-if="canShowCode">
                 کد پذیرش: <span>{{ code  }}</span>
               </div>
             </v-col>
@@ -73,7 +73,7 @@
               <div class="prescription-box">
                 اقدامات و دستورات پزشک:
                 <span
-                  v-for="(p, n) in prescriptionArray"
+                  v-for="(p, n) in selectedPrescriptionArray"
                   :key="n"
                   class="prescription"
                 >
@@ -244,6 +244,7 @@
 
 <script>
 import Fancybox from "~/components/Fancybox";
+
 export default {
   name: "AppointmentItemComponent",
   props: {
@@ -354,6 +355,14 @@ export default {
     photographyMsg: {
       type: String,
       required: true,
+    },
+    selectedDents: {
+      type: Array,
+      default: () => [],
+    },
+    selectedActions: {
+      type: Array,
+      default: () => [],
     },
     waiting: {
       type: Boolean,
@@ -530,6 +539,22 @@ export default {
     prescriptionArray() {
       return this.prescription && this.prescription.length ? this.prescription.split(' - ') : []
     },
+    selectedPrescriptionArray() {
+      let list = [...this.prescriptionArray,]
+      if (this.selectedActions) {
+        list = [
+          ...list,
+          ...this.selectedActions,
+        ]
+      }
+      if (this.selectedDents) {
+        list = [
+          ...list,
+          ...this.selectedDents,
+        ]
+      }
+      return list
+    },
     radiologyCasesArray() {
       return this.radiologyCases && this.radiologyCases.length ? this.radiologyCases.split(',') : []
     },
@@ -596,6 +621,13 @@ export default {
     },
     getMsg() {
       return this.professionMsg[this.profession+'_msg']
+    },
+    canShowCode() {
+      return this.code &&
+        (
+          this.photographyId ||
+          this.radiologyId
+        )
     }
   }
 }
