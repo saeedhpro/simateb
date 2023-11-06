@@ -41,7 +41,7 @@
             >
               <div class="payment-detail">
                 <span>باقیمانده:</span>
-                <span>{{ total.due_total > 0 ? (total.due_total - total.total) : 0 | toPersianCurrency('تومان', 0) }}</span>
+                <span>{{ total.due_total - total.total | toPersianCurrency('تومان', 0) }}</span>
               </div>
             </v-col>
             <v-spacer/>

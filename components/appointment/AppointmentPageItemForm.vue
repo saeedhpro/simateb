@@ -312,7 +312,7 @@
                     <div class="detail-box d-inline-flex">
                       <div class="phone-box">
                           <span class="small">
-                            شرح اقدامات و دستور پزشک
+                            اقدامات پزشک
                           </span>
                       </div>
                     </div>

@@ -28,6 +28,7 @@
             <v-row>
               <v-col
                 cols="12"
+                sm="6"
                 md="6"
               >
                 <div class="radiology-form-item">
@@ -189,6 +190,7 @@
               </v-col>
               <v-col
                 cols="12"
+                sm="6"
                 md="6"
               >
                 <div class="radiology-form-item">
