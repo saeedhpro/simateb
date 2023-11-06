@@ -1304,6 +1304,18 @@ tr.waiting {
   border-radius: 8px !important;
 }
 
+
+.create-update-modal.photography-form {
+  .v-input--selection-controls {
+    margin-top: 4px !important;
+    padding-top: 0 !important;
+  }
+  .col-xl, .col-xl-auto, .col-xl-12, .col-xl-11, .col-xl-10, .col-xl-9, .col-xl-8, .col-xl-7, .col-xl-6, .col-xl-5, .col-xl-4, .col-xl-3, .col-xl-2, .col-xl-1, .col-lg, .col-lg-auto, .col-lg-12, .col-lg-11, .col-lg-10, .col-lg-9, .col-lg-8, .col-lg-7, .col-lg-6, .col-lg-5, .col-lg-4, .col-lg-3, .col-lg-2, .col-lg-1, .col-md, .col-md-auto, .col-md-12, .col-md-11, .col-md-10, .col-md-9, .col-md-8, .col-md-7, .col-md-6, .col-md-5, .col-md-4, .col-md-3, .col-md-2, .col-md-1, .col-sm, .col-sm-auto, .col-sm-12, .col-sm-11, .col-sm-10, .col-sm-9, .col-sm-8, .col-sm-7, .col-sm-6, .col-sm-5, .col-sm-4, .col-sm-3, .col-sm-2, .col-sm-1, .col, .col-auto, .col-12, .col-11, .col-10, .col-9, .col-8, .col-7, .col-6, .col-5, .col-4, .col-3, .col-2, .col-1 {
+    padding-top: 12px!important;
+    padding-bottom: 0px!important;
+  }
+}
+
 .medical-tabs-header {
   direction: ltr;
 
@@ -2739,13 +2751,20 @@ tr.waiting {
 
   .ortho-cases-item {
     border-bottom: 1px solid #DBDBDB;
+    label {
+      font-size: .85rem !important;
+    }
 
     &:last-child {
       border-bottom: unset !important;
     }
   }
 }
-
+.ortho-cases-item, .ortho-cases-form-bottom {
+  label {
+    font-size: .85rem !important;
+  }
+}
 .ortho-cases-form-top {
   direction: ltr !important;
 
@@ -2758,7 +2777,7 @@ tr.waiting {
       border: 1px solid #AEB9E6;
       border-radius: 8px;
       text-align: center;
-      font: normal normal bold 16px/28px IRANYekanRegular !important;
+      font: normal normal bold 16px/28px IRANYekanRegular;
       letter-spacing: 0;
       color: #141432;
       padding: 8px;
@@ -2778,11 +2797,14 @@ tr.waiting {
       font: normal normal bold 16px/28px IRANYekanRegular !important;
       letter-spacing: 0;
       color: #212945;
-      margin-left: 24px;
+      margin-left: 5%;
 
       &.rtl {
         margin-left: unset !important;
-        margin-right: 24px;
+        margin-right: 5%;
+        label {
+          text-align: right !important;
+        }
       }
     }
   }
@@ -2797,7 +2819,10 @@ tr.waiting {
   font: normal normal bold 16px/28px IRANYekanRegular !important;
   letter-spacing: 0;
   color: #141432;
-  margin-top: 20px;
+  margin-top: 40px !important;
+  label {
+    text-align: right !important;
+  }
 }
 
 .radiology-form-item {
@@ -4566,6 +4591,40 @@ tr.waiting {
     &.second {
       .links {
         display: none !important;
+      }
+    }
+  }
+}
+
+@media only screen and (min-width: 580px) and (max-width: 740px) {
+  .ortho-cases-item, .ortho-cases-form-bottom {
+    label {
+      font-size: .75rem !important;
+    }
+  }
+  .ortho-case-list-header {
+    font-size: .75rem !important;
+  }
+}
+
+@media only screen and (max-width: 490px) {
+  .ortho-case-list-header {
+    font-size: .65rem !important;
+  }
+  .ortho-cases-item, .ortho-cases-form-bottom {
+    label {
+      font-size: .65rem !important;
+    }
+  }
+}
+@media only screen and (max-width: 599px) {
+  .ortho-case-list {
+    &.others {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      .ortho-cases-item {
+        width: 25%;
       }
     }
   }

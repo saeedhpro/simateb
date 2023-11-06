@@ -5,7 +5,7 @@
     max-width="1056px"
   >
     <v-card
-      class="create-update-modal"
+      class="create-update-modal photography-form"
     >
       <v-card-title
         class="create-update-modal-title-box"
@@ -58,19 +58,17 @@
             v-else
           >
             <div class="ortho-cases-form-top">
-              <v-row>
+              <v-row class="rtl">
                 <v-col
                   cols="12"
+                  sm="3"
                   md="3"
                 >
-                  <div class="ortho-case-list">
-                    <div class="ortho-case-list-header">
-                      INTRA ORAL
-                    </div>
+                  <div class="ortho-case-list others">
                     <div
-                      v-for="(i,n) in intraOral"
+                      v-for="(i,n) in others"
                       :key="n"
-                      class="ortho-cases-item">
+                      class="ortho-cases-item rtl">
                       <v-checkbox
                         v-model="cases"
                         :label="i"
@@ -81,12 +79,14 @@
                   </div>
                 </v-col>
                 <v-col
-                  cols="12"
+                  cols="8"
+                  sm="6"
                   md="6"
                 >
                   <v-row>
                     <v-col
-                      cols="12"
+                      cols="6"
+                      sm="6"
                       md="6"
                     >
                       <div class="ortho-case-list">
@@ -108,7 +108,8 @@
                       </div>
                     </v-col>
                     <v-col
-                      cols="12"
+                      cols="6"
+                      sm="6"
                       md="6"
                     >
                       <div class="ortho-case-list">
@@ -155,14 +156,18 @@
                   </v-row>
                 </v-col>
                 <v-col
-                  cols="12"
+                  cols="4"
+                  sm="3"
                   md="3"
                 >
-                  <div class="ortho-case-list">
+                  <div class="ortho-case-list ltr">
+                    <div class="ortho-case-list-header">
+                      INTRA ORAL
+                    </div>
                     <div
-                      v-for="(i,n) in others"
+                      v-for="(i,n) in intraOral"
                       :key="n"
-                      class="ortho-cases-item rtl">
+                      class="ortho-cases-item">
                       <v-checkbox
                         v-model="cases"
                         :label="i"
@@ -177,7 +182,8 @@
             <div class="ortho-cases-form-bottom">
               <v-row>
                 <v-col
-                  cols="12"
+                  cols="4"
+                  sm="3"
                   md="2"
                   v-for="(i,n) in bottomCases"
                   :key="n"
@@ -198,7 +204,7 @@
         <v-container>
           <v-row>
             <v-col
-              cols="12"
+              cols="4"
               sm="3"
               md="3"
             >
@@ -211,7 +217,7 @@
             </v-col>
             <v-spacer/>
             <v-col
-              cols="12"
+              cols="4"
               sm="3"
               md="3"
             >
@@ -223,7 +229,7 @@
               </button>
             </v-col>
             <v-col
-              cols="12"
+              cols="4"
               sm="4"
               md="4"
             >
@@ -301,18 +307,15 @@ export default {
       ],
       others: [
         'بینی',
+        'ارتودنسی',
         'فک و چانه',
         'ایمپلنت و پروتز',
         'صورت',
         'پلک و ابرو',
-        'پیشانی',
         'گوش',
         'گردن',
-        'لب',
-        'بازو',
-        'کاشت مو',
         'لیپوماتیک',
-        'ارتودنسی',
+        'سایر موارد',
       ],
     }
   },
