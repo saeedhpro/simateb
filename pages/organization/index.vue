@@ -75,8 +75,8 @@
                   </svg>
                   <input class="search-input" v-model="search.q" type="text" ref="search-input"
                          placeholder="جستجو / کد پذیرش"
-                         @input="getAppointmentList">
-                  <div @click="getAppointmentList" class="search-button">
+                         @input="getAppointmentList(false)">
+                  <div @click="getAppointmentList(false)" class="search-button">
                     <img src="/images/pages/search-button.svg">
                   </div>
                   <div @click="toggleFilterModal" class="search-filter">
