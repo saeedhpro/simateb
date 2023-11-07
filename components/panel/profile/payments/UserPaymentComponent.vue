@@ -1,129 +1,48 @@
 <template>
   <div class="user-payments-component">
     <v-row>
-      <v-col
-        cols="12"
-      >
-        <v-card
-          class="page-main-box"
-        >
+      <v-col cols="12">
+        <v-card class="page-main-box">
           <v-row>
-            <v-col
-              cols="12"
-              sm="4"
-              md="3"
-              lg="2"
-              xl="2"
-            >
-              <div class="payment-detail">
-                <span>مجموع هزینه درمان:</span>
-                <span>{{ total.due_total | toPersianCurrency('تومان',0) }}</span>
-              </div>
-            </v-col>
-            <v-col
-              cols="12"
-              sm="4"
-              md="3"
-              lg="2"
-              xl="2"
-            >
-              <div class="payment-detail">
-                <span>مجموع پرداخت‌ها:</span>
-                <span>{{ total.total | toPersianCurrency('تومان', 0) }}</span>
-              </div>
-            </v-col>
-            <v-col
-              cols="12"
-              sm="4"
-              md="3"
-              lg="2"
-              xl="2"
-            >
-              <div class="payment-detail">
-                <span>باقیمانده:</span>
-                <span>{{ total.due_total - total.total | toPersianCurrency('تومان', 0) }}</span>
-              </div>
-            </v-col>
-            <v-spacer/>
-            <v-col
-              cols="12"
-              sm="4"
-              md="3"
-              lg="3"
-              xl="2"
-            >
-              <div class="page-actions mr-auto"
-                   style="min-width: 220px"
-                   @click="openCreateModal"
-              >
-                <img src="/images/pages/plus.svg" alt="users">
-                <span class="title-main">ثبت پرداخت</span>
+            <v-col cols="12">
+              <div class="d-flex flex-row align-center justify-space-between row-wrap">
+                <div class="d-flex flex-row align-center justify-start row-wrap">
+                  <div class="payment-detail ml-4 mb-2">
+                    <span>مجموع هزینه درمان:</span>
+                    <span>{{ total.due_total | toPersianCurrency('تومان', 0) }}</span>
+                  </div>
+                  <div class="payment-detail ml-4 mb-2">
+                    <span>مجموع پرداخت‌ها:</span>
+                    <span>{{ total.total | toPersianCurrency('تومان', 0) }}</span>
+                  </div>
+                  <div class="payment-detail mb-2">
+                    <span>باقیمانده:</span>
+                    <span>{{ total.due_total - total.total | toPersianCurrency('تومان', 0) }}</span>
+                  </div>
+                </div>
+                <div class="page-actions" style="min-width: 170px !important" @click="openCreateModal">
+                  <img src="/images/pages/plus.svg" alt="users">
+                  <span class="title-main">ثبت پرداخت</span>
+                </div>
               </div>
             </v-col>
           </v-row>
-<!--          <v-row class="search-box">-->
-<!--            <v-col-->
-<!--              cols="12"-->
-<!--              sm="12"-->
-<!--              md="5"-->
-<!--              lg="4"-->
-<!--            >-->
-<!--              <div class="right-box">-->
-<!--                <v-checkbox-->
-<!--                  v-model="selectedAll"-->
-<!--                ></v-checkbox>-->
-<!--                <div class="selected-count" v-if="selectedUsers.length > 0">-->
-<!--                  {{ selectedUsers.length }}-->
-<!--                </div>-->
-<!--                <v-select-->
-<!--                  outlined-->
-<!--                  :items="actions"-->
-<!--                  label="اقدام جمعی"-->
-<!--                  item-value="id"-->
-<!--                  item-text="label"-->
-<!--                  v-model="action"-->
-<!--                ></v-select>-->
-<!--                <button-->
-<!--                  class="do-action-btn"-->
-<!--                  @click="doAction"-->
-<!--                  :disabled="!action"-->
-<!--                >انجام بده-->
-<!--                </button>-->
-<!--              </div>-->
-<!--            </v-col>-->
-<!--            <v-spacer/>-->
-<!--          </v-row>-->
           <v-row>
-            <v-col
-              cols="12"
-              v-if="loading"
-            >
+            <v-col cols="12" v-if="loading">
               <LoadingCard />
             </v-col>
-            <v-col
-              cols="12"
-              v-else
-            >
+            <v-col cols="12" v-else>
               <div class="mb-4 font-weight-bold ">پرداخت های بیمار:</div>
-              <data-table-component
-                :headers="headers"
-                :page="page"
-                :total="payments.meta.total"
-                @paginate="paginate"
-              >
+              <data-table-component :headers="headers" :page="page" :total="payments.meta.total" @paginate="paginate">
                 <template v-slot:body>
                   <tr v-for="(i, n) in payments.data" :key="n">
                     <td class="text-center">{{ (page - 1) * 10 + n + 1 }}</td>
                     <td class="text-center">
                       <div class="table-row flex flex-row align-center justify-start">
-                        <input type="checkbox"
-                               class="table-selectable-checkbox"
-                               v-model="selectedPayments"
-                               :value="i"
-                        />
+                        <input type="checkbox" class="table-selectable-checkbox" v-model="selectedPayments" :value="i" />
                         <img :src="getLogo(i)">
                         <a @click.prevent="openUpdateModal(i)" href="#">
-                        <span> {{
+                          <span> {{
                             i.user ? `${i.user.fname} ${i.user.lname}` : '-'
                           }}</span>
                         </a>
@@ -140,7 +59,7 @@
                     </td>
                     <td class="text-center">
                       <span class="file-id main">
-                          {{ getPayType(i.paytype) }}
+                        {{ getPayType(i.paytype) }}
                       </span>
                     </td>
                     <td class="text-center">
@@ -153,23 +72,13 @@
                 </template>
               </data-table-component>
             </v-col>
-            <v-col
-              cols="12"
-              v-if="loading"
-            >
+            <v-col cols="12" v-if="loading">
               <LoadingCard />
             </v-col>
-            <v-col
-              cols="12"
-              v-else
-            >
+            <v-col cols="12" v-else>
               <div class="mb-4 font-weight-bold ">هزینه های بیمار:</div>
-              <data-table-component
-                :headers="priceHeaders"
-                :page="pagePrice"
-                :total="priceList.meta.total"
-                @paginate="paginatePrice"
-              >
+              <data-table-component :headers="priceHeaders" :page="pagePrice" :total="priceList.meta.total"
+                @paginate="paginatePrice">
                 <template v-slot:body>
                   <tr v-for="(i, n) in priceList.data" :key="n">
                     <td class="text-center">{{ (pagePrice - 1) * 10 + n + 1 }}</td>
@@ -200,230 +109,104 @@
             </v-col>
           </v-row>
           <v-row>
-            <v-col
-              cols="12"
-              sm="4"
-              md="3"
-              lg="2"
-              xl="2"
-            >
-              <div class="payment-detail">
-                <span>سهم بیمار:</span>
-                <span>{{ price.patient_price | toPersianCurrency('تومان',0) }}</span>
-              </div>
-            </v-col>
-            <v-col
-              cols="12"
-              sm="4"
-              md="3"
-              lg="2"
-              xl="2"
-            >
-              <div class="payment-detail">
-                <span>سهم بیمه:</span>
-                <span>{{ price.insurance_price | toPersianCurrency('تومان', 0) }}</span>
-              </div>
-            </v-col>
-            <v-col
-              cols="12"
-              sm="4"
-              md="3"
-              lg="2"
-              xl="2"
-            >
-              <div class="payment-detail">
-                <span>تخفیف:</span>
-                <span>{{ price.discount_price | toPersianCurrency('تومان', 0) }}</span>
+            <v-col cols="12">
+              <div class="d-flex flex-row align-center justify-space-between row-wrap">
+                <div class="d-flex flex-row align-center justify-start row-wrap">
+                  <div class="payment-detail ml-4 mb-2">
+                    <span>سهم بیمار:</span>
+                    <span>{{ price.patient_price | toPersianCurrency('تومان', 0) }}</span>
+                  </div>
+                  <div class="payment-detail ml-4 mb-2">
+                    <span>سهم بیمه:</span>
+                    <span>{{ price.insurance_price | toPersianCurrency('تومان', 0) }}</span>
+                  </div>
+                  <div class="payment-detail mb-2">
+                    <div class="payment-detail">
+                      <span>تخفیف:</span>
+                      <span>{{ price.discount_price | toPersianCurrency('تومان', 0) }}</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </v-col>
           </v-row>
         </v-card>
       </v-col>
     </v-row>
-    <send-sms-component
-      :users="allUsers"
-      :multiple="true"
-      :selectedItems="selectedUsers"
-      :open="showSmsModal"
-      @selected="itemSelected"
-      @close="closeSmsForm"
-    />
-    <admin-delete-users-component
-      :open="showDelete"
-      @close="toggleRemove"
-      @remove="remove"
-      :title="`پرداخت ها`"
-    />
-    <v-dialog
-      v-model="showCreateModal"
-      max-width="1056px"
-      persistent
-    >
-      <v-card
-        class="create-update-modal"
-      >
-        <v-card-title
-          class="create-update-modal-title-box"
-        >
+    <send-sms-component :users="allUsers" :multiple="true" :selectedItems="selectedUsers" :open="showSmsModal"
+      @selected="itemSelected" @close="closeSmsForm" />
+    <admin-delete-users-component :open="showDelete" @close="toggleRemove" @remove="remove" :title="`پرداخت ها`" />
+    <v-dialog v-model="showCreateModal" max-width="1056px" persistent>
+      <v-card class="create-update-modal">
+        <v-card-title class="create-update-modal-title-box">
           <div class="create-update-modal-title">
-            <button
-              @click="closeCreateModal"
-              class="create-update-modal-close"
-            >
+            <button @click="closeCreateModal" class="create-update-modal-close">
               <v-icon>mdi-close</v-icon>
             </button>
             <span>{{ isUpdate ? 'ویرایش' : 'ثبت' }} پرداخت</span>
           </div>
-          <v-spacer/>
+          <v-spacer />
         </v-card-title>
         <v-card-text>
           <v-container>
             <v-row>
-              <v-col
-                cols="12"
-                sm="6"
-                md="4"
-              >
+              <v-col cols="12" sm="6" md="4">
                 <div class="create-update-model-input-box">
                   <label>نام بیمار</label>
                   <input disabled type="text" :value="fullName">
                 </div>
               </v-col>
-              <v-col
-                cols="12"
-                sm="6"
-                md="4"
-              >
-                <custom-date-picker-js
-                  label="تاریخ"
-                  v-model="form.created"
-                  v-if="showCreateModal"
-                  type="datetime"
-                />
+              <v-col cols="12" sm="6" md="4">
+                <custom-date-picker-js label="تاریخ" v-model="form.created" v-if="showCreateModal" type="datetime" />
               </v-col>
-              <v-col
-                cols="12"
-                sm="6"
-                md="4"
-              >
+              <v-col cols="12" sm="6" md="4">
                 <div class="create-update-model-input-box">
-                  <custom-price-input
-                    :label="'مبلغ'"
-                    :error="errors.amount"
-                    v-model="form.amount"
-                    @input="changed"
-                  />
+                  <custom-price-input :label="'مبلغ'" :error="errors.amount" v-model="form.amount" @input="changed" />
                 </div>
               </v-col>
-              <v-col
-                cols="12"
-                sm="6"
-                md="4"
-              >
+              <v-col cols="12" sm="6" md="4">
                 <div class="create-update-model-input-box">
-                  <custom-multi-select
-                    v-model="payType"
-                    :items="payTypes"
-                    :error="errors.payType"
-                    label="شکل پرداخت"
-                  />
+                  <custom-multi-select v-model="payType" :items="payTypes" :error="errors.payType" label="شکل پرداخت" />
                 </div>
               </v-col>
-              <v-col
-                cols="12"
-                sm="6"
-                md="4"
-              >
+              <v-col cols="12" sm="6" md="4">
                 <div class="create-update-model-input-box">
-<!--                  <custom-multi-select-->
-<!--                    v-model="paidFor"-->
-<!--                    :items="paidFors"-->
-<!--                    :error="errors.paidFor"-->
-<!--                    label="پرداخت برای"-->
-<!--                  />-->
-                  <custom-text-input
-                    v-model="form.paid_for"
-                    :error="errors.paidFor"
-                    label="پرداخت برای"
-                  />
+                  <!--                  <custom-multi-select-->
+                  <!--                    v-model="paidFor"-->
+                  <!--                    :items="paidFors"-->
+                  <!--                    :error="errors.paidFor"-->
+                  <!--                    label="پرداخت برای"-->
+                  <!--                  />-->
+                  <custom-text-input v-model="form.paid_for" :error="errors.paidFor" label="پرداخت برای" />
                 </div>
               </v-col>
-              <v-col
-                cols="12"
-                sm="6"
-                md="4"
-              >
+              <v-col cols="12" sm="6" md="4">
                 <div class="create-update-model-input-box">
-                  <custom-text-input
-                    :label="'کد پیگیری'"
-                    v-model="form.trace_code"
-                  />
+                  <custom-text-input :label="'کد پیگیری'" v-model="form.trace_code" />
                 </div>
               </v-col>
-              <v-col
-                cols="12"
-                sm="6"
-                md="4"
-              >
+              <v-col cols="12" sm="6" md="4">
                 <div class="create-update-model-input-box">
-                  <custom-text-input
-                    :label="'واریز به'"
-                    v-model="form.paid_to"
-                  />
+                  <custom-text-input :label="'واریز به'" v-model="form.paid_to" />
                 </div>
               </v-col>
-              <v-col
-                cols="12"
-                sm="6"
-                md="4"
-                v-if="form.paytype === 3"
-              >
+              <v-col cols="12" sm="6" md="4" v-if="form.paytype === 3">
                 <div class="create-update-model-input-box">
-                  <custom-text-input
-                    :label="'چک برای بانک'"
-                    :errors="errors.check_bank"
-                    v-model="form.check_bank"
-                  />
+                  <custom-text-input :label="'چک برای بانک'" :errors="errors.check_bank" v-model="form.check_bank" />
                 </div>
               </v-col>
-              <v-col
-                cols="12"
-                sm="6"
-                md="4"
-                v-if="form.paytype === 3"
-              >
+              <v-col cols="12" sm="6" md="4" v-if="form.paytype === 3">
                 <div class="create-update-model-input-box">
-                  <custom-text-input
-                    :label="'شماره چک'"
-                    :errors="errors.check_num"
-                    v-model="form.check_num"
-                  />
+                  <custom-text-input :label="'شماره چک'" :errors="errors.check_num" v-model="form.check_num" />
                 </div>
               </v-col>
-              <v-col
-                cols="12"
-                sm="6"
-                md="4"
-                v-if="form.paytype === 3"
-              >
-                <custom-date-picker-js
-                  label="تاریخ چک"
-                  v-model="form.check_date"
-                  :jump-minute="15"
-                  :round-minute="true"
-                  type="date"
-                  v-if="showCreateModal"
-                />
+              <v-col cols="12" sm="6" md="4" v-if="form.paytype === 3">
+                <custom-date-picker-js label="تاریخ چک" v-model="form.check_date" :jump-minute="15" :round-minute="true"
+                  type="date" v-if="showCreateModal" />
               </v-col>
-              <v-col
-                cols="12"
-              >
+              <v-col cols="12">
                 <div class="create-update-model-input-box">
-                  <custom-text-area-input
-                    v-model="form.info"
-                    label="توضیحات"
-                    :rows="5"
-                  />
+                  <custom-text-area-input v-model="form.info" label="توضیحات" :rows="5" />
                 </div>
               </v-col>
             </v-row>
@@ -432,40 +215,19 @@
         <v-card-actions>
           <v-container>
             <v-row>
-              <v-col
-                cols="12"
-                sm="3"
-                md="3"
-              >
-                <button
-                  class="second-button full-width"
-                  @click="clearForm"
-                >
+              <v-col cols="12" sm="3" md="3">
+                <button class="second-button full-width" @click="clearForm">
                   پاک کردن فرم
                 </button>
               </v-col>
-              <v-spacer/>
-              <v-col
-                cols="12"
-                sm="3"
-                md="3"
-              >
-                <button
-                  class="second-button full-width"
-                  @click="closeCreateModal"
-                >
+              <v-spacer />
+              <v-col cols="12" sm="3" md="3">
+                <button class="second-button full-width" @click="closeCreateModal">
                   بستن
                 </button>
               </v-col>
-              <v-col
-                cols="12"
-                sm="4"
-                md="4"
-              >
-                <button
-                  class="main-button"
-                  @click="createPayment"
-                >
+              <v-col cols="12" sm="4" md="4">
+                <button class="main-button" @click="createPayment">
                   ثبت
                 </button>
               </v-col>
@@ -973,10 +735,54 @@ export default {
 <style scoped lang="scss">
 .user-payments-component {
   .payment-detail {
-    text-align: left;
-    font: normal normal 500 16px/28px IRANYekanRegular !important;
+    text-align: right;
+    font: normal normal 500 16px/28px IRANYekanRegular;
     letter-spacing: 0;
     color: #3D3D66;
+  }
+}
+
+@media only screen and (min-width: 361px) and (max-width: 823px) {
+  .payment-detail {
+    font: normal normal 500 .875rem/20px IRANYekanRegular !important;
+  }
+
+  .page-actions {
+    height: 42px !important;
+
+    img {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      bottom: 4px;
+      height: 32px !important;
+    }
+  }
+
+  .page-actions .title-main {
+    font: normal normal bold .75rem/20px IRANYekanRegular !important;
+  }
+}
+
+@media only screen and (max-width: 360px) {
+  .payment-detail {
+    font: normal normal 500 .65rem/18px IRANYekanRegular !important;
+  }
+
+  .page-actions .title-main {
+    font: normal normal normal .65rem/18px IRANYekanRegular !important;
+  }
+
+  .page-actions {
+    height: 42px !important;
+
+    img {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      bottom: 4px;
+      height: 32px !important;
+    }
   }
 }
 </style>
