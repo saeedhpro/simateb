@@ -1,63 +1,35 @@
 <template>
   <v-row>
-    <v-col
-      cols="12"
-      v-if="loadList"
-    >
-      <div
-        v-if="!loadList"
-      >
+    <v-col cols="12" v-if="loadList">
+      <div v-if="!loadList">
         <v-progress-circular />
       </div>
-      <div
-        v-else
-        style="overflow-x: scroll" id="table-wrapper" ref="table-wrapper">
-        <table
-          class="appointment-table"
-        >
-          <thead
-            v-if="showCaseType"
-          >
-          <tr>
-            <th
-              v-for="(limits, n) in limitList"
-              :key="n"
-              class="header-case-type-th text-center"
-            >
-              <div
-                class="header-case-type-box"
-              >
-                <div
-                  class="header-case-type"
-                  v-for="(limit,n2) in limits"
-                  :key="n2"
-                >
-                  <div>
-                    {{ limit.name  }}
+      <div v-else style="overflow-x: scroll" id="table-wrapper" ref="table-wrapper">
+        <table class="appointment-table" id="appointment-table">
+          <thead v-if="showCaseType">
+            <tr>
+              <th v-for="(limits, n) in limitList" :key="n" class="header-case-type-th text-center">
+                <div class="header-case-type-box">
+                  <div class="header-case-type" v-for="(limit, n2) in limits" :key="n2">
+                    <div>
+                      {{ limit.name }}
+                    </div>
+                    <span class="ltr" v-if="limit.is_limited"
+                      :class="{ 'is-red': limit.limitations < 0, 'is-zero': limit.limitations == 0 }">
+                      {{ limit.limitations }}
+                    </span>
                   </div>
-                  <span
-                    class="ltr"
-                    :class="{'is-red': limit.limitations < 0, 'is-zero': limit.limitations == 0}"
-                  >
-                    {{ limit.limitations }}
-                  </span>
                 </div>
-              </div>
-            </th>
-          </tr>
+              </th>
+            </tr>
           </thead>
           <thead>
             <tr>
-              <th
-                v-for="(d, n) in headerDays"
-                :key="n"
-                class="header-case-type-th text-center"
-              >
-                <div
-                  class="header-date"
-                  :class="{'is-today': d.is_today, 'is-friday': d.is_friday, 'is-holiday': d.is_holiday}"
-                  @click="openPazireshModal(d.start_at)"
-                >
+              <th v-for="(d, n) in headerDays" :key="n" class="header-case-type-th text-center"
+                :class="{ 'is-today': d.is_today }">
+                <div class="header-date"
+                  :class="{ 'is-today': d.is_today, 'is-friday': d.is_friday, 'is-holiday': d.is_holiday }"
+                  @click="openPazireshModal(d.start_at)">
                   {{ d.title }}
                   <br />
                   {{ d.sub_title }}
@@ -65,81 +37,42 @@
               </th>
             </tr>
           </thead>
-          <tbody
-            v-if="loading"
-          >
+          <tbody v-if="loading">
             <loading-card />
           </tbody>
-          <tbody
-            v-else-if="showHour"
-          >
-          <tr
-            v-for="(_, i) in maxTimeLength"
-            :key="i"
-          >
-            <td
-              v-for="(_, j) in timeBaseDays.length"
-              :key="j"
-            >
-              <appointment-page-table-item
-                v-if="timeBaseDays[j][i] && !timeBaseDays[j][i].is_empty"
-                :case-type="timeBaseDays[j][i].case_type"
-                :index="timeBaseDays[j][i].index"
-                :is-friday="timeBaseDays[j][i].is_friday"
-                :is-holiday="timeBaseDays[j][i].is_holiday"
-                :is-today="timeBaseDays[j][i].is_today"
-                :user-full-name="timeBaseDays[j][i].user_full_name"
-                :start-at-time-fa="timeBaseDays[j][i].start_at_time_fa"
-                @click.native="openItem(timeBaseDays[j][i].id)"
-              />
-              <appointment-page-table-empty-item
-                v-else-if="timeBaseDays[j][i]"
-                :index="i"
-                :is-friday="timeBaseDays[j][i].is_friday"
-                :is-holiday="timeBaseDays[j][i].is_holiday"
-                :is-today="timeBaseDays[j][i].is_today"
-                :show-hour="true"
-                :start-at-time-fa="timeBaseDays[j][i].start_at_time_fa"
-                @click.native="openPazireshModal(timeBaseDays[j][i].start_at)"
-              />
-              <div v-else>{{ `${i} - ${j}`}} </div>
-            </td>
-          </tr>
+          <tbody v-else-if="showHour">
+            <tr v-for="(_, i) in maxTimeLength" :key="i">
+              <td v-for="(_, j) in timeBaseDays.length" :key="j">
+                <appointment-page-table-item v-if="timeBaseDays[j][i] && !timeBaseDays[j][i].is_empty"
+                  :case-type="timeBaseDays[j][i].case_type" :index="timeBaseDays[j][i].index"
+                  :is-friday="timeBaseDays[j][i].is_friday" :is-holiday="timeBaseDays[j][i].is_holiday"
+                  :is-today="timeBaseDays[j][i].is_today" :user-full-name="timeBaseDays[j][i].user_full_name"
+                  :start-at-time-fa="timeBaseDays[j][i].start_at_time_fa" :status="timeBaseDays[j][i].status_fa"
+                  @click.native="openItem(timeBaseDays[j][i].id)" />
+                <appointment-page-table-empty-item v-else-if="timeBaseDays[j][i]" :index="i"
+                  :is-friday="timeBaseDays[j][i].is_friday" :is-holiday="timeBaseDays[j][i].is_holiday"
+                  :is-today="timeBaseDays[j][i].is_today" :show-hour="true"
+                  :start-at-time-fa="timeBaseDays[j][i].start_at_time_fa"
+                  @click.native="openPazireshModal(timeBaseDays[j][i].start_at)" />
+                <div v-else>{{ `${i} - ${j}` }} </div>
+              </td>
+            </tr>
           </tbody>
-          <tbody
-            v-else
-          >
-          <tr
-            v-for="(_,i) in maxLength"
-            :key="i"
-          >
-            <td
-              v-for="(_, j) in simpleDays.length"
-              :key="j"
-            >
-              <appointment-page-table-item
-                v-if="simpleDays[j][i] && !simpleDays[j][i].is_empty"
-                :case-type="simpleDays[j][i].case_type"
-                :index="simpleDays[j][i].index"
-                :is-friday="simpleDays[j][i].is_friday"
-                :is-holiday="simpleDays[j][i].is_holiday"
-                :is-today="simpleDays[j][i].is_today"
-                :user-full-name="simpleDays[j][i].user_full_name"
-                :start-at-time-fa="simpleDays[j][i].start_at_time_fa"
-                @click.native="openItem(simpleDays[j][i].id)"
-              />
-              <appointment-page-table-empty-item
-                v-else-if="simpleDays[j][i]"
-                :index="i"
-                :is-friday="simpleDays[j][i].is_friday"
-                :is-holiday="simpleDays[j][i].is_holiday"
-                :is-today="simpleDays[j][i].is_today"
-                :show-hour="false"
-                :start-at-time-fa="simpleDays[j][i].start_at_time_fa"
-              />
-              <div v-else>{{ `${i} - ${j}`}} </div>
-            </td>
-          </tr>
+          <tbody v-else>
+            <tr v-for="(_, i) in maxLength" :key="i">
+              <td v-for="(_, j) in simpleDays.length" :key="j">
+                <appointment-page-table-item v-if="simpleDays[j][i] && !simpleDays[j][i].is_empty"
+                  :case-type="simpleDays[j][i].case_type" :index="simpleDays[j][i].index"
+                  :is-friday="simpleDays[j][i].is_friday" :is-holiday="simpleDays[j][i].is_holiday"
+                  :is-today="simpleDays[j][i].is_today" :user-full-name="simpleDays[j][i].user_full_name"
+                  :start-at-time-fa="simpleDays[j][i].start_at_time_fa" @click.native="openItem(simpleDays[j][i].id)" />
+                <appointment-page-table-empty-item v-else-if="simpleDays[j][i]" :index="i"
+                  :is-friday="simpleDays[j][i].is_friday" :is-holiday="simpleDays[j][i].is_holiday"
+                  :is-today="simpleDays[j][i].is_today" :show-hour="false"
+                  :start-at-time-fa="simpleDays[j][i].start_at_time_fa" />
+                <div v-else>{{ `${i} - ${j}` }} </div>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -154,7 +87,7 @@ import LoadingCard from "~/components/global/LoadingCard.vue";
 
 export default {
   name: "AppointmentPageList",
-  components: {LoadingCard, TableAppointmentV2, TableAppointmentNoneV2},
+  components: { LoadingCard, TableAppointmentV2, TableAppointmentNoneV2 },
   props: {
     isSurgery: {
       type: Boolean,
@@ -173,7 +106,7 @@ export default {
   },
   mounted() {
     if (this.loadList) {
-      this.$nextTick(()=>{
+      this.$nextTick(() => {
       })
     }
   },
@@ -188,12 +121,21 @@ export default {
       const res = await this.$axios.get(url)
       if (res.status == 200) {
         const data = res.data
-        await this.$store.dispatch('appointment/setAppointments',data.appointments)
+        await this.$store.dispatch('appointment/setAppointments', data.appointments)
         await this.$store.dispatch('appointment/setLimits', data.limits)
         if (this.showHour) {
           this.timeBaseDays = this.calcTimeBaseDays()
         } else {
           this.simpleDays = this.calcSimpleDays()
+        }
+        let todays = document.getElementsByClassName('is-today')
+        if (todays.length > 0) {
+          // let bound = todays[0].getBoundingClientRect()
+          // let table = document.getElementById('appointment-table')
+          todays[0].scrollIntoView({
+            inline: "end",
+            behavior: 'smooth'
+          })
         }
       }
     },
@@ -247,15 +189,15 @@ export default {
       let period = this.workHour.period
       let dayStart = startDay.clone()
       dayStart = dayStart.set({
-        hour: this.workHour.start.substring(0,2),
-        minute: this.workHour.start.substring(3,5),
-        second: this.workHour.start.substring(6,9),
+        hour: this.workHour.start.substring(0, 2),
+        minute: this.workHour.start.substring(3, 5),
+        second: this.workHour.start.substring(6, 9),
       })
       let dayEnd = startDay.clone()
       dayEnd = dayEnd.set({
-        hour: this.workHour.end.substring(0,2),
-        minute: this.workHour.end.substring(3,5),
-        second: this.workHour.end.substring(6,9),
+        hour: this.workHour.end.substring(0, 2),
+        minute: this.workHour.end.substring(3, 5),
+        second: this.workHour.end.substring(6, 9),
       })
       let minutes = moment.duration(dayEnd.diff(dayStart)).asMinutes()
       let dayLength = this.showHour ? minutes / period : 8
@@ -267,19 +209,19 @@ export default {
       let maxLength = dayLength
       // moment.updateLocale('en', 'en')
       moment.locale('en')
-      while(startDay.locale('en').isBefore(lastDay.locale('en').format("YYYY/MM/DD"))) {
+      while (startDay.locale('en').isBefore(lastDay.locale('en').format("YYYY/MM/DD"))) {
         days[i] = []
         let dayStart = startDay.clone()
         dayStart = dayStart.set({
-          hour: this.workHour.start.substring(0,2),
-          minute: this.workHour.start.substring(3,5),
-          second: this.workHour.start.substring(6,9),
+          hour: this.workHour.start.substring(0, 2),
+          minute: this.workHour.start.substring(3, 5),
+          second: this.workHour.start.substring(6, 9),
         })
         let dayEnd = startDay.clone()
         dayEnd = dayEnd.set({
-          hour: this.workHour.end.substring(0,2),
-          minute: this.workHour.end.substring(3,5),
-          second: this.workHour.end.substring(6,9),
+          hour: this.workHour.end.substring(0, 2),
+          minute: this.workHour.end.substring(3, 5),
+          second: this.workHour.end.substring(6, 9),
         })
         let dayEndTime = dayEnd.clone().set({
           hour: 23,
@@ -299,9 +241,9 @@ export default {
         }
         for (let j = 0; j < dayLength; j++) {
           if (list.length > 0) {
-            while(list.length > 0) {
+            while (list.length > 0) {
               let app = list[0]
-              let startAt = moment(app.start_at,'YYYY/MM/DD HH:mm:ss')
+              let startAt = moment(app.start_at, 'YYYY/MM/DD HH:mm:ss')
               if (startAt.format("YYYYMMDD") === dayStart.format("YYYYMMDD")) {
                 days[i].push({
                   ...app,
@@ -378,15 +320,15 @@ export default {
       let i = 0;
       let dayStart = startDay.clone()
       dayStart = dayStart.set({
-        hour: this.workHour.start.substring(0,2),
-        minute: this.workHour.start.substring(3,5),
-        second: this.workHour.start.substring(6,9),
+        hour: this.workHour.start.substring(0, 2),
+        minute: this.workHour.start.substring(3, 5),
+        second: this.workHour.start.substring(6, 9),
       })
       let dayEnd = startDay.clone()
       dayEnd = dayEnd.set({
-        hour: this.workHour.end.substring(0,2),
-        minute: this.workHour.end.substring(3,5),
-        second: this.workHour.end.substring(6,9),
+        hour: this.workHour.end.substring(0, 2),
+        minute: this.workHour.end.substring(3, 5),
+        second: this.workHour.end.substring(6, 9),
       })
       let minutes = moment.duration(dayEnd.diff(dayStart)).asMinutes()
       let maxLength = parseInt(minutes / default_duration)
@@ -395,7 +337,7 @@ export default {
         ...this.appointments,
       ]
       let today = moment().locale('fa').format("YYYYMMDD")
-      while(startDay.locale('en').isBefore(lastDay.locale('en').format("YYYY/MM/DD"))) {
+      while (startDay.locale('en').isBefore(lastDay.locale('en').format("YYYY/MM/DD"))) {
         days[i] = []
         let boxDuration = default_duration
         let boxStart = dayStart.clone().locale('en')
@@ -411,10 +353,10 @@ export default {
         }
         if (list.length > 0) {
           let j = 0;
-          while(list.length > 0) {
+          while (list.length > 0) {
             boxDuration = default_duration
             let app = list[0]
-            let startAt = moment(app.start_at,'YYYY/MM/DD HH:mm:ss')
+            let startAt = moment(app.start_at, 'YYYY/MM/DD HH:mm:ss')
             if (startAt.locale('en').format("YYYYMMDD") === dayStart.format("YYYYMMDD")) {
               if (startAt.locale('en').isBefore(dayStart.locale('en').format('YYYY/MM/DD HH:mm'))) {
                 days[i].push({
@@ -458,7 +400,7 @@ export default {
                 }
               } else {
                 if (startAt.locale('en').isAfter(dayEnd.locale('en').format('YYYY/MM/DD HH:mm'))) {
-                  while(boxStart.isBefore(startAt.format('YYYY/MM/DD HH:mm'))) {
+                  while (boxStart.isBefore(startAt.format('YYYY/MM/DD HH:mm'))) {
                     days[i].push({
                       is_empty: true,
                       is_friday: isFriday,
@@ -497,7 +439,7 @@ export default {
                 }
               }
             } else {
-              while(boxStart.isSameOrBefore(dayEnd.format('YYYY/MM/DD HH:mm'))) {
+              while (boxStart.isSameOrBefore(dayEnd.format('YYYY/MM/DD HH:mm'))) {
                 days[i].push({
                   is_empty: true,
                   is_friday: isFriday,
@@ -530,7 +472,7 @@ export default {
           }
         } else {
           let j = 0;
-          if(this.appointments.length != 0) {
+          if (this.appointments.length != 0) {
             dayStart = dayStart.add(1, 'days')
             dayEnd = dayEnd.add(1, 'days')
             boxStart = dayStart.clone().locale('en')
@@ -546,7 +488,7 @@ export default {
               }
             }
           }
-          while(boxStart.isSameOrBefore(dayEnd.format('YYYY/MM/DD HH:mm'))) {
+          while (boxStart.isSameOrBefore(dayEnd.format('YYYY/MM/DD HH:mm'))) {
             days[i].push({
               is_empty: true,
               is_friday: isFriday,
@@ -559,7 +501,7 @@ export default {
             j++
             boxStart = boxStart.add(boxDuration, 'minutes')
           }
-          if(this.appointments.length == 0) {
+          if (this.appointments.length == 0) {
             dayStart = dayStart.add(1, 'days')
             dayEnd = dayEnd.add(1, 'days')
           }
@@ -574,7 +516,7 @@ export default {
         for (let j = days[i].length - 1; j < maxLength; j++) {
           if (days[i][j]) {
             let startAt = moment(days[i][j].start_at).locale('en').add(default_duration, 'minutes')
-            days[i][j + 1]= {
+            days[i][j + 1] = {
               ...days[i][j],
               is_empty: true,
               start_at: startAt.format('YYYY/MM/DD HH:mm:ss'),
@@ -610,7 +552,7 @@ export default {
             slider.classList.remove('active');
           });
           slider.addEventListener('mousemove', (e) => {
-            if(!isDown) return;
+            if (!isDown) return;
             e.preventDefault();
             const x = e.pageX - slider.offsetLeft;
             const walk = (x - startX) * 3;
@@ -773,6 +715,4 @@ export default {
   }
 }
 </script>
-<style scoped>
-
-</style>
+<style scoped></style>

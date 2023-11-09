@@ -1,33 +1,25 @@
 <template>
-  <v-container
-    fluid
-  >
+  <v-container fluid>
     <v-row>
       <v-col align-self="center">
         <div class="page-header-box schedule">
           <div class="page-header">
             <img src="/images/pages/users.svg" alt="organizations">
             <span class="title">
-            نوبت دهی اینترنتی (VIP)
-          </span>
+              نوبت دهی اینترنتی (VIP)
+            </span>
           </div>
-          <v-divider class="d-none d-lg-flex" inset/>
-          <v-spacer class="d-none d-sm-flex d-lg-none"/>
-          <div class="page-actions second-button"
-               @click="openCasesModal"
-          >
+          <v-divider class="d-none d-lg-flex" inset />
+          <v-spacer class="d-none d-sm-flex d-lg-none" />
+          <div class="page-actions second-button" @click="openCasesModal">
             <img src="/images/pages/plus-out.svg" alt="organizations">
             <span class="title">خدمات</span>
           </div>
-          <div class="page-actions"
-               @click="createModal"
-          >
+          <div class="page-actions" @click="createModal">
             <img src="/images/pages/plus.svg" alt="organizations">
             <span class="title-main">افزودن</span>
           </div>
-          <div class="page-actions"
-               @click="openReserveForm"
-          >
+          <div class="page-actions" @click="openReserveForm">
             <img src="/images/pages/new-user.svg" alt="users">
             <span class="title-main">رزرو برای دکتر دیگر</span>
           </div>
@@ -35,60 +27,26 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col
-        cols="12"
-      >
-        <v-card
-          class="page-main-box"
-        >
+      <v-col cols="12">
+        <v-card class="page-main-box">
           <v-row class="search-box">
-            <v-col
-              cols="12"
-              sm="6"
-              md="4"
-              lg="3"
-            >
+            <v-col cols="12" sm="6" md="4" lg="3">
               <div class="right-box">
-                <v-select
-                  outlined
-                  :items="months"
-                  label="ماه"
-                  item-value="id"
-                  item-text="label"
-                  v-model="month"
-                  @change="onMonthChanged"
-                ></v-select>
+                <v-select outlined :items="months" label="ماه" item-value="id" item-text="label" v-model="month"
+                  @change="onMonthChanged"></v-select>
               </div>
             </v-col>
-            <v-col
-              cols="12"
-              sm="6"
-              md="4"
-              lg="3"
-            >
+            <v-col cols="12" sm="6" md="4" lg="3">
               <div class="right-box">
-                <v-select
-                  outlined
-                  :items="years"
-                  label="سال"
-                  item-value="id"
-                  item-text="label"
-                  v-model="year"
-                  @change="onYearChanged"
-                ></v-select>
+                <v-select outlined :items="years" label="سال" item-value="id" item-text="label" v-model="year"
+                  @change="onYearChanged"></v-select>
               </div>
             </v-col>
           </v-row>
           <v-row>
-            <v-col
-              cols="12"
-            >
-              <data-table-component
-                :headers="headers"
-                :page="search.page"
-                :total="schedules.meta.total"
-                @paginate="paginate"
-              >
+            <v-col cols="12">
+              <data-table-component :headers="headers" :page="search.page" :total="schedules.meta.total"
+                @paginate="paginate">
                 <template v-slot:body>
                   <tr v-for="(i, n) in schedules.data" :key="n">
                     <td class="text-center">{{ (search.page - 1) * 10 + n + 1 }}</td>
@@ -126,9 +84,7 @@
                         <v-icon size="16">mdi-pencil-outline</v-icon>
                         <span>ویرایش</span>
                       </button>
-                      <button
-                        @click="showRemoveItem(i.id)"
-                        class="action-buttons">
+                      <button @click="showRemoveItem(i.id)" class="action-buttons">
                         <v-icon size="16">mdi-trash-can-outline</v-icon>
                         <span>حذف</span>
                       </button>
@@ -144,165 +100,78 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-dialog
-      v-model="showCreateModal"
-      max-width="1056px"
-      persistent
-    >
-      <v-card
-        class="create-update-modal"
-      >
-        <v-card-title
-          class="create-update-modal-title-box"
-        >
+    <v-dialog v-model="showCreateModal" max-width="1056px" persistent>
+      <v-card class="create-update-modal">
+        <v-card-title class="create-update-modal-title-box">
           <div class="create-update-modal-title">
-            <button
-              @click="closeForm"
-              class="create-update-modal-close"
-            >
+            <button @click="closeForm" class="create-update-modal-close">
               <v-icon>mdi-close</v-icon>
             </button>
             <span>فرم ایجاد نوبت دهی اینترنتی (VIP)</span>
           </div>
-          <v-spacer/>
+          <v-spacer />
         </v-card-title>
         <v-card-text>
           <v-container>
             <v-row>
-              <v-col
-                cols="12"
-              >
+              <v-col cols="12">
                 <div class="create-update-model-input-box">
-                  <label>تاریخ</label>
-                  <date-picker
-                    v-if="create"
-                    v-model="form.dates"
-                    format="YYYY-MM-DD"
-                    display-format="jYYYY/jMM/jDD"
-                    class="date-picker"
-                    multiple
-                    :auto-submit="false"
-                  >
-                    <template v-slot:label>
-                      <img src="/images/form/datepicker.svg">
-                    </template>
-                  </date-picker>
-                  <custom-date-input
-                    v-else
-                    :type="'date'"
-                    v-model="form.date"
-                    :initial-value="form.date"
-                  />
+                  <custom-date-picker-js v-if="create" label="تاریخ" v-model="form.dates" multiple type="date" />
+                  <custom-date-picker-js v-else label="تاریخ" v-model="form.date" type="date" />
                 </div>
               </v-col>
-              <v-col
-                cols="12"
-                sm="6"
-                md="6"
-              >
+              <v-col cols="12" sm="6" md="6">
                 <div class="create-update-model-input-box">
                   <label>زمان شروع</label>
-<!--                  <custom-date-input-->
-<!--                    :type="'time'"-->
-<!--                    v-model="form.start"-->
-<!--                    :initial-value="form.start"-->
-<!--                  />-->
-                  <date-picker
-                    v-model="form.start"
-                    format="HH:mm:ss"
-                    display-format="HH:mm:ss"
-                    editable
-                    class="date-picker"
-                    :jump-minute="15"
-                    :round-minute="true"
-                    type="time"
-                  >
+                  <!--                  <custom-date-input-->
+                  <!--                    :type="'time'"-->
+                  <!--                    v-model="form.start"-->
+                  <!--                    :initial-value="form.start"-->
+                  <!--                  />-->
+                  <date-picker v-model="form.start" format="HH:mm:ss" display-format="HH:mm:ss" editable
+                    class="date-picker" :jump-minute="15" :round-minute="true" type="time">
                     <template v-slot:label>
                       <img src="/images/form/datepicker.svg">
                     </template>
                   </date-picker>
                 </div>
               </v-col>
-              <v-col
-                cols="12"
-                sm="6"
-                md="6"
-              >
+              <v-col cols="12" sm="6" md="6">
                 <div class="create-update-model-input-box">
                   <label>زمان پایان</label>
-<!--                  <custom-date-input-->
-<!--                    :type="'time'"-->
-<!--                    v-model="form.end"-->
-<!--                    :initial-value="form.end"-->
-<!--                  />-->
-                  <date-picker
-                    v-model="form.end"
-                    format="HH:mm:ss"
-                    display-format="HH:mm:ss"
-                    editable
-                    class="date-picker"
-                    :jump-minute="15"
-                    :round-minute="true"
-                    type="time"
-                  >
+                  <!--                  <custom-date-input-->
+                  <!--                    :type="'time'"-->
+                  <!--                    v-model="form.end"-->
+                  <!--                    :initial-value="form.end"-->
+                  <!--                  />-->
+                  <date-picker v-model="form.end" format="HH:mm:ss" display-format="HH:mm:ss" editable class="date-picker"
+                    :jump-minute="15" :round-minute="true" type="time">
                     <template v-slot:label>
                       <img src="/images/form/datepicker.svg">
                     </template>
                   </date-picker>
                 </div>
               </v-col>
-              <v-col
-                cols="12"
-                sm="6"
-                md="6"
-              >
+              <v-col cols="12" sm="6" md="6">
                 <div class="create-update-model-input-box">
-                  <custom-number-input
-                    label="ظرفیت Doctor"
-                    v-model="form.count"
-                  />
+                  <custom-number-input label="ظرفیت Doctor" v-model="form.count" />
                 </div>
               </v-col>
-              <v-col
-                cols="12"
-                sm="6"
-                md="6"
-              >
+              <v-col cols="12" sm="6" md="6">
                 <div class="create-update-model-input-box">
-                  <custom-number-input
-                    label="ظرفیت Site"
-                    v-model="form.site"
-                  />
+                  <custom-number-input label="ظرفیت Site" v-model="form.site" />
                 </div>
               </v-col>
-              <v-col
-                cols="12"
-                sm="6"
-                md="6"
-              >
+              <v-col cols="12" sm="6" md="6">
                 <div class="create-update-model-input-box">
-                  <custom-number-input
-                    label="ظرفیت App"
-                    v-model="form.app"
-                  />
+                  <custom-number-input label="ظرفیت App" v-model="form.app" />
                 </div>
               </v-col>
-              <v-col
-                cols="12"
-                sm="6"
-                md="6"
-              >
+              <v-col cols="12" sm="6" md="6">
                 <div class="create-update-model-input-box">
                   <label>خدمت</label>
-                  <v-autocomplete
-                    v-model="form.case_type"
-                    :items="case_types"
-                    outlined
-                    dense
-                    item-text="name"
-                    item-value="id"
-                    label=""
-                  ></v-autocomplete>
+                  <v-autocomplete v-model="form.case_type" :items="case_types" outlined dense item-text="name"
+                    item-value="id" label=""></v-autocomplete>
                 </div>
               </v-col>
             </v-row>
@@ -311,40 +180,19 @@
         <v-card-actions>
           <v-container>
             <v-row>
-              <v-col
-                cols="12"
-                sm="3"
-                md="3"
-              >
-                <button
-                  class="second-button full-width"
-                  @click="clearForm"
-                >
+              <v-col cols="12" sm="3" md="3">
+                <button class="second-button full-width" @click="clearForm">
                   پاک کردن فرم
                 </button>
               </v-col>
-              <v-spacer/>
-              <v-col
-                cols="12"
-                sm="3"
-                md="3"
-              >
-                <button
-                  class="second-button full-width"
-                  @click="closeForm"
-                >
+              <v-spacer />
+              <v-col cols="12" sm="3" md="3">
+                <button class="second-button full-width" @click="closeForm">
                   بستن
                 </button>
               </v-col>
-              <v-col
-                cols="12"
-                sm="4"
-                md="4"
-              >
-                <button
-                  class="main-button"
-                  @click="createSchedule"
-                >
+              <v-col cols="12" sm="4" md="4">
+                <button class="main-button" @click="createSchedule">
                   ذخیره
                 </button>
               </v-col>
@@ -353,42 +201,23 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-dialog
-      v-model="showRemoveItemModal"
-      max-width="648px"
-      persistent
-    >
-      <v-card
-        class="create-update-modal"
-      >
-        <v-card-title
-          class="create-update-modal-title-box"
-        >
+    <v-dialog v-model="showRemoveItemModal" max-width="648px" persistent>
+      <v-card class="create-update-modal">
+        <v-card-title class="create-update-modal-title-box">
           <div class="create-update-modal-title">
-            <button
-              @click="cancelRemoveItem"
-              class="create-update-modal-close"
-            >
+            <button @click="cancelRemoveItem" class="create-update-modal-close">
               <v-icon>mdi-close</v-icon>
             </button>
           </div>
-          <v-spacer/>
+          <v-spacer />
         </v-card-title>
         <v-card-text>
           <v-container>
             <v-row>
-              <v-col
-                cols="12"
-                sm="12"
-                md="12"
-              >
+              <v-col cols="12" sm="12" md="12">
                 <div class="create-update-model-input-title">حذف پذیرش</div>
               </v-col>
-              <v-col
-                cols="12"
-                sm="12"
-                md="12"
-              >
+              <v-col cols="12" sm="12" md="12">
                 <div class="create-update-model-input-description">آیا از حذف کردن این پذیرش vip اطمینان دارید؟
                 </div>
               </v-col>
@@ -398,27 +227,13 @@
         <v-card-actions>
           <v-container>
             <v-row>
-              <v-col
-                cols="12"
-                sm="6"
-                md="6"
-              >
-                <button
-                  class="second-false-button"
-                  @click="cancelRemoveItem"
-                >
+              <v-col cols="12" sm="6" md="6">
+                <button class="second-false-button" @click="cancelRemoveItem">
                   خیر
                 </button>
               </v-col>
-              <v-col
-                cols="12"
-                sm="6"
-                md="6"
-              >
-                <button
-                  class="main-false-button"
-                  @click="removeItem"
-                >
+              <v-col cols="12" sm="6" md="6">
+                <button class="main-false-button" @click="removeItem">
                   بله، حذف کن
                 </button>
               </v-col>
@@ -427,27 +242,16 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-dialog
-      v-model="showCasesModal"
-      max-width="1056px"
-      persistent
-    >
-      <v-card
-        class="create-update-modal"
-      >
-        <v-card-title
-          class="create-update-modal-title-box"
-        >
+    <v-dialog v-model="showCasesModal" max-width="1056px" persistent>
+      <v-card class="create-update-modal">
+        <v-card-title class="create-update-modal-title-box">
           <div class="create-update-modal-title">
-            <button
-              @click="closeCasesModal"
-              class="create-update-modal-close"
-            >
+            <button @click="closeCasesModal" class="create-update-modal-close">
               <v-icon>mdi-close</v-icon>
             </button>
             <span>خدمات</span>
           </div>
-          <v-spacer/>
+          <v-spacer />
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -456,27 +260,23 @@
                 <label>عنوان خدمت</label>
                 <input type="text" v-model="case_type">
               </div>
-              <div class="page-actions second-button inline-btn"
-                   @click="addCaseType"
-              >
+              <div class="page-actions second-button inline-btn" @click="addCaseType">
                 <img src="/images/pages/plus-out.svg" alt="organizations">
                 <span class="title">{{ editCT ? 'ویرایش' : 'افزودن' }}</span>
               </div>
             </div>
-            <v-divider class="mt-4"/>
+            <v-divider class="mt-4" />
             <div class="case-type-list">
               <div class="case-type-item" v-for="(c, i) in case_types" :key="i">
                 <div class="case-item-name">
-                  {{ c  }}
+                  {{ c }}
                 </div>
                 <div class="case-actions text-center flex flex-row justify-space-around align-center">
                   <button @click="editCaseType(c, i)" class="action-buttons">
                     <v-icon size="16">mdi-pencil-outline</v-icon>
                     <span>ویرایش</span>
                   </button>
-                  <button
-                    @click="showRemoveCaseType(c)"
-                    class="action-buttons">
+                  <button @click="showRemoveCaseType(c)" class="action-buttons">
                     <v-icon size="16">mdi-trash-can-outline</v-icon>
                     <span>حذف</span>
                   </button>
@@ -488,28 +288,14 @@
         <v-card-actions>
           <v-container>
             <v-row>
-              <v-spacer/>
-              <v-col
-                cols="12"
-                sm="3"
-                md="3"
-              >
-                <button
-                  class="second-button full-width"
-                  @click="closeCasesModal"
-                >
+              <v-spacer />
+              <v-col cols="12" sm="3" md="3">
+                <button class="second-button full-width" @click="closeCasesModal">
                   بستن
                 </button>
               </v-col>
-              <v-col
-                cols="12"
-                sm="4"
-                md="4"
-              >
-                <button
-                  class="main-button"
-                  @click="saveCases"
-                >
+              <v-col cols="12" sm="4" md="4">
+                <button class="main-button" @click="saveCases">
                   ذخیره
                 </button>
               </v-col>
@@ -518,10 +304,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <appointment-reserve-component
-      :open="showReserveForm"
-      @close="closeReserveForm"
-    />
+    <appointment-reserve-component :open="showReserveForm" @close="closeReserveForm" />
   </v-container>
 </template>
 
@@ -530,12 +313,12 @@ import DataTableComponent from "~/components/panel/global/DataTableComponent";
 import CustomRadioBox from "~/components/panel/global/CustomInput/CustomRadioBox";
 import moment from "jalali-moment";
 import AppointmentReserveComponent from "~/components/panel/profile/appointments/AppointmentReserveComponent.vue";
-
+import CustomDatePickerJs from "~/components/custom/CustomDatePickerJs.vue"
 export default {
   name: "index",
   layout: "panel",
   middleware: "auth",
-  components: {AppointmentReserveComponent, CustomRadioBox, DataTableComponent},
+  components: { AppointmentReserveComponent, CustomRadioBox, DataTableComponent, CustomDatePickerJs },
   async mounted() {
     await this.getWorkHour()
     const year = parseInt(moment().local().format("jYYYY"))
@@ -604,7 +387,7 @@ export default {
     },
     editSchedule(schedule) {
       const start = this.$moment(schedule.start_at, "YYYY/MM/DD HH:mm:ss");
-      const end = this.$moment(schedule.end_at,"YYYY/MM/DD HH:mm:ss");
+      const end = this.$moment(schedule.end_at, "YYYY/MM/DD HH:mm:ss");
       this.create = false
       this.form = {
         id: schedule.id,

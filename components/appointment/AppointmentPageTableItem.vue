@@ -1,27 +1,18 @@
 <template>
-  <div
-    class="table-appointment-component"
-    :class="{'is-friday': isFriday, 'is-holiday': isHoliday, 'is-today': isToday}"
-  >
-    <div
-      class="full-name"
-    >
+  <div class="table-appointment-component" :class="{ 'is-friday': isFriday, 'is-holiday': isHoliday, 'is-today': isToday }">
+    <div class="full-name">
       {{ userFullName }}
     </div>
-    <div
-      class="start-at"
-    >
+    <div class="start-at">
       {{ startAtTimeFa }}
     </div>
-    <div
-      class="case-type"
-    >
+    <div class="case-type">
       {{ caseType }}
     </div>
-    <div
-      class="start-at"
-      v-if="isFriday"
-    >
+    <div class="case-type">
+      {{ status }}
+    </div>
+    <div class="start-at" v-if="isFriday">
       {{ index + 1 }}
     </div>
   </div>
@@ -39,6 +30,10 @@ export default {
       default: null,
     },
     caseType: {
+      type: String,
+      default: '',
+    },
+    status: {
       type: String,
       default: '',
     },
@@ -62,6 +57,4 @@ export default {
   },
 }
 </script>
-<style scoped>
-
-</style>
+<style scoped></style>

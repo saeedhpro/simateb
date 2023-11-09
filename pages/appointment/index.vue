@@ -20,6 +20,7 @@
       v-if="showAppointmentModal"
       :open="showAppointmentModal"
       @close="closeAppointmentModal"
+      @done="doneAppointmentModal"
     />
     <work-hour-component
       :start="''"
@@ -68,6 +69,9 @@ export default {
     closeAppointmentModal() {
       this.showAppointmentModal = false
       this.appointmentID = 0
+    },
+    doneAppointmentModal() {
+      this.getAppointmentList()
     },
     getAppointmentList() {
       this.loadList = false
