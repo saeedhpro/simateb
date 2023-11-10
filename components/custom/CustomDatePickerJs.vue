@@ -7,8 +7,8 @@
         <input v-model="formattedDate" @input="onDateChange" maxlength="16" type="text" pattern="YYYY/MM/DD HH:mm" />
       </div>
     </div>
-    <date-picker :value="dateTimeStr" :format="getEnFormat" :display-format="getFaFormat" editable :show="show"
-      class="date-picker" :type="type" :multiple="multiple" custom-input=".custom-input" ref="datepicker"
+    <date-picker v-model="dateTimeStr" :format="getEnFormat" :display-format="getFaFormat" editable :show="show"
+      class="date-picker" :type="type" custom-input=".custom-input" ref="datepicker"
       @close="show = false" @change="onDateSelected" :disablePast="disablePast" :jumpMinute="jumpMinute"
       :roundMinute="roundMinute" />
   </div>
@@ -50,10 +50,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    multiple: {
-      type: Boolean,
-      default: false,
-    },
     type: {
       type: String,
       default: 'datetime'
@@ -66,11 +62,7 @@ export default {
   mounted() {
     this.$nextTick(() => {
       if (this.value) {
-        if (Array.isArray(this.value)) {
-          console.log(this.value, "value");
-        } else {
-          this.dateTime = moment.from(this.value, 'en', this.getEnFormat).locale('en')
-        }
+        this.dateTime = moment.from(this.value, 'en', this.getEnFormat).locale('en')
         // this.dateTimeStr = this.dateTime.locale('en').format(this.getEnFormat)
       }
     })
@@ -92,22 +84,13 @@ export default {
         'date': 'jYYYY/jMM/jDD',
         'datetime': 'jYYYY/jMM/jDD HH:mm',
       },
-      startDay: '',
-      endDay: '',
-      dates: [],
     }
   },
   methods: {
     onDateChange: debounce(function ($e) {
       let value = $e.target.value;
       if (value) {
-        if (Array.isArray(this.value)) {
-          console.log(this.value, "va");
-
-
-        } else {
-          this.dateTime = moment.from(value, 'fa', this.getEnFormat).locale("en");
-        }
+        this.dateTime = moment.from(value, 'fa', this.getEnFormat).locale("en");
         // this.dateTimeStr = this.dateTime.format(this.getEnFormat)
       } else {
         this.dateTime = null
@@ -118,12 +101,7 @@ export default {
       this.show = true
     },
     onDateSelected(dateTime) {
-      if (Array.isArray(dateTime)) {
-        this.dates = dateTime
-      } else {
-        this.dateTime = dateTime
-      }
-      // this.formattedDate = dateTime.format(this.getFaFormat)
+      this.dateTime = dateTime
     },
   },
   computed: {
@@ -134,22 +112,10 @@ export default {
       return this.faFormats[this.type]
     },
     formattedDate() {
-      if (Array.isArray(this.dateTime)) {
-        let dates = []
-        for (let i = 0; i < this.dateTime.length; i++) {
-          dates.push(this.dateTime[i].locale('en').format(this.getEnFormat))
-        }
-        return dates.join(' - ')
-      } else {
-        return this.dateTime ? this.dateTime.format(this.getFaFormat) : ''
-      }
+      return this.dateTime ? this.dateTime.format(this.getFaFormat) : ''
     },
     dateTimeStr() {
-      if (Array.isArray(this.dateTime)) {
-        return this.dateTime
-      } else {
-        return this.dateTime ? this.dateTime.locale('en').format(this.getEnFormat) : ''
-      }
+      return this.dateTime ? this.dateTime.locale('en').format(this.getEnFormat) : ''
     }
   },
   watch: {

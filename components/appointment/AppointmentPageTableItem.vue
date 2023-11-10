@@ -9,8 +9,8 @@
     <div class="case-type">
       {{ caseType }}
     </div>
-    <div class="case-type">
-      {{ status }}
+    <div v-if="isVip" class="case-type">
+      ٰVIP
     </div>
     <div class="start-at" v-if="isFriday">
       {{ index + 1 }}
@@ -33,9 +33,9 @@ export default {
       type: String,
       default: '',
     },
-    status: {
-      type: String,
-      default: '',
+    isVip: {
+      type: Boolean,
+      default: false,
     },
     isToday: {
       type: Boolean,

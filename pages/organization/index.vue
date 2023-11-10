@@ -75,8 +75,8 @@
                   </svg>
                   <input class="search-input" v-model="search.q" type="text" ref="search-input"
                          placeholder="جستجو / کد پذیرش"
-                         @input="getAppointmentList(false)">
-                  <div @click="getAppointmentList(false)" class="search-button">
+                         @input="onSearchTermChanged">
+                  <div @click="onSearchTermChanged" class="search-button">
                     <img src="/images/pages/search-button.svg">
                   </div>
                   <div @click="toggleFilterModal" class="search-filter">
@@ -124,51 +124,21 @@
                               md="4"
                             >
                               <custom-date-picker-js
-                                label="تاریخ و ساعت پذیرش"
+                                label="تاریخ ابتدا"
                                 v-model="search.start"
                                 type="date"
                               />
-<!--                              <div class="create-update-model-input-box">-->
-<!--                                <label>تاریخ ابتدا</label>-->
-<!--                                <date-picker-->
-<!--                                  v-model="search.start"-->
-<!--                                  format="YYYY-MM-DD"-->
-<!--                                  display-format="jYYYY/jMM/jDD"-->
-<!--                                  editable-->
-<!--                                  class="date-picker"-->
-<!--                                  type="date"-->
-<!--                                >-->
-<!--                                  <template v-slot:label>-->
-<!--                                    <img src="/images/form/datepicker.svg">-->
-<!--                                  </template>-->
-<!--                                </date-picker>-->
-<!--                              </div>-->
                             </v-col>
                             <v-col
                               cols="12"
                               sm="4"
                               md="4"
                             >
-                              <div class="create-update-model-input-box">
-                                <label>تاریخ انتها</label>
-<!--                                <custom-date-input-->
-<!--                                  :type="'date'"-->
-<!--                                  v-model="search.end"-->
-<!--                                  :initial-value="search.end"-->
-<!--                                />-->
-                                <date-picker
-                                  v-model="search.end"
-                                  format="YYYY-MM-DD"
-                                  display-format="jYYYY/jMM/jDD"
-                                  editable
-                                  class="date-picker"
-                                  type="date"
-                                >
-                                  <template v-slot:label>
-                                    <img src="/images/form/datepicker.svg">
-                                  </template>
-                                </date-picker>
-                              </div>
+                              <custom-date-picker-js
+                                label="تاریخ انتها"
+                                v-model="search.end"
+                                type="date"
+                              />
                             </v-col>
                           </v-row>
                         </v-container>
@@ -316,6 +286,7 @@
                             v-bind="attrs"
                             v-on="on"
                             :class="getErjaClass(i)"
+                            @click="openAppointmentModalItem(i, 4)"
                           >
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="14.286" viewBox="0 0 20 14.286">
                               <path class="a"
@@ -475,6 +446,7 @@ import SendSmsComponent from "~/components/global/sms/SendSmsComponent";
 import moment from "jalali-moment"
 import CreateAppointmentFormComponent
   from "~/components/panel/appointment/AppointmentForm/CreateAppointmentFormComponent.vue";
+import { debounce } from "lodash";
 
 export default {
   name: "index",
@@ -600,14 +572,17 @@ export default {
       this.search.page = page
       this.getAppointmentList()
     },
+    onSearchTermChanged: debounce(function ($e) {
+      this.getAppointmentList(false)
+    }, 400),
     getAppointmentList(filtered = false) {
-      if (this.search.q && this.search.q.length != 6) {
-       return
-      }
+      // if (this.search.q && this.search.q.length != 6) {
+      //  return
+      // }
       this.search.q = this.$enDigit(this.search.q)
-      if (this.search.q != '' && !this.$isNumeric(this.search.q)) {
-        return;
-      }
+      // if (this.search.q != '' && !this.$isNumeric(this.search.q)) {
+      //   return;
+      // }
       if (!this.search.q) {
         this.search.admissioned = 0
       }
@@ -627,7 +602,7 @@ export default {
         this.search.status = ''
       } else {
         this.search.status = '2'
-        if (this.search.q.length == 6) {
+        if (this.search.q.length == 6 && this.$isNumeric(this.search.q)) {
           this.search.admissioned = 1
         }
       }

@@ -75,9 +75,9 @@
                         }}
                       </span>
                     </td>
-                    <td class="text-center">{{ i.count }}</td>
-                    <td class="text-center">{{ i.site }}</td>
-                    <td class="text-center">{{ i.app }}</td>
+                    <td class="text-center">{{ `${i.count} (${i.count - i.count_reserved})` }}</td>
+                    <td class="text-center">{{ `${i.site} (${i.site - i.site_reserved})` }}</td>
+                    <td class="text-center">{{ `${i.app} (${i.app - i.app_reserved})` }}</td>
                     <td class="text-center">{{ i.case_type ? i.case_type : '-' }}</td>
                     <td class="text-center flex flex-row justify-space-around align-center">
                       <button @click="editSchedule(i)" class="action-buttons">
@@ -115,10 +115,16 @@
           <v-container>
             <v-row>
               <v-col cols="12">
-                <div class="create-update-model-input-box">
-                  <custom-date-picker-js v-if="create" label="تاریخ" v-model="form.dates" multiple type="date" />
-                  <custom-date-picker-js v-else label="تاریخ" v-model="form.date" type="date" />
+                <div v-if="create" class="create-update-model-input-box">
+                  <label>تاریخ</label>
+                  <date-picker multiple v-model="form.dates" format="YYYY/MM/DD" display-format="jYYYY/jMM/jDD"
+                               class="date-picker" type="date">
+                    <template v-slot:label>
+                      <img src="/images/form/datepicker.svg">
+                    </template>
+                  </date-picker>
                 </div>
+                <custom-date-picker-js v-else label="تاریخ" v-model="form.date" type="date" />
               </v-col>
               <v-col cols="12" sm="6" md="6">
                 <div class="create-update-model-input-box">
