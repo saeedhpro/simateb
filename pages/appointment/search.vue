@@ -307,6 +307,7 @@
       v-if="showAppointmentModal"
       :open="showAppointmentModal"
       @close="closeItem"
+      @done="doneAppointmentModal"
     />
   </v-container>
 </template>
@@ -464,6 +465,10 @@ export default {
     },
     getAppointmentList(load = true) {
       return this.$store.dispatch('appointments/search', this.search)
+    },
+    doneAppointmentModal() {
+      this.clearForm()
+      this.getAppointmentList()
     },
     createAppointment() {
       this.$store.dispatch('appointments/createAppointment', this.appointment)

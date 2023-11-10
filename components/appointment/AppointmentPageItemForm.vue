@@ -359,7 +359,9 @@
                   </div>
                 </v-col>
               </v-row>
-              <v-row>
+              <v-row
+                v-if="!isReDoctor"
+              >
                 <v-col
                   cols="12"
                 >
@@ -521,6 +523,34 @@
                     </a>
                   </Fancybox>
                 </v-row>
+              </v-col>
+            </v-row>
+            <v-row
+              v-if="isReDoctor"
+            >
+              <v-col
+                cols="12"
+                sm="4"
+                md="2"
+              >
+                <div class="detail-box">
+                  <div class="phone-box">
+                    <span class="small">
+                      توضیحات پزشک:
+                    </span>
+                  </div>
+                </div>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="8"
+                md="10"
+              >
+                <div class="detail-box">
+                  <div class="phone-box">
+                    {{ appointment.doctor_msg }}
+                  </div>
+                </div>
               </v-col>
             </v-row>
             <v-row
@@ -886,6 +916,74 @@
       @close="cancelRemoveAppointment"
       @remove="removeAppointment"
     />
+    <v-dialog
+      v-model="showAddDescModal"
+      persistent
+      max-width="1056px"
+    >
+      <v-card
+        class="create-update-modal"
+      >
+        <v-card-title
+          class="create-update-modal-title-box"
+        >
+          <div class="create-update-modal-title">
+            <button
+              @click="closeAddDescModal"
+              class="create-update-modal-close"
+            >
+              <v-icon>mdi-close</v-icon>
+            </button>
+            <span>توضیحات</span>
+          </div>
+          <v-spacer/>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row
+            >
+              <div class="create-update-model-input-box">
+                <custom-text-area-input
+                  v-model="appointment.d_desc"
+                  label="توضیحات"
+                  :rows="6"
+                />
+              </div>
+            </v-row>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-container>
+            <v-row>
+              <v-col
+                cols="12"
+                sm="3"
+                md="3"
+              >
+                <button
+                  class="second-button full-width"
+                  @click="closeAddDescModal"
+                >
+                  بستن
+                </button>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="3"
+                md="3"
+              >
+                <button
+                  class="main-button"
+                  @click="saveDesc"
+                >
+                  ارسال
+                </button>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 <script>
@@ -958,6 +1056,7 @@ export default {
       pType: 'prescription',
       showDeleteApp: false,
       showUpdateModal: false,
+      showAddDescModal: false,
     }
   },
   mounted() {
@@ -1086,6 +1185,11 @@ export default {
           const p = res.data.data;
           this.prescription = p ?? '';
         })
+    },
+    getReferedResults() {
+      this.$store.dispatch('appointments/getAppointmentReferedResults', {
+        id: this.id,
+      })
     },
     getResults() {
       this.$store.dispatch('appointments/getAppointmentResults', {
@@ -1242,6 +1346,10 @@ export default {
     },
     openAddDescModal() {
       this.showAddDescModal = true
+    },
+    closeAddDescModal() {
+      this.getAppointment(this.id)
+      this.showAddDescModal = false
     },
     removeResultImage(image, index) {
       const first = image.split(':')[0]

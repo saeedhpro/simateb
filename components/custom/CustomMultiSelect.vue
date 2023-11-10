@@ -1,5 +1,4 @@
 <template>
-
   <div class="create-update-model-input-box" :class="{'has-error': error}">
     <label v-if="label">{{ label }}</label>
     <multiselect

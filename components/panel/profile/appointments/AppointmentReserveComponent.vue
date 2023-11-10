@@ -112,16 +112,7 @@
                 sm="4"
                 md="4"
               >
-                <div class="create-update-model-input-box">
-                  <label>تاریخ تولد</label>
-                  <custom-date-input
-                    :type="'date'"
-                    v-model="form.birth_date"
-                    :initial-value="form.birth_date"
-                    :error="errors.birth_date"
-                    @input="errors.birth_date = ''"
-                  />
-                </div>
+                <custom-date-picker-js label="تاریخ تولد" v-model="form.birth_date" :error="errors.birth_date" @input="errors.birth_date = ''" type="date" />
               </v-col>
               <v-col
                 cols="12"
@@ -261,7 +252,7 @@ export default{
       isVerified: false,
       sent: false,
       code: '',
-      time: 60,
+      time: 120,
       interval: null,
       form: {
         fname: '',
@@ -313,11 +304,11 @@ export default{
           this.$toast.success('کد تایید برای شما ارسال شد')
           this.sent = true
           const self = this
-          this.time = 60
+          this.time = 120
           this.interval = setInterval(function(){
             if (self.time == 0) {
               clearInterval(self.interval)
-              this.time = 60
+              this.time = 120
               if (!self.isVerified) {
                 self.sent = false
               }
@@ -345,7 +336,7 @@ export default{
           this.isVerified = false
         })
         .finally(() => {
-          this.time = 60
+          this.time = 120
           this.code = ''
           clearInterval(this.interval)
         })

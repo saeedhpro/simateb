@@ -148,7 +148,11 @@ export const actions = {
       })
   },
   getUsers(ctx, data) {
-    return this.$axios.get(`/organizations/users`)
+    let url = '/organizations/users'
+    if (data && data.q) {
+      url += `?q=${data.q}`
+    }
+    return this.$axios.get(url)
       .then(res => {
         const data = res.data.data;
         ctx.commit('setUsers', data)

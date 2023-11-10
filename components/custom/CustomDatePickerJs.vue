@@ -1,32 +1,20 @@
 <template>
-  <div class="create-update-model-input-box" :class="{'has-error': error}">
+  <div class="create-update-model-input-box" :class="{ 'has-error': error }">
     <label v-if="label">{{ label }}</label>
     <div class="custom-date-input-box">
       <div class="date-input-box">
         <img @click="openCalendar" alt="" src="/images/form/datepicker.svg">
-        <input v-model="formattedDate" @input="onDateChange" maxlength="16" type="text" pattern="YYYY/MM/DD HH:mm"/>
+        <input v-model="formattedDate" @input="onDateChange" maxlength="16" type="text" pattern="YYYY/MM/DD HH:mm" />
       </div>
     </div>
-    <date-picker
-      v-model="dateTimeStr"
-      :format="getEnFormat"
-      :display-format="getFaFormat"
-      editable
-      :show="show"
-      class="date-picker"
-      :type="type"
-      custom-input=".custom-input"
-      ref="datepicker"
-      @close="show=false"
-      @change="onDateSelected"
-      :disablePast="disablePast"
-      :jumpMinute="jumpMinute"
-      :roundMinute="roundMinute"
-    />
+    <date-picker v-model="dateTimeStr" :format="getEnFormat" :display-format="getFaFormat" editable :show="show"
+      class="date-picker" :type="type" custom-input=".custom-input" ref="datepicker"
+      @close="show = false" @change="onDateSelected" :disablePast="disablePast" :jumpMinute="jumpMinute"
+      :roundMinute="roundMinute" />
   </div>
 </template>
 <script>
-import {debounce} from "lodash";
+import { debounce } from "lodash";
 import moment from 'jalali-moment'
 
 export default {
@@ -49,7 +37,7 @@ export default {
       default: false,
     },
     value: {
-      type: String,
+      type: String | Array,
       default: "",
     },
     jumpMinute: {
@@ -95,7 +83,7 @@ export default {
         'time': 'HH:mm',
         'date': 'jYYYY/jMM/jDD',
         'datetime': 'jYYYY/jMM/jDD HH:mm',
-      }
+      },
     }
   },
   methods: {
@@ -114,7 +102,6 @@ export default {
     },
     onDateSelected(dateTime) {
       this.dateTime = dateTime
-      // this.formattedDate = dateTime.format(this.getFaFormat)
     },
   },
   computed: {
@@ -152,18 +139,21 @@ export default {
   flex-direction: column;
   height: 42px;
   width: 100%;
+
   .date-input-box {
     height: 42px;
     background: #FFFFFF 0 0 no-repeat padding-box;
     border: 1px solid #DBDBDB;
     position: relative;
     border-radius: 8px;
+
     img {
       position: absolute;
       right: 8px;
       top: 8px;
       cursor: pointer;
     }
+
     input {
       height: 100%;
       outline: none !important;
@@ -172,11 +162,11 @@ export default {
       border-radius: 8px;
       direction: ltr;
       text-align: left;
+
       &:focus {
         outline: none !important;
       }
     }
   }
 }
-
 </style>

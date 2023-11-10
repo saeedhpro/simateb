@@ -254,7 +254,7 @@
                     </td>
                     <td class="text-center">
                       <v-tooltip
-                        v-if="i.radiology && !i.doctor"
+                        v-if="i.radiology && !isReDoctor(i)"
                         bottom
                       >
                         <template v-slot:activator="{ on, attrs }">
@@ -278,7 +278,7 @@
                     </td>
                     <td class="text-center">
                       <v-tooltip
-                        v-if="i.photography && !i.doctor"
+                        v-if="i.photography && !isReDoctor(i)"
                         bottom
                       >
                         <template v-slot:activator="{ on, attrs }">
@@ -310,6 +310,7 @@
                             v-bind="attrs"
                             v-on="on"
                             :class="getErjaClass(i)"
+                            @click="openAppointmentModalItem(i, 4)"
                           >
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="14.286" viewBox="0 0 20 14.286">
                               <path class="a"
@@ -801,7 +802,7 @@ export default {
               break
             case 3:
               t = 'radiology'
-              break
+              break;
           }
           this.$store.dispatch('appointments/getAppointmentResults', {
             id: item.id,

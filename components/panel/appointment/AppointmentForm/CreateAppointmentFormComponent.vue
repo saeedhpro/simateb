@@ -42,14 +42,34 @@
                 sm="4"
                 md="4"
               >
-                <custom-multi-select
-                  v-model="user"
-                  :items="users"
-                  :error="errors.user_id"
-                  :has-custom-label="true"
-                  @input="errors.user_id = ''"
-                  label="نام بیمار"
-                />
+                <div class="create-update-model-input-box" :class="{'has-error': errors.user_id}">
+                  <label>نام بیمار</label>
+                  <multiselect
+                    searchable
+                    clearOnSelect
+                    allowEmpty
+                    v-model="user"
+                    placeholder=""
+                    :label="'fname'"
+                    :track-by="'fname'"
+                    :options="users"
+                    :option-height="104"
+                    :show-labels="false"
+                    :loading="isLoading"
+                    :internal-search="false"
+                    @input="errors.user_id = ''"
+                    @search-change="onSearchUsers"
+                  >
+                    <template slot="singleLabel" slot-scope="props"><span
+                      class="option__desc"><span
+                      class="option__title">{{ `${props.option.fname} ${props.option.lname}` }}</span></span>
+                    </template>
+                    <template slot="option" slot-scope="props">
+                      <div class="option__desc"><span class="option__title">{{ `${props.option.fname} ${props.option.lname}` }}</span></div>
+                    </template>
+                  </multiselect>
+                  <span class="create-update-modal-input-error" v-if="errors.user_id">{{ errors.user_id }}</span>
+                </div>
               </v-col>
               <v-col
                 cols="12"
@@ -194,7 +214,7 @@ import CustomTextAreaInput from "~/components/custom/CustomTextAreaInput";
 import AcceptCreateAppointmentModal from "~/components/panel/appointment/AppointmentForm/AcceptCreateAppointmentModal";
 import CustomNationalCodeInput from "~/components/custom/CustomNationalCodeInput";
 import CustomPhoneNumberInput from "~/components/custom/CustomPhoneNumberInput";
-import moment from "jalali-moment";
+import {debounce} from "lodash";
 
 export default {
   name: "CreateAppointmentFormComponent",
@@ -245,6 +265,7 @@ export default {
       },
       user: null,
       showAcceptModal: false,
+      isLoading: false,
     }
   },
   mounted() {
@@ -299,8 +320,18 @@ export default {
       }
       return isValid;
     },
-    getUsers() {
-      this.$store.dispatch('users/getUsers')
+    onSearchUsers: debounce(function (e) {
+      let q = this.$enDigit(e)
+      this.getUsers(q)
+    }, 400),
+    getUsers(q = '') {
+      this.isLoading = true
+      this.$store.dispatch('users/getUsers', {
+        q: q
+      })
+        .finally(() => {
+          this.isLoading = false
+        })
     },
     getCaseTypes() {
       const type = this.isSurgery ? 2 : 1
