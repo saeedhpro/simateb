@@ -176,7 +176,7 @@
                 </v-row>
               </v-container>
               <div class="prescription-box" v-if="doctorId">
-                مطب {{ doctor ? doctor.name : '' }}:
+                مطب {{ doctor ? doctor.name : '' }} (ارجاع شده):
                 <span
                   class="prescription photography"
                   :class="{'resulted': resulted, 'admissioned': admissioned}"
