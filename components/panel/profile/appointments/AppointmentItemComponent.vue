@@ -29,20 +29,16 @@
               md="6"
             >
               <div class="time-box">
-                <span>
+                <span v-if="!isReDoctor">
                   {{
                     start_at_ago_fa
                   }}
                 </span>
-                <div>
+                <div  v-if="!isReDoctor">
                   <span class="circle"/>
                   {{ start_at_fa }}
                   <span class="circle"/>
                 </div>
-<!--                <span-->
-<!--                  v-if="resulted"-->
-<!--                  class="status-box resulted"-->
-<!--                >نتایج ارسال شده</span>-->
                 <div
                   v-if="waiting"
                   class="status-box waiting"
@@ -55,8 +51,16 @@
                   'color': `${statuses[status - 1].color}`
                 }"
                 >{{ statuses[status - 1].title  }}</div>
+                <div
+                  v-if="isReDoctor"
+                  class="status-box mr-2"
+                  :style="{
+                  'background-color': `#2BC4A9`,
+                  'color': `#EBFFFB`
+                }"
+                >ارجاع شده ({{ organizationName }})</div>
               </div>
-              <div class="case-type" v-if="caseType">
+              <div class="case-type" v-if="caseType && !isReDoctor">
                 علت مراجعه: <span>{{ caseType  }}</span>
               </div>
               <div class="code" v-if="info && canSeeInfo">
@@ -70,7 +74,7 @@
               cols="12"
               md="6"
             >
-              <div class="prescription-box">
+              <div class="prescription-box" v-if="!isReDoctor">
                 اقدامات و دستورات پزشک:
                 <span
                   v-for="(p, n) in selectedPrescriptionArray"
@@ -78,6 +82,15 @@
                   class="prescription"
                 >
                   {{ p  }}
+                </span>
+              </div>
+              <div class="prescription-box" v-if="isReDoctor">
+                توضیحات پزشک:
+                <span
+                  class="prescription"
+                  v-if="doctorMsg"
+                >
+                  {{ doctorMsg  }}
                 </span>
               </div>
               <div class="prescription-box" v-if="!isDoctor && getMsg">
@@ -88,7 +101,7 @@
                   {{ getMsg }}
                 </span>
               </div>
-              <div class="prescription-box" v-if="radiologyCases">
+              <div class="prescription-box" v-if="!isReDoctor && radiologyCases">
                 رادیولوژی {{ radiologyName }}:
                 <span
                   v-for="(p, n) in radiologyCasesArray"
@@ -99,18 +112,7 @@
                   {{ p  }}
                 </span>
               </div>
-              <div class="prescription-box" v-if="photographyCases">
-                فتوگرافی {{ photographyName }}:
-                <span
-                  v-for="(p, n) in photographyCasesArray"
-                  :key="n"
-                  class="prescription photography"
-                  :class="{'resulted': resulted, 'admissioned': admissioned}"
-                >
-                  {{ p  }}
-                </span>
-              </div>
-              <v-container fluid>
+              <v-container v-if="!isReDoctor && radiologyResultList.length > 0" fluid>
                 <v-row>
                   <v-col
                     cols="12"
@@ -130,27 +132,84 @@
                           class="prescription-image"
                           :src="i"
                           alt=""
-                        width="100" height="75" />
+                          width="100" height="75" />
                       </a>
                     </Fancybox>
                   </v-col>
                 </v-row>
-<!--                <v-row>-->
-<!--                  <v-col-->
-<!--                    cols="12"-->
-<!--                    sm="4"-->
-<!--                    md="2"-->
-<!--                    v-for="(i,n) in radiologyResultList"-->
-<!--                    :key="n"-->
-<!--                  >-->
-<!--                    <img-->
-<!--                      class="prescription-image"-->
-<!--                      :src="i"-->
-<!--                      alt=""-->
-<!--                      @click="showImages(n, radiologyResultList)"-->
-<!--                    >-->
-<!--                  </v-col>-->
-<!--                </v-row>-->
+              </v-container>
+              <div class="prescription-box" v-if="!isReDoctor && photographyCases">
+                فتوگرافی {{ photographyName }}:
+                <span
+                  v-for="(p, n) in photographyCasesArray"
+                  :key="n"
+                  class="prescription photography"
+                  :class="{'resulted': resulted, 'admissioned': admissioned}"
+                >
+                  {{ p  }}
+                </span>
+              </div>
+              <v-container v-if="!isReDoctor && photographyResultList.length > 0" fluid>
+                <v-row>
+                  <v-col
+                    cols="12"
+                  >
+                    <Fancybox
+                      :options="options"
+                    >
+                      <a
+                        v-for="(i,n) in photographyResultList"
+                        :key="n"
+                        data-fancybox="gallery"
+                        :href="i"
+                        class="fancybox-item"
+                        :data-fancybox-index="n"
+                      >
+                        <img
+                          class="prescription-image"
+                          :src="i"
+                          alt=""
+                          width="100" height="75" />
+                      </a>
+                    </Fancybox>
+                  </v-col>
+                </v-row>
+              </v-container>
+              <div class="prescription-box" v-if="doctorId">
+                مطب {{ doctor ? doctor.name : '' }}:
+                <span
+                  class="prescription photography"
+                  :class="{'resulted': resulted, 'admissioned': admissioned}"
+                  v-if="doctorDesc"
+                >
+                  {{ doctorDesc  }}
+                </span>
+              </div>
+              <v-container v-if="!isReDoctor && doctorResultList.length > 0" fluid>
+                <v-row>
+                  <v-col
+                    cols="12"
+                  >
+                    <Fancybox
+                      :options="options"
+                    >
+                      <a
+                        v-for="(i,n) in doctorResultList"
+                        :key="n"
+                        data-fancybox="gallery"
+                        :href="i"
+                        class="fancybox-item"
+                        :data-fancybox-index="n"
+                      >
+                        <img
+                          class="prescription-image"
+                          :src="i"
+                          alt=""
+                          width="100" height="75" />
+                      </a>
+                    </Fancybox>
+                  </v-col>
+                </v-row>
               </v-container>
             </v-col>
           </v-row>
@@ -281,6 +340,10 @@ export default {
       type: Number,
       required: true,
     },
+    organizationName: {
+      type: Number,
+      default: ''
+    },
     radiologyId: {
       type: Number,
     },
@@ -295,6 +358,15 @@ export default {
     },
     doctorId: {
       type: Number,
+    },
+    doctor: {
+      type: Object | null,
+    },
+    doctorDesc: {
+      type: String | null,
+    },
+    doctorMsg: {
+      type: String | null,
     },
     pAdmissionAt: {
       type: String,
@@ -534,7 +606,7 @@ export default {
   },
   computed: {
     canSeeInfo() {
-      return this.loginUser.organization_id == this.organizationId
+      return this.loginUser.organization_id == this.organizationId || this.isReDoctor
     },
     prescriptionArray() {
       return this.prescription && this.prescription.length ? this.prescription.split(' - ') : []
