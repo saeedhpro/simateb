@@ -278,6 +278,15 @@
                     </td>
                     <td class="text-center">
                       <div
+                        v-if="resulted(i)"
+                        class="status-box resulted"
+                      >نتایج ارسال شده</div>
+                      <div
+                        v-else-if="waiting(i)"
+                        class="status-box waiting"
+                      >در انتظار مراجعه</div>
+                      <div
+                        v-else
                         class="status-box"
                         :style="{
                           'background-color': `${statuses[i.status - 1].background}`,
@@ -514,7 +523,58 @@ export default {
       setTimeout(() => {
         this.item = null
       }, 200)
-    }
+    },
+    isReDoctor(appointment) {
+      if (!this.loginUser) return false;
+      return this.loginUser.organization.id == appointment.doctor_id;
+    },
+    resulted(appointment, type) {
+      if (!type) {
+        type = this.loginUser.organization.profession_id
+      }
+      if (type == 1) {
+        return appointment.p_admission_at != "" && appointment.p_result_at != "" && appointment.p_admission_at != null && appointment.p_result_at != null
+      } else if (type == 2) {
+        return appointment.l_admission_at != "" && appointment.l_result_at != "" && appointment.l_admission_at != null && appointment.l_result_at != null
+      } else if (type == 3) {
+        return appointment.r_admission_at != "" && appointment.r_result_at != "" && appointment.r_admission_at != null && appointment.r_result_at != null
+      } else if(this.isReDoctor(appointment)) {
+        return appointment.d_admission_at != "" && appointment.d_result_at != "" && appointment.d_admission_at != null && appointment.d_result_at != null
+      } else {
+        return (appointment.p_admission_at != "" && appointment.p_result_at != "" && appointment.p_admission_at != null && appointment.p_result_at != null) ||
+          (appointment.l_admission_at != "" && appointment.l_result_at != "" && appointment.l_admission_at != null && appointment.l_result_at) ||
+          (appointment.r_admission_at != "" && appointment.r_result_at != "" && appointment.r_admission_at != null && appointment.r_result_at != null) ||
+          (appointment.d_admission_at != "" && appointment.d_result_at != "" && appointment.d_admission_at != null && appointment.d_result_at != null);
+      }
+    },
+    admissioned(appointment, type) {
+      if (type == 1) {
+        return appointment.p_admission_at != "" && appointment.p_admission_at != null
+      } else if (type == 2) {
+        return appointment.l_admission_at != "" && appointment.l_admission_at != null
+      } else if (type == 3) {
+        return appointment.r_admission_at != "" && appointment.r_admission_at != null
+      } else if (this.isReDoctor(appointment)) {
+        return appointment.d_admission_at != "" && appointment.d_admission_at != null
+      }
+      return appointment.p_admission_at != "" && appointment.p_admission_at != null ||
+        appointment.l_admission_at != "" && appointment.l_admission_at != null ||
+        appointment.r_admission_at != "" && appointment.r_admission_at != null ||
+        appointment.d_admission_at != "" && appointment.d_admission_at != null;
+    },
+    waiting(appointment) {
+      const profession_id = this.loginUser.organization.profession_id;
+      if (profession_id == 1) {
+        return !appointment.p_admission_at
+      } else if (profession_id == 2) {
+        return !appointment.l_admission_at
+      } else if (profession_id == 3) {
+        return !appointment.r_admission_at
+      } else if (this.isReDoctor(appointment)) {
+        return !appointment.d_admission_at
+      }
+      return appointment.waiting
+    },
   },
   computed: {
     loginUser() {
