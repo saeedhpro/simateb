@@ -2225,7 +2225,7 @@ tr.waiting {
 
 .tafkik {
   text-align: right;
-  font: normal normal bold 14px/25px IRANYekanRegular !important;
+  font: normal normal bold 12px/25px IRANYekanRegular !important;
   letter-spacing: 0;
   color: #757575;
 }
@@ -2307,7 +2307,8 @@ tr.waiting {
     }
 
     &.is-holiday {
-      background: #ff9c95 0 0 no-repeat padding-box !important;
+      //background: #ff9c95 0 0 no-repeat padding-box !important;
+      background: #FFC0CB 0 0 no-repeat padding-box !important;
       border: 1px solid #EBEBEB !important;
       color: #000000 !important;
     }
@@ -2419,8 +2420,10 @@ tr.waiting {
 }
 
 .table-appointment-component {
+  position: relative;
   background: #F5F5FF 0 0 no-repeat padding-box;
-  border: 1px solid #5063FF;
+  //border: 1px solid #5063FF;
+  border: 1px solid #EBEBEB;
   border-radius: 4px;
   display: flex;
   flex-direction: column;
@@ -2431,31 +2434,34 @@ tr.waiting {
   padding: 5px;
   cursor: pointer;
   min-height: 86px;
+  &.is-time-based {
+    margin-bottom: 5px;
+  }
 
   &.surgeries {
     background: #EFF7EF 0 0 no-repeat padding-box;
-    border: 1px solid #BCE0BC;
+    //border: 1px solid #BCE0BC;
 
     &.is-today {
       background: #F5F5FF 0 0 no-repeat padding-box;
-      border: 1px solid #5063FF;
+      //border: 1px solid #5063FF;
     }
-  }
-
-  &.is-friday {
-    background: #FFF7EB 0 0 no-repeat padding-box;
-    border: 1px solid #EBEBEB;
-  }
-
-  &.is-holiday {
-    background: #ff9c95 0 0 no-repeat padding-box;
-    //background: #F44336 0 0 no-repeat padding-box;
-    border: 1px solid #EBEBEB;
   }
 
   &.is-today {
     background: #FAFFFA 0 0 no-repeat padding-box;
-    border: 1px solid #388E3C;
+    //border: 1px solid #388E3C;
+  }
+
+  &.is-friday {
+    background: #FFF7EB 0 0 no-repeat padding-box;
+    //border: 1px solid #EBEBEB;
+  }
+
+  &.is-holiday {
+    background: #FFC0CB 0 0 no-repeat padding-box;
+    //background: #F44336 0 0 no-repeat padding-box;
+    //border: 1px solid #EBEBEB;
   }
 
   .full-name {
@@ -2471,6 +2477,17 @@ tr.waiting {
     letter-spacing: 0;
     color: #141432
   }
+  .holiday-title {
+    text-align: center;
+    font: normal normal normal 10px/16px IRANYekanRegular !important;
+    letter-spacing: 0;
+    color: #141432;
+    background: #ff9c95 0 0 no-repeat padding-box;
+    border: 1px solid #EBEBEB !important;
+    border-radius: 4px;
+    padding: 5px;
+    margin-top: 5px;
+  }
 
   .case-type {
     text-align: center;
@@ -2480,6 +2497,31 @@ tr.waiting {
     background: #E6E6E6 0 0 no-repeat padding-box;
     border-radius: 4px;
     padding: 5px;
+  }
+  .vip-tag {
+    position: absolute;
+    z-index: 9;
+    rotate: -45deg;
+    bottom: 0;
+    right: 0;
+    width: 40px;
+    background: none;
+    color: #9300ff;
+    font-size: 1rem !important;
+    font-family: 'Material Design Icons' !important;
+  }
+  &.is-accepted {
+    border: 1px solid #5063FF;
+  }
+  &.is-reserved {
+    border: 1px solid #F5AC00;
+  }
+  &.is-canceled {
+    border: 1px solid #F44336;
+    background-color: #FFC0CB !important;
+  }
+  &.is-waiting {
+    border: 1px solid #F5AC00;
   }
 }
 
@@ -2495,6 +2537,9 @@ tr.waiting {
   padding: 5px;
   cursor: pointer;
   min-height: 86px;
+  &.is-time-based {
+    margin-bottom: 5px;
+  }
 
   &.show-hour {
     cursor: pointer !important;
@@ -2510,20 +2555,38 @@ tr.waiting {
     }
   }
 
+  &.is-today {
+    background: #FAFFFA 0% 0% no-repeat padding-box;
+    border: 1px solid #388E3C;
+  }
+
   &.is-friday {
     background: #FFF7EB 0 0 no-repeat padding-box;
     border: 1px solid #EBEBEB;
   }
 
   &.is-holiday {
-    background: #ff9c95 0 0 no-repeat padding-box !important;
+    background: #FFC0CB 0 0 no-repeat padding-box !important;
     border: 1px solid #EBEBEB !important;
     color: #000000 !important;
   }
+  .case-type {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    font: normal normal normal 14px/25px IRANYekanRegular !important;
+    letter-spacing: 0;
+    //color: #26264E;
+    color: #000000;
+    text-align: center;
 
-  &.is-today {
-    background: #FAFFFA 0% 0% no-repeat padding-box;
-    border: 1px solid #388E3C;
+    span {
+      background: #F0F0F5 0 0 no-repeat padding-box;
+      border-radius: 6px;
+      padding: 4px 24px;
+      margin-right: 15px;
+    }
   }
 }
 
