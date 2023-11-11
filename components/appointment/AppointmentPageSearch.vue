@@ -12,12 +12,12 @@
           @change="onYearChanged"></v-select>
       </div>
     </v-col>
-    <v-col cols="12" sm="4" md="2" class="hidden-sm-and-down">
+    <v-col cols="12" sm="4" md="2" lg="1" class="hidden-sm-and-down">
       <div class="right-box">
         <div class="mt-4 tafkik">نمایش به تفکیک:</div>
       </div>
     </v-col>
-    <v-col cols="12" sm="2" md="2">
+    <v-col cols="12" sm="2" md="2" lg="1">
       <div class="right-box">
         <button class="show-button" :class="{ 'active': showHour }" @click="toggleShowHour">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
@@ -36,7 +36,7 @@
         </button>
       </div>
     </v-col>
-    <v-col cols="12" sm="2" md="2">
+    <v-col cols="12" sm="2" md="2" lg="1">
       <div class="right-box">
         <button class="show-button" :class="{ 'active': showCaseType }" @click="toggleShowCaseType">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="13" viewBox="0 0 16 13">

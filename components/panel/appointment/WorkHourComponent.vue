@@ -170,6 +170,7 @@ export default {
         })
       .finally((res) => {
         this.close()
+        this.$emit('done')
       })
     },
     onChange(e) {

@@ -49,12 +49,17 @@
                   :is-today="timeBaseDays[j][i].is_today" :user-full-name="timeBaseDays[j][i].user_full_name"
                   :start-at-time-fa="timeBaseDays[j][i].start_at_time_fa"
                   :is-vip="timeBaseDays[j][i].is_vip"
-                  @click.native="openItem(timeBaseDays[j][i].id)" />
+                  :waiting="timeBaseDays[j][i].waiting"
+                  :status="timeBaseDays[j][i].status"
+                  :is-time-based="true"
+                  @click.native="openItem(timeBaseDays[j][i].id)"
+                />
                 <appointment-page-table-empty-item v-else-if="timeBaseDays[j][i]" :index="i"
                   :is-friday="timeBaseDays[j][i].is_friday" :is-holiday="timeBaseDays[j][i].is_holiday"
                   :is-today="timeBaseDays[j][i].is_today" :show-hour="true"
                   :start-at-time-fa="timeBaseDays[j][i].start_at_time_fa"
                   :is-vip="timeBaseDays[j][i].is_vip"
+                  :is-time-based="true"
                   @click.native="openPazireshModal(timeBaseDays[j][i].start_at)" />
                 <div v-else>{{ `${i} - ${j}` }} </div>
               </td>
@@ -69,6 +74,8 @@
                   :is-today="simpleDays[j][i].is_today" :user-full-name="simpleDays[j][i].user_full_name"
                   :start-at-time-fa="simpleDays[j][i].start_at_time_fa"
                   :is-vip="simpleDays[j][i].is_vip"
+                  :waiting="simpleDays[j][i].waiting"
+                  :status="simpleDays[j][i].status"
                   @click.native="openItem(simpleDays[j][i].id)" />
                 <appointment-page-table-empty-item v-else-if="simpleDays[j][i]" :index="i"
                   :is-friday="simpleDays[j][i].is_friday" :is-holiday="simpleDays[j][i].is_holiday"
@@ -151,11 +158,9 @@ export default {
       let day = this.startDate.clone().startOf("jMonth")
       while (day.locale('en').isBefore(this.endDate.clone().locale('en').format('YYYY/MM/DD HH:mm:ss'))) {
         let isHoliday = false
-        let holidayTitle = ''
         for (let i = 0; i < holidays.length; i++) {
           if (day.format("YYYY-MM-DD") == holidays[i].hdate) {
             isHoliday = true
-            holidayTitle = holidays[i].title
             break
           }
         }
@@ -167,7 +172,6 @@ export default {
           title: jDate.locale('fa').format("dddd"),
           sub_title: jDate.locale('fa').format("jDD jMMMM"),
           start_at: `${day.format('YYYY/MM/DD')} ${this.workHour.start}`,
-          holiday_title: holidayTitle
         })
         day = day.add(1, 'jDay')
       }
@@ -242,11 +246,9 @@ export default {
         let isToday = jDate.format("YYYYMMDD") == today
         let isFriday = jDate.isoWeekday() == 5
         let isHoliday = false
-        let holidayTitle = ''
         for (let h = 0; h < holidays.length; h++) {
           if (dayStart.format("YYYY-MM-DD") == holidays[h].hdate) {
             isHoliday = true
-            holidayTitle = holidays[i].title
             break
           }
         }
@@ -264,7 +266,6 @@ export default {
                   is_today: isToday,
                   start_at: startAt.format('YYYY/MM/DD HH:mm:ss'),
                   index: j,
-                  holiday_title: holidayTitle
                 })
                 list.shift()
               } else {
@@ -281,7 +282,6 @@ export default {
               start_at: s.format('YYYY/MM/DD HH:mm:ss'),
               start_at_time_fa: jDate.locale('en').format('HH:mm'),
               index: j,
-              holiday_title: holidayTitle
             })
           } else {
             let s = dayStart.clone().add(j * period, 'minute')
@@ -293,7 +293,6 @@ export default {
               start_at: s.format('YYYY/MM/DD HH:mm:ss'),
               start_at_time_fa: s.format('HH:mm'),
               index: j,
-              holiday_title: holidayTitle
             })
           }
         }
@@ -305,11 +304,9 @@ export default {
         let dayStart = this.startDate.clone().add(i, 'day')
         for (let j = days[i].length; j < maxLength; j++) {
           let isHoliday = false
-          let holidayTitle = ''
           for (let h = 0; h < holidays.length; h++) {
             if (dayStart.format("YYYY-MM-DD") == holidays[h].hdate) {
               isHoliday = true
-              holidayTitle = holidays[i].title
               break
             }
           }
@@ -322,7 +319,6 @@ export default {
             start_at: dayStart.format('YYYY/MM/DD HH:mm:ss'),
             start_at_time_fa: dayStart.locale('en').format('HH:mm'),
             index: j,
-            holiday_title: holidayTitle
           })
         }
       }
@@ -362,11 +358,9 @@ export default {
         let isToday = jDate.format("YYYYMMDD") == today
         let isFriday = jDate.isoWeekday() == 5
         let isHoliday = false
-        let holidayTitle = ''
         for (let h = 0; h < holidays.length; h++) {
           if (dayStart.format("YYYY-MM-DD") == holidays[h].hdate) {
             isHoliday = true
-            holidayTitle = holidays[i].title
             break
           }
         }
@@ -386,7 +380,6 @@ export default {
                   is_today: isToday,
                   start_at: startAt.locale('en').format('YYYY/MM/DD HH:mm:ss'),
                   index: j,
-                  holiday_title: holidayTitle
                 })
                 j++
                 list.shift()
@@ -400,7 +393,6 @@ export default {
                     is_today: isToday,
                     start_at: startAt.locale('en').format('YYYY/MM/DD HH:mm:ss'),
                     index: j,
-                    holiday_title: holidayTitle
                   })
                   j++
                   list.shift()
@@ -415,7 +407,6 @@ export default {
                     start_at: boxStart.locale('en').format('YYYY/MM/DD HH:mm:ss'),
                     start_at_time_fa: boxStart.locale('en').format('HH:mm'),
                     index: j,
-                    holiday_title: holidayTitle
                   })
                   boxStart = boxStart.add(boxDuration, 'minutes')
                   j++
@@ -431,7 +422,6 @@ export default {
                       start_at: boxStart.locale('en').format('YYYY/MM/DD HH:mm:ss'),
                       start_at_time_fa: boxStart.locale('en').format('HH:mm'),
                       index: j,
-                      holiday_title: holidayTitle
                     })
                     j++
                     boxStart = boxStart.add(boxDuration, 'minutes')
@@ -444,7 +434,6 @@ export default {
                     is_today: isToday,
                     start_at: startAt.locale('en').format('YYYY/MM/DD HH:mm:ss'),
                     index: j,
-                    holiday_title: holidayTitle
                   })
                   j++
                   list.shift()
@@ -457,7 +446,6 @@ export default {
                     is_today: isToday,
                     start_at: startAt.locale('en').format('YYYY/MM/DD HH:mm:ss'),
                     index: j,
-                    holiday_title: holidayTitle
                   })
                   j++
                   list.shift()
@@ -473,7 +461,6 @@ export default {
                   start_at: boxStart.locale('en').format('YYYY/MM/DD HH:mm:ss'),
                   start_at_time_fa: boxStart.locale('en').format('HH:mm'),
                   index: j,
-                  holiday_title: holidayTitle
                 })
                 j++
                 boxStart = boxStart.add(boxDuration, 'minutes')
@@ -492,7 +479,6 @@ export default {
               start_at: boxStart.locale('en').format('YYYY/MM/DD HH:mm:ss'),
               start_at_time_fa: boxStart.locale('en').format('HH:mm'),
               index: j,
-              holiday_title: holidayTitle
             })
             j++
             boxStart = boxStart.add(boxDuration, 'minutes')
@@ -508,11 +494,9 @@ export default {
             isToday = jDate.format("YYYYMMDD") == today
             isFriday = jDate.isoWeekday() == 5
             isHoliday = false
-            let holidayTitle = ''
             for (let h = 0; h < holidays.length; h++) {
               if (dayStart.format("YYYY-MM-DD") == holidays[h].hdate) {
                 isHoliday = true
-                holidayTitle = holidays[i].title
                 break
               }
             }
@@ -526,7 +510,6 @@ export default {
               start_at: boxStart.locale('en').format('YYYY/MM/DD HH:mm:ss'),
               start_at_time_fa: boxStart.locale('en').format('HH:mm'),
               index: j,
-              holiday_title: holidayTitle
             })
             j++
             boxStart = boxStart.add(boxDuration, 'minutes')

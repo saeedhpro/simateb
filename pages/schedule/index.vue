@@ -75,9 +75,21 @@
                         }}
                       </span>
                     </td>
-                    <td class="text-center">{{ `${i.count} (${i.count - i.count_reserved})` }}</td>
-                    <td class="text-center">{{ `${i.site} (${i.site - i.site_reserved})` }}</td>
-                    <td class="text-center">{{ `${i.app} (${i.app - i.app_reserved})` }}</td>
+                    <td class="text-center">
+                      <span style="font-size: 1rem">{{ i.count }} (</span>
+                      <span style="color: #5063FF">{{i.count - i.count_reserved}}</span>
+                      <span>)</span>
+                    </td>
+                    <td class="text-center">
+                      <span style="font-size: 1rem">{{ i.site }} (</span>
+                      <span style="color: #5063FF">{{i.site - i.site_reserved}}</span>
+                      <span>)</span>
+                    </td>
+                    <td class="text-center">
+                      <span style="font-size: 1rem">{{ i.app }} (</span>
+                      <span style="color: #5063FF">{{i.app - i.app_reserved}}</span>
+                      <span>)</span>
+                    </td>
                     <td class="text-center">{{ i.case_type ? i.case_type : '-' }}</td>
                     <td class="text-center flex flex-row justify-space-around align-center">
                       <button @click="editSchedule(i)" class="action-buttons">

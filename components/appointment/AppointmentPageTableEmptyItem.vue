@@ -1,7 +1,13 @@
 <template>
   <div
     class="table-appointment-none"
-    :class="{'is-friday': isFriday, 'is-holiday': isHoliday, 'is-today': isToday, 'show-hour': showHour}"
+    :class="{
+      'is-friday': isFriday,
+      'is-holiday': isHoliday,
+      'is-today': isToday,
+      'show-hour': showHour,
+      'is-time-based': isTimeBased,
+    }"
   >
     <div
       class="time"
@@ -25,6 +31,10 @@ export default {
       type: String,
       default: null,
     },
+    holidayTitle: {
+      type: String | null,
+      default: '',
+    },
     showHour: {
       type: Boolean,
       default: false,
@@ -38,6 +48,10 @@ export default {
       default: false,
     },
     isHoliday: {
+      type: Boolean,
+      default: false,
+    },
+    isTimeBased: {
       type: Boolean,
       default: false,
     },

@@ -27,6 +27,7 @@
       :end="''"
       :period="15"
       :organization-id="11"
+      @done="doneAppointmentModal"
     />
   </v-container>
 </template>
