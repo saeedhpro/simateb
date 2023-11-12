@@ -2329,13 +2329,35 @@ tr.waiting {
 }
 
 .appointment-table {
+  .day-count-box {
+    background: #FFFFFF 0 0 no-repeat padding-box;
+    border: 1px solid #EBEBEB;
+    border-radius: 8px;
+    text-align: center;
+    font: normal normal normal 16px/28px IRANYekanRegular !important;
+    letter-spacing: 0;
+    color: #141432;
+    margin: 3px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
   .table-appointment-none, .table-appointment-component {
     margin: 3px;
   }
   width: 100%;
   &.surgeries {
+    .day-count-box {
+      background: #EFF7EF 0 0 no-repeat padding-box !important;
+      border: 1px solid #EBEBEB !important;
+      border-radius: 8px;
+    }
     thead {
       background: #388E3C !important;
+      &.none {
+        background: #FFF !important;
+      }
     }
     tbody {
       background: #8BCC8E !important;
@@ -5167,7 +5189,7 @@ tr.waiting {
 }
 
 .appointment-link {
-  &.nuxt-link-active {
+  &:hover, &.nuxt-link-active {
     span {
       color: #FFBE26 !important;
     }
@@ -5183,61 +5205,73 @@ tr.waiting {
   }
 }
 .organization-link {
-  &.nuxt-link-active {
+  &:hover, &.nuxt-link-active {
     span {
       color: #00E676 !important;
+      transition: all .4s ease;
     }
     svg {
       .b {
         fill: #00E676 !important;
         opacity: 1 !important;
+        transition: all .4s ease;
       }
       .c {
         fill: #00E676 !important;
         opacity: .16 !important;
+        transition: all .4s ease;
       }
       .a {
         fill: #00E676 !important;
+        transition: all .4s ease;
       }
     }
   }
 }
 .patients-link {
-  &.nuxt-link-active {
+  &:hover, &.nuxt-link-active {
     span {
       color: #E040FB !important;
+      transition: all .4s ease;
     }
     svg {
       .c {
         fill: #E040FB !important;
         opacity: 1 !important;
+        transition: all .4s ease;
       }
       .b {
         fill: #E040FB !important;
         opacity: .16 !important;
+        transition: all .4s ease;
       }
       .a {
         fill: #E040FB !important;
+        transition: all .4s ease;
       }
     }
   }
 }
 .messages-link {
-  &.nuxt-link-active {
+  &:hover, &.nuxt-link-active {
     span {
       color: #00E5FF !important;
+      transition: all .4s ease;
     }
     svg {
       .c {
         fill: #00E5FF !important;
         opacity: 1 !important;
+        transition: all .4s ease;
       }
       .b {
         fill: #00E5FF !important;
         opacity: .16 !important;
+        transition: all .4s ease;
       }
       .a {
         fill: #00E5FF !important;
+        transition: all .4s ease;
       }
     }
   }

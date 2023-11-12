@@ -26,6 +26,15 @@
               </th>
             </tr>
           </thead>
+          <thead class="none">
+            <tr>
+              <th v-for="(i, n) in dayCounts" :key="n">
+                <div class="day-count-box">
+                  {{ i }}
+                </div>
+              </th>
+            </tr>
+          </thead>
           <thead>
             <tr>
               <th v-for="(d, n) in headerDays" :key="n" class="header-case-type-th text-center"
@@ -711,6 +720,13 @@ export default {
       set(val) {
         this.$store.dispatch('appointment/setLimits', val)
       }
+    },
+    dayCounts() {
+      let list = Array(this.simpleDays.length).fill(0);
+      for (let i = 0; i < this.simpleDays.length; i++) {
+        list[i] = this.simpleDays[i].filter(i => !i.is_empty).length
+      }
+      return list;
     }
   },
   watch: {
