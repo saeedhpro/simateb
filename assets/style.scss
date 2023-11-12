@@ -5180,3 +5180,80 @@ tr.waiting {
 .row-wrap {
   flex-wrap: wrap;
 }
+
+.appointment-link {
+  &.nuxt-link-active {
+    span {
+      color: #FFBE26 !important;
+    }
+    svg {
+      .b, .c {
+        fill: #FFBE26 !important;
+        opacity: 1 !important;
+      }
+      .a {
+        fill: #FFBE26 !important;
+      }
+    }
+  }
+}
+.organization-link {
+  &.nuxt-link-active {
+    span {
+      color: #00E676 !important;
+    }
+    svg {
+      .b {
+        fill: #00E676 !important;
+        opacity: 1 !important;
+      }
+      .c {
+        fill: #00E676 !important;
+        opacity: .16 !important;
+      }
+      .a {
+        fill: #00E676 !important;
+      }
+    }
+  }
+}
+.patients-link {
+  &.nuxt-link-active {
+    span {
+      color: #E040FB !important;
+    }
+    svg {
+      .c {
+        fill: #E040FB !important;
+        opacity: 1 !important;
+      }
+      .b {
+        fill: #E040FB !important;
+        opacity: .16 !important;
+      }
+      .a {
+        fill: #E040FB !important;
+      }
+    }
+  }
+}
+.messages-link {
+  &.nuxt-link-active {
+    span {
+      color: #00E5FF !important;
+    }
+    svg {
+      .c {
+        fill: #00E5FF !important;
+        opacity: 1 !important;
+      }
+      .b {
+        fill: #00E5FF !important;
+        opacity: .16 !important;
+      }
+      .a {
+        fill: #00E5FF !important;
+      }
+    }
+  }
+}
