@@ -6,6 +6,10 @@ main {
   background: #F1F2F5 0 0 no-repeat padding-box;
 }
 
+table {
+  border-collapse: collapse !important;
+}
+
 .full-width {
   width: 100%;
 }
@@ -766,49 +770,6 @@ tr.waiting {
   box-shadow: 0 2px 4px #14143214 !important;
   border-radius: 8px !important;
   padding: 40px;
-
-  &.surgeries {
-    background: #299565 !important;
-
-    .tafkik {
-      color: #FFFFFF;
-    }
-
-    .theme--light.v-select {
-      .v-select__selections {
-        color: #FFFFFF;
-      }
-    }
-
-    .theme--light.v-icon,
-    .theme--light.v-label {
-      color: #FFFFFF;
-    }
-
-    .theme--light.v-input {
-      input {
-        color: #FFFFFF;
-      }
-    }
-
-    .show-button {
-      background: transparent !important;
-      border: 1px solid #FFFFFF !important;
-      color: #FFFFFF;
-
-      &.active {
-        border: 1px solid #299565 !important;
-        background: #FFFFFF !important;
-        color: #299565;
-
-        svg {
-          .a {
-            fill: #299565 !important;
-          }
-        }
-      }
-    }
-  }
 
   .selected-count {
     background: #5063FF 0 0 no-repeat padding-box;
@@ -2285,7 +2246,7 @@ tr.waiting {
     font-size: 12px;
     font-weight: bold;
     min-width: 100px;
-    margin-left: 5px;
+    margin: 3px;
     background: #F0F0F0 0 0 no-repeat padding-box;
     border: 1px solid #DBDBDB;
     border-radius: 4px;
@@ -2368,9 +2329,35 @@ tr.waiting {
 }
 
 .appointment-table {
+  .table-appointment-none, .table-appointment-component {
+    margin: 3px;
+  }
   width: 100%;
-
   &.surgeries {
+    thead {
+      background: #388E3C !important;
+    }
+    tbody {
+      background: #8BCC8E !important;
+    }
+    .table-appointment-none, .table-appointment-component {
+      background: #EFF7EF 0 0 no-repeat padding-box;
+      margin: 3px;
+      &.is-today {
+        background: #EBF0FF 0 0 no-repeat padding-box !important
+      }
+
+      &.is-friday {
+        background: #FFFAFA 0 0 no-repeat padding-box !important;
+      }
+
+      &.is-holiday {
+        background: #ff9c95 0 0 no-repeat padding-box;
+      }
+    }
+    .header-case-type-th {
+      background: #388E3C !important;
+    }
     background: #EBEBEB !important;
 
     .header-case-type-th {
@@ -2537,9 +2524,7 @@ tr.waiting {
   padding: 5px;
   cursor: pointer;
   min-height: 86px;
-  &.is-time-based {
-    margin-bottom: 5px;
-  }
+  //margin: 3px;
 
   &.show-hour {
     cursor: pointer !important;
