@@ -317,19 +317,19 @@ export default {
       required: true,
     },
     created_at: {
-      type: String,
+      type: String | null,
       required: true,
     },
     start_at: {
-      type: String,
+      type: String | null,
       required: true,
     },
     start_at_ago_fa: {
-      type: String,
+      type: String | null,
       required: true,
     },
     start_at_fa: {
-      type: String,
+      type: String | null,
       required: true,
     },
     id: {
@@ -341,7 +341,7 @@ export default {
       required: true,
     },
     organizationName: {
-      type: Number,
+      type: String | null,
       default: ''
     },
     radiologyId: {
@@ -369,63 +369,63 @@ export default {
       type: String | null,
     },
     pAdmissionAt: {
-      type: String,
+      type: String | null,
     },
     dAdmissionAt: {
-      type: String,
+      type: String | null,
     },
     lAdmissionAt: {
-      type: String,
+      type: String | null,
     },
     pResultAt: {
-      type: String,
+      type: String | null,
     },
     dResultAt: {
-      type: String,
+      type: String | null,
     },
     lResultAt: {
-      type: String,
+      type: String | null,
     },
     rAdmissionAt: {
-      type: String,
+      type: String | null,
     },
     rResultAt: {
-      type: String,
+      type: String | null,
     },
     status: {
       type: Number,
       required: true,
     },
     caseType: {
-      type: String,
+      type: String | null,
       required: true,
     },
     code: {
-      type: String,
+      type: String | null,
       required: true,
     },
     info: {
-      type: String,
+      type: String | null,
       required: true,
     },
     prescription: {
-      type: String,
+      type: String | null,
       required: true,
     },
     radiologyCases: {
-      type: String,
+      type: String | null,
       required: true,
     },
     photographyCases: {
-      type: String,
+      type: String | null,
       required: true,
     },
     radiologyMsg: {
-      type: String,
+      type: String | null,
       required: true,
     },
     photographyMsg: {
-      type: String,
+      type: String | null,
       required: true,
     },
     selectedDents: {
