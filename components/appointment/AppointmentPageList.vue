@@ -5,7 +5,10 @@
         <v-progress-circular />
       </div>
       <div v-else style="overflow-x: scroll" id="table-wrapper" ref="table-wrapper">
-        <table class="appointment-table" id="appointment-table">
+        <table class="appointment-table"
+         id="appointment-table"
+         :class="{'surgeries': isSurgery}"
+        >
           <thead v-if="showCaseType">
             <tr>
               <th v-for="(limits, n) in limitList" :key="n" class="header-case-type-th text-center">
