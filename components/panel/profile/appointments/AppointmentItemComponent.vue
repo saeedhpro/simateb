@@ -60,7 +60,7 @@
                 }"
                 >ارجاع شده ({{ organizationName }})</div>
               </div>
-              <div class="case-type" v-if="caseType && !isReDoctor">
+              <div class="case-type" v-if="caseType && isDoctor">
                 علت مراجعه: <span>{{ caseType  }}</span>
               </div>
               <div class="code" v-if="info && canSeeInfo">
@@ -74,7 +74,7 @@
               cols="12"
               md="6"
             >
-              <div class="prescription-box" v-if="!isReDoctor">
+              <div class="prescription-box" v-if="isDoctor">
                 اقدامات و دستورات پزشک:
                 <span
                   v-for="(p, n) in selectedPrescriptionArray"
