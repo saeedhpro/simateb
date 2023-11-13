@@ -22,6 +22,9 @@ main {
   padding-right: 40px !important;
   padding-left: 40px !important;
 }
+.relative {
+  position: relative;
+}
 
 .open-drawer {
   display: none !important;
@@ -3178,6 +3181,31 @@ tr.waiting {
   display: flex;
   //overflow-x: scroll;
   justify-content: center;
+  margin: 2px auto;
+
+  .dent-box {
+    .dent-title {
+      position: absolute;
+      font: normal normal normal 16px/18px IRANYekanRegular !important;
+      &.ur {
+        left: -25px;
+      }
+      &.ul {
+        right: -25px;
+      }
+    }
+    &.bottom {
+      .dent-title {
+        bottom: 0;
+        &.lr {
+          left: -25px;
+        }
+        &.ll {
+          right: -25px;
+        }
+      }
+    }
+  }
 
   .dent-item {
     cursor: pointer;

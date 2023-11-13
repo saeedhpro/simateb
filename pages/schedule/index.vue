@@ -19,6 +19,10 @@
             <img src="/images/pages/plus.svg" alt="organizations">
             <span class="title-main">افزودن</span>
           </div>
+          <nuxt-link to="/schedule/list" class="page-actions">
+            <img src="/images/pages/new-user.svg" alt="users">
+            <span class="title-main mr-4">لیست رزرو دکتر دیگر</span>
+          </nuxt-link>
           <div class="page-actions" @click="openReserveForm">
             <img src="/images/pages/new-user.svg" alt="users">
             <span class="title-main">رزرو برای دکتر دیگر</span>
