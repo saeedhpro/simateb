@@ -24,21 +24,100 @@
         </v-card-title>
         <v-card-text>
           <v-container>
-            <v-row dir="ltr">
-              <div v-if="canSeeDent" class="dents-list">
-                <div class="dent-box overflow-x-auto">
-                  <div class="dent-top">
-                    <img :class="{'selected': inList(i)}" @click="onDentClicked(i)" v-for="(i, n) in 16"
-                         :src="`/images/dents/${i}.png`" :key="n">
+            <v-row v-if="canSeeDent"  dir="ltr">
+              <v-col
+                cols="9"
+              >
+                <div class="dents-list">
+                  <div class="dent-list">
+                    <div class="dent-box d-flex flex-row relative">
+                      <span class="dent-title ur">UR</span>
+                      <span class="dent-title ul">UL</span>
+                      <div
+                        v-for="(i,n) in 8"
+                        :key="n"
+                        class="dent-item"
+                        :class="{'selected': inList('UR', i)}"
+                      >
+                        <img
+                          @click="onDentClicked('UR', i)"
+                          :src="`/images/dents/${i}.png`"
+                        >
+                      </div>
+                      <v-divider vertical class="mx-2 border-black"/>
+                      <div
+                        v-for="(i,n) in 8"
+                        :key="n + 8"
+                        class="dent-item"
+                        :class="{'selected': inList('UL', i)}"
+                      >
+                        <img
+                          @click="onDentClicked('UL', i)"
+                          :src="`/images/dents/${i + 8}.png`"
+                        >
+                      </div>
+                    </div>
                   </div>
-                  <div class="dent-bottom">
-                    <img :class="{'selected': inList(i + 16)}" @click="onDentClicked(i + 16)" v-for="(i, n) in 16"
-                         :src="`/images/dents/${i+16}.png`" :key="n">
+                  <v-divider class="border-black"/>
+                  <div class="dent-list">
+                    <div class="dent-box bottom d-flex flex-row relative">
+                      <span class="dent-title lr">LR</span>
+                      <span class="dent-title ll">LL</span>
+                      <div
+                        v-for="(i,n) in 8"
+                        :key="n + 16"
+                        class="dent-item"
+                        :class="{'selected': inList('LR', i)}"
+                      >
+                        <img
+                          @click="onDentClicked('LR', i)"
+                          :src="`/images/dents/${i + 16}.png`"
+                        >
+                      </div>
+                      <v-divider vertical class="mx-2 border-black" />
+                      <div
+                        v-for="(i,n) in 8"
+                        :key="n + 24"
+                        class="dent-item"
+                        :class="{'selected': inList('LL', i)}"
+                      >
+                        <img
+                          @click="onDentClicked('LL', i)"
+                          :src="`/images/dents/${i + 24}.png`"
+                        >
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <hr v-if="canSeeDent" class="full-width mt-4 mb-4"/>
+              </v-col>
+              <v-col
+                cols="3"
+              >
+                <div class="d-flex flex-column align-center justify-center full-height">
+                  <div class="selected-dent-list">
+                    <div class="divided vertical"></div>
+                    <div class="divided horizontal"></div>
+                    <div class="selected-dent-top mr-2">
+                      <div class="d-flex flex-row justify-end align-center">
+                        {{urSelectedDents.join(',')}}
+                      </div>
+                      <div class="d-flex flex-row justify-end align-center">
+                        {{lrSelectedDents.join(',')}}
+                      </div>
+                    </div>
+                    <div class="selected-dent-bottom ml-2">
+                      <div class="d-flex flex-row justify-start align-center">
+                        {{ulSelectedDents.join(',')}}
+                      </div>
+                      <div class="d-flex flex-row justify-start align-center">
+                        {{llSelectedDents.join(',')}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </v-col>
             </v-row>
+            <hr v-if="canSeeDent" class="full-width mt-4 mb-4"/>
             <v-row>
               <v-col
                 cols="12"
@@ -193,8 +272,8 @@ export default {
         //   })
       }
     },
-    inList(item) {
-      return this.selected_dents.find(i => i == `dent: ${item}`)
+    inList(type, item) {
+      return this.selected_dents.find(i => i == `${type} dent: ${item}`)
     },
     selectAction(item) {
       const i = this.selected_actions.find(i => i == item.name)
@@ -203,19 +282,17 @@ export default {
       } else {
         this.selected_actions.push(item.name)
       }
-      // this.$emit('actionClicked', this.selected_actions)
     },
     isSelected(item) {
       return this.selected_actions.find(i => i == item.name)
     },
-    onDentClicked(item) {
-      const i = this.selected_dents.find(i => i == `dent: ${item}`)
+    onDentClicked(type, item) {
+      const i = this.selected_dents.find(i => i == `${type} dent: ${item}`)
       if (i) {
-        this.selected_dents = this.selected_dents.filter(i => i != `dent: ${item}`)
+        this.selected_dents = this.selected_dents.filter(i => i != `${type} dent: ${item}`)
       } else {
-        this.selected_dents.push(`dent: ${item}`)
+        this.selected_dents.push(`${type} dent: ${item}`)
       }
-      // this.$emit('dentClicked', this.dents.join())
     },
     save() {
       this.$emit('save', {
@@ -237,28 +314,33 @@ export default {
     canSeeDent() {
       const profession_id = this.loginUser.organization.profession_id
       return [5, 7, "5", "7"].includes(profession_id)
+    },
+    urSelectedDents() {
+      return this.selected_dents.filter(i => {
+        return i.startsWith('UR')
+      }).map(i => parseInt(i.replace('UR dent: ', ''))).sort().reverse()
+    },
+    ulSelectedDents() {
+      return this.selected_dents.filter(i => {
+        return i.startsWith('UL')
+      }).map(i => parseInt(i.replace('UL dent: ', ''))).sort()
+    },
+    lrSelectedDents() {
+      return this.selected_dents.filter(i => {
+        return i.startsWith('LR')
+      }).map(i => parseInt(i.replace('LR dent: ', ''))).sort().reverse()
+    },
+    llSelectedDents() {
+      return this.selected_dents.filter(i => {
+        return i.startsWith('LL')
+      }).map(i => parseInt(i.replace('LL dent: ', ''))).sort()
     }
   }
 }
 </script>
 <style scoped lang="scss">
 .dents-list {
-  .dent-top, .dent-bottom {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    img {
-      cursor: pointer;
-      width: calc(100% /25);
-      &.selected {
-        background: #EBF0FF 0 0 no-repeat padding-box;
-        border: 1px solid #5063FF;
-        border-radius: 8px;
-        opacity: 1;
-      }
-    }
-  }
+  margin: 0 25px;
 }
 .category-item {
   text-align: center;
@@ -278,6 +360,35 @@ export default {
     background-color: #5981ff;
     color: #FFFFFF;
     border: 1px solid #141432;
+  }
+}
+
+.selected-dent-list {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: auto auto;
+  font: normal normal bold 1rem/1.4rem IRANYekanRegular !important;
+  position: relative;
+  .divided {
+    position: absolute;
+    background-color: #1A1A1A;
+    &.vertical {
+      height: 100%;
+      width: 1px;
+      left: 50%;
+    }
+    &.horizontal {
+      height: 1px;
+      width: 100%;
+      top: 48%;
+    }
+  }
+  .selected-dent-top, .selected-dent-bottom {
+    display: grid;
+    grid-auto-columns: auto auto;
+    div {
+      width: 100px !important;
+    }
   }
 }
 </style>

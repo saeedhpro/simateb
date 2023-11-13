@@ -402,6 +402,7 @@
                                   <v-divider vertical/>
                                   <div class="right">{{ selectedCBCTRightTopDents.join(',') }}</div>
                                 </div>
+                                <v-divider />
                                 <div class="selected-items-row">
                                   <div class="left">{{ selectedCBCTLeftBottomDents.join(',') }}</div>
                                   <v-divider vertical/>
@@ -570,21 +571,24 @@
           class="paziresh-form-box">
           <v-container fluid>
             <div class="dent-list">
-              <div
-                v-for="(i,n) in 8"
-                :key="n"
-                class="dent-item"
-                :class="{'selected': inList(`${type}_${i}`)}"
-              >
-                <img
-                  @click="onDentClicked(`${type}_${i}`, type, i)"
-                  :src="`/images/dents/${i}.png`"
+              <div class="dent-box d-flex flex-row relative">
+                <span class="dent-title ur">UR</span>
+                <span class="dent-title ul">UL</span>
+                <div
+                  v-for="(i,n) in 8"
+                  :key="n"
+                  class="dent-item"
+                  :class="{'selected': inList(`${type}_${i}`)}"
                 >
-              </div>
-              <v-divider vertical class="mx-2 border-black"/>
-              <div
+                  <img
+                    @click="onDentClicked(`${type}_${i}`, type, i)"
+                    :src="`/images/dents/${i}.png`"
+                  >
+                </div>
+                <v-divider vertical class="mx-2 border-black"/>
+                <div
                 v-for="(i,n) in 8"
-                :key="n"
+                :key="n + 8"
                 class="dent-item"
                 :class="{'selected': inList(`${type}_${i + 8}`)}"
               >
@@ -593,32 +597,36 @@
                   :src="`/images/dents/${i + 8}.png`"
                 >
               </div>
-
+              </div>
             </div>
             <v-divider class="border-black"/>
             <div class="dent-list">
-              <div
-                v-for="(i,n) in 8"
-                :key="n"
-                class="dent-item"
-                :class="{'selected': inList(`${type}_${i + 16}`)}"
-              >
-                <img
-                  @click="onDentClicked(`${type}_${i + 16}`,  type,i + 16)"
-                  :src="`/images/dents/${i + 16}.png`"
+              <div class="dent-box bottom d-flex flex-row relative">
+                <span class="dent-title lr">LR</span>
+                <span class="dent-title ll">LL</span>
+                <div
+                  v-for="(i,n) in 8"
+                  :key="n + 16"
+                  class="dent-item"
+                  :class="{'selected': inList(`${type}_${i + 16}`)}"
                 >
-              </div>
-              <v-divider vertical class="mx-2 border-black" />
-              <div
-                v-for="(i,n) in 8"
-                :key="n"
-                class="dent-item"
-                :class="{'selected': inList(`${type}_${i + 24}`)}"
-              >
-                <img
-                  @click="onDentClicked(`${type}_${i + 24}`,  type,i + 24)"
-                  :src="`/images/dents/${i + 24}.png`"
+                  <img
+                    @click="onDentClicked(`${type}_${i + 16}`,  type,i + 16)"
+                    :src="`/images/dents/${i + 16}.png`"
+                  >
+                </div>
+                <v-divider vertical class="mx-2 border-black" />
+                <div
+                  v-for="(i,n) in 8"
+                  :key="n + 24"
+                  class="dent-item"
+                  :class="{'selected': inList(`${type}_${i + 24}`)}"
                 >
+                  <img
+                    @click="onDentClicked(`${type}_${i + 24}`,  type,i + 24)"
+                    :src="`/images/dents/${i + 24}.png`"
+                  >
+                </div>
               </div>
             </div>
           </v-container>
