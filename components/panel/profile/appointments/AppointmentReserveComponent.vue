@@ -86,6 +86,18 @@
                 sm="4"
                 md="4"
               >
+                <custom-national-code-input
+                  :label="'کد ملی'"
+                  v-model="form.cardno"
+                  :error="errors.cardno"
+                  @input="errors.cardno = ''"
+                />
+              </v-col>
+              <v-col
+                cols="12"
+                sm="4"
+                md="4"
+              >
                 <custom-phone-number-input
                   :label="'شماره موبایل'"
                   v-model="form.tel"
@@ -261,8 +273,10 @@ export default{
         case_type: 0,
         gender: '',
         tel: '',
+        cardno: '',
         birth_date: '',
         start_at: '',
+        vip_type: 'count',
       },
       startAtList: [],
       organizations: [],
@@ -276,6 +290,7 @@ export default{
         birth_date: '',
         gender: '',
         tel: '',
+        cardno: '',
         code: '',
       },
     }
@@ -291,7 +306,11 @@ export default{
         return
       }
       if (!this.form.tel) {
-        this.$toast.error('شماره موبایل را کنید')
+        this.$toast.error('شماره موبایل را وارد کنید')
+        return
+      }
+      if (!this.form.cardno) {
+        this.$toast.error('کد ملی بیمار را وارد کنید')
         return
       }
       const data = {
@@ -356,6 +375,7 @@ export default{
         birth_date: '',
         gender: '',
         tel: '',
+        cardno: '',
         code: '',
       }
     },
@@ -369,7 +389,9 @@ export default{
         tel: '',
         birth_date: '',
         code: '',
+        cardno: '',
         start_at: '',
+        vip_type: 'count',
       }
       this.sent = false
       this.isVerified = false
@@ -379,7 +401,9 @@ export default{
       const data = {
         ...this.form,
         organization_id: this.form.organization_id.id,
-        case_type: this.form.case_type.name
+        case_type: this.form.case_type.name,
+        cardno: this.form.cardno,
+        vip_type: this.form.vip_type,
       }
       if(!this.validateForm(data)) {
         return
@@ -434,6 +458,11 @@ export default{
         this.errors.start_at = 'تاریخ رزرو وقت را وارد کنید'
         this.$toast.error('تاریخ رزرو وقت را وارد کنید')
       }
+      if (!form.cardno) {
+        isValid = false
+        this.errors.cardno = 'کد ملی را وارد کنید'
+        this.$toast.error('کد ملی را وارد کنید')
+      }
       return isValid
     },
     getOrganizations() {
@@ -443,7 +472,6 @@ export default{
         })
     },
     getCaseTypes(val) {
-      // this.$axios.get(`/organizations/${this.loginUser.organization_id}/cases`)
       this.$axios.get(`/organizations/${val.id}/cases/v2`)
         .then(res => {
           const cases = res.data.data
