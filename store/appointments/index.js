@@ -35,6 +35,7 @@ export const state = () => ({
     }
   },
   results: [],
+  allResults: [],
   referedResults: [],
 })
 
@@ -56,6 +57,9 @@ export const mutations = {
   },
   setReferedResults(state, results) {
     state.referedResults = results
+  },
+  setAllResults(state, results) {
+    state.allResults = results
   },
   setPriceList(state, priceList) {
     state.priceList = priceList
@@ -129,6 +133,18 @@ export const actions = {
       .then(res => {
         const data = res.data;
         ctx.commit('setResults', data)
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  getUserAppointmentResults(ctx, id) {
+    ctx.commit('setAllResults', [])
+    return this.$axios.get(`/users/${id}/appointments/results`)
+      .then(res => {
+        const data = res.data;
+        ctx.commit('setAllResults', data)
         return Promise.resolve(res)
       })
       .catch(err => {
@@ -371,6 +387,9 @@ export const getters = {
   },
   getResults(state) {
     return state.results
+  },
+  getAllResults(state) {
+    return state.allResults
   },
   getReferedResults(state) {
     return state.referedResults

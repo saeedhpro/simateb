@@ -1171,6 +1171,7 @@ export default {
         this.newFiles = []
         this.getAppointmentPrescription()
         this.getResults()
+        this.getUserAppointmentResults()
         if(this.isReDoctor) {
           this.getReferedResults()
         }
@@ -1196,6 +1197,9 @@ export default {
         id: this.id,
         type: ''
       })
+    },
+    getUserAppointmentResults() {
+      this.$store.dispatch('appointments/getUserAppointmentResults', this.appointment.user_id)
     },
     getLogo(app) {
       if (app.user && app.user.logo) {

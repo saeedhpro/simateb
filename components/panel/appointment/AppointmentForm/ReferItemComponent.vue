@@ -138,21 +138,18 @@
           <v-container fluid>
             <div class="send-image-list">
               <div class="send-image-item"
-               :class="{'selected': isSelected(i)}"
+               :class="{'selected': isSelected(i.url)}"
                v-for="(i,n) in results"
                :key="n"
               >
-                <input :id="`image_${i}`" type="checkbox" hidden :value="i" v-model="doctorImages">
-                <label :for="`image_${i}`">
+                <input :id="`image_${n}`" type="checkbox" hidden :value="i.url" v-model="doctorImages">
+                <label :for="`image_${n}`">
                     <img
-                      :src="i"
+                      :src="i.url"
                       alt=""
                     />
                 </label>
               </div>
-<!--              <div @click="selectImage(i)" class="send-image-item" v-for="(i,n) in results" :key="n">-->
-<!--                <v-img width="200px" :src="i" alt=""/>-->
-<!--              </div>-->
             </div>
           </v-container>
         </v-card-text>
@@ -320,7 +317,7 @@ export default {
   },
   computed: {
     results() {
-      return this.$store.getters['appointments/getResults']
+      return this.$store.getters['appointments/getAllResults']
     },
     radiologyList() {
       return this.$store.getters['organizations/getRadiologyList']
