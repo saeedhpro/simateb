@@ -41,7 +41,7 @@
                 :class="{ 'is-today': d.is_today }">
                 <div class="header-date"
                   :class="{ 'is-today': d.is_today, 'is-friday': d.is_friday, 'is-holiday': d.is_holiday }"
-                  @click="openPazireshModal(d.start_at)">
+                  @click="openPazireshModal(d.start_at, true)">
                   {{ d.title }}
                   <br />
                   {{ d.sub_title }}
@@ -183,14 +183,23 @@ export default {
           is_today: jDate.locale('fa').format("YYYYMMDD") == moment().locale('fa').format("YYYYMMDD"),
           title: jDate.locale('fa').format("dddd"),
           sub_title: jDate.locale('fa').format("jDD jMMMM"),
-          start_at: `${day.format('YYYY/MM/DD')} ${this.workHour.start}`,
+          start_at: `${day.format('YYYY/MM/DD')}`,
         })
         day = day.add(1, 'jDay')
       }
       this.headerDays = days
     },
-    openPazireshModal(startAt) {
-      this.initTime = startAt
+    openPazireshModal(startAt, header = false) {
+      if (header) {
+        this.initTime = `${startAt} ${moment().format("HH:mm:ss")}`
+        const start = moment(this.initTime);
+        const remainder = 15 - (start.minute() % 15);
+        this.initTime = moment(start)
+          .add(remainder, "minutes")
+          .format("YYYY/MM/DD HH:mm:ss")
+      } else {
+        this.initTime = startAt
+      }
       this.showPazireshModal = true
     },
     openItem(id) {

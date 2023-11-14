@@ -311,7 +311,6 @@ export default{
       }
       if (!this.form.cardno) {
         this.$toast.error('کد ملی بیمار را وارد کنید')
-        return
       }
       const data = {
         'ref_organization_id': this.form.organization_id.id,
