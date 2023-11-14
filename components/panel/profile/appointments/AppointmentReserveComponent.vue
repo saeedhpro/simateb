@@ -337,6 +337,14 @@ export default{
             }
           }, 1000);
         })
+        .catch(err => {
+          if (err.response.status == 422) {
+            console.log(err.response)
+            if (err.response.data && err.response.data.errors) {
+
+            }
+          }
+        })
     },
     verifyCode() {
       const data = {
