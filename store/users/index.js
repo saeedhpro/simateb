@@ -148,11 +148,16 @@ export const actions = {
       })
   },
   getUsers(ctx, data) {
-    let url = '/organizations/users'
-    if (data && data.q) {
-      url += `?q=${data.q}`
+    const arr = [];
+    if (data) {
+      const d = Object.entries(data);
+      for (let i = 0; i < d.length; i++) {
+        if (d[i][1]) {
+          arr.push(`${d[i][0]}=${d[i][1]}`)
+        }
+      }
     }
-    return this.$axios.get(url)
+    return this.$axios.get(`/organizations/users?${arr.join('&')}`)
       .then(res => {
         const data = res.data.data;
         ctx.commit('setUsers', data)

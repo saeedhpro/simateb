@@ -149,6 +149,16 @@
                       alt=""
                     />
                 </label>
+                <label :for="`image_${n}`">
+                <span class="d-flex flex-column align-start justify-start py-2 px-2">
+                  <span class="organization-name mt-2 font-weight-bold">
+                    {{ i.organization_name }}
+                  </span>
+                  <span class="organization-name mt-2 font-weight-bold">
+                    {{ i.start_at_fa }}
+                  </span>
+                </span>
+                </label>
               </div>
             </div>
           </v-container>
