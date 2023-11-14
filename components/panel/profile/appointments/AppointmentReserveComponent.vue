@@ -339,9 +339,8 @@ export default{
         })
         .catch(err => {
           if (err.response.status == 422) {
-            console.log(err.response)
-            if (err.response.data && err.response.data.errors) {
-
+            if (err.response.data && err.response.data.errors && err.response.data.errors.appointment.length > 0) {
+              this.$toast.error(err.response.data.errors.appointment[0])
             }
           }
         })
