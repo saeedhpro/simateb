@@ -316,6 +316,7 @@ export default{
         'ref_organization_id': this.form.organization_id.id,
         'organization_id': this.loginUser.organization_id,
         'tel': this.form.tel,
+        'start_at': this.form.start_at,
       };
       this.$axios.post('/organizations/appointments/reserve/code', data)
         .then(res=> {
