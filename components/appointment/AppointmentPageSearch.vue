@@ -144,14 +144,18 @@ export default {
         },
         {
           id: 2,
-          label: 'برنامه نوبت دهی vip'
+          label: 'تنظیمات نوبت دهی vip'
         },
         {
           id: 3,
-          label: 'تنظیمات علل مراجعه'
+          label: 'برنامه نوبت دهی vip'
         },
         {
           id: 4,
+          label: 'تنظیمات علل مراجعه'
+        },
+        {
+          id: 5,
           label: 'ساعت کاری'
         },
       ],
@@ -226,6 +230,11 @@ export default {
           })
           break;
         case 3:
+          this.$router.push({
+            path: '/schedule/reserves'
+          })
+          break;
+        case 4:
           if (this.isSurgery) {
             this.$router.push({
               path: '/cases/surgeries'
@@ -236,7 +245,7 @@ export default {
             })
           }
           break;
-        case 4:
+        case 5:
           this.openShowWorkHour()
           break;
       }
