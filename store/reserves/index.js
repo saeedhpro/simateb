@@ -35,7 +35,7 @@ export const mutations = {
 
 export const actions = {
   getForMeList(ctx, data) {
-    return this.$axios.get(`/reserves/for_me?page=${data.page}&start=${data.start}&end=${data.end}`)
+    return this.$axios.get(`/reserves/for_me?page=${data.page}&start=${data.start}&end=${data.end}&profession_id=${data.profession_id}`)
       .then(res => {
         const data = res.data;
         ctx.commit('setForMeList', data)
@@ -46,7 +46,7 @@ export const actions = {
       })
   },
   getForOthersList(ctx, data) {
-    return this.$axios.get(`/reserves/for_others?page=${data.page}&start=${data.start}&end=${data.end}`)
+    return this.$axios.get(`/reserves/for_others?page=${data.page}&start=${data.start}&end=${data.end}&profession_id=${data.profession_id}`)
       .then(res => {
         const data = res.data;
         ctx.commit('setForOthersList', data)

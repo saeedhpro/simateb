@@ -23,19 +23,187 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="12">
-        <v-card class="page-main-box">
+      <v-col
+        cols="12"
+      >
+        <v-card
+          class="page-main-box"
+        >
           <v-row class="search-box">
-            <v-col cols="12" sm="6" md="4" lg="3">
-              <div class="right-box">
-                <v-select outlined :items="months" label="ماه" item-value="id" item-text="label" v-model="month"
-                  @change="onMonthChanged"></v-select>
-              </div>
-            </v-col>
-            <v-col cols="12" sm="6" md="4" lg="3">
-              <div class="right-box">
-                <v-select outlined :items="years" label="سال" item-value="id" item-text="label" v-model="year"
-                  @change="onYearChanged"></v-select>
+            <v-spacer/>
+            <v-col
+              cols="12"
+              sm="6"
+              md="6"
+              lg="5"
+            >
+              <div class="page-main-actions-left">
+                <div class="result-count">
+                  <span>{{ schedules.meta.total ? schedules.meta.total : 0  }}</span>
+                  نتیجه
+                </div>
+                <div class="page-search-box">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="17.995" height="18" viewBox="0 0 17.995 18">
+                    <defs>
+                      <style>.a {
+                        fill: #757575;
+                      }</style>
+                    </defs>
+                    <path class="a"
+                          d="M17.722,16.559l-4.711-4.711a7.094,7.094,0,0,0,1.582-4.535,7.327,7.327,0,1,0-2.777,5.729l4.711,4.711a.972.972,0,0,0,.629.247.844.844,0,0,0,.6-.247A.822.822,0,0,0,17.722,16.559ZM1.687,7.313a5.625,5.625,0,1,1,5.625,5.625A5.632,5.632,0,0,1,1.687,7.313Z"
+                          transform="translate(0)"/>
+                  </svg>
+                  <input class="search-input" v-model="search.q" type="text" ref="search-input"
+                         placeholder="جستجو" @input="getScheduleList(false)">
+                  <div @click="getScheduleList(false)" class="search-button">
+                    <img src="/images/pages/search-button.svg">
+                  </div>
+                  <div @click="toggleFilterModal" class="search-filter">
+                    <img src="/images/pages/filter.svg">
+                    فیلتر
+                  </div>
+                  <v-dialog
+                    v-model="showFilterModal"
+                    persistent
+                    max-width="1056px"
+                  >
+                    <v-card
+                      class="create-update-modal"
+                    >
+                      <v-card-title
+                        class="create-update-modal-title-box"
+                      >
+                        <div class="create-update-modal-title">
+                          <button
+                            @click="closeFilterModal"
+                            class="create-update-modal-close"
+                          >
+                            <v-icon>mdi-close</v-icon>
+                          </button>
+                          <span>جستجو پیشرفته</span>
+                        </div>
+                        <v-spacer/>
+                      </v-card-title>
+                      <v-card-text>
+                        <v-container>
+                          <v-row><v-col
+                            cols="12"
+                            sm="6"
+                            md="3"
+                          >
+                            <div class="create-update-model-input-box">
+                              <label>عبارت جستجو</label>
+                              <input type="text" v-model="search.q">
+                            </div>
+                          </v-col>
+                            <v-col
+                              cols="12"
+                              sm="6"
+                              md="3"
+                            >
+                              <div class="create-update-model-input-box">
+                                <label>تخصص</label>
+                                <v-autocomplete
+                                  v-model="search.profession_id"
+                                  :items="professions"
+                                  outlined
+                                  dense
+                                  item-text="name"
+                                  item-value="id"
+                                  label=""
+                                ></v-autocomplete>
+                              </div>
+                            </v-col>
+                            <v-col
+                              cols="12"
+                              sm="6"
+                              md="3"
+                            >
+                              <div class="create-update-model-input-box">
+                                <label>تاریخ ابتدا</label>
+                                <date-picker
+                                  v-model="search.start"
+                                  format="YYYY-MM-DD"
+                                  display-format="jYYYY/jMM/jDD"
+                                  editable
+                                  class="date-picker"
+                                  type="date"
+                                >
+                                  <template v-slot:label>
+                                    <img src="/images/form/datepicker.svg">
+                                  </template>
+                                </date-picker>
+                              </div>
+                            </v-col>
+                            <v-col
+                              cols="12"
+                              sm="6"
+                              md="3"
+                            >
+                              <div class="create-update-model-input-box">
+                                <label>تاریخ انتها</label>
+                                <date-picker
+                                  v-model="search.end"
+                                  format="YYYY-MM-DD"
+                                  display-format="jYYYY/jMM/jDD"
+                                  editable
+                                  class="date-picker"
+                                  type="date"
+                                >
+                                  <template v-slot:label>
+                                    <img src="/images/form/datepicker.svg">
+                                  </template>
+                                </date-picker>
+                              </div>
+                            </v-col>
+                          </v-row>
+                        </v-container>
+                      </v-card-text>
+                      <v-card-actions>
+                        <v-container>
+                          <v-row>
+                            <v-col
+                              cols="12"
+                              sm="3"
+                              md="3"
+                            >
+                              <button
+                                class="second-button full-width"
+                                @click="clearForm"
+                              >پاک کردن فرم
+                              </button>
+                            </v-col>
+                            <v-spacer/>
+                            <v-col
+                              cols="12"
+                              sm="3"
+                              md="3"
+                            >
+                              <button
+                                class="second-button full-width"
+                                @click="closeFilterModal"
+                              >
+                                بستن
+                              </button>
+                            </v-col>
+                            <v-col
+                              cols="12"
+                              sm="4"
+                              md="4"
+                            >
+                              <button
+                                class="main-button"
+                                @click="getScheduleList"
+                              >
+                                جستجو
+                              </button>
+                            </v-col>
+                          </v-row>
+                        </v-container>
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
+                </div>
               </div>
             </v-col>
           </v-row>
@@ -49,7 +217,7 @@
                     <td class="text-center">
                       <span class="file-id vip">
                         {{
-                          i.res_organization ? i.res_organization.name : ''
+                          i.staff_organization ? i.staff_organization.name : ''
                         }}
                       </span>
                     </td>
@@ -88,32 +256,68 @@ export default {
   layout: "panel",
   middleware: "auth",
   components: { AppointmentReserveComponent, CustomRadioBox, DataTableComponent, CustomDatePickerJs },
+  data() {
+    return {
+      moment: moment,
+      showFilterModal: false,
+      showReserveForm: false,
+      headers: [
+        '',
+        'برای مطب',
+        'تاریخ',
+        'ساعت',
+        'خدمت',
+      ],
+      search: {
+        page: 1,
+        start: '',
+        end: '',
+        q: '',
+        profession_id: 0,
+      },
+      form: {
+        date: moment().locale('en').format('YYYY/MM/DD'),
+        start: '08:00:00',
+        end: '10:00:00',
+        id: null,
+        start_at: '',
+        end_at: '',
+        count: 0,
+        site: 0,
+        app: 0,
+        case_type: '',
+        organization_id: null,
+        dates: [],
+      },
+      lastDay: 0,
+    }
+  },
   async mounted() {
     await this.getWorkHour()
-    const year = parseInt(moment().local().format("jYYYY"))
-    const month = parseInt(moment().local().format("jMM"))
-    this.year = year
-    this.month = month
-    this.paginate()
+    this.getScheduleList(false)
     this.form.start = this.workHour.start
     this.form.end = this.workHour.end
+    this.getProfessions()
   },
   methods: {
     async getWorkHour() {
       return this.$store.dispatch('appointment/getOrganizationWorkHour', this.loginUser.organization_id)
     },
-    getScheduleList() {
-      let month = this.month;
-      let year = this.year;
-      if (month < 10) {
-        month = `0${month}`
+    getProfessions() {
+      this.$store.dispatch('admin/professions/getProfessions')
+    },
+    getScheduleList(filtered = true) {
+      let startDay = null
+      let endDay = null
+      if (filtered) {
+        startDay = this.search.start
+        endDay = this.search.end
       }
-      let startDay = moment(`${year}/${month}/01`, 'jYYYY/jMM/jDD', 'fa').locale('en')
-      let endDay = startDay.clone().endOf('jMonth').locale('en')
       this.$store.dispatch('reserves/getForMeList', {
         ...this.search,
-        start: startDay.format('YYYY/MM/DD'),
-        end: endDay.format('YYYY/MM/DD')
+        start: startDay,
+        end: endDay,
+        profession_id: this.search.profession_id,
       })
     },
     paginate(page = 1) {
@@ -193,122 +397,35 @@ export default {
           }, 50)
         })
     },
-    onMonthChanged(month) {
-      this.month = month
-      this.getScheduleList()
-    },
-    onYearChanged(year) {
-      this.year = year
-      this.getScheduleList()
-    },
-    calcDate() {
-      this.years = []
-      for (let i = 1398; i < this.year + 10; i++) {
-        this.years.push(i)
-      }
-      let yearMonth = moment.from(`${this.year}/${this.month}`, "fa", "jYYYY/jMM").format("jYYYY/jMM")
-      const lastDay = moment.from(`${this.year}/${this.month}`, "fa", "jYYYY/jMM").jDaysInMonth()
-      this.lastDay = lastDay
-      const start = moment.from(`${yearMonth}/01`, "fa", "YYYY/MM/DD").locale("en").format("YYYY/MM/DD")
-      const end = moment.from(`${yearMonth}/${lastDay}`, "fa", "YYYY/MM/DD").locale("en").format("YYYY/MM/DD")
-      this.search = {
-        start,
-        end,
-      }
-    },
     openReserveForm() {
       this.showReserveForm = true
     },
     closeReserveForm() {
       this.showReserveForm = false
-    }
-  },
-  data() {
-    return {
-      moment: moment,
-      showReserveForm: false,
-      headers: [
-        '',
-        'مطب',
-        'تاریخ',
-        'ساعت',
-        'خدمت',
-      ],
-      search: {
-        page: 1,
-      },
-      form: {
-        date: moment().locale('en').format('YYYY/MM/DD'),
-        start: '08:00:00',
-        end: '10:00:00',
-        id: null,
-        start_at: '',
-        end_at: '',
-        count: 0,
-        site: 0,
-        app: 0,
-        case_type: '',
-        organization_id: null,
-        dates: [],
-      },
-      lastDay: 0,
-      month: 1,
-      months: [
-        {
-          id: 1,
-          label: 'فروردین',
-        },
-        {
-          id: 2,
-          label: 'اردیبهشت',
-        },
-        {
-          id: 3,
-          label: 'خرداد',
-        },
-        {
-          id: 4,
-          label: 'تیر',
-        },
-        {
-          id: 5,
-          label: 'مرداد',
-        },
-        {
-          id: 6,
-          label: 'شهریور',
-        },
-        {
-          id: 7,
-          label: 'مهر',
-        },
-        {
-          id: 8,
-          label: 'آبان',
-        },
-        {
-          id: 9,
-          label: 'آذر',
-        },
-        {
-          id: 10,
-          label: 'دی',
-        },
-        {
-          id: 11,
-          label: 'بهمن',
-        },
-        {
-          id: 12,
-          label: 'اسفند',
-        },
-      ],
-      year: 1398,
-    }
+    },
+    toggleFilterModal() {
+      this.showFilterModal = !this.showFilterModal
+    },
+    closeFilterModal() {
+      this.clearSearchForm()
+      this.toggleFilterModal()
+    },
+    clearSearchForm() {
+      this.search = {
+        page: this.search.page,
+        start: '',
+        end: '',
+        q: '',
+        profession_id: 0,
+      }
+    },
   },
   computed: {
     schedules() {
       return this.$store.getters['reserves/getForMeList']
+    },
+    professions() {
+      return this.$store.getters['admin/professions/getProfessions']
     },
     loginUser() {
       return this.$store.getters['login/getUser']
@@ -321,23 +438,7 @@ export default {
         return this.$store.dispatch('appointment/setWorkHour', val)
       }
     },
-    years() {
-      const years = [];
-      const year = parseInt(this.$moment().format("jYYYY")) + 10;
-      for (let i = 1398; i < year; i++) {
-        years.push(i)
-      }
-      return years
-    }
   },
-  watch: {
-    'form.start'() {
-      this.form.start_at = `${this.form.date} ${this.form.start}`
-    },
-    'form.end'() {
-      this.form.end_at = `${this.form.date} ${this.form.end}`
-    }
-  }
 }
 </script>
 
