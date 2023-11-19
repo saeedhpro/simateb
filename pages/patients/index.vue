@@ -9,7 +9,7 @@
             <img src="/images/pages/users.svg" alt="users">
             <span class="title">
             بیماران
-          </span>
+            </span>
           </div>
           <v-divider inset :style="{'margin-left': isDoctor ? '72px' : '0'}"/>
           <div class="page-actions"
@@ -92,7 +92,7 @@
                           transform="translate(0)"/>
                   </svg>
                   <input class="search-input" v-model="search.q" type="text" ref="search-input" placeholder="جستجو"
-                         @input="getUsersList">
+                         @input="onSearch">
                   <div @click="getUsersList" class="search-button">
                     <img src="/images/pages/search-button.svg">
                   </div>
@@ -357,6 +357,7 @@
 </template>
 
 <script>
+import { debounce } from "lodash";
 import DataTableComponent from "~/components/panel/global/DataTableComponent";
 import CropImageComponent from "~/components/panel/global/CropImageComponent";
 import CreateUserFormComponent from "~/components/panel/profile/user/CreateUserFormComponent";
@@ -458,6 +459,9 @@ export default {
       this.search.page = page
       this.getUsersList()
     },
+    onSearch: debounce(function ($e) {
+      this.getUsersList()
+    }, 500),
     getUsersList() {
       // this.loading = true
       this.showFilterModal = false

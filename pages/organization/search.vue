@@ -66,7 +66,7 @@
                           transform="translate(0)"/>
                   </svg>
                   <input class="search-input" v-model="search.q" type="text" ref="search-input"
-                         placeholder="جستجو / کد پذیرش" @input="getAppointmentList">
+                         placeholder="جستجو / کد پذیرش" @input="onSearch">
                   <div @click="getAppointmentList" class="search-button">
                     <img src="/images/pages/search-button.svg">
                   </div>
@@ -467,6 +467,7 @@
 </template>
 
 <script>
+import { debounce } from "lodash";
 import moment from "jalali-moment";
 import DataTableComponent from "~/components/panel/global/DataTableComponent";
 import CaseTypeCheckboxComponent from "~/components/panel/appointment/CaseTypeCheckboxComponent";
@@ -592,6 +593,10 @@ export default {
     this.getCaseTypes()
   },
   methods: {
+    onSearch: debounce(function ($e) {
+      let value = $e.target.value;
+      this.getAppointmentList()
+    }, 500),
     getAppointmentList(filtered = false) {
       this.showFilterModal = false
       const data = {

@@ -457,11 +457,13 @@ export default {
   },
   methods: {
     getUser(tel) {
-      this.$store.dispatch('users/getUserByTel', tel)
+      if (this.form.tel) {
+        this.$store.dispatch('users/getUserByTel', tel)
         .then(res => {
           const data = res.data.data
           this.$toast.error(`این شماره پیشتر برای ${data.full_name} ثبت شده است!`)
         })
+      }
     },
     closeForm(done = false) {
       if (done) {

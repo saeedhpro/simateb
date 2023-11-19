@@ -93,7 +93,7 @@
                           d="M17.722,16.559l-4.711-4.711a7.094,7.094,0,0,0,1.582-4.535,7.327,7.327,0,1,0-2.777,5.729l4.711,4.711a.972.972,0,0,0,.629.247.844.844,0,0,0,.6-.247A.822.822,0,0,0,17.722,16.559ZM1.687,7.313a5.625,5.625,0,1,1,5.625,5.625A5.632,5.632,0,0,1,1.687,7.313Z"
                           transform="translate(0)"/>
                   </svg>
-                  <input class="search-input" v-model="search.q" type="text" ref="search-input" placeholder="جستجو">
+                  <input class="search-input" v-model="search.q" type="text" ref="search-input" placeholder="جستجو" @input="onSearch">
                   <div @click="getAppointmentList" class="search-button">
                     <img src="/images/pages/search-button.svg">
                   </div>
@@ -322,6 +322,7 @@
 </template>
 
 <script>
+import { debounce } from "lodash";
 import moment from 'jalali-moment'
 
 import DataTableComponent from "~/components/panel/global/DataTableComponent";
@@ -472,6 +473,10 @@ export default {
           this.showFilterModal = false
         })
     },
+    onSearch: debounce(function ($e) {
+      let value = $e.target.value;
+      this.getAppointmentList()
+    }, 500),
     getAppointmentList(load = true) {
       return this.$store.dispatch('appointments/search', this.search)
     },
@@ -623,13 +628,13 @@ export default {
         this.appointment.cardno = ''
       }
     },
-    'search.q'(val) {
-      if (val) {
-        this.getAppointmentList(false)
-      } else {
-        this.getAppointmentList(false)
-      }
-    }
+    // 'search.q'(val) {
+    //   if (val) {
+    //     this.getAppointmentList(false)
+    //   } else {
+    //     this.getAppointmentList(false)
+    //   }
+    // }
   }
 }
 </script>
