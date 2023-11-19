@@ -329,7 +329,8 @@ export default {
     getUsers(q = '', page = null) {
       this.isLoading = true
       let filter = {
-        q: q
+        q: q,
+        group: 1
       }
       if (page) {
         filter.page = page

@@ -211,14 +211,14 @@
                           />
                           <div class="selected-items-box">
                             <div class="selected-items-row top">
-                              <div class="left">{{ selectedLeftTopDents.join(',') }}</div>
+                              <div class="left">{{ selectedRightTopDents.join(',') }}</div>
                               <v-divider vertical/>
-                              <div class="right">{{ selectedRightTopDents.join(',') }}</div>
+                              <div class="right">{{ selectedLeftTopDents.join(',') }}</div>
                             </div>
                             <div class="selected-items-row">
-                              <div class="left">{{ selectedLeftBottomDents.join(',') }}</div>
+                              <div class="left">{{ selectedRightBottomDents.join(',') }}</div>
                               <v-divider vertical/>
-                              <div class="right">{{ selectedRightBottomDents.join(',') }}</div>
+                              <div class="right">{{ selectedLeftBottomDents.join(',') }}</div>
                             </div>
                             <div class="remove-dents" @click="removeDents('Periapical')"><v-icon>mdi-close</v-icon></div>
                           </div>
@@ -398,15 +398,15 @@
                               />
                               <div class="selected-items-box">
                                 <div class="selected-items-row top">
-                                  <div class="left">{{ selectedCBCTLeftTopDents.join(',') }}</div>
+                                  <div class="left">{{ selectedCBCTRightTopDents.join(',') }}</div>
                                   <v-divider vertical/>
-                                  <div class="right">{{ selectedCBCTRightTopDents.join(',') }}</div>
+                                  <div class="right">{{ selectedCBCTLeftTopDents.join(',') }}</div>
                                 </div>
                                 <v-divider />
                                 <div class="selected-items-row">
-                                  <div class="left">{{ selectedCBCTLeftBottomDents.join(',') }}</div>
+                                  <div class="left">{{ selectedCBCTRightBottomDents.join(',') }}</div>
                                   <v-divider vertical/>
-                                  <div class="right">{{ selectedCBCTRightBottomDents.join(',') }}</div>
+                                  <div class="right">{{ selectedCBCTLeftBottomDents.join(',') }}</div>
                                 </div>
                                 <div class="remove-dents" @click="removeDents('CBCT')"><v-icon>mdi-close</v-icon></div>
                               </div>
@@ -578,10 +578,10 @@
                   v-for="(i,n) in 8"
                   :key="n"
                   class="dent-item"
-                  :class="{'selected': inList(`${type}_${i}`)}"
+                  :class="{'selected': inList(`${type}_UL_${8 - i + 1}`)}"
                 >
                   <img
-                    @click="onDentClicked(`${type}_${i}`, type, i)"
+                    @click="onDentClicked(`${type}_UL_${8 - i + 1}`, type, 8 - i + 1, 'UL')"
                     :src="`/images/dents/${i}.png`"
                   >
                 </div>
@@ -590,10 +590,10 @@
                 v-for="(i,n) in 8"
                 :key="n + 8"
                 class="dent-item"
-                :class="{'selected': inList(`${type}_${i + 8}`)}"
+                :class="{'selected': inList(`${type}_UR_${i}`)}"
               >
                 <img
-                  @click="onDentClicked(`${type}_${i + 8}`, type, i + 8)"
+                  @click="onDentClicked(`${type}_UR_${i}`, type, i, 'UR')"
                   :src="`/images/dents/${i + 8}.png`"
                 >
               </div>
@@ -608,10 +608,10 @@
                   v-for="(i,n) in 8"
                   :key="n + 16"
                   class="dent-item"
-                  :class="{'selected': inList(`${type}_${i + 16}`)}"
+                  :class="{'selected': inList(`${type}_LL_${8 - i + 1}`)}"
                 >
                   <img
-                    @click="onDentClicked(`${type}_${i + 16}`,  type,i + 16)"
+                    @click="onDentClicked(`${type}_LL_${8 - i + 1}`,  type, 8 - i + 1, 'LL')"
                     :src="`/images/dents/${i + 16}.png`"
                   >
                 </div>
@@ -620,10 +620,10 @@
                   v-for="(i,n) in 8"
                   :key="n + 24"
                   class="dent-item"
-                  :class="{'selected': inList(`${type}_${i + 24}`)}"
+                  :class="{'selected': inList(`${type}_LR_${i}`)}"
                 >
                   <img
-                    @click="onDentClicked(`${type}_${i + 24}`,  type,i + 24)"
+                    @click="onDentClicked(`${type}_LR_${i}`,  type, i, 'LR')"
                     :src="`/images/dents/${i + 24}.png`"
                   >
                 </div>
@@ -698,60 +698,60 @@ export default {
     inList(item) {
       return this.cases.find(i => i == item)
     },
-    onDentClicked(item, type = 'Periapical', index) {
+    onDentClicked(item, type = 'Periapical', index, position = 'UR') {
       const i = this.cases.find(i => i == item)
       if (i) {
         this.cases = this.cases.filter(i => i != item)
         if (type === 'Periapical') {
-          if (index < 9) {
+          if (position = 'UR') {
             this.selectedRightTopDents = this.selectedRightTopDents.filter(i => i != index).sort()
-          } else if (index < 17) {
-            this.selectedLeftTopDents = this.selectedLeftTopDents.filter(i => i != index - 8).sort()
-          } else if (index < 25) {
-            this.selectedRightBottomDents = this.selectedRightBottomDents.filter(i => i != index - 16).sort()
+          } else if (position = 'UL') {
+            this.selectedLeftTopDents = this.selectedLeftTopDents.filter(i => i != index).sort()
+          } else if (position = 'LR') {
+            this.selectedRightBottomDents = this.selectedRightBottomDents.filter(i => i != index).sort()
           } else {
-            this.selectedLeftBottomDents = this.selectedLeftBottomDents.filter(i => i != index - 24).sort()
+            this.selectedLeftBottomDents = this.selectedLeftBottomDents.filter(i => i != index).sort()
           }
         } else {
-          if (index < 9) {
+          if (position = 'UR') {
             this.selectedCBCTRightTopDents = this.selectedCBCTRightTopDents.filter(i => i != index).sort()
-          } else if (index < 17) {
-            this.selectedCBCTLeftTopDents = this.selectedCBCTLeftTopDents.filter(i => i != index - 8).sort()
-          } else if (index < 25) {
-            this.selectedCBCTRightBottomDents = this.selectedCBCTRightBottomDents.filter(i => i != index - 16).sort()
+          } else if (position = 'UL') {
+            this.selectedCBCTLeftTopDents = this.selectedCBCTLeftTopDents.filter(i => i != index).sort()
+          } else if (position = 'LR') {
+            this.selectedCBCTRightBottomDents = this.selectedCBCTRightBottomDents.filter(i => i != index).sort()
           } else {
-            this.selectedCBCTLeftBottomDents = this.selectedCBCTLeftBottomDents.filter(i => i != index - 24).sort()
+            this.selectedCBCTLeftBottomDents = this.selectedCBCTLeftBottomDents.filter(i => i != index).sort()
           }
         }
       } else {
         this.cases.push(item)
         if (type === 'Periapical') {
-          if (index < 9) {
+          if (position == 'UR') {
             this.selectedRightTopDents.push(index)
-            this.selectedRightTopDents.sort()
-          } else if (index < 17) {
-            this.selectedLeftTopDents.push(index - 8)
-            this.selectedLeftTopDents.sort((a, b) => a > b ? -1 : 1)
-          } else if (index < 25) {
-            this.selectedRightBottomDents.push(index - 16)
-            this.selectedRightBottomDents.sort()
+            this.selectedRightTopDents.sort((a, b) => a > b ? -1 : 1)
+          } else if (position == 'UL') {
+            this.selectedLeftTopDents.push(index)
+            this.selectedLeftTopDents.sort()
+          } else if (position == 'LR') {
+            this.selectedRightBottomDents.push(index)
+            this.selectedRightBottomDents.sort().sort((a, b) => a > b ? -1 : 1)
           } else {
-            this.selectedLeftBottomDents.push(index - 24)
-            this.selectedLeftBottomDents.sort().sort((a, b) => a > b ? -1 : 1)
+            this.selectedLeftBottomDents.push(index)
+            this.selectedLeftBottomDents.sort()
           }
         } else {
-          if (index < 9) {
+          if (position == 'UR') {
             this.selectedCBCTRightTopDents.push(index)
-            this.selectedCBCTRightTopDents.sort()
-          } else if (index < 17) {
-            this.selectedCBCTLeftTopDents.push(index - 8)
-            this.selectedCBCTLeftTopDents.sort((a, b) => a > b ? -1 : 1)
-          } else if (index < 25) {
-            this.selectedCBCTRightBottomDents.push(index - 16)
-            this.selectedCBCTRightBottomDents.sort()
+            this.selectedCBCTRightTopDents.sort((a, b) => a > b ? -1 : 1)
+          } else if (position == 'UL') {
+            this.selectedCBCTLeftTopDents.push(index)
+            this.selectedCBCTLeftTopDents.sort()
+          } else if (position == 'LR') {
+            this.selectedCBCTRightBottomDents.push(index)
+            this.selectedCBCTRightBottomDents.sort().sort((a, b) => a > b ? -1 : 1)
           } else {
-            this.selectedCBCTLeftBottomDents.push(index - 24)
-            this.selectedCBCTLeftBottomDents.sort().sort((a, b) => a > b ? -1 : 1)
+            this.selectedCBCTLeftBottomDents.push(index)
+            this.selectedCBCTLeftBottomDents.sort()
           }
         }
       }

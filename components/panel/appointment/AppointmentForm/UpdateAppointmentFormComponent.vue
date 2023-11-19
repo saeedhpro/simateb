@@ -391,13 +391,21 @@ export default {
     },
     onSearchUsers: debounce(function (e) {
       let q = this.$enDigit(e)
-      this.getUsers(q)
+      this.getUsers(q, null)
     }, 400),
-    getUsers(q = '') {
+    getUsers(q = '', page = null) {
       this.isLoading = true
-      this.$store.dispatch('users/getUsers', {
-        q: q
-      })
+      let filter = {
+        q: q,
+        group: 1
+      }
+      if (page) {
+        filter.page = page
+      }
+      this.$store.dispatch('users/getUsers', filter)
+        .then(res => {
+          this.users = res.data.data
+        })
         .finally(() => {
           this.isLoading = false
         })
