@@ -201,6 +201,28 @@ export const actions = {
         return Promise.reject(err)
       })
   },
+  getUserByCardno(ctx, cardno) {
+    return this.$axios.post(`/users/user`, {
+      cardno: cardno
+    })
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  getUserByTel(ctx, tel) {
+    return this.$axios.post(`/users/user`, {
+      tel: tel,
+    })
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
   createUser(ctx, data) {
     return this.$axios.post(`/users?`, data)
       .then(res => {

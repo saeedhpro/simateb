@@ -309,9 +309,6 @@ export default{
         this.$toast.error('شماره موبایل را وارد کنید')
         return
       }
-      if (!this.form.cardno) {
-        this.$toast.error('کد ملی بیمار را وارد کنید')
-      }
       const data = {
         'ref_organization_id': this.form.organization_id.id,
         'organization_id': this.loginUser.organization_id,
@@ -465,11 +462,6 @@ export default{
         this.errors.start_at = 'تاریخ رزرو وقت را وارد کنید'
         this.$toast.error('تاریخ رزرو وقت را وارد کنید')
       }
-      if (!form.cardno) {
-        isValid = false
-        this.errors.cardno = 'کد ملی را وارد کنید'
-        this.$toast.error('کد ملی را وارد کنید')
-      }
       return isValid
     },
     getOrganizations() {
@@ -495,6 +487,19 @@ export default{
           this.startAtList = res.data
         })
     },
+    getUserWithCardno(cardno) {
+      if (cardno) {
+        this.$store.dispatch('users/getUserByCardno', cardno)
+        .then(res => {
+          const data = res.data.data
+          this.form.fname = data.fname
+          this.form.lname = data.lname
+          this.form.tel = data.tel
+          this.form.gender = data.gender
+          this.form.birth_date = data.birth_date
+        })
+      }
+    }
   },
   computed: {
     show() {
@@ -519,6 +524,11 @@ export default{
         this.getWindows(val)
       } else {
         this.startAtList = []
+      }
+    },
+    'form.cardno'(val) {
+      if (val && val.length == 10) {
+        this.getUserWithCardno(val)
       }
     }
   }

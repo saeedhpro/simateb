@@ -37,10 +37,10 @@
                         v-for="(i,n) in 8"
                         :key="n"
                         class="dent-item"
-                        :class="{'selected': inList('UR', i)}"
+                        :class="{'selected': inList('UR', 8 - i + 1)}"
                       >
                         <img
-                          @click="onDentClicked('UR', i)"
+                          @click="onDentClicked('UR', 8 - i + 1)"
                           :src="`/images/dents/${i}.png`"
                         >
                       </div>
@@ -67,10 +67,10 @@
                         v-for="(i,n) in 8"
                         :key="n + 16"
                         class="dent-item"
-                        :class="{'selected': inList('LR', i)}"
+                        :class="{'selected': inList('LR', 8 - i + 1)}"
                       >
                         <img
-                          @click="onDentClicked('LR', i)"
+                          @click="onDentClicked('LR', 8 - i + 1)"
                           :src="`/images/dents/${i + 16}.png`"
                         >
                       </div>
@@ -97,19 +97,20 @@
                   <div class="selected-dent-list">
                     <div class="divided vertical"></div>
                     <div class="divided horizontal"></div>
+
                     <div class="selected-dent-top mr-2">
-                      <div class="d-flex flex-row justify-end align-center">
+                      <div class="d-flex flex-row justify-end align-center dent-number-item">
                         {{urSelectedDents.join(',')}}
                       </div>
-                      <div class="d-flex flex-row justify-end align-center">
+                      <div class="d-flex flex-row justify-end align-center dent-number-item">
                         {{lrSelectedDents.join(',')}}
                       </div>
                     </div>
                     <div class="selected-dent-bottom ml-2">
-                      <div class="d-flex flex-row justify-start align-center">
+                      <div class="d-flex flex-row justify-start align-center dent-number-item">
                         {{ulSelectedDents.join(',')}}
                       </div>
-                      <div class="d-flex flex-row justify-start align-center">
+                      <div class="d-flex flex-row justify-start align-center dent-number-item">
                         {{llSelectedDents.join(',')}}
                       </div>
                     </div>
@@ -226,11 +227,11 @@ export default {
   },
   methods: {
     close() {
-      this.$emit('save', {
-        selected_dents: this.selectedDents,
-        selected_actions: this.selectedActions,
-      })
-      // this.$emit('close')
+      // this.$emit('save', {
+      // selected_dents: this.selectedDents,
+      // selected_actions: this.selectedActions,
+      // })
+      this.$emit('close')
     },
     addToDoctorDo(item) {
       let prescription = ''
@@ -241,10 +242,10 @@ export default {
         array.push(item)
       }
       prescription = array.length == 1 ? array.join('') : array.join(' - ')
-      this.$emit('done', {
-        type: 'prescription',
-        prescription: prescription,
-      })
+      // this.$emit('done', {
+      //   type: 'prescription',
+      //   prescription: prescription,
+      // })
     },
     getCategories() {
       this.$store.dispatch('treatments/getTreatmentCategories')
@@ -389,6 +390,9 @@ export default {
     div {
       width: 100px !important;
     }
+  }
+  .dent-number-item {
+    height: 23px !important;
   }
 }
 </style>

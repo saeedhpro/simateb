@@ -345,10 +345,10 @@
                           </span>
                       </div>
                     </div>
-                    <button @click="openDoctorPrescriptionModal('future_prescription')" class="add-more-button">
+                    <!-- <button @click="openDoctorPrescriptionModal('future_prescription')" class="add-more-button">
                       <v-icon>mdi-plus</v-icon>
                       اضافه کردن
-                    </button>
+                    </button> -->
                   </div>
                   <div class="mt-2 create-update-model-input-box">
                       <textarea
@@ -1195,7 +1195,7 @@ export default {
     getResults() {
       this.$store.dispatch('appointments/getAppointmentResults', {
         id: this.id,
-        type: ''
+        type: this.getType
       })
     },
     getUserAppointmentResults() {
@@ -1814,6 +1814,19 @@ export default {
         ...this.appointment.selected_dents,
       ]
       return list.join('\n')
+    },
+    getType() {
+      let type = ''
+      if (this.appointment.doctor_id == this.loginUser.organization_id) {
+        type = 'doctor'
+      } else if (this.appointment.photography_id == this.loginUser.organization_id) {
+        type = 'photography'
+      } else if (this.appointment.radiology_id == this.loginUser.organization_id) {
+        type = 'radiology'
+      } else if (this.appointment.laboratory_id == this.loginUser.organization_id) {
+        type = 'laboratory'
+      }
+      return type
     }
   },
 }

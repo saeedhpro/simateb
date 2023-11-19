@@ -1222,10 +1222,11 @@ export default {
       this.getAppointmentPrescription()
     },
     getResults() {
-      this.$store.dispatch('appointments/getAppointmentResults', {
+      const data = {
         id: this.item.id,
         type: ''
-      })
+      }
+      this.$store.dispatch('appointments/getAppointmentResults', data)
     },
     imaged(file) {
       this.newFiles.push(file)

@@ -482,6 +482,13 @@ export default {
     this.getUserGroups()
   },
   methods: {
+    getUser(tel) {
+      this.$store.dispatch('users/getUserByTel', tel)
+        .then(res => {
+          const data = res.data.data
+          this.$toast.error(`این شماره پیشتر برای ${data.full_name} ثبت شده است!`)
+        })
+    },
     closeForm(updated = false) {
       if (updated) {
         this.$emit('updated')
@@ -777,6 +784,11 @@ export default {
         }
       }
     },
+    'form.tel'(val) {
+      if (val && val.length >= 11 && val.length <= 13) {
+        this.getUser(val)
+      }
+    }
   }
 }
 </script>

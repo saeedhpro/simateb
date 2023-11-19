@@ -40,7 +40,7 @@
                       <td class="text-center">{{ i + 1 }}</td>
                       <td class="text-center">
                         <span
-                          v-for="(p,i) in toList(p.prescription)"
+                          v-for="(p,i) in toList(p)"
                           :key="i"
                           class="file-id mx-1"
                         >
@@ -107,7 +107,26 @@ export default {
       this.$emit('close')
     },
     toList(p) {
-      return p.length > 0 ? p.split('-') : [];
+      let list = []
+      if (p.prescription && p.prescription.length > 0) {
+        list = [
+          ...list,
+          ...p.split('-'),
+        ]
+      }
+      if (p.selected_dents && p.selected_dents.length > 0) {
+        list = [
+          ...list,
+          ...p.selected_dents,
+        ]
+      }
+      if (p.selected_actions && p.selected_actions.length > 0) {
+        list = [
+          ...list,
+          ...p.selected_actions,
+        ]
+      }
+      return list;
     },
   },
   computed: {
