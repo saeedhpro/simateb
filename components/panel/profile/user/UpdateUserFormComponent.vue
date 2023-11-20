@@ -494,7 +494,9 @@ export default {
         this.$store.dispatch('users/getUserByTel', tel)
         .then(res => {
           const data = res.data.data
-          this.$toast.error(`این شماره پیشتر برای ${data.full_name} ثبت شده است!`)
+          if (data.id != this.form.id) {
+            this.$toast.error(`این شماره پیشتر برای ${data.full_name} ثبت شده است!`)
+          }
         })
       }
     },
