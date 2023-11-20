@@ -367,6 +367,7 @@
 </template>
 
 <script>
+import { debounce } from "lodash";
 import CropImageComponent from "~/components/panel/global/CropImageComponent";
 import GenderSwitchBoxComponent from "~/components/panel/profile/user/GenderSwitchBoxComponent";
 import CustomTextInput from "~/components/custom/CustomTextInput";
@@ -482,12 +483,20 @@ export default {
     this.getUserGroups()
   },
   methods: {
+    onTelChanged: debounce(function ($e) {
+      let val = $e.target.value;
+        if (val && val.length >= 11 && val.length <= 13) {
+        this.getUser(val)
+      }
+    }, 500),
     getUser(tel) {
-      if (this.form.tel) {
+      if (tel) {
         this.$store.dispatch('users/getUserByTel', tel)
         .then(res => {
           const data = res.data.data
-          this.$toast.error(`این شماره پیشتر برای ${data.full_name} ثبت شده است!`)
+          if (data.id != this.form.id) {
+            this.$toast.error(`این شماره پیشتر برای ${data.full_name} ثبت شده است!`)
+          }
         })
       }
     },
@@ -786,11 +795,6 @@ export default {
         }
       }
     },
-    'form.tel'(val) {
-      if (val && val.length >= 11 && val.length <= 13) {
-        this.getUser(val)
-      }
-    }
   }
 }
 </script>
