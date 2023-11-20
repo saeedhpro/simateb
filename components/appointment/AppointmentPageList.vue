@@ -39,13 +39,31 @@
             <tr>
               <th v-for="(d, n) in headerDays" :key="n" class="header-case-type-th text-center"
                 :class="{ 'is-today': d.is_today }">
-                <div class="header-date"
+                <div
+                  v-if="!d.is_holiday"
+                  class="header-date"
                   :class="{ 'is-today': d.is_today, 'is-friday': d.is_friday, 'is-holiday': d.is_holiday }"
                   @click="openPazireshModal(d.start_at, true)">
                   {{ d.title }}
                   <br />
                   {{ d.sub_title }}
                 </div>
+                <v-tooltip v-else top>
+                  <template v-slot:activator="{ on, attrs }">
+                    <span
+                      v-bind="attrs"
+                      v-on="on"
+                      class="header-date"
+                      :class="{ 'is-today': d.is_today, 'is-friday': d.is_friday, 'is-holiday': d.is_holiday }"
+                      @click="openPazireshModal(d.start_at, true)"
+                    >
+                    {{ d.title }}
+                      <br />
+                      {{ d.sub_title }}
+                    </span>
+                  </template>
+                  <span>{{ d.holiday_title }}</span>
+                </v-tooltip>
               </th>
             </tr>
           </thead>
@@ -170,9 +188,11 @@ export default {
       let day = this.startDate.clone().startOf("jMonth")
       while (day.locale('en').isBefore(this.endDate.clone().locale('en').format('YYYY/MM/DD HH:mm:ss'))) {
         let isHoliday = false
+        let holiday_title = ''
         for (let i = 0; i < holidays.length; i++) {
           if (day.format("YYYY-MM-DD") == holidays[i].hdate) {
             isHoliday = true
+            holiday_title = holidays[i].title
             break
           }
         }
@@ -180,6 +200,7 @@ export default {
         days.push({
           is_friday: jDate.locale('fa').isoWeekday() == 5,
           is_holiday: isHoliday,
+          holiday_title: holiday_title,
           is_today: jDate.locale('fa').format("YYYYMMDD") == moment().locale('fa').format("YYYYMMDD"),
           title: jDate.locale('fa').format("dddd"),
           sub_title: jDate.locale('fa').format("jDD jMMMM"),
