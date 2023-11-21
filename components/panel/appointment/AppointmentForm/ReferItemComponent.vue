@@ -299,10 +299,11 @@ export default {
       this.showRadiologyFrom = !this.showRadiologyFrom
     },
     saveCases() {
-      const items = this.doctorImages.map(i => {
-        const split = i.split('/');
-        return `${split[split.length - 2]}/${split[split.length - 1]}`;
-      })
+      // const items = this.doctorImages.map(i => {
+      //   const split = i.split('/');
+      //   return `${split[split.length - 2]}/${split[split.length - 1]}`;
+      // })
+      const items = this.doctorImages
       this.$emit('setDoctorImagesCases', items)
       this.closeShowDoctorFrom()
     },
