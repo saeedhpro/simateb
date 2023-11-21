@@ -139,7 +139,7 @@
                 </v-row>
               </v-container>
               <div class="prescription-box" v-if="canSeePhotography">
-                فتوگرافی {{ photographyName }}:
+                {{ photographyName }}:
                 <span
                   v-for="(p, n) in photographyCasesArray"
                   :key="n"
