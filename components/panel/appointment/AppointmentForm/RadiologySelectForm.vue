@@ -758,29 +758,29 @@ export default {
     },
     removeDents(type) {
       if(type === 'Periapical') {
-        let values = this.selectedRightTopDents.map(i => `${type}_${i}`)
+        let values = this.selectedRightTopDents.map(i => `${type}_UL_${i}`)
         this.cases = this.cases.filter(i => !values.includes(i))
         this.selectedRightTopDents = []
-        values = this.selectedLeftTopDents.map(i => `${type}_${(i + 8)}`)
+        values = this.selectedLeftTopDents.map(i => `${type}_UR_${(i + 8)}`)
         this.cases = this.cases.filter(i => !values.includes(i))
         this.selectedLeftTopDents = []
-        values = this.selectedRightBottomDents.map(i => `${type}_${(i + 16)}`)
+        values = this.selectedRightBottomDents.map(i => `${type}_LR_${(i + 16)}`)
         this.cases = this.cases.filter(i => !values.includes(i))
         this.selectedRightBottomDents = []
-        values = this.selectedLeftBottomDents.map(i => `${type}_${(i + 24)}`)
+        values = this.selectedLeftBottomDents.map(i => `${type}_LL_${(i + 24)}`)
         this.cases = this.cases.filter(i => !values.includes(i))
         this.selectedLeftBottomDents = []
       } else {
-        let values = this.selectedCBCTRightTopDents.map(i => `${type}_${i}`)
+        let values = this.selectedCBCTRightTopDents.map(i => `${type}_UL_${i}`)
         this.cases = this.cases.filter(i => !values.includes(i))
         this.selectedCBCTRightTopDents = []
-        values = this.selectedCBCTLeftTopDents.map(i => `${type}_${i + 8}`)
+        values = this.selectedCBCTLeftTopDents.map(i => `${type}_UR_${i + 8}`)
         this.cases = this.cases.filter(i => !values.includes(i))
         this.selectedCBCTLeftTopDents = []
-        values = this.selectedCBCTRightBottomDents.map(i => `${type}_${i + 16}`)
+        values = this.selectedCBCTRightBottomDents.map(i => `${type}_LR_${i + 16}`)
         this.cases = this.cases.filter(i => !values.includes(i))
         this.selectedCBCTRightBottomDents = []
-        values = this.selectedCBCTLeftBottomDents.map(i => `${type}_${i + 24}`)
+        values = this.selectedCBCTLeftBottomDents.map(i => `${type}_LL_${i + 24}`)
         this.cases = this.cases.filter(i => !values.includes(i))
         this.selectedCBCTLeftBottomDents = []
       }
