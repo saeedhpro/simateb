@@ -764,6 +764,9 @@ export default {
       } else if(this.isReDoctor(appointment)) {
         return appointment.d_admission_at != "" && appointment.d_result_at != "" && appointment.d_admission_at != null && appointment.d_result_at != null
       } else {
+        if (appointment.doctor_id != null) {
+          return appointment.d_admission_at != "" && appointment.d_result_at != "" && appointment.d_admission_at != null && appointment.d_result_at != null
+        }
         return (appointment.p_admission_at != "" && appointment.p_result_at != "" && appointment.p_admission_at != null && appointment.p_result_at != null) ||
           (appointment.l_admission_at != "" && appointment.l_result_at != "" && appointment.l_admission_at != null && appointment.l_result_at) ||
           (appointment.r_admission_at != "" && appointment.r_result_at != "" && appointment.r_admission_at != null && appointment.r_result_at != null) ||
@@ -779,6 +782,9 @@ export default {
         return appointment.r_admission_at != "" && appointment.r_admission_at != null
       } else if (this.isReDoctor(appointment)) {
         return appointment.d_admission_at != "" && appointment.d_admission_at != null
+      }
+      if (appointment.doctor_id != null) {
+        return appointment.d_admission_at != "" && appointment.d_result_at != "" && appointment.d_admission_at != null && appointment.d_result_at != null
       }
       return appointment.p_admission_at != "" && appointment.p_admission_at != null ||
         appointment.l_admission_at != "" && appointment.l_admission_at != null ||

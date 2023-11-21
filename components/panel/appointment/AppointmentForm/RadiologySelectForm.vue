@@ -703,21 +703,21 @@ export default {
       if (i) {
         this.cases = this.cases.filter(i => i != item)
         if (type === 'Periapical') {
-          if (position = 'UR') {
+          if (position == 'UR') {
             this.selectedRightTopDents = this.selectedRightTopDents.filter(i => i != index).sort()
-          } else if (position = 'UL') {
+          } else if (position == 'UL') {
             this.selectedLeftTopDents = this.selectedLeftTopDents.filter(i => i != index).sort()
-          } else if (position = 'LR') {
+          } else if (position == 'LR') {
             this.selectedRightBottomDents = this.selectedRightBottomDents.filter(i => i != index).sort()
           } else {
             this.selectedLeftBottomDents = this.selectedLeftBottomDents.filter(i => i != index).sort()
           }
         } else {
-          if (position = 'UR') {
+          if (position == 'UR') {
             this.selectedCBCTRightTopDents = this.selectedCBCTRightTopDents.filter(i => i != index).sort()
-          } else if (position = 'UL') {
+          } else if (position == 'UL') {
             this.selectedCBCTLeftTopDents = this.selectedCBCTLeftTopDents.filter(i => i != index).sort()
-          } else if (position = 'LR') {
+          } else if (position == 'LR') {
             this.selectedCBCTRightBottomDents = this.selectedCBCTRightBottomDents.filter(i => i != index).sort()
           } else {
             this.selectedCBCTLeftBottomDents = this.selectedCBCTLeftBottomDents.filter(i => i != index).sort()
