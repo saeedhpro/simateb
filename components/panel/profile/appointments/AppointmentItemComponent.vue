@@ -101,8 +101,8 @@
                   {{ getMsg }}
                 </span>
               </div>
-              <div class="prescription-box" v-if="!isReDoctor && radiologyCases">
-                رادیولوژی {{ radiologyName }}:
+              <div class="prescription-box" v-if="canSeeRadiology">
+                {{ radiologyName }}:
                 <span
                   v-for="(p, n) in radiologyCasesArray"
                   :key="n"
@@ -112,7 +112,7 @@
                   {{ p  }}
                 </span>
               </div>
-              <v-container v-if="!isReDoctor && radiologyResultList.length > 0" fluid>
+              <v-container v-if="canSeeRadiology && radiologyResultList.length > 0" fluid>
                 <v-row>
                   <v-col
                     cols="12"
@@ -138,7 +138,7 @@
                   </v-col>
                 </v-row>
               </v-container>
-              <div class="prescription-box" v-if="!isReDoctor && photographyCases">
+              <div class="prescription-box" v-if="canSeePhotography">
                 فتوگرافی {{ photographyName }}:
                 <span
                   v-for="(p, n) in photographyCasesArray"
@@ -149,7 +149,7 @@
                   {{ p  }}
                 </span>
               </div>
-              <v-container v-if="!isReDoctor && photographyResultList.length > 0" fluid>
+              <v-container v-if="canSeePhotography && photographyResultList.length > 0" fluid>
                 <v-row>
                   <v-col
                     cols="12"
@@ -175,7 +175,7 @@
                   </v-col>
                 </v-row>
               </v-container>
-              <div class="prescription-box" v-if="doctorId">
+              <div class="prescription-box" v-if="canSeeReDoctor">
                 {{ doctor ? doctor.name : '' }}<span v-if="!isReDoctor"> (ارجاع شده)</span>:
                 <span
                   class="prescription photography"
@@ -185,7 +185,7 @@
                   {{ doctorDesc  }}
                 </span>
               </div>
-              <v-container v-if="doctorResultList.length > 0" fluid>
+              <v-container v-if="canSeeReDoctor && doctorResultList.length > 0" fluid>
                 <v-row>
                   <v-col
                     cols="12"
@@ -700,6 +700,18 @@ export default {
           this.photographyId ||
           this.radiologyId
         )
+    },
+    canSeeRadiology() {
+      return this.radiologyId == this.loginUser.organization_id || 
+      (this.isDoctor && !this.isReDoctor) 
+    },
+    canSeePhotography() {
+      return this.photographyId == this.loginUser.organization_id || 
+      (this.isDoctor && !this.isReDoctor) 
+    },
+    canSeeReDoctor() {
+      return this.doctorId == this.loginUser.organization_id || 
+      this.isDoctor
     }
   }
 }
