@@ -899,8 +899,8 @@
       :open="showNewDoctorPrescription"
       :selected-actions="appointment.selected_actions"
       :selected-dents="appointment.selected_dents"
-      @save="saveNewPrescription"
       @close="closeNewDoctorPrescription"
+      @save="saveNewPrescription"
       @done="addDoctorPrescription"
     />
     <update-appointment-form-component
@@ -996,6 +996,7 @@ import UpdateAppointmentFormComponent
   from "~/components/panel/appointment/AppointmentForm/UpdateAppointmentFormComponent.vue";
 import NewAppointmentPageDoctorPrescriptionModal
   from "~/components/appointment/NewAppointmentPageDoctorPrescriptionModal.vue";
+  
 
 export default {
   name: "AppointmentPageItemForm",

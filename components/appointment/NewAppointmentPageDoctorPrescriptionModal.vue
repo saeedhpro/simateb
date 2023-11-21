@@ -221,8 +221,8 @@ export default {
     }
   },
   mounted() {
-    this.selected_actions = this.selectedActions
-    this.selected_dents = this.selectedDents
+    this.selected_actions = [...this.selectedActions]
+    this.selected_dents = [...this.selectedDents]
     this.getCategories();
   },
   methods: {
@@ -242,10 +242,10 @@ export default {
         array.push(item)
       }
       prescription = array.length == 1 ? array.join('') : array.join(' - ')
-      // this.$emit('done', {
-      //   type: 'prescription',
-      //   prescription: prescription,
-      // })
+      this.$emit('done', {
+        type: 'prescription',
+        prescription: prescription,
+      })
     },
     getCategories() {
       this.$store.dispatch('treatments/getTreatmentCategories')
