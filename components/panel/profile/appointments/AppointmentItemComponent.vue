@@ -702,16 +702,16 @@ export default {
         )
     },
     canSeeRadiology() {
-      return this.radiologyId == this.loginUser.organization_id || 
-      (this.isDoctor && !this.isReDoctor) 
+      return (this.radiologyId == this.loginUser.organization_id ||
+      (this.isDoctor && !this.isReDoctor)) && this.radiology
     },
     canSeePhotography() {
-      return this.photographyId == this.loginUser.organization_id || 
-      (this.isDoctor && !this.isReDoctor) 
+      return (this.photographyId == this.loginUser.organization_id ||
+      (this.isDoctor && !this.isReDoctor)) && this.photography
     },
     canSeeReDoctor() {
-      return this.doctorId == this.loginUser.organization_id || 
-      this.isDoctor
+      return (this.doctorId == this.loginUser.organization_id ||
+        this.isDoctor) && this.doctor
     }
   }
 }
