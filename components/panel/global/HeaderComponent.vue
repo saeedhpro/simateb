@@ -222,9 +222,9 @@ export default {
           isAdmin: false,
         },
         {
-          link: '/admin/reports',
+          link: '/reports',
           title: 'گزارش ها',
-          isAdmin: true,
+          isAdmin: false,
         },
       ]
     }
