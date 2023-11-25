@@ -3,18 +3,28 @@
     <v-row>
       <v-col align-self="center">
         <div class="page-header-box schedule">
-          <div class="page-header">
-            <img src="/images/pages/users.svg" alt="organizations">
+          <nuxt-link to="/schedule/reserves" class="page-header">
+            <img src="/images/pages/docs.svg" alt="organizations">
             <span class="title">
-              نوبت دهی اینترنتی (VIP)
+                مشاهده رزروها برای من
             </span>
-          </div>
+          </nuxt-link>
+          <nuxt-link to="/schedule/reserves/others" class="page-header">
+            <img src="/images/pages/docs.svg" alt="organizations">
+            <span class="title">
+                مشاهده رزروها برای دیگران
+            </span>
+          </nuxt-link>
           <v-divider class="d-none d-lg-flex" inset />
           <v-spacer class="d-none d-sm-flex d-lg-none" />
-          <nuxt-link to="/schedule/reserves/others" class="page-actions second-button">
-            <img src="/images/pages/docs.svg" alt="organizations">
-            <span class="title">رزروهابرای دیگران</span>
-          </nuxt-link>
+<!--          <nuxt-link to="/schedule/reserves" class="page-actions second-button big">-->
+<!--            <img src="/images/pages/docs.svg" alt="organizations">-->
+<!--            <span class="title">مشاهده رزروهابرای من</span>-->
+<!--          </nuxt-link>-->
+<!--          <nuxt-link to="/schedule/reserves/others" class="page-actions second-button big">-->
+<!--            <img src="/images/pages/docs.svg" alt="organizations">-->
+<!--            <span class="title">مشاهده رزروهابرای دیگران</span>-->
+<!--          </nuxt-link>-->
           <div class="page-actions" @click="openReserveForm">
             <img src="/images/pages/plus.svg" alt="organizations">
             <span class="title-main">رزرو برای دکتر دیگر</span>

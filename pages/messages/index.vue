@@ -8,7 +8,7 @@
           <div class="right-box">
             <img src="/images/pages/alert.svg" alt="">
             <div>اعتبار لازم برای ارسال پیام کوتاه در حال اتمام است</div>
-            <nuxt-link to="/messages/pay" class="page-actions second-button">
+            <nuxt-link to="/messages/pay" class="page-actions second-button low-credit">
               <img src="/images/pages/plus-out.svg" alt="organizations">
               <span class="title">افزایش اعتبار</span>
             </nuxt-link>
