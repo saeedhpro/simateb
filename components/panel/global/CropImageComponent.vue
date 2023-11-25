@@ -21,7 +21,7 @@
             :guides="false"
             :view-mode="0"
             drag-mode="move"
-            :auto-crop-area="2"
+            :auto-crop-area="1"
             :min-container-width="100"
             :min-container-height="180"
             :background="true"
@@ -79,7 +79,8 @@ export default {
     dialogMaxHeight: {default: "600px"},
     maxWidth: {default: 3600},
     maxHeight: {default: 3600},
-    aspectRatio: 9 / 16,
+    // aspectRatio: 9 / 16,
+    // aspectRatio: 1,
     // the URL of the blob image
     objectUrl: {default: ""}
   },
