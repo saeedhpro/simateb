@@ -5126,7 +5126,13 @@ tr.waiting {
   }
 }
 
+.report-component {
+  padding: 32px !important;
+}
 @media only screen and (max-width: 1200px) {
+  .report-component {
+    padding: 32px 0 !important;
+  }
   .v-main {
     padding-right: 8px !important;
     padding-left: 8px !important;

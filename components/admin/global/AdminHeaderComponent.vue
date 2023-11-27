@@ -154,7 +154,7 @@ export default {
         {
           link: '/profile',
           title: 'پروفایل من',
-          isAdmin: false,
+          isAdmin: true,
         },
         {
           link: '/admin/reports',

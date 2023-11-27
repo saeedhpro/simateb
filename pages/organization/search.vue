@@ -254,7 +254,7 @@
                     </td>
                     <td class="text-center">
                       <v-tooltip
-                        v-if="i.radiology && !isReDoctor(i)"
+                        v-if="i.radiology && !isReDoctor(i.doctor_id)"
                         bottom
                       >
                         <template v-slot:activator="{ on, attrs }">
@@ -278,7 +278,7 @@
                     </td>
                     <td class="text-center">
                       <v-tooltip
-                        v-if="i.photography && !isReDoctor(i)"
+                        v-if="i.photography && !isReDoctor(i.doctor_id)"
                         bottom
                       >
                         <template v-slot:activator="{ on, attrs }">
@@ -302,14 +302,14 @@
                     </td>
                     <td class="text-center">
                       <v-tooltip
-                        v-if="i.doctor"
+                        v-if="i.doctor && !isReDoctor(i.doctor_id)"
                         bottom
                       >
                         <template v-slot:activator="{ on, attrs }">
                           <div
                             v-bind="attrs"
                             v-on="on"
-                            :class="getErjaClass(i)"
+                            :class="getErjaClass(i, 4)"
                             @click="openAppointmentModalItem(i, 4)"
                           >
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="14.286" viewBox="0 0 20 14.286">
@@ -320,7 +320,7 @@
                           </div>
                         </template>
                         <span>
-                          {{ getErjaType(i) }}
+                          {{ getErjaType(i, 4) }}
                         </span>
                       </v-tooltip>
                     </td>
@@ -720,9 +720,9 @@ export default {
         return '-'
       }
     },
-    isReDoctor(appointment) {
+    isReDoctor(doctor_id) {
       if (!this.loginUser) return false;
-      return this.loginUser.organization.id == appointment.doctor_id;
+      return this.loginUser.organization.id == doctor_id;
     },
     resulted(appointment, type) {
       const profession_id = this.loginUser.organization.profession_id;
@@ -732,7 +732,7 @@ export default {
         return appointment.l_admission_at != "" && appointment.l_result_at != "" && appointment.l_admission_at != null && appointment.l_result_at != null
       } else if (profession_id == 3) {
         return appointment.r_admission_at != "" && appointment.r_result_at != "" && appointment.r_admission_at != null && appointment.r_result_at != null
-      } else if (this.isReDoctor(appointment)) {
+      } else if (this.isReDoctor(appointment.doctor_id)) {
         return appointment.d_admission_at != null && appointment.d_admission_at != "" && appointment.d_result_at != "" && appointment.d_result_at != null
       } else {
         switch (type) {
@@ -743,7 +743,7 @@ export default {
           case 3:
             return appointment.r_admission_at != "" && appointment.r_result_at != "" && appointment.r_admission_at != null && appointment.r_result_at != null
         }
-        if (this.isReDoctor(appointment)) {
+        if (this.isReDoctor(appointment.doctor_id)) {
           return appointment.d_admission_at != null && appointment.d_admission_at != "" && appointment.d_result_at != "" && appointment.d_result_at != null
         }
       }
@@ -756,7 +756,7 @@ export default {
         return appointment.l_admission_at != "" && appointment.l_admission_at != null
       } else if (profession_id == 3) {
         return appointment.r_admission_at != "" && appointment.r_admission_at != null
-      } else if (this.isReDoctor(appointment)) {
+      } else if (this.isReDoctor(appointment.doctor_id)) {
         return appointment.d_admission_at != "" && appointment.d_admission_at != null
       }
       return appointment.p_admission_at != "" && appointment.p_admission_at != null ||
@@ -765,7 +765,7 @@ export default {
         appointment.d_admission_at != "" && appointment.d_admission_at != null;
     },
     waiting(appointment) {
-      if (this.isReDoctor(appointment) && (appointment.d_admission_at == "" || appointment.d_admission_at == null)) {
+      if (this.isReDoctor(appointment.doctor_id) && (appointment.d_admission_at == "" || appointment.d_admission_at == null)) {
         return true
       }
       return appointment.waiting
