@@ -1,5 +1,5 @@
 <template>
-    <div class="report-component px-16 py-16 relative">
+    <div class="report-component relative">
         <div class="type-selection-box">
             <v-btn-toggle
                 v-model="type"

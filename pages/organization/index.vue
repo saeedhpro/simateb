@@ -278,7 +278,7 @@
                     </td>
                     <td>
                       <v-tooltip
-                        v-if="i.doctor"
+                        v-if="i.doctor && !isReDoctor(i.doctor_id)"
                         bottom
                       >
                         <template v-slot:activator="{ on, attrs }">
@@ -796,7 +796,7 @@ export default {
         return !appointment.l_admission_at
       } else if (profession_id == 3) {
         return !appointment.r_admission_at
-      } else if (this.isReDoctor(appointment)) {
+      } else if (this.isReDoctor(appointment.doctor_id)) {
         return !appointment.d_admission_at
       }
       return appointment.waiting

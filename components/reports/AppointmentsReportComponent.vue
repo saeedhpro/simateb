@@ -1,5 +1,5 @@
 <template>
-  <div class="report-component px-16 py-16 relative">
+  <div class="report-component relative">
     <div class="type-selection-box">
       <v-btn-toggle
         v-model="type"
@@ -42,7 +42,7 @@ export default {
         colors: ['#293366', '#F5AC00', '#F44336'],
         chart: {
           type: 'bar',
-          height: 350,
+          height: 450,
           stacked: true,
           toolbar: {
             show: true
@@ -52,12 +52,12 @@ export default {
           }
         },
         responsive: [{
-          breakpoint: 480,
+          breakpoint: 1200,
           options: {
             legend: {
               position: 'bottom',
               offsetX: -10,
-              offsetY: 0
+              offsetY: 1000
             }
           }
         }],

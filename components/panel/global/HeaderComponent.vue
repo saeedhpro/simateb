@@ -231,6 +231,7 @@ export default {
           link: '/reports',
           title: 'گزارش ها',
           isAdmin: false,
+          onlyDoctor: true,
         },
       ]
     }
@@ -244,6 +245,9 @@ export default {
       await this.$router.push('/')
     },
     canShow(item) {
+      if (item.onlyDoctor){
+        return !this.isAdmin || this.loginUser.user_group_id != 3
+      }
       return !item.isAdmin || this.isAdmin
     }
   },
@@ -255,6 +259,7 @@ export default {
       return this.loginUser.user_group_id === 2
     },
     isDoctor() {
+      return this.loginUser.organization.is_doctor;
       return this.loginUser.organization_id != 1 && this.loginUser.organization_id != 2 && this.loginUser.organization_id != 3
     },
     getOrganizationLogo() {
