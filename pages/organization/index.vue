@@ -285,7 +285,7 @@
                           <div
                             v-bind="attrs"
                             v-on="on"
-                            :class="getErjaClass(i)"
+                            :class="getErjaClass(i, 4)"
                             @click="openAppointmentModalItem(i, 4)"
                           >
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="14.286" viewBox="0 0 20 14.286">
@@ -296,7 +296,7 @@
                           </div>
                         </template>
                         <span>
-                            {{ getErjaType(i) }}
+                            {{ getErjaType(i, 4) }}
                           </span>
                       </v-tooltip>
                     </td>
@@ -761,7 +761,7 @@ export default {
         return appointment.l_admission_at != "" && appointment.l_result_at != "" && appointment.l_admission_at != null && appointment.l_result_at != null
       } else if (type == 3) {
         return appointment.r_admission_at != "" && appointment.r_result_at != "" && appointment.r_admission_at != null && appointment.r_result_at != null
-      } else if(this.isReDoctor(appointment)) {
+      } else if(this.isReDoctor(appointment.doctor_id)) {
         return appointment.d_admission_at != "" && appointment.d_result_at != "" && appointment.d_admission_at != null && appointment.d_result_at != null
       } else {
         if (appointment.doctor_id != null) {
@@ -780,11 +780,8 @@ export default {
         return appointment.l_admission_at != "" && appointment.l_admission_at != null
       } else if (type == 3) {
         return appointment.r_admission_at != "" && appointment.r_admission_at != null
-      } else if (this.isReDoctor(appointment)) {
+      } else if (this.isReDoctor(appointment.doctor_id)) {
         return appointment.d_admission_at != "" && appointment.d_admission_at != null
-      }
-      if (appointment.doctor_id != null) {
-        return appointment.d_admission_at != "" && appointment.d_result_at != "" && appointment.d_admission_at != null && appointment.d_result_at != null
       }
       return appointment.p_admission_at != "" && appointment.p_admission_at != null ||
         appointment.l_admission_at != "" && appointment.l_admission_at != null ||
@@ -833,9 +830,9 @@ export default {
         }
       }
     },
-    isReDoctor(appointment) {
+    isReDoctor(doctor_id) {
       if (!this.loginUser) return false;
-      return this.loginUser.organization.id == appointment.doctor_id;
+      return this.loginUser.organization.id == doctor_id;
     },
     canSeeResulted(i) {
       return this.loginUser.organization_id == i.photography_id ||
