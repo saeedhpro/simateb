@@ -79,17 +79,16 @@
                         }}
                       </span>
                     </td>
-                    <td class="text-center">
-                      <span style="font-size: 1rem">{{ i.count }} (</span>
-                      <span style="color: #5063FF">{{i.count - i.count_reserved}}</span>
-                      <span>)</span>
+                    <td class="text-center" style="min-width: 92px">
+                      <span style="font-size: 1rem">{{ i.count }}</span>
+                      (<span style="color: #5063FF">{{i.count - i.count_reserved}}</span>)
                     </td>
-                    <td class="text-center">
+                    <td class="text-center" style="min-width: 92px">
                       <span style="font-size: 1rem">{{ i.site }} (</span>
                       <span style="color: #5063FF">{{i.site - i.site_reserved}}</span>
                       <span>)</span>
                     </td>
-                    <td class="text-center">
+                    <td class="text-center" style="min-width: 92px">
                       <span style="font-size: 1rem">{{ i.app }} (</span>
                       <span style="color: #5063FF">{{i.app - i.app_reserved}}</span>
                       <span>)</span>
@@ -150,7 +149,7 @@
                   <!--                    v-model="form.start"-->
                   <!--                    :initial-value="form.start"-->
                   <!--                  />-->
-                  <date-picker v-model="form.start" format="HH:mm:ss" display-format="HH:mm:ss" editable
+                  <date-picker v-model="form.start" format="HH:mm:ss" display-format="HH:mm" editable
                     class="date-picker" :jump-minute="15" :round-minute="true" type="time">
                     <template v-slot:label>
                       <img src="/images/form/datepicker.svg">
@@ -166,7 +165,7 @@
                   <!--                    v-model="form.end"-->
                   <!--                    :initial-value="form.end"-->
                   <!--                  />-->
-                  <date-picker v-model="form.end" format="HH:mm:ss" display-format="HH:mm:ss" editable class="date-picker"
+                  <date-picker v-model="form.end" format="HH:mm:ss" display-format="HH:mm" editable class="date-picker"
                     :jump-minute="15" :round-minute="true" type="time">
                     <template v-slot:label>
                       <img src="/images/form/datepicker.svg">
@@ -598,8 +597,8 @@ export default {
       },
       form: {
         date: moment().locale('en').format('YYYY/MM/DD'),
-        start: '08:00:00',
-        end: '10:00:00',
+        start: '15:00:00',
+        end: '20:00:00',
         id: null,
         start_at: '',
         end_at: '',

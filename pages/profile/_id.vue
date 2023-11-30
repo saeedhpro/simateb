@@ -59,7 +59,7 @@
               v-if="canSee('doctor')"
             >
               <img src="/images/profile/pay.svg">
-              اطلاعات تکمیلی
+              اطلاعات بیمه
             </v-tab>
           </v-tabs>
         </v-container>

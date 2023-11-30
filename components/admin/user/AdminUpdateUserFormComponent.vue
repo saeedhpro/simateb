@@ -106,7 +106,7 @@
                   </v-col>
                   <v-col
                     cols="12"
-                    sm="6"
+                    sm="12"
                     md="6"
                   >
                     <custom-text-input
@@ -116,7 +116,7 @@
                   </v-col>
                   <v-col
                     cols="12"
-                    sm="6"
+                    sm="12"
                     md="6"
                   >
                     <div class="create-update-model-input-box">

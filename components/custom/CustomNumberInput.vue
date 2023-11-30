@@ -2,7 +2,7 @@
   <div class="create-update-model-input-box" :class="{'has-error': error}">
     <label v-if="label">{{ label }}</label>
     <input v-model="data" :disabled="disabled" :min="min" type="number" :max="max" @focusin="onFocusIn" @focusout="onFocusOut">
-    <span class="create-update-modal-input-error" v-if="error">{{ error }}</span>
+    <span style="letter-spacing: 2px"  class="create-update-modal-input-error" v-if="error">{{ error }}</span>
   </div>
 </template>
 

@@ -4,7 +4,7 @@
     <div class="input-box">
       <v-icon v-if="status === 'valid'" color="#2BC4A9">mdi-check</v-icon>
       <v-icon v-if="status === 'invalid'" color="#F44336">mdi-alert-circle</v-icon>
-      <input :max="max" :type="type" v-model="data" @focusout="check" :class="{'has-status': status !== 'none', 'invalid': status === 'invalid', 'valid': status === 'valid'}">
+      <input style="letter-spacing: 2px" :max="max" :type="type" v-model="data" @focusout="check" :class="{'has-status': status !== 'none', 'invalid': status === 'invalid', 'valid': status === 'valid'}">
     </div>
     <span class="create-update-modal-input-error" v-if="error">{{ error }}</span>
   </div>

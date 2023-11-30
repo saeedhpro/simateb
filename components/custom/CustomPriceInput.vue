@@ -1,7 +1,7 @@
 <template>
   <div class="create-update-model-input-box" :class="{'has-error': error}">
     <label v-if="label">{{ label }}</label>
-    <input :disabled="disabled" v-model="data" @focusin="onFocusIn" @focusout="onFocusOut">
+    <input style="letter-spacing: 2px"  :disabled="disabled" v-model="data" @focusin="onFocusIn" @focusout="onFocusOut">
     <span class="create-update-modal-input-error" v-if="error">{{ error }}</span>
     <span class="create-update-modal-input-error">{{ fa }}</span>
   </div>

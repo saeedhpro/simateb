@@ -160,6 +160,9 @@ export default {
       let url = `/appointments/que/v4?start=${start}&end=${end}`
       if (this.isSurgery) {
         url += `&ct=جراحی`
+        url += `&is_surgery=1`
+      } else {
+        url += `&is_surgery=0`
       }
       const res = await this.$axios.get(url)
       if (res.status == 200) {

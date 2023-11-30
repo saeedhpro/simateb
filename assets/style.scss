@@ -2635,8 +2635,11 @@ tr.waiting {
   padding: 6px 16px;
   text-align: center;
   font: normal normal medium 14px/25px IRANYekanRegular !important;
-  letter-spacing: 0px;
+  letter-spacing: 0;
   color: #757575;
+  min-width: 100px;
+  margin-bottom: 2px;
+  margin-top: 2px;
 }
 
 .v-select {
@@ -4895,11 +4898,10 @@ tr.waiting {
 
     &.schedule {
       justify-content: space-between;
-
       .page-header,
       .page-actions,
       .page-actions-secondary {
-        width: calc(25% - 10px) !important;
+        width: calc(33% - 10px) !important;
         margin: 5px !important;
         max-width: inherit !important;
         min-width: inherit !important;
@@ -4915,6 +4917,9 @@ tr.waiting {
         .title-main {
           font: normal normal normal 12px/18px IRANYekanRegular !important;
         }
+      }
+      .page-header {
+        width: calc(33% - 10px) !important;
       }
 
       .page-actions:last-child {
@@ -5129,7 +5134,14 @@ tr.waiting {
 .report-component {
   padding: 32px !important;
 }
+.add-sub {
+  margin-top: 25px !important;
+}
 @media only screen and (max-width: 1200px) {
+  .add-sub {
+    height: 42px !important;
+    margin-top: 25px !important;
+  }
   .report-component {
     padding: 32px 0 !important;
   }
@@ -5340,6 +5352,12 @@ tr.waiting {
   }
 }
 
+.appointments-box {
+  overflow-x: scroll;
+}
+.profile-appointment-item-component {
+  min-width: 600px;
+}
 @media only screen and (max-width: 800px) {
   .send-image-item {
     font-size: 14px;
@@ -5369,7 +5387,19 @@ tr.waiting {
     }
   }
 }
+.add-sub-box {
+  align-items: center;
+}
 @media only screen and (max-width: 570px) {
+  .add-sub-box {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+    .add-sub {
+      margin-top: 6px !important;
+      margin-right: 0 !important;
+    }
+  }
   .send-image-item {
     font-size: 12px;
     img {
@@ -5394,4 +5424,41 @@ tr.waiting {
       height: 137px;
     }
   }
+}
+@media only screen and (max-width: 600px) {
+  .page-header-box {
+      &.messages {
+      }
+      &.organization {
+        .page-header,
+        .page-actions,
+        .page-actions-secondary {
+          width: 175px !important;
+          height: 42px;
+          margin: 5px;
+          max-width: inherit !important;
+          min-width: inherit !important;
+
+          justify-content: flex-start;
+          img {
+            width: 32px;
+          }
+        }
+        .page-header {
+          padding: 8px 12px;
+        }
+        .page-actions {
+          min-width: 150px;
+          padding: 8px 12px;
+
+          img {
+            position: unset;
+          }
+        }
+      }
+      &.admin-organization {
+      }
+      &.appointment-search {
+      }
+    }
 }

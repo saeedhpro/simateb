@@ -154,6 +154,24 @@
                 cols="12"
                 sm="6"
                 md="4"
+                v-if="sent"
+              >
+                <custom-text-input
+                  v-model="code"
+                  :error="errors.code"
+                  @input="errors.code = ''"
+                  label="کد تایید"
+                />
+                <span>{{ time }}</span>
+              </v-col>
+            </v-row>
+            <v-row
+              v-if="!isVerified"
+            >
+              <v-col
+                cols="12"
+                sm="6"
+                md="4"
               >
                 <button
                   class="second-button full-width"
@@ -169,24 +187,6 @@
                 >
                   تایید
                 </button>
-              </v-col>
-            </v-row>
-            <v-row
-              v-if="!isVerified"
-            >
-              <v-col
-                cols="12"
-                sm="6"
-                md="4"
-                v-if="sent"
-              >
-                <custom-text-input
-                  v-model="code"
-                  :error="errors.code"
-                  @input="errors.code = ''"
-                  label="کد تایید"
-                />
-                <span>{{ time }}</span>
               </v-col>
             </v-row>
           </v-container>
@@ -307,6 +307,14 @@ export default{
       }
       if (!this.form.tel) {
         this.$toast.error('شماره موبایل را وارد کنید')
+        return
+      }
+      if (!this.form.fname) {
+        this.$toast.error('نام بیمار را وارد کنید')
+        return
+      }
+      if (!this.form.lname) {
+        this.$toast.error('نام خانوادگی بیمار را وارد کنید')
         return
       }
       const data = {

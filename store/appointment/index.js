@@ -5,8 +5,8 @@ export const state = () => ({
   showHour: false,
   showCaseType: false,
   workHour: {
-    start: '09:00:00',
-    end: '17:00:00',
+    start: '15:00:00',
+    end: '20:00:00',
     period: 15,
     organization_id: 0,
   },

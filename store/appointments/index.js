@@ -30,8 +30,8 @@ export const state = () => ({
     limits: [],
     ques: [],
     work_hour: {
-      start: '16:00:00',
-      end: '21:00:00',
+      start: '15:00:00',
+      end: '20:00:00',
     }
   },
   results: [],

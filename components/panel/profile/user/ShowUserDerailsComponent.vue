@@ -160,7 +160,7 @@
             class="hidden-lg-and-up"
           >
             <div
-              class="user-details-box"
+              class="user-details-box small"
             >
               <div class="label-box">نام و نام خانوادگی:</div>
               <div class="value-box">{{ `${user.fname} ${user.lname}` }}</div>
