@@ -116,19 +116,23 @@
             </v-row>
             <v-row>
               <v-col
-                cols="6"
-                sm="2"
-                md="2"
-                v-for="(c,n) in cases"
-                :key="n"
+                cols="12"
               >
-                <case-type-checkbox-component
-                  :id="c.id"
-                  :name="c.name"
-                  :items="cases"
-                  :is-checked="appointment.case_type === c.name"
-                  @change="onChecked"
-                />
+                <div class="d-flex flex-row flex-wrap align-start justify-start">
+                  <div
+                    v-for="(c,n) in cases"
+                    :key="n"
+                  >
+                    <case-type-checkbox-component
+                      class="ml-2"
+                      :id="c.id"
+                      :name="c.name"
+                      :items="cases"
+                      :is-checked="appointment.case_type === c.name"
+                      @change="onChecked"
+                    />
+                  </div>
+                </div>
               </v-col>
             </v-row>
             <v-row>
@@ -376,6 +380,7 @@ export default {
           user_id: this.user.id,
           start_at: start_at,
           income: this.appointment.income,
+          is_surgery: this.isSurgery,
         }
         this.$store.dispatch('appointments/createAppointment', data)
           .then(() => {

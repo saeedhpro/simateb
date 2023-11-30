@@ -16,7 +16,7 @@
           <nuxt-link to="/appointment/surgeries" class="page-header" v-show="canSeeSurgeries">
             <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
               <defs>
-                <style>.a.index,.b.index{fill:#5063ff;}.a.index{opacity:.12;}.b.index{opacity:1;}</style>
+                <style>.a.index,.b.index{fill:#388E3C;}.a.index{opacity:.12;}.b.index{opacity:1;}</style>
               </defs>
               <g transform="translate(-1316 -132)">
                 <rect class="a index" width="40" height="40" rx="20" transform="translate(1316 132)"/>

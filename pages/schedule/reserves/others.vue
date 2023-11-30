@@ -228,6 +228,20 @@
                       </span>
                     </td>
                     <td class="text-center">
+                      {{
+                        i.res_organization ? i.res_organization.profession.name : ''
+                      }}
+                    </td>
+                    <td class="text-center">
+                      {{ i.user ? i.user.full_name : '-' }}
+                    </td>
+                    <td class="text-center">
+                      {{ i.user ? i.user.tel : '-' }}
+                    </td>
+                    <td class="text-center">
+                      {{ i.code ? i.code : '-' }}
+                    </td>
+                    <td class="text-center">
                       {{ i.start_at_fa }}
                     </td>
                     <td class="text-center">
@@ -269,7 +283,11 @@ export default {
       showReserveForm: false,
       headers: [
         '',
-        'از طرف مطب',
+        'مطب',
+        'تخصص',
+        'بیمار',
+        'شماره تماس',
+        'کد پذیرش',
         'تاریخ',
         'ساعت',
         'خدمت',

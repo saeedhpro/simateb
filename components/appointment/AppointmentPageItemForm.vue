@@ -330,6 +330,13 @@
                         rows="5"
                       ></textarea>
                   </div>
+                  <div class="mt-2 create-update-model-input-box">
+                      <textarea
+                        class="prescription-textarea"
+                        v-model="doctorPrescription"
+                        rows="5"
+                      ></textarea>
+                  </div>
                 </v-col>
                 <v-divider vertical inset/>
                 <v-col
@@ -996,7 +1003,7 @@ import UpdateAppointmentFormComponent
   from "~/components/panel/appointment/AppointmentForm/UpdateAppointmentFormComponent.vue";
 import NewAppointmentPageDoctorPrescriptionModal
   from "~/components/appointment/NewAppointmentPageDoctorPrescriptionModal.vue";
-  
+
 
 export default {
   name: "AppointmentPageItemForm",

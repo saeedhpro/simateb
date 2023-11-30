@@ -4,7 +4,7 @@
   >
     <v-row>
       <v-col align-self="center">
-        <div class="page-header-box">
+        <div class="page-header-box organization">
           <div class="page-header">
             <img src="/images/pages/users.svg" alt="organizations">
             <span class="title">

@@ -4,7 +4,7 @@
   >
     <v-row>
       <v-col align-self="center">
-        <div class="page-header-box">
+        <div class="page-header-box organization">
           <div class="page-header">
             <img src="/images/pages/users.svg" alt="organizations">
             <span class="title">
@@ -43,7 +43,7 @@
                     <td class="text-center">{{ (search.page - 1) * 10 + n + 1 }}</td>
                     <td class="text-center">{{ i.name ? i.name : '-' }}</td>
                     <td class="text-center">
-                      <span class="file-id" v-for="(i,n) in getActions(i)" :key="n">
+                      <span class="file-id ml-2" v-for="(i,n) in getActions(i)" :key="n">
                         {{ i }}
                       </span>
                     </td>
@@ -119,7 +119,7 @@
           <v-container>
             <v-row>
               <v-col
-                cols="12"
+                cols="4"
                 sm="3"
                 md="3"
               >
@@ -132,7 +132,7 @@
               </v-col>
               <v-spacer/>
               <v-col
-                cols="12"
+                cols="4"
                 sm="3"
                 md="3"
               >
@@ -144,7 +144,7 @@
                 </button>
               </v-col>
               <v-col
-                cols="12"
+                cols="4"
                 sm="4"
                 md="4"
               >
@@ -260,13 +260,13 @@
         </v-card-title>
         <v-card-text>
           <v-container>
-            <div class="inline-input-btn align-center">
+            <div class="inline-input-btn add-sub-box">
               <div class="create-update-model-input-box d-inline-flex" :class="{'has-error': errors.treatment_name}">
                 <label>عنوان</label>
                 <input type="text" v-model="treatment.name">
                 <span class="create-update-modal-input-error" v-if="errors.treatment_name">{{ errors.treatment_name }}</span>
               </div>
-              <div class="page-actions second-button inline-btn mt-2"
+              <div class="page-actions second-button inline-btn add-sub"
                    style="height: 44px"
                    @click="addTreatment"
               >
@@ -301,7 +301,7 @@
             <v-row>
               <v-spacer/>
               <v-col
-                cols="12"
+                cols="6"
                 sm="3"
                 md="3"
               >
@@ -313,7 +313,7 @@
                 </button>
               </v-col>
               <v-col
-                cols="12"
+                cols="6"
                 sm="4"
                 md="4"
               >

@@ -2,7 +2,7 @@
   <v-container fluid>
     <v-row>
       <v-col align-self="center">
-        <div class="page-header-box schedule">
+        <div class="page-header-box schedule reserve">
           <nuxt-link to="/schedule/reserves" class="page-header">
             <img src="/images/pages/docs.svg" alt="organizations">
             <span class="title">
@@ -232,6 +232,20 @@
                       </span>
                     </td>
                     <td class="text-center">
+                      {{
+                        i.staff_organization ? i.staff_organization.profession.name : ''
+                      }}
+                    </td>
+                    <td class="text-center">
+                      {{ i.user ? i.user.full_name : '-' }}
+                    </td>
+                    <td class="text-center">
+                      {{ i.user ? i.user.tel : '-' }}
+                    </td>
+                    <td class="text-center">
+                      {{ i.code ? i.code : '-' }}
+                    </td>
+                    <td class="text-center">
                       {{ i.start_at_fa }}
                     </td>
                     <td class="text-center">
@@ -273,7 +287,11 @@ export default {
       showReserveForm: false,
       headers: [
         '',
-        'برای مطب',
+        'مطب',
+        'تخصص',
+        'بیمار',
+        'شماره تماس',
+        'کد پذیرش',
         'تاریخ',
         'ساعت',
         'خدمت',
@@ -329,6 +347,9 @@ export default {
         end: endDay,
         profession_id: this.search.profession_id,
       })
+        .finally(() => {
+          this.showFilterModal = false
+        })
     },
     paginate(page = 1) {
       this.search.page = page

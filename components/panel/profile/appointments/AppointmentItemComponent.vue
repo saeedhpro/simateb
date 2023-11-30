@@ -2,7 +2,7 @@
   <div class="profile-appointment-item-component">
     <v-row>
       <v-col
-        cols="12"
+        cols="3"
         sm="4"
         md="2"
       >
@@ -18,7 +18,7 @@
       </v-col>
 
       <v-col
-        cols="12"
+        cols="9"
         sm="8"
         md="10"
       >
