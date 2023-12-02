@@ -57,7 +57,7 @@
     </v-col>
     <v-spacer v-if="!mini" />
     <v-col cols="12" sm="2" md="2">
-      <v-select outlined :items="actions" label="تنظیمات" item-value="id" item-text="label" v-model="action"
+      <v-select class="settings-select" outlined :items="actions" label="تنظیمات" item-value="id" item-text="label" v-model="action"
         @change="doAction"></v-select>
     </v-col>
   </v-row>
@@ -345,4 +345,6 @@ export default {
   }
 }
 </script>
-<style scoped></style>
+<style scoped lang="scss">
+
+</style>

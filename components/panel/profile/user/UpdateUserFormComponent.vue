@@ -25,7 +25,7 @@
             ثبت در سیستم توسط:
             {{ item.staff ? `${item.staff.fname} ${item.staff.lname}` : '' }}
             ({{ item.created | toRelativeDate }} {{
-              item.created | toPersianDate('YYYY/MM/DD HH:mm:ss')
+              item.created | toPersianDate('YYYY/MM/DD HH:mm')
             }})
           </div>
         </v-card-title>

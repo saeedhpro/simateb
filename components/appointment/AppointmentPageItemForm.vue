@@ -643,9 +643,19 @@
                       :key="n"
                       data-fancybox="gallery"
                       :href="i"
-                      class="fancybox-item"
+                      class="fancybox-item result-image"
                       :data-fancybox-index="n"
                     >
+<!--                      <v-btn-->
+<!--                        class="remove-button"-->
+<!--                        icon-->
+<!--                        color="white"-->
+<!--                        x-small-->
+<!--                        @click="removeReferedItem($event, i)"-->
+<!--                      >-->
+                        <v-icon @click.prevent="removeResultImage(i, n)" class="remove-result-image" color="red">mdi-delete</v-icon>
+<!--                        <v-icon small>mdi-close</v-icon>-->
+<!--                      </v-btn>-->
                       <img
                         class="prescription-image"
                         :src="i"
@@ -1023,6 +1033,7 @@ export default {
   data() {
     return {
       loading: true,
+      removed_items: [],
       appointment: {
         start_at: this.$moment().format("YYYY/MM/DD HH:mm:ss"),
         tel: '',
@@ -1359,20 +1370,23 @@ export default {
     removeResultImage(image, index) {
       const first = image.split(':')[0]
       if (first == 'data') {
-        const list = []
-        for (let i = 0; i < this.newFiles.length; i++) {
-          if (i == index) continue
-          list.push(this.newFiles[i])
-        }
-        this.newFiles = list
+        this.newFiles = this.newFiles.filter(i => i !== image)
+        // const list = []
+        // for (let i = 0; i < this.newFiles.length; i++) {
+        //   if (i == index) continue
+        //   list.push(this.newFiles[i])
+        // }
+        // this.newFiles = list
         // this.newFiles = this.newFiles.splice(index, 1)
       } else {
-        this.$store.dispatch('appointments/removeResult', {
-          image: image,
-          index: index
-        })
-        const list = image.split('/');
-        this.deletedResults.push(list[list.length - 1])
+        this.results = this.results.filter(i => i !== image)
+        this.deletedResults.push(image)
+        // this.$store.dispatch('appointments/removeResult', {
+        //   image: image,
+        //   index: index
+        // })
+        // const list = image.split('/');
+        // this.deletedResults.push(list[list.length - 1])
       }
     },
     imaged(file) {
@@ -1617,6 +1631,15 @@ export default {
           this.closeForm()
         })
     },
+    removeReferedItem(e, item) {
+      e.preventDefault()
+      if (this.results.find(i => i === item)) {
+        this.results = this.results.filter(i => i !== item)
+        this.removed_items.push(item)
+      } else {
+        this.newFiles = this.newFiles.filter(i => i !== item)
+      }
+    }
   },
   computed: {
     moment() {
@@ -1644,8 +1667,13 @@ export default {
       if (!this.loginUser) return false;
       return this.loginUser.organization.is_doctor;
     },
-    results() {
-      return this.$store.getters['appointments/getResults']
+    results: {
+      get() {
+        return this.$store.getters['appointments/getResults']
+      },
+      set(list = []) {
+        this.$store.commit('appointments/setResults', list)
+      }
     },
     admissioned() {
       const profession_id = this.loginUser.organization.profession_id;
@@ -1832,7 +1860,12 @@ export default {
   },
 }
 </script>
-<style scoped>
-
-
+<style scoped lang="scss">
+.refered-items {
+  .remove-button {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+  }
+}
 </style>

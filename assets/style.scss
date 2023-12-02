@@ -2315,6 +2315,11 @@ tr.waiting {
 
     div {
       margin-right: 10px;
+
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 61px;
     }
 
     span {
@@ -2326,6 +2331,7 @@ tr.waiting {
       border: 1px solid #EBEBEB;
       border-radius: 4px;
       width: 28px;
+      min-width: 28px;
       height: 100%;
 
       &.is-zero {
@@ -5461,4 +5467,16 @@ tr.waiting {
       &.appointment-search {
       }
     }
+}
+
+@media only screen and (max-width: 1200px) {
+  .v-list-item__title {
+    font-size: .75rem !important;
+  }
+  .v-list-item {
+    min-height: 32px !important;
+  }
+  .v-list-item__content {
+    padding: 8px 0 !important;
+  }
 }
