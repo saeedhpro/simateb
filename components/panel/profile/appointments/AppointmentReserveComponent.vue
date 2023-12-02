@@ -107,7 +107,7 @@
               </v-col>
               <v-col
                 cols="12"
-                sm="4"
+                sm="6"
                 md="4"
               >
                 <div class="create-update-model-input-box">
@@ -121,7 +121,7 @@
               </v-col>
               <v-col
                 cols="12"
-                sm="4"
+                sm="6"
                 md="4"
               >
                 <custom-date-picker-js label="تاریخ تولد" v-model="form.birth_date" :error="errors.birth_date" @input="errors.birth_date = ''" type="date" />
