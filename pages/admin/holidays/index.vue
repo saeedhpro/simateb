@@ -36,7 +36,7 @@
                 <div class="create-update-modal-regbox">
                   ثبت در سیستم توسط: {{ `${loginUser.staff.lname} ${loginUser.staff.fname}` }}
                   ({{ loginUser.created | toRelativeDate }} {{
-                    loginUser.created | toPersianDate('YYYY/MM/DD HH:mm:ss')
+                    loginUser.created | toPersianDate('YYYY/MM/DD HH:mm')
                   }})
                 </div>
               </v-card-title>

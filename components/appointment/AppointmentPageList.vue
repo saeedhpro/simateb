@@ -14,9 +14,17 @@
               <th v-for="(limits, n) in limitList" :key="n" class="header-case-type-th text-center">
                 <div class="header-case-type-box">
                   <div class="header-case-type" v-for="(limit, n2) in limits" :key="n2">
-                    <div>
-                      {{ limit.name }}
-                    </div>
+                    <v-tooltip top>
+                      <template v-slot:activator="{ on, attrs }">
+                        <div
+                          v-bind="attrs"
+                          v-on="on"
+                        >
+                        {{ limit.name }}
+                        </div>
+                      </template>
+                      <div>{{ limit.name }}</div>
+                    </v-tooltip>
                     <span class="ltr" v-if="limit.is_limited"
                       :class="{ 'is-red': limit.limitations < 0, 'is-zero': limit.limitations == 0 }">
                       {{ limit.limitations }}
