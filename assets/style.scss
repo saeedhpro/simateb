@@ -2839,8 +2839,9 @@ tr.waiting {
       .phone-box {
         text-align: right;
         font: normal normal bold 16px/35px IRANYekanRegular !important;
-        letter-spacing: 1px;
+        //letter-spacing: 1px;
         color: #141432;
+        letter-spacing: 0;
 
         &.second {
           //margin-top: 24px;

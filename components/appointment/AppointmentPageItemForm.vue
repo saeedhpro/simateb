@@ -407,32 +407,71 @@
               class="my-5"
             />
             <v-row
-              v-if="isDoctor && !isReDoctor && resulted"
+              v-if="isReDoctor || isDoctor"
             >
               <v-col
                 cols="12"
-                v-if="appointment.d_desc"
+                sm="4"
+                md="2"
               >
                 <div class="detail-box">
                   <div class="phone-box">
-                    <span class="small">
-                      توضیحات متخصص:
+                    <span v-if="isReDoctor" class="small">
+                      توضیحات پزشک:
+                    </span>
+                    <span v-else class="small">
+                      توضیحات من:
                     </span>
                   </div>
                 </div>
               </v-col>
               <v-col
                 cols="12"
-                v-if="appointment.d_desc"
+                sm="8"
+                md="10"
               >
-                <div class="detail-box text-right">
-                  <p>{{ appointment.d_desc }}</p>
+                <div class="detail-box">
+                  <div class="phone-box">
+                    {{ appointment.doctor_msg }}
+                  </div>
+                </div>
+              </v-col>
+            </v-row>
+            <v-row
+              v-if="(isDoctor || !isReDoctor) && resulted"
+            >
+              <v-col
+                cols="12"
+                sm="4"
+                md="2"
+              >
+                <div class="detail-box">
+                  <div class="phone-box">
+                      <span v-if="isReDoctor" class="small">
+                        توضیحات من:
+                      </span>
+                      <span v-else class="small">
+                        توضیحات متخصص:
+                      </span>
+                  </div>
+                </div>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="8"
+                md="10"
+              >
+                <div class="detail-box">
+                  <div class="phone-box">
+                    {{ appointment.d_desc }}
+                  </div>
                 </div>
               </v-col>
               <v-col
                 cols="12"
                 sm="4"
                 md="2"
+                v-if="!isReDoctor"
               >
                 <div class="detail-box">
                   <div class="phone-box">
@@ -444,6 +483,7 @@
               </v-col>
               <v-col
                 cols="12"
+                v-if="!isReDoctor"
               >
                 <v-row>
                   <Fancybox
@@ -523,34 +563,6 @@
                     </a>
                   </Fancybox>
                 </v-row>
-              </v-col>
-            </v-row>
-            <v-row
-              v-if="isReDoctor"
-            >
-              <v-col
-                cols="12"
-                sm="4"
-                md="2"
-              >
-                <div class="detail-box">
-                  <div class="phone-box">
-                    <span class="small">
-                      توضیحات پزشک:
-                    </span>
-                  </div>
-                </div>
-              </v-col>
-              <v-col
-                cols="12"
-                sm="8"
-                md="10"
-              >
-                <div class="detail-box">
-                  <div class="phone-box">
-                    {{ appointment.doctor_msg }}
-                  </div>
-                </div>
               </v-col>
             </v-row>
             <v-row
