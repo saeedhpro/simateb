@@ -144,8 +144,12 @@ export const actions = {
         return Promise.reject(err)
       })
   },
-  getTreatmentCategories(ctx) {
-    return this.$axios.get(`/categories`)
+  getTreatmentCategories(ctx, id) {
+    let url = `/categories`
+    if (id) {
+      url += `?organization_id=${id}`
+    }
+    return this.$axios.get(url)
       .then(res => {
         const data = res.data.data;
         ctx.commit('setTreatmentCategories', data)
