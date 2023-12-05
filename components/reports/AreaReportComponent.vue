@@ -79,7 +79,7 @@
                     </div>
                     <div @click="getAgeReport" class="age-button">
                       <span v-if="age_loading">
-                        <v-progress-circular color="red"/>
+                        <v-progress-circular color="#fff"/>
                       </span>
                       <span v-else>محاسبه</span>
                     </div>

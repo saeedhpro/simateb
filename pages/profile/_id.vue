@@ -18,7 +18,8 @@
           <v-tabs
             v-model="tabs"
             centered
-            class="profile-tabs-header"
+            class="profile-tabs-header no-swipe"
+            mobile-breakpoint="600"
           >
             <v-tab
               class="profile-tab"
@@ -66,7 +67,7 @@
         <div
           class="profile-tabs-box"
         >
-          <v-tabs-items v-model="tabs">
+          <v-tabs-items v-model="tabs" touchless>
             <v-tab-item>
               <appointment-list-component
                 :user-id="user.id"
@@ -251,6 +252,5 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
 </style>
