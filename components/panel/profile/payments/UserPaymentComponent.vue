@@ -403,7 +403,7 @@ export default {
         created: this.$moment().format('YYYY/MM/DD HH:mm:ss'),
         amount: 0,
         paytype: 4,
-        paid_for: 1,
+        paid_for: '',
         paid_to: '',
         info: '',
         trace_code: '',
