@@ -248,7 +248,7 @@ export default {
       })
     },
     getCategories() {
-      this.$store.dispatch('treatments/getTreatmentCategories')
+      this.$store.dispatch('treatments/getTreatmentCategories', this.loginUser.organization_id)
         .then(res => {
           this.categories = {
             ...res.data.data

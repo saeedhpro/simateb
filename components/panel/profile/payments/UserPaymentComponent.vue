@@ -9,7 +9,8 @@
                 <div class="d-flex flex-row align-center justify-start row-wrap">
                   <div class="payment-detail ml-4 mb-2">
                     <span>مجموع هزینه درمان:</span>
-                    <span>{{ total.due_total | toPersianCurrency('تومان', 0) }}</span>
+<!--                    <span>{{ total.due_total | toPersianCurrency('تومان', 0) }}</span>-->
+                    <span>{{ price.patient_price | toPersianCurrency('تومان', 0) }}</span>
                   </div>
                   <div class="payment-detail ml-4 mb-2">
                     <span>مجموع پرداخت‌ها:</span>
@@ -17,7 +18,7 @@
                   </div>
                   <div class="payment-detail mb-2">
                     <span>باقیمانده:</span>
-                    <span>{{ total.due_total - total.total | toPersianCurrency('تومان', 0) }}</span>
+                    <span>{{ price.patient_price - total.total | toPersianCurrency('تومان', 0) }}</span>
                   </div>
                 </div>
                 <div class="page-actions" style="min-width: 170px !important" @click="openCreateModal">
@@ -403,7 +404,7 @@ export default {
         created: this.$moment().format('YYYY/MM/DD HH:mm:ss'),
         amount: 0,
         paytype: 4,
-        paid_for: 1,
+        paid_for: '',
         paid_to: '',
         info: '',
         trace_code: '',
