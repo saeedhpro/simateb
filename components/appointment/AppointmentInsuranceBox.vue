@@ -45,7 +45,6 @@
               sm="4"
             >
               <custom-price-input
-                :disabled="true"
                 v-model="insurance_price"
                 label="سهم بیمه"
               />
@@ -55,7 +54,6 @@
               sm="4"
             >
               <custom-price-input
-                :disabled="true"
                 v-model="patient_price"
                 label="سهم بیمار"
               />
