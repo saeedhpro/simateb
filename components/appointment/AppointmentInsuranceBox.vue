@@ -47,6 +47,7 @@
               <custom-price-input
                 v-model="insurance_price"
                 label="سهم بیمه"
+                @input="onInsurancePriceChanged"
               />
             </v-col>
             <v-col
@@ -56,6 +57,7 @@
               <custom-price-input
                 v-model="patient_price"
                 label="سهم بیمار"
+                @input="onPatientPriceChanged"
               />
             </v-col>
             <v-col
@@ -102,6 +104,14 @@ export default {
     },
     insurance: {
       type: Object,
+      default: null
+    },
+    insurancePrice: {
+      type: Number,
+      default: 0
+    },
+    patientPrice: {
+      type: Number,
       default: 0
     },
   },
@@ -119,7 +129,9 @@ export default {
         id: null,
         percentage: 0,
         name: 'آزاد',
-      }
+      },
+      insurance_price: 0,
+      patient_price: 0,
     }
   },
   mounted() {
@@ -135,26 +147,59 @@ export default {
             this.free,
             ...res.data.data,
           ]
+          this.insurance_price = this.insurancePrice
+          this.patient_price = this.patientPrice
         })
     },
     onInsuranceChanged(e) {
       this.$emit('onInsuranceChanged', {
         insurance_id: null,
         user_insurance_id: this.selectedInsurance.id,
-        insurance_price: this.insurance_price,
-        patient_price: this.patient_price,
+        insurance_price: parseFloat(this.insurance_price),
+        patient_price: parseFloat(this.patient_price),
+        total_price: parseFloat(this.total),
+        discount_price: parseInt(this.discount_price),
+      })
+      this.insurance_price = this.total * this.selectedInsurance.percentage / 100
+      this.patient_price = this.total - this.insurance_price - this.discount_price
+    },
+    onInsurancePriceChanged(val) {
+      this.insurance_price = val
+      this.patient_price = this.total - val
+      this.$emit('onInsurancePriceChanges', {
+        insurance_id: null,
+        user_insurance_id: this.selectedInsurance.id,
+        insurance_price: parseFloat(this.insurance_price),
+        patient_price: parseFloat(this.patient_price),
+        total_price: parseFloat(this.total),
+        discount_price: parseInt(this.discount_price),
+      })
+    },
+    onPatientPriceChanged(val) {
+      this.patient_price = val
+      this.insurance_price = this.total - val
+      this.$emit('onInsurancePriceChanges', {
+        insurance_id: null,
+        user_insurance_id: this.selectedInsurance.id,
+        insurance_price: parseFloat(this.insurance_price),
+        patient_price: parseFloat(this.patient_price),
         total_price: parseFloat(this.total),
         discount_price: parseInt(this.discount_price),
       })
     }
   },
   computed: {
-    insurance_price() {
-      return this.total * this.selectedInsurance.percentage / 100
-    },
-    patient_price() {
-      return this.total - this.insurance_price - this.discount_price
-    }
+    // insurance_price: {
+    //   get() {
+    //     return this.total * this.selectedInsurance.percentage / 100
+    //   },
+    //   set(val) {
+    //
+    //   }
+    // },
+    // patient_price() {
+    //   return this.total - this.insurance_price - this.discount_price
+    // }
   }
 }
 
