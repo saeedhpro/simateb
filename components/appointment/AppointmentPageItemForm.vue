@@ -372,7 +372,10 @@
                     :user-insurance-id="appointment.user_insurance_id"
                     :user-id="appointment.user_id"
                     :insurance="appointment.user_insurance"
+                    :insurance-price="appointment.insurance_price"
+                    :patient-price="appointment.patient_price"
                     @onInsuranceChanged="onInsuranceChanged"
+                    @onInsurancePriceChanges="onInsurancePriceChanges"
                   />
                 </v-col>
               </v-row>
@@ -1355,6 +1358,14 @@ export default {
       this.appointment.user_insurance_id = insurance.user_insurance_id
       this.appointment.total_price = insurance.total_price
       this.appointment.discount_price = insurance.discount_price
+    },
+    onInsurancePriceChanges(data) {
+      this.appointment.insurance_price = data.insurance_price
+      this.appointment.patient_price = data.patient_price
+      this.appointment.insurance_id = data.insurance_id
+      this.appointment.user_insurance_id = data.user_insurance_id
+      this.appointment.total_price = data.total_price
+      this.appointment.discount_price = data.discount_price
     },
     setPhotographyCases(cases) {
       this.appointment.photography_cases = cases.join(',')
