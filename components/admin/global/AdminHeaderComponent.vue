@@ -63,6 +63,9 @@
             <nuxt-link to="/admin/insurances">
               <span class="title">بیمه</span>
             </nuxt-link>
+            <nuxt-link to="/admin/payments">
+              <span class="title">واریزی ها</span>
+            </nuxt-link>
           </div>
           <v-spacer />
         </div>
@@ -85,6 +88,9 @@
             </nuxt-link>
             <nuxt-link to="/admin/insurances">
               <span class="title">بیمه</span>
+            </nuxt-link>
+            <nuxt-link to="/admin/payments">
+              <span class="title">واریزی ها</span>
             </nuxt-link>
           </div>
         </div>
@@ -131,6 +137,20 @@
         >
           <v-list-item-title class="title">
             تعطیلات رسمی
+          </v-list-item-title>
+        </v-list-item>
+        <v-list-item
+          to="/admin/insurances"
+        >
+          <v-list-item-title class="title">
+            بیمه
+          </v-list-item-title>
+        </v-list-item>
+        <v-list-item
+          to="/admin/payments"
+        >
+          <v-list-item-title class="title">
+            واریزی ها
           </v-list-item-title>
         </v-list-item>
       </v-list>

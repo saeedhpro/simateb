@@ -105,6 +105,15 @@ export const actions = {
         return Promise.reject(err)
       })
   },
+  createCardToCard(ctx, data) {
+    return this.$axios.post(`/organizations/payments`, data)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
 }
 
 export const getters = {

@@ -47,7 +47,7 @@ export default {
       if (this.value == 0) {
         this.data = 0
       }
-    }
+    },
   },
   computed: {
     data: {
@@ -59,10 +59,13 @@ export default {
       }
     },
     fa() {
-      if (this.data) {
-        return this.$num2persian(this.data) + ' تومان'
+      if (typeof this.$num2persian == 'function') {
+        if (this.data) {
+          return this.$num2persian(this.data) + ' تومان'
+        }
+        return this.$num2persian(0) + ' تومان'
       }
-      return this.$num2persian(0) + ' تومان'
+      return this.data
     }
   }
 }
