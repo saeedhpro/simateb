@@ -152,6 +152,7 @@ export default {
         })
     },
     onInsuranceChanged(e) {
+      this.discount_price = 0
       this.$emit('onInsuranceChanged', {
         insurance_id: null,
         user_insurance_id: this.selectedInsurance.id,
@@ -165,7 +166,7 @@ export default {
     },
     onInsurancePriceChanged(val) {
       this.insurance_price = val
-      this.patient_price = this.total - (this.discount_price + val)
+      this.patient_price = this.total - (parseInt(this.discount_price) + parseInt(val))
       this.$emit('onInsurancePriceChanges', {
         insurance_id: null,
         user_insurance_id: this.selectedInsurance.id,
@@ -190,7 +191,7 @@ export default {
     onDiscountPriceChanged(val) {
       if (val) {
         this.discount_price = val
-        this.patient_price = this.total - this.insurance_price - val
+        this.patient_price = this.total - parseInt(this.insurance_price) - parseInt(val)
         this.$emit('onInsurancePriceChanges', {
           insurance_id: null,
           user_insurance_id: this.selectedInsurance.id,
