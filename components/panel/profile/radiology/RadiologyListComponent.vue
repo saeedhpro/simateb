@@ -1,5 +1,5 @@
 <template>
-  <div class="profile-photography-list-component">
+  <div class="profile-photography-list-component profile-tab">
     <div
       v-if="loading"
     >
