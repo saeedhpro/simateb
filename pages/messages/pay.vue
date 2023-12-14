@@ -25,71 +25,9 @@
       <v-col
         cols="12"
       >
-        <v-card
-          class="page-main-box"
-        >
-          <v-row>
-            <v-col
-              cols="12"
-            >
-              <div class="pay-header">لطفا مبلغ مورد نظر خود را جهت افزایش اعتبار وارد کرده یا از بین گزینه‌های زیر
-                انتخاب کنید
-              </div>
-            </v-col>
-            <v-col
-              col="12"
-            >
-              <div class="price-items mt-4">
-                <div
-                  class="price-item"
-                  :class="{'selected': price === 20000}"
-                  @click="selectPrice(20000)">
-                  {{ 20000 | toPersianCurrency('ریال', 0) }}
-                </div>
-                <div
-                  class="price-item"
-                  :class="{'selected': price === 50000}"
-                  @click="selectPrice(50000)">
-                  {{ 50000 | toPersianCurrency('ریال', 0) }}
-                </div>
-                <div
-                  class="price-item"
-                  :class="{'selected': price === 100000}"
-                  @click="selectPrice(100000)">
-                  {{ 100000 | toPersianCurrency('ریال', 0) }}
-                </div>
-                <div
-                  class="price-item"
-                  :class="{'selected': price === 150000}"
-                  @click="selectPrice(150000)">
-                  {{ 150000 | toPersianCurrency('ریال', 0) }}
-                </div>
-                <div
-                  class="price-item"
-                  :class="{'selected': price === 200000}"
-                  @click="selectPrice(200000)">
-                  {{ 200000 | toPersianCurrency('ریال', 0) }}
-                </div>
-              </div>
-            </v-col>
-            <v-col
-              cols="12"
-            >
-              <div class="d-flex justify-center mt-4">
-                <input class="price-input" v-money="money" type="text" v-model.lazy="price" >
-              </div>
-            </v-col>
-            <v-col
-              cols="12"
-            >
-              <div class="d-flex justify-center mt-4">
-                <button class="pay-button" @click="doPay">
-                  پرداخت
-                </button>
-              </div>
-            </v-col>
-          </v-row>
-        </v-card>
+        <pay-card-to-card-payment-box
+          @save="onSaveClicked"
+        />
       </v-col>
     </v-row>
   </v-container>
@@ -119,6 +57,34 @@ export default {
   methods: {
     getUser() {
       this.$store.dispatch('getOwn')
+    },
+    onSaveClicked(form) {
+      if (this.validateCardForm(form)) {
+        this.$store.dispatch('organizations/createCardToCard', form)
+          .then(res => {
+            this.$toast.success('درخواست با موفقیت ثبت شد')
+            this.$router.push('/messages')
+          })
+          .catch(err => {
+            this.$toast.error('متاسفانه خطایی رخ داده است')
+          })
+      }
+    },
+    validateCardForm(form) {
+      let validated = true
+      if (!form.amount) {
+        validated = false
+        this.$toast.error('لطفا مبلغ را وارد کنید');
+      }
+      if (!form.card_number) {
+        validated = false
+        this.$toast.error('لطفا شماره کارت را وارد کنید');
+      }
+      if (!form.date) {
+        validated = false
+        this.$toast.error('لطفا تاریخ واریز را وارد کنید');
+      }
+      return validated
     },
     doPay() {
       const price = parseInt(this.price.toString().replaceAll('ریال', '').trim().replaceAll(',', ''))
