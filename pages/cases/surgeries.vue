@@ -34,7 +34,7 @@
                 </div>
                 <v-spacer/>
                 <div class="create-update-modal-regbox">
-                  ثبت در سیستم توسط: {{ `${loginUser.staff.lname} ${loginUser.staff.fname}` }}
+                  ثبت در سیستم توسط: {{ `${loginUser.staff ? loginUser.staff.full_name : ''}` }}
                   ({{ loginUser.created | toRelativeDate }} {{
                     loginUser.created | toPersianDate('YYYY/MM/DD HH:mm')
                   }})

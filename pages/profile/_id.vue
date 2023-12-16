@@ -71,21 +71,25 @@
             <v-tab-item>
               <appointment-list-component
                 :user-id="user.id"
+                v-if="reloaded"
               />
             </v-tab-item>
             <v-tab-item v-if="canSee('radiology')">
               <radiology-list-component
                 :user-id="user.id"
+                v-if="reloaded"
               />
             </v-tab-item>
             <v-tab-item v-if="canSee('photography')">
               <photography-list-component
                 :user-id="user.id"
+                v-if="reloaded"
               />
             </v-tab-item>
             <v-tab-item v-if="canSee('doctor')">
               <send-documents-component
                 :user-id="user.id"
+                v-if="reloaded"
               />
             </v-tab-item>
             <v-tab-item v-if="canSee('doctor')">
@@ -94,11 +98,13 @@
                 :due-payment="user.due_payment"
                 :organization-id="user.organization_id"
                 :fullName="`${user.fname} ${user.lname}`"
+                v-if="reloaded"
               />
             </v-tab-item>
             <v-tab-item v-if="canSee('doctor')">
               <user-insurance-component
                 :user-id="user.id"
+                v-if="reloaded"
               />
             </v-tab-item>
           </v-tabs-items>
@@ -159,6 +165,7 @@ export default {
       showDelete: false,
       showHistoryModal: false,
       showUpdateModal: false,
+      reloaded: true,
     }
   },
   methods: {
@@ -247,6 +254,14 @@ export default {
       set(val) {
         console.log(val)
       }
+    }
+  },
+  watch: {
+    tabs() {
+      this.reloaded = false
+      setTimeout(() => {
+        this.reloaded = true
+      }, 100)
     }
   }
 }

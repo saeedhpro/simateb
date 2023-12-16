@@ -67,7 +67,7 @@
               <custom-price-input
                 v-model="discount_price"
                 label="میزان تخفیف"
-                @input="onInsuranceChanged"
+                @input="onDiscountPriceChanged"
               />
             </v-col>
           </v-row>
@@ -152,6 +152,7 @@ export default {
         })
     },
     onInsuranceChanged(e) {
+      this.discount_price = 0
       this.$emit('onInsuranceChanged', {
         insurance_id: null,
         user_insurance_id: this.selectedInsurance.id,
@@ -165,7 +166,7 @@ export default {
     },
     onInsurancePriceChanged(val) {
       this.insurance_price = val
-      this.patient_price = this.total - val
+      this.patient_price = this.total - (parseInt(this.discount_price) + parseInt(val))
       this.$emit('onInsurancePriceChanges', {
         insurance_id: null,
         user_insurance_id: this.selectedInsurance.id,
@@ -177,7 +178,7 @@ export default {
     },
     onPatientPriceChanged(val) {
       this.patient_price = val
-      this.insurance_price = this.total - val
+      this.insurance_price = this.total - (parseInt(this.discount_price) + parseInt(val))
       this.$emit('onInsurancePriceChanges', {
         insurance_id: null,
         user_insurance_id: this.selectedInsurance.id,
@@ -186,6 +187,20 @@ export default {
         total_price: parseFloat(this.total),
         discount_price: parseInt(this.discount_price),
       })
+    },
+    onDiscountPriceChanged(val) {
+      if (val) {
+        this.discount_price = val
+        this.patient_price = this.total - parseInt(this.insurance_price) - parseInt(val)
+        this.$emit('onInsurancePriceChanges', {
+          insurance_id: null,
+          user_insurance_id: this.selectedInsurance.id,
+          insurance_price: parseFloat(this.insurance_price),
+          patient_price: parseFloat(this.patient_price),
+          total_price: parseFloat(this.total),
+          discount_price: parseInt(this.discount_price),
+        })
+      }
     }
   },
   computed: {
