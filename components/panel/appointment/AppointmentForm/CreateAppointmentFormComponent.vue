@@ -50,14 +50,14 @@
                     allowEmpty
                     v-model="user"
                     placeholder=""
-                    :label="'fname'"
-                    :track-by="'fname'"
+                    :label="'full_name'"
+                    :track-by="'full_name'"
                     :options="users"
                     :option-height="104"
                     :show-labels="false"
                     :loading="isLoading"
                     :internal-search="false"
-                    @input="errors.user_id = ''"
+                    @input="onUserChanged"
                     @search-change="onSearchUsers"
                   >
                     <template slot="singleLabel" slot-scope="props"><span
@@ -205,6 +205,11 @@
       @close="toggleAcceptModal"
       @accept="createAppointment"
     />
+    <create-user-form-component
+      :open="showCreateUser"
+      @close="closeCreateUserForm"
+      @done="doneCreateUserForm"
+    />
   </div>
 </template>
 
@@ -219,10 +224,12 @@ import AcceptCreateAppointmentModal from "~/components/panel/appointment/Appoint
 import CustomNationalCodeInput from "~/components/custom/CustomNationalCodeInput";
 import CustomPhoneNumberInput from "~/components/custom/CustomPhoneNumberInput";
 import {debounce} from "lodash";
+import CreateUserFormComponent from "~/components/panel/profile/user/CreateUserFormComponent.vue";
 
 export default {
   name: "CreateAppointmentFormComponent",
   components: {
+    CreateUserFormComponent,
     CustomPhoneNumberInput,
     CustomNationalCodeInput,
     AcceptCreateAppointmentModal,
@@ -269,6 +276,7 @@ export default {
       },
       user: null,
       showAcceptModal: false,
+      showCreateUser: false,
       isLoading: false,
       users: [],
     }
@@ -341,7 +349,14 @@ export default {
       }
       this.$store.dispatch('users/getUsers', filter)
         .then(res => {
-          this.users = res.data.data
+          this.users = [
+            ...res.data.data,
+            {
+              id: -1,
+              fname: 'افزودن',
+              lname: 'بیمار'
+            }
+          ]
         })
         .finally(() => {
           this.isLoading = false
@@ -392,6 +407,22 @@ export default {
             this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
           })
       }
+    },
+    onUserChanged(e) {
+      if (e.id == -1) {
+        this.user = null
+        this.showCreateUser = true
+      } else {
+        this.errors.user_id = ''
+      }
+    },
+    closeCreateUserForm() {
+      this.showCreateUser = false
+    },
+    doneCreateUserForm(user) {
+      this.showCreateUser = false
+      this.user = user
+      this.getUsers()
     }
   },
   computed: {

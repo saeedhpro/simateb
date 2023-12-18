@@ -5,7 +5,6 @@ main {
   direction: rtl;
   background: #F1F2F5 0 0 no-repeat padding-box;
 }
-
 table {
   border-collapse: collapse !important;
 }
@@ -1941,6 +1940,7 @@ tr.waiting {
     img {
       cursor: pointer;
       border-radius: 8px;
+      width: 100%;
     }
   }
 
@@ -2494,14 +2494,18 @@ tr.waiting {
 
   .full-name {
     text-align: center;
-    font: normal normal bold 10px/16px IRANYekanRegular !important;
+    font: normal normal bold 14px/16px IRANYekanRegular !important;
     letter-spacing: 0;
-    color: #141432
+    color: #141432;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 82px;
   }
 
   .start-at {
     text-align: center;
-    font: normal normal normal 10px/16px IRANYekanRegular !important;
+    font: normal normal bold 12px/16px IRANYekanRegular !important;
     letter-spacing: 0;
     color: #141432
   }
@@ -2519,7 +2523,7 @@ tr.waiting {
 
   .case-type {
     text-align: center;
-    font: normal normal normal 10px/16px IRANYekanRegular !important;
+    font: normal normal normal 12px/16px IRANYekanRegular !important;
     letter-spacing: 0;
     color: #141432;
     background: #E6E6E6 0 0 no-repeat padding-box;
@@ -4520,7 +4524,7 @@ tr.waiting {
   }
 
   .show-button {
-    min-width: 100px !important;
+    min-width: 82px !important;
     font-weight: normal !important;
 
     &.active {

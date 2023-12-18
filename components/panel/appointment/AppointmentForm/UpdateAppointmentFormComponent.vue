@@ -50,14 +50,14 @@
                     allowEmpty
                     v-model="user"
                     placeholder=""
-                    :label="'fname'"
-                    :track-by="'fname'"
+                    :label="'full_name'"
+                    :track-by="'full_name'"
                     :options="users"
                     :option-height="104"
                     :show-labels="false"
                     :loading="isLoading"
                     :internal-search="false"
-                    @input="errors.user_id = ''"
+                    @input="onUserChanged"
                     @search-change="onSearchUsers"
                   >
                     <template slot="singleLabel" slot-scope="props"><span
@@ -201,6 +201,11 @@
       @close="toggleAcceptModal"
       @accept="updateAppointment"
     />
+    <create-user-form-component
+      :open="showCreateUser"
+      @close="closeCreateUserForm"
+      @done="doneCreateUserForm"
+    />
   </div>
 </template>
 
@@ -218,10 +223,12 @@ import moment from "jalali-moment";
 import CustomDateInput from "~/components/custom/CustomDateInput";
 import {apps} from "~/ecosystem.config";
 import {debounce} from "lodash";
+import CreateUserFormComponent from "~/components/panel/profile/user/CreateUserFormComponent.vue";
 
 export default {
   name: "UpdateAppointmentFormComponent",
   components: {
+    CreateUserFormComponent,
     CustomDateInput,
     CustomPhoneNumberInput,
     CustomNationalCodeInput,
@@ -278,12 +285,15 @@ export default {
       },
       user: null,
       showAcceptModal: false,
+      showCreateUser: false,
       showTime: false,
       isLoading: false,
+      users: [],
     }
   },
   mounted() {
     this.resetForm()
+    this.getUsers('', 1)
   },
   methods: {
     closeForm() {
@@ -404,7 +414,14 @@ export default {
       }
       this.$store.dispatch('users/getUsers', filter)
         .then(res => {
-          this.users = res.data.data
+          this.users = [
+            ...res.data.data,
+            {
+              id: -1,
+              fname: 'افزودن',
+              lname: 'بیمار'
+            }
+          ]
         })
         .finally(() => {
           this.isLoading = false
@@ -452,14 +469,24 @@ export default {
           })
       }
     },
-    getStartAt(e) {
-      console.log(e, "e")
+    onUserChanged(e) {
+      if (e.id == -1) {
+        this.user = null
+        this.showCreateUser = true
+      } else {
+        this.errors.user_id = ''
+      }
+    },
+    closeCreateUserForm() {
+      this.showCreateUser = false
+    },
+    doneCreateUserForm(user) {
+      this.showCreateUser = false
+      this.user = user
+      this.getUsers()
     }
   },
   computed: {
-    users() {
-      return this.$store.getters['users/getUsers']
-    },
     cases() {
       return this.$store.getters['cases/getCaseTypes']
     },
