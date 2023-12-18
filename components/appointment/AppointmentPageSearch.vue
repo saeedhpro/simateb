@@ -17,7 +17,7 @@
         <div class="mt-4 tafkik">نمایش به تفکیک:</div>
       </div>
     </v-col>
-    <v-col cols="12" sm="2" md="2" lg="1">
+    <v-col cols="12" sm="2" md="2" lg="2">
       <div class="right-box">
         <button class="show-button" :class="{ 'active': showHour }" @click="toggleShowHour">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">

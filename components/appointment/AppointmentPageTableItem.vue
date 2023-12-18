@@ -11,9 +11,19 @@
      'is-time-based': isTimeBased,
    }">
     <div class="full-name">
-      {{ userFullName }}
+      <v-tooltip top>
+        <template v-slot:activator="{ on, attrs }">
+          <div
+            v-bind="attrs"
+            v-on="on"
+          >
+            {{ userFullName }}
+          </div>
+        </template>
+        <div>{{ userFullName }}</div>
+      </v-tooltip>
     </div>
-    <div class="start-at">
+    <div class="start-at mt-1">
       {{ startAtTimeFa }}
     </div>
     <div class="case-type" v-if="caseType">

@@ -472,9 +472,9 @@ export default {
         })
       }
     },
-    closeForm(done = false) {
+    closeForm(done = false, user = null) {
       if (done) {
-        this.$emit('done')
+        this.$emit('done', user)
       } else {
         this.$emit('close')
       }
@@ -653,9 +653,9 @@ export default {
           surgery_price: parseInt(this.form.surgery_price)
         }
         this.$store.dispatch('users/createUser', data)
-          .then(() => {
+          .then((res) => {
             this.$toast.success('با موفقیت انجام شد');
-            this.closeForm(true)
+            this.closeForm(true, res.data.data)
           })
           .catch(err => {
             this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
