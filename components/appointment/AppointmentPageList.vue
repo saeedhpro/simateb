@@ -321,21 +321,24 @@ export default {
                   index: j,
                 })
                 list.shift()
+                j++;
               } else {
                 break;
               }
             }
-            let s = dayStart.clone().add(j * period, 'minute')
-            let jDate = s.clone().locale('fa')
-            days[i].push({
-              is_empty: true,
-              is_friday: jDate.isoWeekday() == 5,
-              is_holiday: isHoliday,
-              is_today: jDate.format("YYYYMMDD") == today,
-              start_at: s.format('YYYY/MM/DD HH:mm:ss'),
-              start_at_time_fa: jDate.locale('en').format('HH:mm'),
-              index: j,
-            })
+            if (j < dayLength) {
+              let s = dayStart.clone().add(j * period, 'minute')
+              let jDate = s.clone().locale('fa')
+              days[i].push({
+                is_empty: true,
+                is_friday: jDate.isoWeekday() == 5,
+                is_holiday: isHoliday,
+                is_today: jDate.format("YYYYMMDD") == today,
+                start_at: s.format('YYYY/MM/DD HH:mm:ss'),
+                start_at_time_fa: jDate.locale('en').format('HH:mm'),
+                index: j,
+              })
+            }
           } else {
             let s = dayStart.clone().add(j * period, 'minute')
             days[i].push({
@@ -352,6 +355,10 @@ export default {
         startDay = startDay.add(1, 'days')
         i++;
       }
+      maxLength = days.reduce((maxSize, subArray) => {
+        const subArraySize = subArray.length;
+        return Math.max(maxSize, subArraySize);
+      }, 0)
       this.maxLength = maxLength
       for (let i = 0; i < days.length; i++) {
         let dayStart = this.startDate.clone().add(i, 'day')
