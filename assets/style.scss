@@ -2497,10 +2497,12 @@ tr.waiting {
     font: normal normal bold 14px/16px IRANYekanRegular !important;
     letter-spacing: 0;
     color: #141432;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    width: 82px;
+    div {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 82px;
+    }
   }
 
   .start-at {
