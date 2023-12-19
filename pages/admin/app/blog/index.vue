@@ -2,42 +2,7 @@
   <v-container
     fluid
   >
-    <v-row>
-      <v-col align-self="center">
-        <div class="page-header-box admin">
-          <nuxt-link to="/admin/app" class="page-header">
-            <img src="/images/pages/app.svg" alt="users">
-            <span class="title">
-              اپ
-            </span>
-          </nuxt-link>
-          <nuxt-link to="/admin/app/page" class="page-header">
-            <img src="/images/pages/page.svg" alt="users">
-            <span class="title">
-              محتوای ثابت
-            </span>
-          </nuxt-link>
-          <nuxt-link to="/admin/app/blog" class="page-header">
-            <img src="/images/pages/blog.svg" alt="users">
-            <span class="title">
-              وبلاگ
-            </span>
-          </nuxt-link>
-          <v-divider class="d-none d-lg-flex" inset/>
-          <v-spacer class="d-none d-sm-flex d-lg-none"/>
-          <div class="page-actions"
-               @click="toggleCreateModal"
-          >
-            <img src="/images/pages/new-user.svg" alt="users">
-            <span class="title-main">دسته بندی جدید</span>
-          </div>
-          <nuxt-link to="/admin/app/blog/create" class="page-actions">
-            <img src="/images/pages/new-user.svg" alt="users">
-            <span class="title-main">مقاله جدید</span>
-          </nuxt-link>
-        </div>
-      </v-col>
-    </v-row>
+    <app-header-component />
     <v-row>
       <v-col
         cols="12"
@@ -185,10 +150,12 @@ import CreateUserFormComponent from "~/components/panel/profile/user/CreateUserF
 import AdminCreateUserFormComponent from "~/components/admin/user/AdminCreateUserFormComponent";
 import SendSmsComponent from "~/components/global/sms/SendSmsComponent";
 import AdminDeleteUsersComponent from "~/components/admin/global/AdminDeleteUsersComponent";
+import AppHeaderComponent from "~/components/admin/app/AppHeaderComponent.vue";
 
 export default {
   name: "index",
   components: {
+    AppHeaderComponent,
     AdminDeleteUsersComponent,
     SendSmsComponent,
     AdminCreateUserFormComponent, CreateUserFormComponent, CropImageComponent, DataTableComponent},
