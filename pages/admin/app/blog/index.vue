@@ -2,7 +2,7 @@
   <v-container
     fluid
   >
-    <app-header-component />
+    <app-header-component :type="getType" />
     <v-row>
       <v-col
         cols="12"
