@@ -132,6 +132,7 @@
                           }}</nuxt-link>
                       </span>
                       <span v-else>-</span>
+                    </td>
                     <td class="text-center">
                       {{ i.created_at_ago }}
                     </td>
