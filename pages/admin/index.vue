@@ -8,7 +8,7 @@
         md="6"
       >
         <v-card
-          class="page-main-box"
+          class="page-main-box mt-12"
         >
           <v-row>
             <v-col>
@@ -57,7 +57,7 @@
         md="6"
       >
         <v-card
-          class="page-main-box"
+          class="page-main-box mt-12"
         >
           <v-row>
             <v-col>

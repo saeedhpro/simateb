@@ -5,23 +5,37 @@
     <v-row>
       <v-col align-self="center">
         <div class="page-header-box admin">
-          <div class="page-header selected">
-            <img src="/images/pages/user.svg" alt="users">
+          <nuxt-link to="/admin/app" class="page-header">
+            <img src="/images/pages/app.svg" alt="users">
             <span class="title">
-            کاربران
-          </span>
-          </div>
+              اپ
+            </span>
+          </nuxt-link>
+          <nuxt-link to="/admin/app/page" class="page-header">
+            <img src="/images/pages/page.svg" alt="users">
+            <span class="title">
+              محتوای ثابت
+            </span>
+          </nuxt-link>
+          <nuxt-link to="/admin/app/blog" class="page-header">
+            <img src="/images/pages/blog.svg" alt="users">
+            <span class="title">
+              وبلاگ
+            </span>
+          </nuxt-link>
           <v-divider class="d-none d-lg-flex" inset/>
           <v-spacer class="d-none d-sm-flex d-lg-none"/>
-          <admin-create-user-form-component
-            :open="showCreateModal"
-            @close="closeForm"
-          />
           <div class="page-actions"
                @click="toggleCreateModal"
           >
             <img src="/images/pages/new-user.svg" alt="users">
-            <span class="title-main">کاربر جدید</span>
+            <span class="title-main">دسته بندی جدید</span>
+          </div>
+          <div class="page-actions"
+               @click="toggleCreateModal"
+          >
+            <img src="/images/pages/new-user.svg" alt="users">
+            <span class="title-main">مقاله جدید</span>
           </div>
         </div>
       </v-col>

@@ -653,6 +653,10 @@ tr.waiting {
     min-width: 150px;
     margin-left: 10px;
 
+    img {
+      height: 100%;
+    }
+
     &.selected {
       background: #F6F7FF 0 0 no-repeat padding-box;
       box-shadow: 0 12px 16px #5063FF28;
