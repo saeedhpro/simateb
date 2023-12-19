@@ -66,6 +66,9 @@
             <nuxt-link to="/admin/payments">
               <span class="title">واریزی ها</span>
             </nuxt-link>
+            <nuxt-link to="/admin/app">
+              <span class="title">اپ</span>
+            </nuxt-link>
           </div>
           <v-spacer />
         </div>
@@ -91,6 +94,9 @@
             </nuxt-link>
             <nuxt-link to="/admin/payments">
               <span class="title">واریزی ها</span>
+            </nuxt-link>
+            <nuxt-link to="/admin/app">
+              <span class="title">اپ</span>
             </nuxt-link>
           </div>
         </div>
@@ -151,6 +157,13 @@
         >
           <v-list-item-title class="title">
             واریزی ها
+          </v-list-item-title>
+        </v-list-item>
+        <v-list-item
+          to="/admin/app"
+        >
+          <v-list-item-title class="title">
+            اپ
           </v-list-item-title>
         </v-list-item>
       </v-list>

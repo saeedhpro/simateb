@@ -53,7 +53,7 @@
                     :label="'full_name'"
                     :track-by="'full_name'"
                     :options="users"
-                    :option-height="104"
+                    :option-height="40"
                     :show-labels="false"
                     :loading="isLoading"
                     :internal-search="false"
@@ -124,7 +124,7 @@
                     :key="n"
                   >
                     <case-type-checkbox-component
-                      class="ml-2"
+                      class="ml-2 mb-2"
                       :id="c.id"
                       :name="c.name"
                       :items="cases"
