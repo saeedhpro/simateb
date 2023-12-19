@@ -31,12 +31,10 @@
             <img src="/images/pages/new-user.svg" alt="users">
             <span class="title-main">دسته بندی جدید</span>
           </div>
-          <div class="page-actions"
-               @click="toggleCreateModal"
-          >
+          <nuxt-link to="/admin/app/page/create" class="page-actions">
             <img src="/images/pages/new-user.svg" alt="users">
             <span class="title-main">مقاله جدید</span>
-          </div>
+          </nuxt-link>
         </div>
       </v-col>
     </v-row>
