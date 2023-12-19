@@ -2,32 +2,7 @@
   <v-container
     fluid
   >
-    <v-row>
-      <v-col align-self="center">
-        <div class="page-header-box admin">
-          <nuxt-link to="/admin/app" class="page-header">
-            <img src="/images/pages/app.svg" alt="users">
-            <span class="title">
-              اپ
-            </span>
-          </nuxt-link>
-          <nuxt-link to="/admin/app/page" class="page-header">
-            <img src="/images/pages/page.svg" alt="users">
-            <span class="title">
-              محتوای ثابت
-            </span>
-          </nuxt-link>
-          <nuxt-link to="/admin/app/blog" class="page-header">
-            <img src="/images/pages/blog.svg" alt="users">
-            <span class="title">
-              وبلاگ
-            </span>
-          </nuxt-link>
-          <v-divider class="d-none d-lg-flex" inset/>
-          <v-spacer class="d-none d-sm-flex d-lg-none"/>
-        </div>
-      </v-col>
-    </v-row>
+    <app-header-component />
     <v-row>
       <v-col
         cols="12"
@@ -137,10 +112,11 @@
 
 <script>
 import DataTableComponent from "~/components/panel/global/DataTableComponent";
+import AppHeaderComponent from "~/components/admin/app/AppHeaderComponent.vue";
 
 export default {
   name: "index.vue",
-  components: {DataTableComponent},
+  components: {AppHeaderComponent, DataTableComponent},
   layout: 'admin',
   middleware: 'admin',
   data() {
