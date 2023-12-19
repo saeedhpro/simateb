@@ -6,6 +6,7 @@
   >
     <v-card
       class="create-update-modal"
+      v-if="category"
     >
       <v-card-title
         class="create-update-modal-title-box"
@@ -65,7 +66,7 @@
                   >
                   <img
                     class="full-height"
-                    :src="form.new_logo ? form.new_logo : '/images/pages/img.svg'"
+                    :src="getLogo"
                     @click="openChooseImage"
                   >
                   <crop-image-component
@@ -94,7 +95,7 @@
                   >
                   <img
                     class="full-height"
-                    :src="form.new_icon ? form.new_icon : '/images/pages/img.svg'"
+                    :src="getIcon"
                     @click="openChooseImageIcon"
                   >
                   <crop-image-component
@@ -143,7 +144,7 @@
             >
               <button
                 class="main-button"
-                @click="createCategory"
+                @click="updateCategory"
               >
                 ذخیره
               </button>
@@ -167,12 +168,16 @@ import FilesListComponent from "~/components/panel/profile/documents/FilesListCo
 import CropImageComponent from "~/components/panel/global/CropImageComponent.vue";
 
 export default {
-  name: "CreateAppCategory",
+  name: "UpdateAppCategory",
   components: {CropImageComponent, FilesListComponent},
   props: {
     open: {
       type: Boolean,
       default: false,
+      required: true
+    },
+    category: {
+      type: Object,
       required: true
     },
     title: {
@@ -187,6 +192,7 @@ export default {
   data() {
     return {
       form: {
+        id: 0,
         name: '',
         type: this.type,
         logo: '',
@@ -202,6 +208,9 @@ export default {
       items: [],
     }
   },
+  mounted() {
+    this.clearForm()
+  },
   methods: {
     getCategories() {
       this.$store.dispatch('admin/app/getCategoryList', {
@@ -211,10 +220,10 @@ export default {
           this.items = res.data.data
         })
     },
-    createCategory() {
-      this.$store.dispatch('admin/app/createCategory', this.form)
+    updateCategory() {
+      this.$store.dispatch('admin/app/updateCategory', this.form)
         .then(res => {
-          this.$toast.success('دسته بندی با موفقیت ثبت شد')
+          this.$toast.success('دسته بندی با موفقیت ویرایش شد')
           this.done()
         })
         .catch(err => {
@@ -227,18 +236,19 @@ export default {
     },
     clearForm() {
       this.form = {
-        name: '',
-        type: this.type,
-        logo: '',
+        id: this.category.id,
+        name: this.category.name,
+        type: this.category.type,
+        logo: this.category.logo,
         new_logo: '',
         ext: '',
         ext_icon: '',
-        icon: '',
+        icon: this.category.icon,
         new_icon: '',
-        parent_id: null,
+        parent_id: this.category.parent_id,
         organization_id: 1,
       }
-      this.parent = null
+      this.parent = this.category.parent
     },
     closeForm() {
       this.close()
@@ -279,7 +289,7 @@ export default {
     },
     chooseImageIcon(e) {
       this.$refs.cropIcon.setImage(e)
-    },
+    }
   },
   computed: {
     show: {
@@ -289,6 +299,12 @@ export default {
       set(val) {
         this.$emit('close')
       }
+    },
+    getLogo() {
+      return this.form.new_logo ? this.form.new_logo : this.form.logo ? this.form.logo : '/images/pages/img.svg'
+    },
+    getIcon() {
+      return this.form.new_icon ? this.form.new_icon : this.form.icon ? this.form.icon : '/images/pages/img.svg'
     }
   },
   watch: {

@@ -1,6 +1,5 @@
 require('whatwg-fetch')
 export const state = () => ({
-
 })
 
 export const mutations = {
@@ -32,6 +31,24 @@ export const actions = {
       }
     }
     return this.$axios.get(`/app/categories?${arr.join('&')}`)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  createCategory(ctx, data) {
+    return this.$axios.post(`/app/categories`, data)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  updateCategory(ctx, data) {
+    return this.$axios.put(`/app/categories/${data.id}`, data)
       .then(res => {
         return Promise.resolve(res)
       })

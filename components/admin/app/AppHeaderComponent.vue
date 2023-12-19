@@ -40,7 +40,7 @@
     <create-app-category
       :open="showCreateModal"
       :title="getTitle"
-      :type="getType"
+      :type="type"
       @close="closeCreateModal"
     />
   </v-row>
@@ -52,6 +52,13 @@ import CreateAppCategory from "~/components/admin/app/CreateAppCategory.vue";
 export default {
   name: "AppHeaderComponent",
   components: {CreateAppCategory},
+  props: {
+    type: {
+      type: String,
+      required: true,
+      default: 'page'
+    }
+  },
   data() {
     return {
       showCreateModal: false
@@ -63,7 +70,7 @@ export default {
     },
     closeCreateModal() {
       this.showCreateModal = false
-    }
+    },
   },
   computed: {
     isIndex() {
@@ -79,16 +86,6 @@ export default {
           return ''
       }
     },
-    getType() {
-      switch (this.$route.path) {
-        case '/admin/app/page':
-          return 'page'
-        case '/admin/app/blog':
-          return 'blog'
-        default:
-          return ''
-      }
-    }
   }
 }
 </script>
