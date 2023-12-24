@@ -204,10 +204,10 @@ export default {
     getToEditRoute(id) {
       switch (this.$route.path) {
         case '/admin/app/page':
-          this.$router.push(`/admin/app/page/${id}`)
+          this.$router.push(`/admin/app/article/page/${id}`)
           return
         case '/admin/app/blog':
-          this.$router.push(`/admin/app/blog/${id}`)
+          this.$router.push(`/admin/app/article/blog/${id}`)
           return
         default:
           return ''

@@ -1442,6 +1442,7 @@ export default {
           this.closeForm()
           this.showDeleteApp = false
           this.$emit('remove')
+          this.$emit('done')
           this.$toast.success('با موفقیت انجام شد');
         })
         .catch(err => {

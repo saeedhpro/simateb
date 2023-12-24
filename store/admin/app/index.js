@@ -56,6 +56,33 @@ export const actions = {
         return Promise.reject(err)
       })
   },
+  getArticle(ctx, id) {
+    return this.$axios.get(`/app/articles/${id}`,)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  createArticle(ctx, data) {
+    return this.$axios.post(`/app/articles`, data)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  updateArticle(ctx, data) {
+    return this.$axios.put(`/app/articles/${data.id}`, data)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
 }
 
 export const getters = {
