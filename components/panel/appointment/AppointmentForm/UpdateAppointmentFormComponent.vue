@@ -43,7 +43,10 @@
                 md="4"
               >
                 <div class="create-update-model-input-box" :class="{'has-error': errors.user_id}">
-                  <label>نام بیمار</label>
+                  <label class="d-flex flex-row align-center justify-space-between full-width">
+                    <span>نام بیمار</span>
+                    <span class="cursor-pointer" @click="openCreateNewUser"><v-icon color="#5063FF">mdi-account-plus</v-icon></span>
+                  </label>
                   <multiselect
                     searchable
                     clearOnSelect
@@ -414,14 +417,15 @@ export default {
       }
       this.$store.dispatch('users/getUsers', filter)
         .then(res => {
-          this.users = [
-            ...res.data.data,
-            {
-              id: -1,
-              fname: 'افزودن',
-              lname: 'بیمار'
-            }
-          ]
+          this.users = res.data.data
+          // this.users = [
+          //   ...res.data.data,
+          //   {
+          //     id: -1,
+          //     fname: 'افزودن',
+          //     lname: 'بیمار'
+          //   }
+          // ]
         })
         .finally(() => {
           this.isLoading = false
@@ -471,11 +475,14 @@ export default {
     },
     onUserChanged(e) {
       if (e.id == -1) {
-        this.user = null
-        this.showCreateUser = true
+        this.openCreateNewUser()
       } else {
         this.errors.user_id = ''
       }
+    },
+    openCreateNewUser() {
+      this.user = null
+      this.showCreateUser = true
     },
     closeCreateUserForm() {
       this.showCreateUser = false

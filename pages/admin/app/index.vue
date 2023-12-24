@@ -2,7 +2,7 @@
   <v-container
     fluid
   >
-    <app-header-component />
+    <app-header-component :type="getType" />
     <v-row>
       <v-col
         cols="12"
@@ -170,6 +170,18 @@ export default {
       return categories.length > 0 ? categories.map(i=>i.name).join(' , ') : '-'
     }
   },
+  computed: {
+    getType() {
+      switch (this.$route.path) {
+        case '/admin/app/page':
+          return 'page'
+        case '/admin/app/blog':
+          return 'blog'
+        default:
+          return ''
+      }
+    },
+  }
 }
 </script>
 

@@ -1,146 +1,47 @@
 <template>
-  <v-container
+  <div class="profile-page">
+    <v-container
     fluid
   >
-    <app-header-component />
+    <app-header-component :type="getType" />
     <v-row>
       <v-col
         cols="12"
       >
-        <v-card
-          class="page-main-box"
+        <v-container fluid>
+          <v-tabs
+            v-model="tabs"
+            class="profile-tabs-header no-swipe"
+            mobile-breakpoint="600"
+          >
+            <v-tab
+              class="profile-tab"
+            >
+              لیست دسته بندی ها
+            </v-tab>
+            <v-tab
+              class="profile-tab"
+            >
+              لیست محتواها
+            </v-tab>
+          </v-tabs>
+        </v-container>
+        <div
+          class="profile-tabs-box"
         >
-          <v-row class="search-box">
-            <v-col
-              cols="12"
-              sm="12"
-              md="5"
-              lg="4"
-            >
-              <div class="right-box">
-                <v-checkbox
-                  v-model="selectedAll"
-                ></v-checkbox>
-                <div class="selected-count" v-if="selectedUsers.length > 0">
-                  {{ selectedUsers.length }}
-                </div>
-                <v-select
-                  outlined
-                  :items="actions"
-                  label="اقدام جمعی"
-                  item-value="id"
-                  item-text="label"
-                  v-model="action"
-                ></v-select>
-                <button
-                  class="do-action-btn"
-                  @click="doAction"
-                  :disabled="!action"
-                >انجام بده
-                </button>
-              </div>
-            </v-col>
-            <v-spacer/>
-            <v-col
-              cols="12"
-              sm="12"
-              md="5"
-              lg="5"
-            >
-              <div class="page-main-actions-left">
-                <div class="result-count">
-                  <span>{{ users.meta.total  }}</span>
-                  نتیجه
-                </div>
-                <div class="page-search-box">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="17.995" height="18" viewBox="0 0 17.995 18">
-                    <defs>
-                      <style>.a {
-                        fill: #757575;
-                      }</style>
-                    </defs>
-                    <path class="a"
-                          d="M17.722,16.559l-4.711-4.711a7.094,7.094,0,0,0,1.582-4.535,7.327,7.327,0,1,0-2.777,5.729l4.711,4.711a.972.972,0,0,0,.629.247.844.844,0,0,0,.6-.247A.822.822,0,0,0,17.722,16.559ZM1.687,7.313a5.625,5.625,0,1,1,5.625,5.625A5.632,5.632,0,0,1,1.687,7.313Z"
-                          transform="translate(0)"/>
-                  </svg>
-                  <input class="search-input" v-model="search.q" type="text" ref="search-input" placeholder="جستجو"
-                         @input="changeSearch">
-                  <div @click="getUsersList" class="search-button">
-                    <img src="/images/pages/search-button.svg">
-                  </div>
-                </div>
-              </div>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col
-              cols="12"
-            >
-              <data-table-component
-                :headers="headers"
-                :page="search.page"
-                :total="users.meta.total"
-                @paginate="paginate"
-              >
-                <template v-slot:body>
-                  <tr v-for="(i, n) in users.data" :key="n">
-                    <td class="text-center">{{ (search.page - 1) * 10 + n + 1 }}</td>
-                    <td class="text-center">
-                      <div class="table-row flex flex-row align-center justify-start">
-                        <input type="checkbox"
-                               class="table-selectable-checkbox"
-                               v-model="selectedUsers"
-                               :value="i"
-                               :ripple="false"
-                        />
-                        <img :src="getLogo(i)">
-                        <span><nuxt-link :to="`/admin/profile/${i.id}`">{{
-                            `${i.fname} ${i.lname}`
-                          }}</nuxt-link></span>
-                      </div>
-                    </td>
-                    <td class="text-center">{{ i.tel ? i.tel : '-' }}</td>
-                    <td class="text-center">{{ i.user_group ? i.user_group.name : '-' }}</td>
-                    <td class="text-center">{{ i.age ? i.age : '-' }}</td>
-                    <td class="text-center" style="color: #000000">
-                      <span v-if="i.organization">
-                        <nuxt-link :to="`/admin/organizations/${i.organization.id}`">{{
-                            i.organization.name
-                          }}</nuxt-link>
-                      </span>
-                      <span v-else>-</span>
-                    </td>
-                    <td class="text-center">
-                      {{ i.created_at_ago }}
-                    </td>
-                    <td class="text-center">
-                      {{ i.last_login_ago }}
-                    </td>
-                  </tr>
-                </template>
-                <template v-slot:notfound>
-                  <div v-if="users.meta.total === 0">اطلاعاتی یافت نشد</div>
-                </template>
-              </data-table-component>
-            </v-col>
-          </v-row>
-        </v-card>
+          <v-tabs-items v-model="tabs" touchless>
+            <v-tab-item>
+              <category-list :type="getType"/>
+            </v-tab-item>
+            <v-tab-item>
+              <article-list :type="getType"/>
+            </v-tab-item>
+          </v-tabs-items>
+        </div>
       </v-col>
     </v-row>
-    <admin-delete-users-component
-      :open="showDelete"
-      @close="toggleRemove"
-      @remove="remove"
-    />
-    <send-sms-component
-      :users="allUsers"
-      :multiple="true"
-      :selectedItems="selectedUsers"
-      :open="showSmsModal"
-      @selected="itemSelected"
-      @close="closeSmsForm"
-    />
   </v-container>
+  </div>
 </template>
 
 <script>
@@ -151,166 +52,32 @@ import AdminCreateUserFormComponent from "~/components/admin/user/AdminCreateUse
 import SendSmsComponent from "~/components/global/sms/SendSmsComponent";
 import AdminDeleteUsersComponent from "~/components/admin/global/AdminDeleteUsersComponent";
 import AppHeaderComponent from "~/components/admin/app/AppHeaderComponent.vue";
+import CategoryList from "~/components/admin/app/CategoryList.vue";
+import ArticleList from "~/components/admin/app/ArticleList.vue";
 
 export default {
   name: "index",
   components: {
+    ArticleList,
+    CategoryList,
     AppHeaderComponent,
-    AdminDeleteUsersComponent,
-    SendSmsComponent,
-    AdminCreateUserFormComponent, CreateUserFormComponent, CropImageComponent, DataTableComponent},
+  },
   layout: 'admin',
   middleware: 'auth',
   data() {
     return {
-      items: [
-        {
-          id: 1,
-          label: 'حذف'
-        },
-        {
-          id: 2,
-          label: 'ارسال پیامک'
-        }
-      ],
-      headers: [
-        '',
-        'کاربر',
-        'شماره تماس',
-        'گروه',
-        'سن',
-        'موسسه',
-        'ثبت در سیستم',
-        'آخرین ورود',
-      ],
-      action: null,
-      search: {
-        q: "",
-        page: 1,
-        groups: [2,3,4,5]
-      },
-      actions: [
-        {
-          id: 0,
-          label: 'اقدام جمعی'
-        },
-        {
-          id: 1,
-          label: 'حذف کن'
-        },
-      ],
-      selectedUsers: [],
-      showCreateModal: false,
-      showDelete: false,
-      showSmsModal: false,
-    }
-  },
-  mounted() {
-    this.paginate()
-    this.getAllUsers()
-  },
-  methods: {
-    toggleRemove() {
-      this.showDelete = !this.showDelete
-    },
-    toggleSmsModal() {
-      this.showSmsModal = !this.showSmsModal
-    },
-    doAction() {
-      if (!this.action) return
-      switch (this.action) {
-        case 1:
-        case '1':
-          this.toggleRemove();
-          break;
-        case 2:
-        case '2':
-          this.toggleSmsModal();
-          break;
-      }
-    },
-    remove() {
-      this.deleteUsers(this.selectedUsers.map(i => i.id))
-      this.toggleRemove()
-    },
-    paginate(page = 1) {
-      this.search.page = page
-      this.getUsersList()
-    },
-    changeSearch(e) {
-      this.getUsersList()
-    },
-    getUsersList() {
-      this.showFilterModal = false
-      this.$store.dispatch('admin/users/getList', this.search)
-    },
-    getAllUsers() {
-      this.$store.dispatch('admin/users/getUsers')
-    },
-    toggleCreateModal() {
-      this.showCreateModal = !this.showCreateModal
-    },
-    closeForm() {
-      this.toggleCreateModal()
-      this.paginate(1)
-    },
-    deleteUsers(ids) {
-      this.$store.dispatch('users/deleteAdminUsers', {
-        ids
-      })
-        .then(() => {
-          setTimeout(() => {
-            this.getUsersList()
-            this.action = null
-            this.selectedUsers = []
-          }, 50)
-          this.$toast.success('با موفقیت انجام شد');
-        })
-      .catch(err => {
-        this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
-      })
-    },
-    itemSelected(e) {
-      this.selectedUsers = e
-    },
-    closeSmsForm() {
-      this.selectedUsers = []
-      this.toggleSmsModal()
-      this.action = null
-    },
-    getLogo(user) {
-      if (user.logo) {
-        return user.logo
-      } else {
-        if (user.gender == 'female') {
-          return '/images/profile/woman.svg'
-        } else {
-          return '/images/profile/man.svg'
-        }
-      }
+      tabs: null,
     }
   },
   computed: {
-    allUsers() {
-      return this.$store.getters['admin/users/getUsers']
-    },
-    users() {
-      return this.$store.getters['admin/users/getList']
-    },
-    loginUser() {
-      return this.$store.getters['login/getUser']
-    },
-    selectedAll: {
-      get() {
-        return this.selectedUsers.length > 0 && this.selectedUsers.length === this.users.data.length
-      },
-      set(bool) {
-        if (bool) {
-          this.selectedUsers = []
-          this.selectedUsers = this.users.data
-        } else {
-          this.selectedUsers = []
-        }
+    getType() {
+      switch (this.$route.path) {
+        case '/admin/app/page':
+          return 'page'
+        case '/admin/app/blog':
+          return 'blog'
+        default:
+          return ''
       }
     },
   },

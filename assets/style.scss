@@ -5,27 +5,33 @@ main {
   direction: rtl;
   background: #F1F2F5 0 0 no-repeat padding-box;
 }
-ul.multiselect__content {
-  .multiselect__element:nth-last-child(-n+3) {
-    background: #5063ff8c !important;
-    color: #FFFFFF !important;
-    &:hover {
-      background: #5063ff8c !important;
-      color: #FFFFFF !important;
-      .multiselect__option--highlight {
-        background: #5063ff8c !important;
-        color: #FFFFFF !important;
-      }
-    }
-  }
-  .multiselect__option {
-    line-height: 12px;
-    .option__title {
-      font-size: 12px;
-      font-weight: bold;
-    }
-  }
+.ck-content {
+  min-height: 500px !important;
 }
+.ck-editor {
+  width: 100% !important;
+}
+//ul.multiselect__content {
+//  .multiselect__element:nth-last-child(-n+3) {
+//    background: #5063ff8c !important;
+//    color: #FFFFFF !important;
+//    &:hover {
+//      background: #5063ff8c !important;
+//      color: #FFFFFF !important;
+//      .multiselect__option--highlight {
+//        background: #5063ff8c !important;
+//        color: #FFFFFF !important;
+//      }
+//    }
+//  }
+//  .multiselect__option {
+//    line-height: 12px;
+//    .option__title {
+//      font-size: 12px;
+//      font-weight: bold;
+//    }
+//  }
+//}
 table {
   border-collapse: collapse !important;
 }

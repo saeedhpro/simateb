@@ -192,9 +192,11 @@ export default {
         logo: '',
         new_logo: '',
         ext: '',
+        ext_icon: '',
         icon: '',
         new_icon: '',
         parent_id: null,
+        organization_id: 1,
       },
       parent: null,
       items: [],
@@ -210,9 +212,7 @@ export default {
         })
     },
     createCategory() {
-      this.$store.dispatch('admin/app/getCategoryList', {
-        type: this.type,
-      })
+      this.$store.dispatch('admin/app/createCategory', this.form)
         .then(res => {
           this.$toast.success('دسته بندی با موفقیت ثبت شد')
           this.done()
@@ -230,9 +230,15 @@ export default {
         name: '',
         type: this.type,
         logo: '',
+        new_logo: '',
+        ext: '',
+        ext_icon: '',
         icon: '',
+        new_icon: '',
         parent_id: null,
+        organization_id: 1,
       }
+      this.parent = null
     },
     closeForm() {
       this.close()
@@ -243,6 +249,7 @@ export default {
       this.close()
     },
     close() {
+      this.clearForm()
       this.$emit('close')
     },
     cropped(file) {
@@ -286,9 +293,7 @@ export default {
   },
   watch: {
     open() {
-      if (this.open) {
-        this.getCategories()
-      }
+      this.getCategories()
     },
     parent(parent) {
       this.form.parent_id = parent ? parent.id : null
