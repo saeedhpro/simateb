@@ -33,7 +33,8 @@ export default {
     {src: '~/plugins/notification.js', ssr: false},
     {src: '~/plugins/vuelidate.js', ssr: false},
     {src: '~/plugins/topersian.js', ssr: false},
-    {src: '~/plugins/apexchart.js', ssr: false}
+    {src: '~/plugins/apexchart.js', ssr: false},
+    {src: '~/plugins/password-strength.js', ssr: false},
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
