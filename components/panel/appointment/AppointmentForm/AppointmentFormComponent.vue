@@ -1324,7 +1324,7 @@ export default {
       this.getAppointmentPrescription()
     },
     getUsers() {
-      this.$store.dispatch('users/getUsers')
+      this.$store.dispatch('users/getUsers', {limit: 100})
     },
     getCaseTypes() {
       this.$store.dispatch('cases/getCaseTypes', {})

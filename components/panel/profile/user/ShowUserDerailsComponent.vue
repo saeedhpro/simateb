@@ -231,6 +231,7 @@
             <div
               class="action-button"
               @click="showUpdate"
+              v-if="canSeeUpdateUser"
             >
               <v-icon>
                 mdi-pencil-outline
@@ -488,6 +489,9 @@ export default {
         return false
       }
       return this.user.organization_id === this.loginUser.organization_id || this.loginUser.user_group_id === 2;
+    },
+    canSeeUpdateUser() {
+      return this.loginUser.organization.profession_id == 2 || this.loginUser.organization.profession_id == 3 || this.loginUser.organization.profession_id == 5 || this.loginUser.id == this.$route.params.id || this.loginUser.user_group_id === 2
     },
     loginUser() {
       return this.$store.getters['login/getUser']

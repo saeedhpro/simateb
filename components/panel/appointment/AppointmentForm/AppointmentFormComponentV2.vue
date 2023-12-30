@@ -1471,7 +1471,7 @@ export default {
       this.getAppointmentPrescription()
     },
     getUsers() {
-      this.$store.dispatch('users/getUsers')
+      this.$store.dispatch('users/getUsers', {limit: 100})
     },
     getCaseTypes() {
       const type = this.isSurgery ? 2 : 1

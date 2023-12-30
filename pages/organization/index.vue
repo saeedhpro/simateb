@@ -610,7 +610,7 @@ export default {
       this.$store.dispatch('appointments/getOrganizationAppointmentsList', this.search)
     },
     getUsers() {
-      this.$store.dispatch('users/getUsers')
+      this.$store.dispatch('users/getUsers', {limit: 100})
     },
     getCaseTypes() {
       this.$store.dispatch('cases/getCaseTypes', {})

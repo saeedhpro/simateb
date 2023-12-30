@@ -2,6 +2,9 @@
   <div class="create-update-model-input-box" :class="{'has-error': error}">
     <label v-if="label">{{ label }}</label>
     <input :type="type" v-model="data" :autocomplete="type === 'password' ? 'new-password' : 'off'">
+    <client-only>
+      <password-meter v-if="type === 'password'" :password="data" />
+    </client-only>
     <span class="create-update-modal-input-error" v-if="error">{{ error }}</span>
   </div>
 </template>

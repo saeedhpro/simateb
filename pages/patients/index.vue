@@ -472,7 +472,7 @@ export default {
         // })
     },
     getAllUsers() {
-      this.$store.dispatch('users/getUsers')
+      this.$store.dispatch('users/getUsers', {limit: 100})
     },
     toggleCreateModal() {
       this.showCreateModal = !this.showCreateModal

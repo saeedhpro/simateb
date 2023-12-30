@@ -206,6 +206,7 @@
             <div
               class="action-button"
               @click="showUpdate"
+              v-if="canSeeUpdateUser"
             >
               <v-icon>
                 mdi-pencil-outline
@@ -266,7 +267,7 @@ export default {
       this.showUpdateModal = !this.showUpdateModal
     },
     closeUpdateModal() {
-      this.$emit('updated');
+      this.$emit('close');
       this.toggleShowUpdateModal()
       this.item = null
     },
@@ -302,6 +303,9 @@ export default {
         return false
       }
       return this.user.user_group_id !== 2;
+    },
+    canSeeUpdateUser() {
+      return this.isDoctor || this.loginUser.id == this.user.id
     },
     isAdmin() {
       if (!this.loginUser) return false
