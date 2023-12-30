@@ -47,7 +47,7 @@ export default {
   },
   methods: {
     getUsers() {
-      this.$store.dispatch('users/getUsers', {limit: 100})
+      this.$store.dispatch('users/getUsers', {limit: 100, page: 1})
     },
     getCaseTypes() {
       this.$store.dispatch('cases/getCaseTypes', {type: 1})
