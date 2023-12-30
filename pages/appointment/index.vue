@@ -42,7 +42,7 @@ export default {
   layout: 'panel',
   middleware: 'auth',
   mounted() {
-    this.getUsers()
+    // this.getUsers()
     this.getCaseTypes()
   },
   methods: {

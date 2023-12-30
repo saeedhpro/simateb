@@ -201,6 +201,7 @@
                 :headers="doctorHeaders"
                 :page="search.page"
                 :total="appointments.meta.total"
+                :per-page="search.limit"
                 @paginate="paginate"
               >
                 <template v-slot:body>
@@ -329,6 +330,7 @@
                 :headers="headers"
                 :page="search.page"
                 :total="appointments.meta.total"
+                :per-page="search.limit"
                 @paginate="paginate"
               >
                 <template v-slot:body>
