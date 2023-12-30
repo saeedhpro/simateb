@@ -445,7 +445,7 @@ export default {
         })
     },
     getUsers() {
-      this.$store.dispatch('users/getUsers', {limit: 100})
+      this.$store.dispatch('users/getUsers', {limit: 100, page: 1})
     },
     getUser() {
       this.$store.dispatch('getOwn')
