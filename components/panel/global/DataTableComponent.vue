@@ -74,7 +74,7 @@ export default {
   },
   computed: {
     length() {
-      return Math.ceil(this.total / 10)
+      return Math.ceil(this.total / this.perPage)
     }
   }
 }
