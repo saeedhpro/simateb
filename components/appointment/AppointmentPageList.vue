@@ -9,7 +9,7 @@
          id="appointment-table"
          :class="{'surgeries': isSurgery}"
         >
-          <thead v-if="showCaseType">
+          <thead v-if="showCaseType" v-once>
             <tr>
               <th v-for="(limits, n) in limitList" :key="n" class="header-case-type-th text-center">
                 <div class="header-case-type-box">
