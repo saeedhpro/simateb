@@ -697,8 +697,8 @@ export default {
     canShowCode() {
       return this.code &&
         (
-          this.photographyId ||
-          this.radiologyId
+          this.photography ||
+          this.radiology
         )
     },
     canSeeRadiology() {
