@@ -13,6 +13,14 @@
         <img src="/images/pages/about.svg" alt="users">
         <span class="title">درباره موسسه</span>
       </nuxt-link>
+      <nuxt-link :to="`/admin/organizations/${organization.id}/faq`" class="page-header">
+        <img src="/images/pages/about.svg" alt="users">
+        <span class="title">سوالات متداول</span>
+      </nuxt-link>
+      <nuxt-link :to="`/admin/organizations/${organization.id}/samples`" class="page-header">
+        <img src="/images/pages/about.svg" alt="users">
+        <span class="title">نمونه کارها</span>
+      </nuxt-link>
       <v-divider class="d-none d-lg-flex" :style="{'margin-left': canSee ? '72px' : '0'}" inset/>
       <v-spacer class="d-none d-sm-flex d-lg-none"/>
       <div class="page-actions"

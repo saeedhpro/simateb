@@ -14,11 +14,24 @@ export const state = () => ({
   organization: null,
   organizations: [],
   sliders: [],
+  image_samples: [],
+  video_samples: [],
   organizationsByProfession: {
     laboratories: [],
     radiologies: [],
     photographies: [],
     doctors: [],
+  },
+  faqs: {
+    data: [],
+    limit: 10,
+    page: 1,
+    sort: '',
+    meta: {
+      total: 0,
+    },
+    total_rows: 0,
+    total_pages: 0
   },
 })
 
@@ -29,6 +42,12 @@ export const mutations = {
   setSliders(state, sliders) {
     state.sliders = sliders
   },
+  setImageSamples(state, sliders) {
+    state.image_samples = sliders
+  },
+  setVideoSamples(state, sliders) {
+    state.video_samples = sliders
+  },
   setOrganization(state, organization) {
     state.organization = organization
   },
@@ -37,6 +56,9 @@ export const mutations = {
   },
   setOrganizationsByProfession(state, organizations) {
     state.organizationsByProfession = organizations
+  },
+  setFaqList(state, faqs) {
+    state.faqs = faqs
   },
 }
 
@@ -69,6 +91,30 @@ export const actions = {
       .then(res => {
         const data = res.data;
         ctx.commit('setSliders', data)
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  getImageSamples(ctx, id) {
+    ctx.commit('setImageSamples', [])
+    return this.$axios.get(`/admin/organizations/${id}/samples?type=image`)
+      .then(res => {
+        const data = res.data;
+        ctx.commit('setImageSamples', data)
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  getVideoSamples(ctx, id) {
+    ctx.commit('setVideoSamples', [])
+    return this.$axios.get(`/admin/organizations/${id}/samples?type=video`)
+      .then(res => {
+        const data = res.data;
+        ctx.commit('setVideoSamples', data)
         return Promise.resolve(res)
       })
       .catch(err => {
@@ -141,6 +187,61 @@ export const actions = {
       .catch(err => {
         return Promise.reject(err)
       })
+  },
+  deleteOrganizationFaqs(ctx, data) {
+    return this.$axios.post(`/admin/organizations/faqs/deletes`, data)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  getOrganizationFaqs(ctx, data) {
+    ctx.commit('setFaqList', {
+      data: [],
+      limit: 10,
+      page: 1,
+      sort: '',
+      meta: {
+        total: 0,
+      },
+      total_rows: 0,
+      total_pages: 0
+    })
+    const d = Object.entries(data);
+    const arr = [];
+    for (let i = 0; i < d.length; i++) {
+      if (d[i][1]) {
+        arr.push(`${d[i][0]}=${d[i][1]}`)
+      }
+    }
+    return this.$axios.get(`/organizations/${data.organization_id}/faqs?${arr.join('&')}`, data)
+      .then(res => {
+        ctx.commit('setFaqList', res.data)
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  createOrganizationFaq(ctx, data) {
+    return this.$axios.post(`/admin/organizations/faqs`, data)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  updateOrganizationFaq(ctx, data) {
+    return this.$axios.put(`/admin/organizations/faqs/${data.id}`, data)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
   }
 }
 
@@ -159,5 +260,14 @@ export const getters = {
   },
   getOrganizationsByProfession(state) {
     return state.organizationsByProfession
+  },
+  getOrganizationFaqs(state) {
+    return state.faqs
+  },
+  getImageSamples(state) {
+    return state.image_samples
+  },
+  getVideoSamples(state) {
+    return state.video_samples
   },
 }

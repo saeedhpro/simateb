@@ -491,7 +491,10 @@ export default {
       return this.user.organization_id === this.loginUser.organization_id || this.loginUser.user_group_id === 2;
     },
     canSeeUpdateUser() {
-      return this.loginUser.organization.profession_id == 2 || this.loginUser.organization.profession_id == 3 || this.loginUser.organization.profession_id == 5 || this.loginUser.id == this.$route.params.id || this.loginUser.user_group_id === 2
+        return this.loginUser.user_group_id === 2 ||
+          this.loginUser.user_group_id === 3 ||
+          this.loginUser.user_group_id === 4 ||
+          this.loginUser.user_group_id === 5
     },
     loginUser() {
       return this.$store.getters['login/getUser']
