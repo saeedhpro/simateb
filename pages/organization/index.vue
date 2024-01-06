@@ -478,7 +478,7 @@ export default {
         q: '',
         status: '',
         page: 1,
-        limit: 25,
+        limit: 500,
         admissioned: 0,
       },
       actions: [

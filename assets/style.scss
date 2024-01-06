@@ -3746,6 +3746,24 @@ tr.waiting {
       margin-top: 24px;
     }
   }
+
+  &.small {
+    max-height: 150px;
+    min-height: 150px;
+    align-items: flex-start;
+    .plus-box {
+      height: 150px;
+      min-height: 150px;
+      width: 150px;
+      min-width: 150px;
+      img {
+        height: 50px;
+      }
+      .choose-image {
+        margin-top: 10px !important;
+      }
+    }
+  }
 }
 
 .organization-slider-image {
@@ -3757,6 +3775,13 @@ tr.waiting {
   box-shadow: 0 12px 16px rgb(20 20 50 / 8%);
   border: 1px solid rgb(20 20 50 / 8%);
   position: relative;
+  &.none {
+    height: auto !important;
+    .remove-image {
+      top: -20px;
+      right: -20px;
+    }
+  }
 
   .remove-image {
     position: absolute;
@@ -3800,8 +3825,6 @@ tr.waiting {
     right: 10px;
   }
 }
-
-.organization-slider-image {}
 
 .doctor-paziresh-header {
   display: flex;
