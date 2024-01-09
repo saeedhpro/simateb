@@ -22,6 +22,7 @@ export const state = () => ({
   showItemModal: false,
   appointments: [],
   limits: [],
+  simpleDays: [],
 })
 
 export const mutations = {
@@ -77,6 +78,9 @@ export const mutations = {
   },
   setLimits(state, limits) {
     state.limits = limits
+  },
+  setSimpleDays(state, days) {
+    state.simpleDays = days
   },
 }
 
@@ -151,6 +155,9 @@ export const actions = {
   setHolidays(ctx, val) {
     ctx.commit('setHolidays', val)
   },
+  setSimpleDays(ctx, val) {
+    ctx.commit('setSimpleDays', val)
+  },
 }
 
 export const getters = {
@@ -201,5 +208,8 @@ export const getters = {
   },
   getLimits(state) {
     return state.limits
+  },
+  getSimpleDays(state) {
+    return state.simpleDays
   }
 }

@@ -404,9 +404,9 @@ export default {
     },
     onSearchUsers: debounce(function (e) {
       let q = this.$enDigit(e)
-      this.getUsers(q, null)
+      this.getUsers(q, 1, 15)
     }, 400),
-    getUsers(q = '', page = null) {
+    getUsers(q = '', page = null, limit = null) {
       this.isLoading = true
       let filter = {
         q: q,
@@ -414,6 +414,9 @@ export default {
       }
       if (page) {
         filter.page = page
+      }
+      if (limit) {
+        filter.limit = limit
       }
       this.$store.dispatch('users/getUsers', filter)
         .then(res => {

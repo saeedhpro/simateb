@@ -11,6 +11,15 @@ main {
 .ck-editor {
   width: 100% !important;
 }
+.scroller {
+  height: 100%;
+  &.header-days {
+    min-height: 56px;
+    .vue-recycle-scroller__item-wrapper {
+      min-height: 56px;
+    }
+  }
+}
 //ul.multiselect__content {
 //  .multiselect__element:nth-last-child(-n+3) {
 //    background: #5063ff8c !important;

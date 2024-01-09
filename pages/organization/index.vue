@@ -465,8 +465,8 @@ export default {
   middleware: 'auth',
   mounted() {
     this.paginate()
-    this.getUsers()
-    this.getCaseTypes()
+    // this.getUsers()
+    // this.getCaseTypes()
   },
   data() {
     return {
