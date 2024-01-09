@@ -421,18 +421,17 @@ export default {
       }
     },
     shownDays() {
-      return this.simpleDays
       let index = this.startDay > 1 ? this.startDay - 2: this.startDay
       if (index > 27) {
         index = 27
       }
-      return this.simpleDays.slice(index, index + 14)
+      return this.simpleDays.slice(index, index + this.tableWidth)
     },
     tableWidth() {
       const slider = document.getElementById('table-wrapper');
       const width = slider.offsetWidth;
       console.log(parseInt(width / 105) + 2)
-      return width
+      return parseInt(width / 105) + 2
     }
   },
   watch: {
