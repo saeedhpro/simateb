@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col cols="12">
-      <div v-if="!loadList">
+      <div v-if="loading">
         <v-progress-circular />
       </div>
       <div v-else style="overflow-x: scroll" id="table-wrapper" ref="table-wrapper">
@@ -10,7 +10,7 @@
            :class="{'surgeries': isSurgery}"
            @scroll="onTableScroll"
         >
-          <div class="" v-for="(l, i) in simpleDays" :key="i">
+          <div class="" v-for="(l, i) in shownDays" :key="i">
             <div class="table-appointment-item" v-for="(a, j) in l" :key="j">
               <div
                 v-if="!a.is_empty"
@@ -93,7 +93,7 @@ export default {
   },
   data() {
     return {
-      loading: false,
+      loading: true,
       maxLength: 0,
       maxDayLength: 0,
       maxTimeLength: 0,
@@ -124,6 +124,7 @@ export default {
         })
     },
     calcSimpleDays() {
+      const start = Date.now();
       if (!this.startDate) {
         return
       }
@@ -158,15 +159,19 @@ export default {
               is_friday: isFriday,
               is_holiday: isHoliday,
               is_today: isToday,
+              is_reserved: this.simpleDays[key][j].status == 1,
+              is_accepted: this.simpleDays[key][j].status == 2,
+              is_canceled: this.simpleDays[key][j].status == 3,
+              is_waiting: this.simpleDays[key][j].waiting,
               index: j,
             }
           } else {
             let s = dayStart.clone().add(j * period, 'minute')
             this.simpleDays[key][j] = {
               is_empty: true,
-              is_friday: jDate.isoWeekday() == 5,
+              is_friday: isFriday,
               is_holiday: isHoliday,
-              is_today: jDate.format("YYYYMMDD") == today,
+              is_today: isToday,
               start_at: s.format('YYYY/MM/DD HH:mm:ss'),
               start_at_time_fa: s.format('HH:mm'),
               index: j,
@@ -180,6 +185,9 @@ export default {
           second: this.workHour.start.substring(6, 9),
         })
       }
+      const millis = Date.now() - start;
+      alert(`seconds elapsed = ${Math.floor(millis)}`);
+      this.loading = false
     },
     setSlider() {
       setTimeout(() => {
@@ -323,6 +331,7 @@ export default {
     },
     tableWidth() {
       const slider = document.getElementById('table-wrapper');
+      if (!slider) return 0
       const width = slider.offsetWidth;
       return parseInt(width / 105) + 2
     }
