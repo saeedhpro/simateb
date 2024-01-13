@@ -104,6 +104,7 @@ export default {
       maxLength: 0,
       maxTimeLength: 0,
       startDay: 0,
+      endDay: 0,
     }
   },
   mounted() {
@@ -430,7 +431,6 @@ export default {
     tableWidth() {
       const slider = document.getElementById('table-wrapper');
       const width = slider.offsetWidth;
-      console.log(parseInt(width / 105) + 2)
       return parseInt(width / 105) + 2
     }
   },
