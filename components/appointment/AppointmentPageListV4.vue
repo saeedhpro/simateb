@@ -36,9 +36,8 @@
         <div class="appointment-table d-flex flex-column"
            id="appointment-table"
            :class="{'surgeries': isSurgery}"
-           @scroll="onTableScroll"
         >
-          <div v-if="showCaseType && simpleDays.length > 0">
+          <div v-if="showCaseType && shownDays.length > 0">
             <div class="d-flex flex-row">
               <div v-for="(limits, n) in limitList" :key="n" class="header-case-type-th text-center">
                 <div class="header-case-type-box">
@@ -63,7 +62,7 @@
               </div>
             </div>
           </div>
-          <div class="none" v-if="simpleDays.length">
+          <div class="none" v-if="shownDays.length">
             <div class="d-flex flex-row">
                 <div v-for="(i, n) in shownDayCounts" class="header-case-type-th text-center" :key="n">
                     <div class="day-count-box">
@@ -72,7 +71,7 @@
                 </div>
             </div>
           </div>
-          <div class="d-flex flex-row" v-if="simpleDays.length">
+          <div class="d-flex flex-row" v-if="shownDays.length">
             <div v-for="(d, n) in showHeaderDays" :key="n" class="header-case-type-th text-center"
                :class="{ 'is-today': d.is_today }">
                   <div
@@ -103,71 +102,68 @@
               </v-tooltip>
             </div>
           </div>
-          <div class="d-flex flex-row" v-for="(_, i) in maxLength" :key="i">
-            <div class="table-appointment-item" v-for="(_, j) in shownDays.length" :key="j">
-              <div
-                class="table-appointment-component"
-                :class="{
-                   'is-friday': shownDays[j][i].is_friday,
-                   'is-holiday': shownDays[j][i].is_holiday,
-                   'is-today': shownDays[j][i].is_today,
-                   'is-reserved': shownDays[j][i].is_reserved,
-                   'is-accepted': shownDays[j][i].is_accepted,
-                   'is-canceled': shownDays[j][i].is_canceled,
-                   'is-waiting': shownDays[j][i].is_waiting,
+          <div class="d-flex flex-row" v-for="(row, i) in shownDays" :key="i">
+            <div class="d-flex flex-column" v-for="(a, j) in row" :key="j">
+              <div class="table-appointment-item">
+                <div
+                  v-if="!a.is_empty"
+                  class="table-appointment-component"
+                  :class="{
+                   'is-friday': a.is_friday,
+                   'is-holiday': a.is_holiday,
+                   'is-today': a.is_today,
+                   'is-reserved': a.is_reserved,
+                   'is-accepted': a.is_accepted,
+                   'is-canceled': a.is_canceled,
+                   'is-waiting': a.is_waiting,
                    'is-time-based': false,
                 }"
-                v-if="shownDays[j][i] && !shownDays[j][i].is_empty"
-                @click="openItem(shownDays[j][i].id)"
-              >
-                <div class="full-name">
-                  <v-tooltip top>
-                    <template v-slot:activator="{ on, attrs }">
-                      <div
-                        v-bind="attrs"
-                        v-on="on"
-                      >
-                        {{ shownDays[j][i].user_full_name }}
-                      </div>
-                    </template>
-                    <div>{{ shownDays[j][i].user_full_name }}</div>
-                  </v-tooltip>
+                  @click="openItem(a.id)"
+                >
+                  <div class="full-name">
+                    <v-tooltip top>
+                      <template v-slot:activator="{ on, attrs }">
+                        <div
+                          v-bind="attrs"
+                          v-on="on"
+                        >
+                          {{ a.user_full_name }}
+                        </div>
+                      </template>
+                      <div>{{ a.user_full_name }}</div>
+                    </v-tooltip>
+                  </div>
+                  <span class="start-at mt-1">{{ a.start_at_time_fa }}</span>
+                  <span class="case-type" v-if="a.case_type">{{ a.case_type }}</span>
+                  <div v-if="a.is_vip" class="vip-tag">
+                    VIP
+                  </div>
                 </div>
-                <span class="start-at mt-1">{{ shownDays[j][i].start_at_time_fa }}</span>
-                <span class="case-type" v-if="shownDays[j][i].case_type">{{ shownDays[j][i].case_type }}</span>
-                <div v-if="shownDays[j][i].is_vip" class="vip-tag">
-                  VIP
-                </div>
-              </div>
-              <div
-                class="table-appointment-none"
-                :class="{
-                   'is-friday': shownDays[j][i].is_friday,
-                   'is-holiday': shownDays[j][i].is_holiday,
-                   'is-today': shownDays[j][i].is_today,
-                   'is-reserved': shownDays[j][i].is_reserved,
-                   'is-accepted': shownDays[j][i].is_accepted,
-                   'is-canceled': shownDays[j][i].is_canceled,
-                   'is-waiting': shownDays[j][i].is_waiting,
+                <div
+                  v-else
+                  class="table-appointment-none"
+                  :class="{
+                   'is-friday': a.is_friday,
+                   'is-holiday': a.is_holiday,
+                   'is-today': a.is_today,
+                   'is-reserved': a.is_reserved,
+                   'is-accepted': a.is_accepted,
+                   'is-canceled': a.is_canceled,
+                   'is-waiting': a.is_waiting,
                    'is-time-based': false,
                 }"
-                v-else-if="shownDays[j][i] && shownDays[j][i].is_empty"
-              >
-                <div
-                  class="start-at"
-                  v-if="shownDays[j][i].is_friday"
                 >
-                  {{ shownDays[j][i].index + 1 }}
+                  <div
+                    class="start-at"
+                  >
+                  </div>
+                  <div
+                    class="time"
+                    v-if="showHour"
+                  >
+                    {{'-'}}
+                  </div>
                 </div>
-                <div
-                  class="time"
-                  v-else-if="showHour"
-                >
-                  {{ shownDays[j][i].start_at_time_fa  }}
-                </div>
-              </div>
-              <div v-else >
-                {{ `${i - j}` }}
               </div>
             </div>
           </div>
@@ -209,12 +205,10 @@
 </template>
 <script>
 import moment from "jalali-moment";
-import TableAppointmentNoneV2 from "~/components/panel/appointment/TableAppointmentNoneV2.vue";
-import TableAppointmentV2 from "~/components/panel/appointment/TableAppointmentV2.vue";
 import LoadingCard from "~/components/global/LoadingCard.vue";
 
 export default {
-  name: "AppointmentPageList2",
+  name: "AppointmentPageListV4",
   components: { LoadingCard, },
   props: {
     isSurgery: {
@@ -233,13 +227,14 @@ export default {
       endIndex: 0,
       tableW: 0,
       headerDays: [],
+      tableHtml: ''
     }
   },
   methods: {
     async getAppointments() {
       const start = this.startDate.clone().locale('en').format("YYYY/MM/DD")
-      const end = this.endDate.clone().locale('en').format("YYYY/MM/DD")
-      let url = `/appointments/que/v4?start=${start}&end=${end}`
+      const period = 40
+      let url = `/appointments/que/v5?start=${start}&period=${period}`
       if (this.isSurgery) {
         url += `&ct=جراحی`
         url += `&is_surgery=1`
@@ -248,7 +243,9 @@ export default {
       }
       this.$axios.get(url)
         .then(res => {
-          this.appointments = res.data.appointments
+          this.simpleDays = res.data.appointments
+          this.maxLength = 40
+          this.maxDayLength = res.data.max_length
           this.limits = res.data.limits
           this.calcSimpleDays()
         })
@@ -258,161 +255,68 @@ export default {
       if (!this.startDate) {
         return
       }
-      let holidays = this.holidays
       let startDay = this.startDate.clone()
-      let lastDay = this.endDate.clone().add(1, 'day').endOf("day")
-      let i = 0;
-      let period = this.workHour.period
       let dayStart = startDay.clone()
       dayStart = dayStart.set({
         hour: this.workHour.start.substring(0, 2),
         minute: this.workHour.start.substring(3, 5),
         second: this.workHour.start.substring(6, 9),
       })
-      let dayEnd = startDay.clone()
-      dayEnd = dayEnd.set({
-        hour: this.workHour.end.substring(0, 2),
-        minute: this.workHour.end.substring(3, 5),
-        second: this.workHour.end.substring(6, 9),
-      })
-      let minutes = moment.duration(dayEnd.diff(dayStart)).asMinutes()
-      let dayLength = this.showHour ? minutes / period : 8
-      const days = []
-      let list = [
-        ...this.appointments,
-      ]
       let today = moment().locale('fa').format("YYYYMMDD")
-      let maxLength = dayLength
-      moment.locale('en')
-      while (startDay.locale('en').isBefore(lastDay.locale('en').format("YYYY/MM/DD"))) {
-        days[i] = []
-        let dayStart = startDay.clone()
+      let holidays = this.holidays
+      let period = this.workHour.period
+      let i = 0;
+      let keys = Object.keys(this.simpleDays)
+      for (const key of keys) {
+        let jDate = dayStart.clone().locale('fa')
+        let isToday = jDate.format("YYYYMMDD") == today
+        let isFriday = jDate.isoWeekday() == 5
+        let isHoliday = false
+        for (let h = 0; h < holidays.length; h++) {
+          if (startDay.clone().format("YYYY-MM-DD") == holidays[h].hdate) {
+            isHoliday = true
+            break
+          }
+        }
+        for (let j = 0; j < this.maxDayLength; j++) {
+          if (this.simpleDays[key][j]) {
+            this.simpleDays[key][j] = {
+              ...this.simpleDays[key][j],
+              is_empty: false,
+              is_friday: isFriday,
+              is_holiday: isHoliday,
+              is_today: isToday,
+              is_reserved: this.simpleDays[key][j].status == 1,
+              is_accepted: this.simpleDays[key][j].status == 2,
+              is_canceled: this.simpleDays[key][j].status == 3,
+              is_waiting: this.simpleDays[key][j].waiting,
+              index: j,
+            }
+          } else {
+            let s = dayStart.clone().add(j * period, 'minute')
+            this.simpleDays[key][j] = {
+              is_empty: true,
+              is_friday: isFriday,
+              is_holiday: isHoliday,
+              is_today: isToday,
+              start_at: s.format('YYYY/MM/DD HH:mm:ss'),
+              start_at_time_fa: s.format('HH:mm'),
+              index: j,
+            }
+          }
+        }
+        dayStart = dayStart.add(1, 'day')
         dayStart = dayStart.set({
           hour: this.workHour.start.substring(0, 2),
           minute: this.workHour.start.substring(3, 5),
           second: this.workHour.start.substring(6, 9),
         })
-        let dayEnd = startDay.clone()
-        dayEnd = dayEnd.set({
-          hour: this.workHour.end.substring(0, 2),
-          minute: this.workHour.end.substring(3, 5),
-          second: this.workHour.end.substring(6, 9),
-        })
-        let jDate = dayStart.clone().locale('fa')
-        let isToday = jDate.format("YYYYMMDD") == today
-        if (isToday) {
-          this.startDay = i
-          this.startIndex = i
-        }
-        let isFriday = jDate.isoWeekday() == 5
-        let isHoliday = false
-        for (let h = 0; h < holidays.length; h++) {
-          if (dayStart.format("YYYY-MM-DD") == holidays[h].hdate) {
-            isHoliday = true
-            break
-          }
-        }
-        for (let j = 0; j < dayLength; j++) {
-          if (list.length > 0) {
-            while (list.length > 0) {
-              let app = list[0]
-              let startAt = moment(app.start_at, 'YYYY/MM/DD HH:mm:ss')
-              if (startAt.format("YYYYMMDD") === dayStart.format("YYYYMMDD")) {
-                days[i].push({
-                  id: j,
-                  ...app,
-                  is_empty: false,
-                  is_friday: isFriday,
-                  is_holiday: isHoliday,
-                  is_today: isToday,
-                  is_reserved: app.status == 1,
-                  is_accepted: app.status == 2,
-                  is_canceled: app.status == 3,
-                  is_waiting: app.waiting,
-                  start_at: startAt.format('YYYY/MM/DD HH:mm:ss'),
-                  index: j,
-                })
-                list.shift()
-                j++;
-              } else {
-                break;
-              }
-            }
-            if (j < dayLength) {
-              let s = dayStart.clone().add(j * period, 'minute')
-              let jDate = s.clone().locale('fa')
-              days[i].push({
-                id: j,
-                is_empty: true,
-                is_friday: isFriday,
-                is_holiday: isHoliday,
-                is_today: isToday,
-                is_reserved: app.status == 1,
-                is_accepted: app.status == 2,
-                is_canceled: app.status == 3,
-                is_waiting: app.waiting,
-                start_at: s.format('YYYY/MM/DD HH:mm:ss'),
-                start_at_time_fa: jDate.locale('en').format('HH:mm'),
-                index: j,
-              })
-            }
-          } else {
-            let s = dayStart.clone().add(j * period, 'minute')
-            days[i].push({
-              id: j,
-              is_empty: true,
-              is_friday: isFriday,
-              is_holiday: isHoliday,
-              is_today: isToday,
-              is_reserved: app.status == 1,
-              is_accepted: app.status == 2,
-              is_canceled: app.status == 3,
-              is_waiting: app.waiting,
-              start_at: s.format('YYYY/MM/DD HH:mm:ss'),
-              start_at_time_fa: s.format('HH:mm'),
-              index: j,
-            })
-          }
-        }
-        startDay = startDay.add(1, 'days')
-        i++;
-      }
-      maxLength = days.reduce((maxSize, subArray) => {
-        const subArraySize = subArray.length;
-        return Math.max(maxSize, subArraySize);
-      }, 0)
-      this.maxLength = maxLength
-      for (let i = 0; i < days.length; i++) {
-        let dayStart = this.startDate.clone().add(i, 'day')
-        for (let j = days[i].length; j < maxLength; j++) {
-          let isHoliday = false
-          for (let h = 0; h < holidays.length; h++) {
-            if (dayStart.format("YYYY-MM-DD") == holidays[h].hdate) {
-              isHoliday = true
-              break
-            }
-          }
-          let jDate = dayStart.clone().locale('fa')
-          days[i].push({
-            id: j,
-            is_empty: true,
-            is_friday: jDate.isoWeekday() == 5,
-            is_holiday: isHoliday,
-            is_reserved: app.status == 1,
-            is_accepted: app.status == 2,
-            is_canceled: app.status == 3,
-            is_waiting: app.waiting,
-            is_today: jDate.format("YYYYMMDD") == today,
-            start_at: dayStart.format('YYYY/MM/DD HH:mm:ss'),
-            start_at_time_fa: dayStart.locale('en').format('HH:mm'),
-            index: j,
-          })
-        }
       }
       this.loading = false
-      this.simpleDays = days
+      this.setSlider()
       const millis = Date.now() - start;
       alert(`seconds elapsed = ${Math.floor(millis)}`);
+      this.simpleDays = this.transposeArray(Object.values(this.simpleDays))
     },
     setSlider() {
       setTimeout(() => {
@@ -444,8 +348,6 @@ export default {
           });
           slider.addEventListener('scroll', (e) => {
             const start = Math.abs(slider.scrollLeft) / 105
-            console.log(start + 2, "start")
-
           });
         }
       }, 500)
@@ -454,18 +356,15 @@ export default {
       this.appointmentID = id
       this.showItemModal = true
     },
-    onTableScroll(e) {
-      return true
-    },
     goNext() {
-      let index = this.startIndex + this.tableWidth
-      if (index > this.simpleDays.length - this.tableWidth) {
-        index = this.simpleDays.length - this.tableWidth
+      let index = this.startIndex + this.tableW
+      if (index > this.simpleDays.length - this.tableW) {
+        index = this.simpleDays.length - this.tableW
       }
       this.startIndex = index
     },
     goPrev() {
-      let index = this.startIndex - this.tableWidth
+      let index = this.startIndex - this.tableW
       if (index < 0) {
         index = 0
       }
@@ -512,6 +411,12 @@ export default {
       }
       this.showPazireshModal = true
     },
+    transposeArray(array) {
+        return array[0].map((col, i) => array.map(row => row[i]));
+    },
+    reduceArraySize(array, start, end) {
+        return array.map(innerArray => innerArray.slice(start, end));
+    }
   },
   computed: {
     isGoNextDisabled() {
@@ -614,19 +519,21 @@ export default {
       if (this.isLaptop) {
         return this.simpleDays
       }
-      return this.simpleDays.slice(this.startIndex, this.startIndex + this.tableWidth)
+      return this.reduceArraySize(this.simpleDays, this.startIndex, this.startIndex + this.tableW)
+      return this.simpleDays.slice(this.startIndex, this.startIndex + this.tableW)
     },
     showHeaderDays() {
       if (this.isLaptop) {
         return this.headerDays
       }
-      return this.headerDays.slice(this.startIndex, this.startIndex + this.tableWidth)
+      return this.headerDays.slice(this.startIndex, this.startIndex + this.tableW)
     },
     shownDayCounts() {
       if (this.isLaptop) {
         return this.dayCounts
       }
-      return this.dayCounts.slice(this.startIndex, this.startIndex + this.tableWidth)
+      return this.dayCounts
+      return this.dayCounts.slice(this.startIndex, this.startIndex + this.tableW)
     },
     isLaptop() {
       return this.$vuetify.breakpoint.lgAndUp

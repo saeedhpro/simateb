@@ -319,7 +319,6 @@ export default {
       }
     },
     shownDays() {
-      return this.simpleDays
       let index = this.startDay > 1 ? this.startDay - 2: this.startDay
       if (index > 27) {
         index = 27
