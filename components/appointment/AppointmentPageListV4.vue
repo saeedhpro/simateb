@@ -62,14 +62,15 @@
               </div>
             </div>
           </div>
-          <div class="none" v-if="shownDays.length">
-            <div class="d-flex flex-row">
-                <div v-for="(i, n) in shownDayCounts" class="header-case-type-th text-center" :key="n">
-                    <div class="day-count-box">
-                        {{ i }}
-                    </div>
-                </div>
-            </div>
+          <div id="day-count-main" class="none" v-if="shownDays.length">
+<!--            <div class="d-flex flex-row">-->
+<!--                <div v-for="(i, n) in shownDayCounts" class="header-case-type-th text-center" :key="n">-->
+<!--                    <div class="day-count-box header-date">-->
+<!--                        {{ i }}-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+
           </div>
           <div class="d-flex flex-row" v-if="shownDays.length">
             <div v-for="(d, n) in showHeaderDays" :key="n" class="header-case-type-th text-center"
@@ -102,9 +103,9 @@
               </v-tooltip>
             </div>
           </div>
-          <div class="d-flex flex-row" v-for="(row, i) in shownDays" :key="i">
-            <div class="d-flex flex-column" v-for="(a, j) in row" :key="j">
-              <div class="table-appointment-item">
+          <div class="d-flex flex-row" >
+            <div class="d-flex flex-column" v-for="(row, i) in shownDays" :key="i">
+              <div class="table-appointment-item" v-for="(a, j) in row" :key="j">
                 <div
                   v-if="!a.is_empty"
                   class="table-appointment-component"
@@ -316,7 +317,10 @@ export default {
       this.setSlider()
       const millis = Date.now() - start;
       alert(`seconds elapsed = ${Math.floor(millis)}`);
-      this.simpleDays = this.transposeArray(Object.values(this.simpleDays))
+      this.simpleDays = Object.values(this.simpleDays)
+      setTimeout(() => {
+          this.dayCountsHtml()
+      }, 500)
     },
     setSlider() {
       setTimeout(() => {
@@ -416,7 +420,33 @@ export default {
     },
     reduceArraySize(array, start, end) {
         return array.map(innerArray => innerArray.slice(start, end));
-    }
+    },
+    dayCountsHtml() {
+        let box = document.getElementById('day-count-main')
+        // let div = `<div class="d-flex flex-row">`
+        let div = document.createElement('div')
+        div.classList.add('d-flex')
+        div.classList.add('flex-row')
+        for (const c of this.shownDayCounts) {
+          let d1 = document.createElement('div')
+          d1.classList.add('header-case-type-th')
+          d1.classList.add('day-count-parent')
+          d1.classList.add('text-center')
+          let d2 = document.createElement('div')
+          d2.classList.add('day-count-box')
+          d2.classList.add('header-date')
+          d2.innerHTML = c
+          d1.appendChild(d2)
+          div.appendChild(d1)
+        }
+        box.appendChild(div)
+      },
+      calcSimpleDayHtml() {
+
+      },
+      createAppNode(app) {
+
+      }
   },
   computed: {
     isGoNextDisabled() {
@@ -519,7 +549,7 @@ export default {
       if (this.isLaptop) {
         return this.simpleDays
       }
-      return this.reduceArraySize(this.simpleDays, this.startIndex, this.startIndex + this.tableW)
+      // return this.reduceArraySize(this.simpleDays, this.startIndex, this.startIndex + this.tableW)
       return this.simpleDays.slice(this.startIndex, this.startIndex + this.tableW)
     },
     showHeaderDays() {
