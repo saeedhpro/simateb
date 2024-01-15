@@ -45,12 +45,12 @@
                   <div class="header-case-type" v-for="(limit, n2) in limits" :key="n2">
                     <v-tooltip top>
                       <template v-slot:activator="{ on, attrs }">
-                          <div
-                            v-bind="attrs"
-                            v-on="on"
-                          >
-                              {{ limit.name }}
-                          </div>
+                        <div
+                          v-bind="attrs"
+                          v-on="on"
+                        >
+                            {{ limit.name }}
+                        </div>
                       </template>
                       <div>{{ limit }}</div>
                     </v-tooltip>
@@ -74,33 +74,33 @@
           </div>
           <div class="d-flex flex-row" v-if="simpleDays.length">
             <div v-for="(d, n) in showHeaderDays" :key="n" class="header-case-type-th text-center"
-                   :class="{ 'is-today': d.is_today }">
+               :class="{ 'is-today': d.is_today }">
                   <div
-                          v-if="!d.is_holiday"
-                          class="header-date"
-                          :class="{ 'is-today': d.is_today, 'is-friday': d.is_friday, 'is-holiday': d.is_holiday }"
-                          @click="openPazireshModal(d.start_at, true)"
+                    v-if="!d.is_holiday"
+                    class="header-date"
+                    :class="{ 'is-today': d.is_today, 'is-friday': d.is_friday, 'is-holiday': d.is_holiday }"
+                    @click="openPazireshModal(d.start_at, true)"
                   >
-                      {{ d.title }}
-                      <br />
-                      {{ d.sub_title }}
+                    {{ d.title }}
+                    <br />
+                    {{ d.sub_title }}
                   </div>
                   <v-tooltip v-else top>
-                      <template v-slot:activator="{ on, attrs }">
-                <span
-                        v-bind="attrs"
-                        v-on="on"
-                        class="header-date"
-                        :class="{ 'is-today': d.is_today, 'is-friday': d.is_friday, 'is-holiday': d.is_holiday }"
-                        @click="openPazireshModal(d.start_at, true)"
-                >
-                {{ d.title }}
-                  <br />
-                  {{ d.sub_title }}
-                </span>
-                      </template>
-                      <span>{{ d.holiday_title }}</span>
-                  </v-tooltip>
+                <template v-slot:activator="{ on, attrs }">
+                  <span
+                    v-bind="attrs"
+                    v-on="on"
+                    class="header-date"
+                    :class="{ 'is-today': d.is_today, 'is-friday': d.is_friday, 'is-holiday': d.is_holiday }"
+                    @click="openPazireshModal(d.start_at, true)"
+                  >
+                  {{ d.title }}
+                    <br />
+                    {{ d.sub_title }}
+                  </span>
+                </template>
+                <span>{{ d.holiday_title }}</span>
+              </v-tooltip>
             </div>
           </div>
           <div class="d-flex flex-row" v-for="(_, i) in maxLength" :key="i">
