@@ -412,7 +412,7 @@ export default {
       this.loading = false
       this.simpleDays = days
       const millis = Date.now() - start;
-      // alert(`seconds elapsed = ${Math.floor(millis)}`);
+      alert(`seconds elapsed = ${Math.floor(millis)}`);
     },
     setSlider() {
       setTimeout(() => {
