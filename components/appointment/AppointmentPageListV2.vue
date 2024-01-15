@@ -38,9 +38,9 @@
            :class="{'surgeries': isSurgery}"
            @scroll="onTableScroll"
         >
-          <div v-if="showCaseType && simpleDays.length > 0" v-once>
+          <div v-if="showCaseType && simpleDays.length > 0">
             <div class="d-flex flex-row">
-              <div v-for="(limits, n) in shownLimitList" :key="n" class="header-case-type-th text-center">
+              <div v-for="(limits, n) in limitList" :key="n" class="header-case-type-th text-center">
                 <div class="header-case-type-box">
                   <div class="header-case-type" v-for="(limit, n2) in limits" :key="n2">
                     <v-tooltip top>
@@ -52,7 +52,7 @@
                               {{ limit.name }}
                           </div>
                       </template>
-                      <div>{{ limit.name }}</div>
+                      <div>{{ limit }}</div>
                     </v-tooltip>
                     <span class="ltr" v-if="limit.is_limited"
                       :class="{ 'is-red': limit.limitations < 0, 'is-zero': limit.limitations == 0 }">
@@ -225,7 +225,6 @@ export default {
   data() {
     return {
       loading: false,
-      showVirtual: true,
       maxLength: 0,
       maxTimeLength: 0,
       startDay: 0,
@@ -233,7 +232,6 @@ export default {
       startIndex: 0,
       endIndex: 0,
       tableW: 0,
-      showCaseType: true,
       headerDays: [],
     }
   },
@@ -414,7 +412,7 @@ export default {
       this.loading = false
       this.simpleDays = days
       const millis = Date.now() - start;
-      alert(`seconds elapsed = ${Math.floor(millis)}`);
+      // alert(`seconds elapsed = ${Math.floor(millis)}`);
     },
     setSlider() {
       setTimeout(() => {
@@ -624,12 +622,6 @@ export default {
       }
       return this.headerDays.slice(this.startIndex, this.startIndex + this.tableWidth)
     },
-    shownLimitList() {
-      if (this.isLaptop) {
-        return this.limitList
-      }
-      return this.limitList.slice(this.startIndex, this.startIndex + this.tableWidth)
-    },
     shownDayCounts() {
       if (this.isLaptop) {
         return this.dayCounts
@@ -652,18 +644,27 @@ export default {
       }
       return list;
     },
+    showCaseType: {
+      get() {
+        return this.$store.getters['appointment/getShowCaseType']
+      },
+      set(val) {
+        this.$store.dispatch('appointment/setShowCaseType', val)
+      }
+    },
     limitList() {
-        let limitDays = []
-        for (let i = 0; i < this.simpleDays.length; i++) {
-          limitDays[i] = []
-          for (let j = 0; j < this.limits.length; j++) {
-            limitDays[i][j] = {
-                ...this.limits[j],
-                limitations: this.limits[j].limitation - this.simpleDays[i].filter(i => i.case_type == this.limits[j].name).length
-            }
+      let limitDays = []
+      for (let i = 0; i < this.shownDays.length; i++) {
+        limitDays[i] = []
+        for (let j = 0; j < this.limits.length; j++) {
+          let count =this.limits[j].limitation - this.shownDays[i].filter(i => i.case_type == this.limits[j].name).length
+          limitDays[i][j] = {
+            ...this.limits[j],
+            limitations: count
           }
         }
-        return limitDays
+      }
+      return limitDays
     },
   },
   watch: {
