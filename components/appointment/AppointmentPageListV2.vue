@@ -1,15 +1,108 @@
 <template>
   <v-row>
-    <v-col cols="12">
-      <div v-if="!loadList">
-        <v-progress-circular />
+    <v-col
+      cols="12"
+      v-if="!isLaptop && simpleDays.length > 0"
+    >
+      <div class="d-flex flex-row align-center justify-start ltr">
+        <v-btn
+          @click="goNext"
+          :disabled="isGoNextDisabled"
+          icon
+          class="ml-3"
+        >
+          <v-icon
+            large
+          >
+            mdi-chevron-left
+          </v-icon>
+        </v-btn>
+        <v-btn
+          @click="goPrev"
+          :disabled="isGoPrevDisabled"
+          class="mr-3"
+          icon
+        >
+          <v-icon
+            large
+          >
+            mdi-chevron-right
+          </v-icon>
+        </v-btn>
       </div>
-      <div v-else style="overflow-x: scroll" id="table-wrapper" ref="table-wrapper">
+    </v-col>
+    <v-col cols="12">
+      <div style="overflow-x: scroll" id="table-wrapper" ref="table-wrapper">
         <div class="appointment-table d-flex flex-column"
            id="appointment-table"
            :class="{'surgeries': isSurgery}"
            @scroll="onTableScroll"
         >
+          <div v-if="showCaseType && simpleDays.length > 0" v-once>
+            <div>
+              <div v-for="(limits, n) in limitList" :key="n" class="header-case-type-th text-center">
+                <div class="header-case-type-box">
+                  <div class="header-case-type" v-for="(limit, n2) in limits" :key="n2">
+                    <v-tooltip top>
+                      <template v-slot:activator="{ on, attrs }">
+                          <div
+                            v-bind="attrs"
+                            v-on="on"
+                          >
+                              {{ limit.name }}
+                          </div>
+                      </template>
+                      <div>{{ limit.name }}</div>
+                    </v-tooltip>
+                    <span class="ltr" v-if="limit.is_limited"
+                      :class="{ 'is-red': limit.limitations < 0, 'is-zero': limit.limitations == 0 }">
+                      {{ limit.limitations }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="none" v-if="simpleDays.length">
+            <div class="d-flex flex-row">
+                <div v-for="(i, n) in shownDayCounts" class="header-case-type-th text-center" :key="n">
+                    <div class="day-count-box">
+                        {{ i }}
+                    </div>
+                </div>
+            </div>
+          </div>
+          <div class="d-flex flex-row" v-if="simpleDays.length">
+            <div v-for="(d, n) in showHeaderDays" :key="n" class="header-case-type-th text-center"
+                   :class="{ 'is-today': d.is_today }">
+                  <div
+                          v-if="!d.is_holiday"
+                          class="header-date"
+                          :class="{ 'is-today': d.is_today, 'is-friday': d.is_friday, 'is-holiday': d.is_holiday }"
+                          @click="openPazireshModal(d.start_at, true)"
+                  >
+                      {{ d.title }}
+                      <br />
+                      {{ d.sub_title }}
+                  </div>
+                  <v-tooltip v-else top>
+                      <template v-slot:activator="{ on, attrs }">
+                <span
+                        v-bind="attrs"
+                        v-on="on"
+                        class="header-date"
+                        :class="{ 'is-today': d.is_today, 'is-friday': d.is_friday, 'is-holiday': d.is_holiday }"
+                        @click="openPazireshModal(d.start_at, true)"
+                >
+                {{ d.title }}
+                  <br />
+                  {{ d.sub_title }}
+                </span>
+                      </template>
+                      <span>{{ d.holiday_title }}</span>
+                  </v-tooltip>
+            </div>
+          </div>
           <div class="d-flex flex-row" v-for="(_, i) in maxLength" :key="i">
             <div class="table-appointment-item" v-for="(_, j) in shownDays.length" :key="j">
               <div
@@ -81,6 +174,37 @@
         </div>
       </div>
     </v-col>
+    <v-col
+      cols="12"
+      v-if="!isLaptop && simpleDays.length > 0"
+    >
+      <div class="d-flex flex-row align-center justify-start ltr">
+        <v-btn
+          @click="goNext"
+          :disabled="isGoNextDisabled"
+          icon
+          class="ml-3"
+        >
+          <v-icon
+            large
+          >
+            mdi-chevron-left
+          </v-icon>
+        </v-btn>
+        <v-btn
+          @click="goPrev"
+          :disabled="isGoPrevDisabled"
+          class="mr-3"
+          icon
+        >
+          <v-icon
+            large
+          >
+            mdi-chevron-right
+          </v-icon>
+        </v-btn>
+      </div>
+    </v-col>
   </v-row>
 </template>
 <script>
@@ -101,13 +225,17 @@ export default {
   data() {
     return {
       loading: false,
+      showVirtual: true,
       maxLength: 0,
       maxTimeLength: 0,
       startDay: 0,
       endDay: 0,
+      startIndex: 0,
+      endIndex: 0,
+      tableW: 0,
+      showCaseType: true,
+      headerDays: [],
     }
-  },
-  mounted() {
   },
   methods: {
     async getAppointments() {
@@ -176,6 +304,7 @@ export default {
         let isToday = jDate.format("YYYYMMDD") == today
         if (isToday) {
           this.startDay = i
+          this.startIndex = i
         }
         let isFriday = jDate.isoWeekday() == 5
         let isHoliday = false
@@ -328,11 +457,73 @@ export default {
       this.showItemModal = true
     },
     onTableScroll(e) {
-      console.log(e , "e")
       return true
-    }
+    },
+    goNext() {
+      let index = this.startIndex + this.tableWidth
+      if (index > this.simpleDays.length - this.tableWidth) {
+        index = this.simpleDays.length - this.tableWidth
+      }
+      this.startIndex = index
+    },
+    goPrev() {
+      let index = this.startIndex - this.tableWidth
+      if (index < 0) {
+        index = 0
+      }
+      this.startIndex = index
+    },
+    setHeaderDays() {
+      let holidays = this.holidays
+      const days = []
+      let day = this.startDate.clone().startOf("jMonth")
+      while (day.locale('en').isBefore(this.endDate.clone().locale('en').format('YYYY/MM/DD HH:mm:ss'))) {
+        let isHoliday = false
+        let holiday_title = ''
+        for (let i = 0; i < holidays.length; i++) {
+          if (day.format("YYYY-MM-DD") == holidays[i].hdate) {
+            isHoliday = true
+            holiday_title = holidays[i].title
+            break
+          }
+        }
+        let jDate = day.clone()
+        days.push({
+          is_friday: jDate.locale('fa').isoWeekday() == 5,
+          is_holiday: isHoliday,
+          holiday_title: holiday_title,
+          is_today: jDate.locale('fa').format("YYYYMMDD") == moment().locale('fa').format("YYYYMMDD"),
+          title: jDate.locale('fa').format("dddd"),
+          sub_title: jDate.locale('fa').format("jDD jMMMM"),
+          start_at: `${day.format('YYYY/MM/DD')}`,
+        })
+        day = day.add(1, 'jDay')
+      }
+      this.headerDays = days
+    },
+    openPazireshModal(startAt, header = false) {
+      if (header) {
+          this.initTime = `${startAt} ${moment().format("HH:mm:ss")}`
+          const start = moment(this.initTime);
+          const remainder = 15 - (start.minute() % 15);
+          this.initTime = moment(start)
+              .add(remainder, "minutes")
+              .format("YYYY/MM/DD HH:mm:ss")
+      } else {
+          this.initTime = startAt
+      }
+      this.showPazireshModal = true
+    },
   },
   computed: {
+    isGoNextDisabled() {
+      if (this.loading) return true
+      return this.startIndex + this.tableW >= this.simpleDays.length
+    },
+    isGoPrevDisabled() {
+      if (this.loading) return true
+      return this.startIndex === 0
+    },
     startDate: {
       get() {
         return this.$store.getters['appointment/getStartDate']
@@ -422,21 +613,57 @@ export default {
       }
     },
     shownDays() {
-      let index = this.startDay > 1 ? this.startDay - 2: this.startDay
-      if (index > 27) {
-        index = 27
+      if (this.isLaptop) {
+        return this.simpleDays
       }
-      return this.simpleDays.slice(index, index + this.tableWidth)
+      return this.simpleDays.slice(this.startIndex, this.startIndex + this.tableWidth)
+    },
+    showHeaderDays() {
+      if (this.isLaptop) {
+        return this.headerDays
+      }
+      return this.headerDays.slice(this.startIndex, this.startIndex + this.tableWidth)
+    },
+    shownDayCounts() {
+      if (this.isLaptop) {
+        return this.dayCounts
+      }
+      return this.dayCounts.slice(this.startIndex, this.startIndex + this.tableWidth)
+    },
+    isLaptop() {
+      return this.$vuetify.breakpoint.lgAndUp
     },
     tableWidth() {
       const slider = document.getElementById('table-wrapper');
       const width = slider.offsetWidth;
-      return parseInt(width / 105) + 2
-    }
+      this.tableW = parseInt(width / 105)
+      return parseInt(width / 105)
+    },
+    dayCounts() {
+      let list = Array(this.simpleDays.length).fill(0);
+      for (let i = 0; i < this.simpleDays.length; i++) {
+          list[i] = this.simpleDays[i].filter(i => !i.is_empty).length
+      }
+      return list;
+    },
+    limitList() {
+        let limitDays = []
+        for (let i = 0; i < this.simpleDays.length; i++) {
+          limitDays[i] = []
+          for (let j = 0; j < this.limits.length; j++) {
+            limitDays[i][j] = {
+                ...this.limits[j],
+                limitations: this.limits[j].limitation - this.simpleDays[i].filter(i => i.case_type == this.limits[j].name).length
+            }
+          }
+        }
+        return limitDays
+    },
   },
   watch: {
     loadList(val) {
       if (val) {
+        this.setHeaderDays()
         this.getAppointments()
         this.setSlider()
       }
@@ -445,11 +672,16 @@ export default {
 }
 </script>
 <style scoped>
-.table-appointment-item {
+.table-appointment-item  {
   width: 101px !important;
   min-width: 101px !important;
   height: 86px !important;
   min-height: 86px !important;
   margin: 3px;
+}
+.header-case-type-th {
+  width: 101px !important;
+  min-width: 101px !important;
+  margin: 0 3px;
 }
 </style>

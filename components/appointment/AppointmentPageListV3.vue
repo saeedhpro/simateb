@@ -124,7 +124,6 @@ export default {
         })
     },
     calcSimpleDays() {
-      const start = Date.now();
       if (!this.startDate) {
         return
       }
@@ -185,9 +184,8 @@ export default {
           second: this.workHour.start.substring(6, 9),
         })
       }
-      const millis = Date.now() - start;
-      alert(`seconds elapsed = ${Math.floor(millis)}`);
       this.loading = false
+      this.setSlider()
     },
     setSlider() {
       setTimeout(() => {
@@ -228,7 +226,6 @@ export default {
       this.showItemModal = true
     },
     onTableScroll(e) {
-      console.log(e , "e")
       return true
     }
   },
@@ -327,7 +324,11 @@ export default {
       if (index > 27) {
         index = 27
       }
-      return this.simpleDays.slice(index, index + this.tableWidth)
+      // return this.simpleDays.slice(index, index + this.tableWidth)
+      let keys = Object.keys(this.simpleDays)
+      keys = keys.slice(index, index + this.tableWidth)
+      const picked = (({ ...keys }) => ({ ...keys }))(this.simpleDays);
+      return picked
     },
     tableWidth() {
       const slider = document.getElementById('table-wrapper');
@@ -340,7 +341,6 @@ export default {
     loadList(val) {
       if (val) {
         this.getAppointments()
-        this.setSlider()
       }
     },
   }
