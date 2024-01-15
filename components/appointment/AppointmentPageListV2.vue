@@ -39,8 +39,8 @@
            @scroll="onTableScroll"
         >
           <div v-if="showCaseType && simpleDays.length > 0" v-once>
-            <div>
-              <div v-for="(limits, n) in limitList" :key="n" class="header-case-type-th text-center">
+            <div class="d-flex flex-row">
+              <div v-for="(limits, n) in shownLimitList" :key="n" class="header-case-type-th text-center">
                 <div class="header-case-type-box">
                   <div class="header-case-type" v-for="(limit, n2) in limits" :key="n2">
                     <v-tooltip top>
@@ -624,6 +624,12 @@ export default {
       }
       return this.headerDays.slice(this.startIndex, this.startIndex + this.tableWidth)
     },
+    shownLimitList() {
+      if (this.isLaptop) {
+        return this.limitList
+      }
+      return this.limitList.slice(this.startIndex, this.startIndex + this.tableWidth)
+    },
     shownDayCounts() {
       if (this.isLaptop) {
         return this.dayCounts
@@ -663,6 +669,8 @@ export default {
   watch: {
     loadList(val) {
       if (val) {
+        this.startIndex = 0
+        this.startDay = 0
         this.setHeaderDays()
         this.getAppointments()
         this.setSlider()
