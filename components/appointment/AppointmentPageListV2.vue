@@ -9,7 +9,7 @@
           @click="goNext"
           :disabled="isGoNextDisabled"
           icon
-          class="ml-3"
+          class="mr-3"
         >
           <v-icon
             large
@@ -20,7 +20,7 @@
         <v-btn
           @click="goPrev"
           :disabled="isGoPrevDisabled"
-          class="mr-3"
+          class="ml-3"
           icon
         >
           <v-icon
@@ -183,7 +183,7 @@
           @click="goNext"
           :disabled="isGoNextDisabled"
           icon
-          class="ml-3"
+          class="mr-3"
         >
           <v-icon
             large
@@ -194,7 +194,7 @@
         <v-btn
           @click="goPrev"
           :disabled="isGoPrevDisabled"
-          class="mr-3"
+          class="ml-3"
           icon
         >
           <v-icon
