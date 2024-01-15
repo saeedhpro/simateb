@@ -532,7 +532,6 @@ export default {
       if (this.isLaptop) {
         return this.dayCounts
       }
-      return this.dayCounts
       return this.dayCounts.slice(this.startIndex, this.startIndex + this.tableW)
     },
     isLaptop() {
