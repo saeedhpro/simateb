@@ -2388,6 +2388,15 @@ tr.waiting {
 }
 
 .appointment-table {
+  &.v3 {
+    .table-appointment-item {
+      width: 101px !important;
+      min-width: 101px !important;
+      height: 86px !important;
+      min-height: 86px !important;
+      margin: 3px;
+    }
+  }
   .day-count-box {
     background: #FFFFFF 0 0 no-repeat padding-box;
     border: 1px solid #EBEBEB;
