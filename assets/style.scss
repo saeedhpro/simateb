@@ -2616,11 +2616,14 @@ tr.waiting {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%;
+  //width: 100%;
+  width: 101px;
+  min-width: 101px;
   padding: 5px;
   cursor: pointer;
   min-height: 86px;
   //margin: 3px;
+  margin: 1px !important;
 
   &.show-hour {
     cursor: pointer !important;

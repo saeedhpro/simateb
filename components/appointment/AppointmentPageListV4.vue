@@ -187,10 +187,10 @@ export default {
   },
   methods: {
     getHtml() {
-      this.$axios.get('/a')
-          .then(res=> {
-            this.tableHtml = res.data
-          })
+      // this.$axios.get('/a')
+      //     .then(res=> {
+      //       this.tableHtml = res.data
+      //     })
     },
     async getAppointments() {
       const start = this.startDate.clone().locale('en').format("YYYY/MM/DD")
@@ -213,6 +213,8 @@ export default {
     },
     calcSimpleDays() {
       const start = Date.now();
+      let box = document.getElementById('appointments-list-box')
+      let tbody = document.createElement('tbody')
       if (!this.startDate) {
         return
       }
@@ -227,7 +229,9 @@ export default {
       let holidays = this.holidays
       let period = this.workHour.period
       let keys = Object.keys(this.simpleDays)
-      for (const key of keys) {
+      let simpleDays = this.transposeArray(Object.values(this.simpleDays))
+      for (let i = 0; i < simpleDays.length; i++) {
+        let tr = document.createElement('tr')
         let jDate = dayStart.clone().locale('fa')
         let isToday = jDate.format("YYYYMMDD") == today
         let isFriday = jDate.isoWeekday() == 5
@@ -239,22 +243,50 @@ export default {
           }
         }
         for (let j = 0; j < this.maxDayLength; j++) {
-          if (this.simpleDays[key][j]) {
-            this.simpleDays[key][j] = {
-              ...this.simpleDays[key][j],
+          let td = document.createElement('td')
+          if (simpleDays[i][j]) {
+            let div = document.createElement('div')
+            div.classList.add('table-appointment-component')
+            div.addEventListener('click', () => {
+              this.openItem(simpleDays[i][j].id)
+            })
+            let name = document.createElement('div')
+            name.classList.add('full-name')
+            name.innerHTML = `<v-tooltip top>
+                                <template v-slot:activator="{ on, attrs }">
+                                  <div
+                                    v-bind="attrs"
+                                    v-on="on"
+                                  >
+                                    ${ simpleDays[i][j].user_full_name }
+                                  </div>
+                                </template>
+                                <div>${ simpleDays[i][j].user_full_name }</div>
+                              </v-tooltip>`
+            div.appendChild(name)
+            let startAt = document.createElement('div')
+            startAt.classList.add('start-at')
+            startAt.classList.add('mt-1')
+            startAt.innerHTML = `${simpleDays[i][j].start_at_time_fa}`
+            div.appendChild(startAt)
+            td.appendChild(div)
+            simpleDays[i][j] = {
+              ...simpleDays[i][j],
               is_empty: false,
               is_friday: isFriday,
               is_holiday: isHoliday,
               is_today: isToday,
-              is_reserved: this.simpleDays[key][j].status == 1,
-              is_accepted: this.simpleDays[key][j].status == 2,
-              is_canceled: this.simpleDays[key][j].status == 3,
-              is_waiting: this.simpleDays[key][j].waiting,
+              is_reserved: simpleDays[i][j].status == 1,
+              is_accepted: simpleDays[i][j].status == 2,
+              is_canceled: simpleDays[i][j].status == 3,
+              is_waiting: simpleDays[i][j].waiting,
               index: j,
             }
           } else {
+            let div = document.createElement('div')
+            div.classList.add('table-appointment-none')
             let s = dayStart.clone().add(j * period, 'minute')
-            this.simpleDays[key][j] = {
+            simpleDays[i][j] = {
               is_empty: true,
               is_friday: isFriday,
               is_holiday: isHoliday,
@@ -263,8 +295,11 @@ export default {
               start_at_time_fa: s.format('HH:mm'),
               index: j,
             }
+            td.appendChild(div)
           }
+          tr.appendChild(td)
         }
+        tbody.appendChild(tr)
         dayStart = dayStart.add(1, 'day')
         dayStart = dayStart.set({
           hour: this.workHour.start.substring(0, 2),
@@ -272,6 +307,7 @@ export default {
           second: this.workHour.start.substring(6, 9),
         })
       }
+      box.appendChild(tbody)
       this.loading = false
       this.setSlider()
       const millis = Date.now() - start;

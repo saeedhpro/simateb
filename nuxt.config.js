@@ -65,7 +65,8 @@ export default {
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
     'cookie-universal-nuxt',
-    'vue-toastification/nuxt'
+    'vue-toastification/nuxt',
+    "nuxt-compress"
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -116,7 +117,7 @@ export default {
     ]
   },
   server: {
-    port: 5000
+    port: 5000,
   },
   env: {
     baseUrl: process.env.BASE_URL || 'http://localhost:8000/api'
