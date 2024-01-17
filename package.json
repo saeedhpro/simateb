@@ -22,6 +22,7 @@
     "moment-round": "^1.0.1",
     "num2persian": "^3.2.2",
     "nuxt": "^2.15.8",
+    "nuxt-compress": "^5.0.0",
     "nuxt-moment-jalaali": "^1.6.2",
     "remove": "^0.1.5",
     "sass": "^1.49.11",

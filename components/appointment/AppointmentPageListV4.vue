@@ -62,14 +62,15 @@
               </div>
             </div>
           </div>
-          <div class="none" v-if="shownDays.length">
-            <div class="d-flex flex-row">
-                <div v-for="(i, n) in shownDayCounts" class="header-case-type-th text-center" :key="n">
-                    <div class="day-count-box">
-                        {{ i }}
-                    </div>
-                </div>
-            </div>
+          <div id="day-count-main" class="none">
+<!--            <div class="d-flex flex-row">-->
+<!--                <div v-for="(i, n) in shownDayCounts" class="header-case-type-th text-center" :key="n">-->
+<!--                    <div class="day-count-box header-date">-->
+<!--                        {{ i }}-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+
           </div>
           <div class="d-flex flex-row" v-if="shownDays.length">
             <div v-for="(d, n) in showHeaderDays" :key="n" class="header-case-type-th text-center"
@@ -102,71 +103,25 @@
               </v-tooltip>
             </div>
           </div>
-          <div class="d-flex flex-row" v-for="(row, i) in shownDays" :key="i">
-            <div class="d-flex flex-column" v-for="(a, j) in row" :key="j">
-              <div class="table-appointment-item">
-                <div
-                  v-if="!a.is_empty"
-                  class="table-appointment-component"
-                  :class="{
-                   'is-friday': a.is_friday,
-                   'is-holiday': a.is_holiday,
-                   'is-today': a.is_today,
-                   'is-reserved': a.is_reserved,
-                   'is-accepted': a.is_accepted,
-                   'is-canceled': a.is_canceled,
-                   'is-waiting': a.is_waiting,
-                   'is-time-based': false,
-                }"
-                  @click="openItem(a.id)"
-                >
-                  <div class="full-name">
-                    <v-tooltip top>
-                      <template v-slot:activator="{ on, attrs }">
-                        <div
-                          v-bind="attrs"
-                          v-on="on"
-                        >
-                          {{ a.user_full_name }}
-                        </div>
-                      </template>
-                      <div>{{ a.user_full_name }}</div>
-                    </v-tooltip>
-                  </div>
-                  <span class="start-at mt-1">{{ a.start_at_time_fa }}</span>
-                  <span class="case-type" v-if="a.case_type">{{ a.case_type }}</span>
-                  <div v-if="a.is_vip" class="vip-tag">
-                    VIP
-                  </div>
-                </div>
-                <div
-                  v-else
-                  class="table-appointment-none"
-                  :class="{
-                   'is-friday': a.is_friday,
-                   'is-holiday': a.is_holiday,
-                   'is-today': a.is_today,
-                   'is-reserved': a.is_reserved,
-                   'is-accepted': a.is_accepted,
-                   'is-canceled': a.is_canceled,
-                   'is-waiting': a.is_waiting,
-                   'is-time-based': false,
-                }"
-                >
-                  <div
-                    class="start-at"
-                  >
-                  </div>
-                  <div
-                    class="time"
-                    v-if="showHour"
-                  >
-                    {{'-'}}
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div class="d-flex flex-row" id="appointments-list-box" v-html="tableHtml">
+
+
+
+
+
           </div>
+          <script>
+            // let box = document.getElementById('appointments-list-box')
+            // box.innerHTML = ''
+            // fetch("https://api.sabaapp.ir/a", options = {
+            //   method: 'GET',
+            //   mode: 'no-cors',
+            //   url: 'https://api.sabaapp.ir/a'
+            // })
+            //     .then(res => {
+            //       console.log(res ," res")
+            //     })
+          </script>
         </div>
       </div>
     </v-col>
@@ -231,6 +186,12 @@ export default {
     }
   },
   methods: {
+    getHtml() {
+      // this.$axios.get('/a')
+      //     .then(res=> {
+      //       this.tableHtml = res.data
+      //     })
+    },
     async getAppointments() {
       const start = this.startDate.clone().locale('en').format("YYYY/MM/DD")
       const period = 40
@@ -252,6 +213,8 @@ export default {
     },
     calcSimpleDays() {
       const start = Date.now();
+      let box = document.getElementById('appointments-list-box')
+      let tbody = document.createElement('tbody')
       if (!this.startDate) {
         return
       }
@@ -265,9 +228,10 @@ export default {
       let today = moment().locale('fa').format("YYYYMMDD")
       let holidays = this.holidays
       let period = this.workHour.period
-      let i = 0;
       let keys = Object.keys(this.simpleDays)
-      for (const key of keys) {
+      let simpleDays = this.transposeArray(Object.values(this.simpleDays))
+      for (let i = 0; i < simpleDays.length; i++) {
+        let tr = document.createElement('tr')
         let jDate = dayStart.clone().locale('fa')
         let isToday = jDate.format("YYYYMMDD") == today
         let isFriday = jDate.isoWeekday() == 5
@@ -279,22 +243,50 @@ export default {
           }
         }
         for (let j = 0; j < this.maxDayLength; j++) {
-          if (this.simpleDays[key][j]) {
-            this.simpleDays[key][j] = {
-              ...this.simpleDays[key][j],
+          let td = document.createElement('td')
+          if (simpleDays[i][j]) {
+            let div = document.createElement('div')
+            div.classList.add('table-appointment-component')
+            div.addEventListener('click', () => {
+              this.openItem(simpleDays[i][j].id)
+            })
+            let name = document.createElement('div')
+            name.classList.add('full-name')
+            name.innerHTML = `<v-tooltip top>
+                                <template v-slot:activator="{ on, attrs }">
+                                  <div
+                                    v-bind="attrs"
+                                    v-on="on"
+                                  >
+                                    ${ simpleDays[i][j].user_full_name }
+                                  </div>
+                                </template>
+                                <div>${ simpleDays[i][j].user_full_name }</div>
+                              </v-tooltip>`
+            div.appendChild(name)
+            let startAt = document.createElement('div')
+            startAt.classList.add('start-at')
+            startAt.classList.add('mt-1')
+            startAt.innerHTML = `${simpleDays[i][j].start_at_time_fa}`
+            div.appendChild(startAt)
+            td.appendChild(div)
+            simpleDays[i][j] = {
+              ...simpleDays[i][j],
               is_empty: false,
               is_friday: isFriday,
               is_holiday: isHoliday,
               is_today: isToday,
-              is_reserved: this.simpleDays[key][j].status == 1,
-              is_accepted: this.simpleDays[key][j].status == 2,
-              is_canceled: this.simpleDays[key][j].status == 3,
-              is_waiting: this.simpleDays[key][j].waiting,
+              is_reserved: simpleDays[i][j].status == 1,
+              is_accepted: simpleDays[i][j].status == 2,
+              is_canceled: simpleDays[i][j].status == 3,
+              is_waiting: simpleDays[i][j].waiting,
               index: j,
             }
           } else {
+            let div = document.createElement('div')
+            div.classList.add('table-appointment-none')
             let s = dayStart.clone().add(j * period, 'minute')
-            this.simpleDays[key][j] = {
+            simpleDays[i][j] = {
               is_empty: true,
               is_friday: isFriday,
               is_holiday: isHoliday,
@@ -303,8 +295,11 @@ export default {
               start_at_time_fa: s.format('HH:mm'),
               index: j,
             }
+            td.appendChild(div)
           }
+          tr.appendChild(td)
         }
+        tbody.appendChild(tr)
         dayStart = dayStart.add(1, 'day')
         dayStart = dayStart.set({
           hour: this.workHour.start.substring(0, 2),
@@ -312,11 +307,15 @@ export default {
           second: this.workHour.start.substring(6, 9),
         })
       }
+      box.appendChild(tbody)
       this.loading = false
       this.setSlider()
       const millis = Date.now() - start;
-      alert(`seconds elapsed = ${Math.floor(millis)}`);
-      this.simpleDays = this.transposeArray(Object.values(this.simpleDays))
+      // alert(`seconds elapsed = ${Math.floor(millis)}`);
+      this.simpleDays = Object.values(this.simpleDays)
+      setTimeout(() => {
+          this.dayCountsHtml()
+      }, 500)
     },
     setSlider() {
       setTimeout(() => {
@@ -416,7 +415,27 @@ export default {
     },
     reduceArraySize(array, start, end) {
         return array.map(innerArray => innerArray.slice(start, end));
-    }
+    },
+    dayCountsHtml() {
+        let box = document.getElementById('day-count-main')
+        // let div = `<div class="d-flex flex-row">`
+        let div = document.createElement('div')
+        div.classList.add('d-flex')
+        div.classList.add('flex-row')
+        for (const c of this.shownDayCounts) {
+          let d1 = document.createElement('div')
+          d1.classList.add('header-case-type-th')
+          d1.classList.add('day-count-parent')
+          d1.classList.add('text-center')
+          let d2 = document.createElement('div')
+          d2.classList.add('day-count-box')
+          d2.classList.add('header-date')
+          d2.innerHTML = c
+          d1.appendChild(d2)
+          div.appendChild(d1)
+        }
+        box.appendChild(div)
+      },
   },
   computed: {
     isGoNextDisabled() {
@@ -519,7 +538,7 @@ export default {
       if (this.isLaptop) {
         return this.simpleDays
       }
-      return this.reduceArraySize(this.simpleDays, this.startIndex, this.startIndex + this.tableW)
+      // return this.reduceArraySize(this.simpleDays, this.startIndex, this.startIndex + this.tableW)
       return this.simpleDays.slice(this.startIndex, this.startIndex + this.tableW)
     },
     showHeaderDays() {
@@ -580,6 +599,7 @@ export default {
         this.startDay = 0
         this.setHeaderDays()
         this.getAppointments()
+        this.getHtml()
         this.setSlider()
       }
     },
