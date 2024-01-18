@@ -1,221 +1,93 @@
 <template>
   <v-row>
-    <v-col
-      cols="12"
-      v-if="!isLaptop && simpleDays.length > 0"
-    >
-      <div class="d-flex flex-row align-center justify-start ltr">
-        <v-btn
-          @click="goNext"
-          :disabled="isGoNextDisabled"
-          icon
-          class="mr-3"
-        >
-          <v-icon
-            large
-          >
-            mdi-chevron-left
-          </v-icon>
-        </v-btn>
-        <v-btn
-          @click="goPrev"
-          :disabled="isGoPrevDisabled"
-          class="ml-3"
-          icon
-        >
-          <v-icon
-            large
-          >
-            mdi-chevron-right
-          </v-icon>
-        </v-btn>
-      </div>
-    </v-col>
     <v-col cols="12">
-      <div style="overflow-x: scroll" id="table-wrapper" ref="table-wrapper">
+      <div style="overflow-x: scroll; -webkit-overflow-scrolling: touch" id="table-wrapper" ref="table-wrapper">
         <div class="appointment-table d-flex flex-column"
            id="appointment-table"
            :class="{'surgeries': isSurgery}"
-           @scroll="onTableScroll"
         >
-          <div v-if="showCaseType && simpleDays.length > 0">
-            <div class="d-flex flex-row">
-              <div v-for="(limits, n) in limitList" :key="n" class="header-case-type-th text-center">
-                <div class="header-case-type-box">
-                  <div class="header-case-type" v-for="(limit, n2) in limits" :key="n2">
-                    <v-tooltip top>
-                      <template v-slot:activator="{ on, attrs }">
-                        <div
-                          v-bind="attrs"
-                          v-on="on"
-                        >
-                            {{ limit.name }}
-                        </div>
-                      </template>
-                      <div>{{ limit }}</div>
-                    </v-tooltip>
-                    <span class="ltr" v-if="limit.is_limited"
-                      :class="{ 'is-red': limit.limitations < 0, 'is-zero': limit.limitations == 0 }">
-                      {{ limit.limitations }}
+          <table class="table table-bordered table-sm text-center m-0 fade " v-show="!loading && loaded"
+                 v-cloak>
+            <thead v-if="displayLimits">
+            <tr class="" v-for="(limit, i) in limits" :key="i">
+              <th class="table-active"></th>
+              <td class="text-sm text-nowrap py-0" v-for="dayIndex in monthDates">
+                <span class="text-nowrap">{{limit.name}}</span>
+                <span class="badge badge-secondary"
+                      :class="{'badge-danger':(limit.limitation-dayIndex['limit'+limit.id].total)<1}">{{limit.limitation-dayIndex['limit'+limit.id].total}}</span>
+              </td>
+            </tr>
+            </thead>
+            <thead class="text-center sticky">
+            <tr class="">
+              <th class="table-active"></th>
+              <td class="" v-for="dayIndex in monthDates">
+                <span class=" text-sm" v-if="dayIndex && !dayIndex.isFriday">{{dayIndex.total}}</span>
+              </td>
+            </tr>
+            <tr class="">
+              <th class="table-active"></th>
+              <th class="" v-for="(dayIndex, j) in monthDates"
+                  :class="{'table-warning':dayIndex && dayIndex.isFriday&&!dayIndex.today,'table-success is-today':dayIndex &&dayIndex.today}"
+                  :id="`column_${j}`" @click="newAppointment(dayIndex)">
+                <button class="btn btn-success btn-block btn-sm p-1 text-sm font-weight-normal"
+                        :class="{'btn-light':dayIndex &&!dayIndex.today,'holiday':dayIndex &&dayIndex.holiday}" @click="newAppointment(dayIndex)"
+                        v-if="dayIndex && !dayIndex.isFriday" >
+                  {{dayIndex | toPersianDate('dddd')}} <br>
+                  <span class="text-nowrap">{{dayIndex| toPersianDate('jD jMMMM')}}</span>
+                </button>
+                <span v-if="dayIndex && dayIndex.isFriday" class="text-sm font-weight-normal">
+                            <span>{{dayIndex | toPersianDate('dddd')}}</span>
+                            <span class="text-nowrap">{{dayIndex | toPersianDate('jD jMMMM')}}</span>
                     </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="none" v-if="simpleDays.length">
-            <div class="d-flex flex-row">
-                <div v-for="(i, n) in shownDayCounts" class="header-case-type-th text-center" :key="n">
-                    <div class="day-count-box">
-                        {{ i }}
-                    </div>
-                </div>
-            </div>
-          </div>
-          <div class="d-flex flex-row" v-if="simpleDays.length">
-            <div v-for="(d, n) in showHeaderDays" :key="n" class="header-case-type-th text-center"
-               :class="{ 'is-today': d.is_today }">
-                  <div
-                    v-if="!d.is_holiday"
-                    class="header-date"
-                    :class="{ 'is-today': d.is_today, 'is-friday': d.is_friday, 'is-holiday': d.is_holiday }"
-                    @click="openPazireshModal(d.start_at, true)"
-                  >
-                    {{ d.title }}
-                    <br />
-                    {{ d.sub_title }}
-                  </div>
-                  <v-tooltip v-else top>
-                <template v-slot:activator="{ on, attrs }">
-                  <span
-                    v-bind="attrs"
-                    v-on="on"
-                    class="header-date"
-                    :class="{ 'is-today': d.is_today, 'is-friday': d.is_friday, 'is-holiday': d.is_holiday }"
-                    @click="openPazireshModal(d.start_at, true)"
-                  >
-                  {{ d.title }}
-                    <br />
-                    {{ d.sub_title }}
-                  </span>
-                </template>
-                <span>{{ d.holiday_title }}</span>
-              </v-tooltip>
-            </div>
-          </div>
-          <div class="d-flex flex-row" v-for="(_, i) in maxLength" :key="i">
-            <div class="table-appointment-item" v-for="(_, j) in shownDays.length" :key="j">
-              <div
-                class="table-appointment-component"
-                :class="{
-                   'is-friday': shownDays[j][i].is_friday,
-                   'is-holiday': shownDays[j][i].is_holiday,
-                   'is-today': shownDays[j][i].is_today,
-                   'is-reserved': shownDays[j][i].is_reserved,
-                   'is-accepted': shownDays[j][i].is_accepted,
-                   'is-canceled': shownDays[j][i].is_canceled,
-                   'is-waiting': shownDays[j][i].is_waiting,
-                   'is-time-based': false,
-                }"
-                v-if="shownDays[j][i] && !shownDays[j][i].is_empty"
-                @click="openItem(shownDays[j][i].id)"
-              >
-                <div class="full-name">
-                  <v-tooltip top>
-                    <template v-slot:activator="{ on, attrs }">
-                      <div
-                        v-bind="attrs"
-                        v-on="on"
-                      >
-                        {{ shownDays[j][i].user_full_name }}
-                      </div>
-                    </template>
-                    <div>{{ shownDays[j][i].user_full_name }}</div>
-                  </v-tooltip>
-                </div>
-                <span class="start-at mt-1">{{ shownDays[j][i].start_at_time_fa }}</span>
-                <span class="case-type" v-if="shownDays[j][i].case_type">{{ shownDays[j][i].case_type }}</span>
-                <div v-if="shownDays[j][i].is_vip" class="vip-tag">
-                  VIP
-                </div>
-              </div>
-              <div
-                class="table-appointment-none"
-                :class="{
-                   'is-friday': shownDays[j][i].is_friday,
-                   'is-holiday': shownDays[j][i].is_holiday,
-                   'is-today': shownDays[j][i].is_today,
-                   'is-reserved': shownDays[j][i].is_reserved,
-                   'is-accepted': shownDays[j][i].is_accepted,
-                   'is-canceled': shownDays[j][i].is_canceled,
-                   'is-waiting': shownDays[j][i].is_waiting,
-                   'is-time-based': false,
-                }"
-                v-else-if="shownDays[j][i] && shownDays[j][i].is_empty"
-              >
-                <div
-                  class="start-at"
-                  v-if="shownDays[j][i].is_friday"
-                >
-                  {{ shownDays[j][i].index + 1 }}
-                </div>
-                <div
-                  class="time"
-                  v-else-if="showHour"
-                >
-                  {{ shownDays[j][i].start_at_time_fa  }}
-                </div>
-              </div>
-              <div v-else >
-                {{ `${i - j}` }}
-              </div>
-            </div>
-          </div>
+              </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="(queIndex) in queIndexMax" :key="queIndex">
+              <th class="align-middle text-center">
+                {{queIndex}}
+              </th>
+              <td v-for="(dayIndex, i) in monthDates" :key="i"
+                  :class="{'table-warning':dayIndex &&dayIndex.isFriday&&!dayIndex.today,'table-success':dayIndex && dayIndex.today, 'holiday':dayIndex &&  dayIndex.holiday}"
+                  class="text-sm ">
+                <button class="text-nowrap text-center btn btn-block btn-sm  p-1"
+                        v-if="ques[i][queIndex] && !ques[i][queIndex].empty"
+                        @click="summary(ques[i][queIndex])">
+                  <h6 class="m-0 "><span class="badge badge-secondary"
+                                         :style="{'background-color': statuses[ques[i][queIndex].status].color}">{{statuses[ques[i][queIndex].status].title}}</span>
+                  </h6>
+                  <span>{{ques[i][queIndex].user_full_name}}</span><br>
+                  <span class="badge badge-secondary" v-if="ques[i][queIndex].case_type">{{ques[i][queIndex].case_type}}</span><br>
+                  <h6 class="m-0"><span class="font-weight-bold badge badge-light"> {{ques[i][queIndex].start_at | toPersianDate('HH:mm') }} </span>
+                  </h6>
+                  <h6 class="m-0 " v-if="ques[i][queIndex].is_vip"><span class="badge badge-info">VIP</span>
+                  </h6>
+
+                </button>
+                <button class="text-nowrap text-center text-secondary btn btn-block btn-sm p-1 "
+                        :class="{'btn-clock-empty':!dayIndex.isFriday && (!ques[i][queIndex] || (ques[i][queIndex].empty))}"
+                        v-if="!ques[i][queIndex] || (ques[i][queIndex] && ques[i][queIndex].empty && dayIndex &&!dayIndex.isFriday)"
+                        @click="newFromEmptyTime(ques[i][queIndex].start_at)">
+                  <span v-if="ques[i][queIndex]">
+                    <span>{{ dayIndex.isFriday }}</span>
+                    {{ques[i][queIndex].start_at | toPersianDate('HH:mm')}} </span>
+                </button>
+                <span v-if="dayIndex &&dayIndex.isFriday">{{queIndex}}</span>
+              </td>
+            </tr>
+            </tbody>
+          </table>
         </div>
-      </div>
-    </v-col>
-    <v-col
-      cols="12"
-      v-if="!isLaptop && simpleDays.length > 0"
-    >
-      <div class="d-flex flex-row align-center justify-start ltr">
-        <v-btn
-          @click="goNext"
-          :disabled="isGoNextDisabled"
-          icon
-          class="mr-3"
-        >
-          <v-icon
-            large
-          >
-            mdi-chevron-left
-          </v-icon>
-        </v-btn>
-        <v-btn
-          @click="goPrev"
-          :disabled="isGoPrevDisabled"
-          class="ml-3"
-          icon
-        >
-          <v-icon
-            large
-          >
-            mdi-chevron-right
-          </v-icon>
-        </v-btn>
       </div>
     </v-col>
   </v-row>
 </template>
 <script>
 import moment from "jalali-moment";
-import TableAppointmentNoneV2 from "~/components/panel/appointment/TableAppointmentNoneV2.vue";
-import TableAppointmentV2 from "~/components/panel/appointment/TableAppointmentV2.vue";
-import LoadingCard from "~/components/global/LoadingCard.vue";
 
 export default {
-  name: "AppointmentPageList2",
-  components: { LoadingCard, },
+  name: "AppointmentPageListV2",
   props: {
     isSurgery: {
       type: Boolean,
@@ -224,19 +96,26 @@ export default {
   },
   data() {
     return {
-      loading: false,
-      maxLength: 0,
-      maxTimeLength: 0,
-      startDay: 0,
-      endDay: 0,
-      startIndex: 0,
-      endIndex: 0,
-      tableW: 0,
-      headerDays: [],
+      loading: true,
+      loaded: true,
+      period: 41,
+      default_duration: 16,
+      max_length: 16,
+      ques: [],
+      monthDates: Array(this.period),
+      displayLimits: false,
+      queIndexMax: 0,
+      todayDate: moment(),
+      statuses: {
+        1: {title: "رزرو شده", color: "#ff981e"},
+        2: {title: "پذیرش شده", color: "#008daf"},
+        3: {title: "کنسل", color: "#ff2c1b"}
+      }
     }
   },
   methods: {
     async getAppointments() {
+      this.loading = true
       const start = this.startDate.clone().locale('en').format("YYYY/MM/DD")
       const end = this.endDate.clone().locale('en').format("YYYY/MM/DD")
       let url = `/appointments/que/v4?start=${start}&end=${end}`
@@ -250,278 +129,110 @@ export default {
         .then(res => {
           this.appointments = res.data.appointments
           this.limits = res.data.limits
-          this.calcSimpleDays()
+          this.default_duration = res.data.default_duration
+          this.max_length = res.data.max_length
+          this.renderQues()
+          // this.calcSimpleDays()
         })
     },
-    calcSimpleDays() {
-      const start = Date.now();
-      if (!this.startDate) {
-        return
-      }
-      let holidays = this.holidays
-      let startDay = this.startDate.clone()
-      let lastDay = this.endDate.clone().add(1, 'day').endOf("day")
-      let i = 0;
-      let period = this.workHour.period
-      let dayStart = startDay.clone()
-      dayStart = dayStart.set({
-        hour: this.workHour.start.substring(0, 2),
-        minute: this.workHour.start.substring(3, 5),
-        second: this.workHour.start.substring(6, 9),
-      })
-      let dayEnd = startDay.clone()
-      dayEnd = dayEnd.set({
-        hour: this.workHour.end.substring(0, 2),
-        minute: this.workHour.end.substring(3, 5),
-        second: this.workHour.end.substring(6, 9),
-      })
-      let minutes = moment.duration(dayEnd.diff(dayStart)).asMinutes()
-      let dayLength = this.showHour ? minutes / period : 8
-      const days = []
-      let list = [
-        ...this.appointments,
-      ]
-      let today = moment().locale('fa').format("YYYYMMDD")
-      let maxLength = dayLength
-      moment.locale('en')
-      while (startDay.locale('en').isBefore(lastDay.locale('en').format("YYYY/MM/DD"))) {
-        days[i] = []
-        let dayStart = startDay.clone()
-        dayStart = dayStart.set({
-          hour: this.workHour.start.substring(0, 2),
-          minute: this.workHour.start.substring(3, 5),
-          second: this.workHour.start.substring(6, 9),
-        })
-        let dayEnd = startDay.clone()
-        dayEnd = dayEnd.set({
-          hour: this.workHour.end.substring(0, 2),
-          minute: this.workHour.end.substring(3, 5),
-          second: this.workHour.end.substring(6, 9),
-        })
-        let jDate = dayStart.clone().locale('fa')
-        let isToday = jDate.format("YYYYMMDD") == today
-        if (isToday) {
-          this.startDay = i
-          this.startIndex = i
-        }
-        let isFriday = jDate.isoWeekday() == 5
-        let isHoliday = false
-        for (let h = 0; h < holidays.length; h++) {
-          if (dayStart.format("YYYY-MM-DD") == holidays[h].hdate) {
-            isHoliday = true
-            break
+    renderQues() {
+      this.ques = [];
+      if (this.isTimeBased) {
+        let fixedDate = new Date();
+        let maxWorkTime = new Date('2019-01-10 ' + this.workHour.end);
+        let minWorkTime = new Date('2019-01-10 ' + this.workHour.start);
+
+        let duration = moment.duration(moment(maxWorkTime).diff(minWorkTime));
+        let minutes = duration.asMinutes();
+        this.queIndexMax = Math.floor(minutes / this.default_duration);
+        let normalTimeSpan = this.queIndexMax;
+
+        let queCounter = 0;
+        for (let i = 0; i < 41; i++) {
+          this.ques[i] = [];
+          let baseDate = moment(this.monthDates[i]).seconds(0).hours(moment(minWorkTime).hours()).minutes(moment(minWorkTime).minutes());
+          for (let k = 0; k <= normalTimeSpan || (this.appointments[queCounter] && this.sameDay(new Date(this.appointments[queCounter].start_at), baseDate.toDate())); k++) {
+            if (this.appointments[queCounter] &&
+              (!baseDate.isBefore(this.appointments[queCounter].start_at)
+                || (k > normalTimeSpan)
+              )) {//day matches to this gap
+              this.ques[i].push(this.appointments[queCounter]);
+              baseDate.add(this.appointments[queCounter].duration, 'minutes');
+              queCounter++;
+              this.monthDates[i].isWorkDay = true;
+              if (k > normalTimeSpan) {
+                // $scope.queIndexMax++;
+              }
+            } else {
+              this.ques[i].push({
+                start_at: moment(baseDate),
+                empty: true
+              });
+              baseDate.add(this.default_duration, 'minutes');
+            }
           }
         }
-        for (let j = 0; j < dayLength; j++) {
-          if (list.length > 0) {
-            while (list.length > 0) {
-              let app = list[0]
-              let startAt = moment(app.start_at, 'YYYY/MM/DD HH:mm:ss')
-              if (startAt.format("YYYYMMDD") === dayStart.format("YYYYMMDD")) {
-                days[i].push({
-                  id: j,
-                  ...app,
-                  is_empty: false,
-                  is_friday: isFriday,
-                  is_holiday: isHoliday,
-                  is_today: isToday,
-                  is_reserved: app.status == 1,
-                  is_accepted: app.status == 2,
-                  is_canceled: app.status == 3,
-                  is_waiting: app.waiting,
-                  start_at: startAt.format('YYYY/MM/DD HH:mm:ss'),
-                  index: j,
-                })
-                list.shift()
-                j++;
-              } else {
+        this.queIndexMax = Math.max.apply(Math, this.ques.map(function (a) {
+          return a.length;
+        }));
+      } else {
+        this.queIndexMax = 4;
+        let loopedQues = 0;
+        for (let i = 0; i < 42; i++) {
+          this.ques[i] = [];
+          for (let j = loopedQues; j < this.appointments.length; j++) {
+            let que = this.appointments[j];
+            if (this.sameDay(new Date(que.start_at), this.monthDates[i])) {
+              this.ques[i].push(que);
+              loopedQues++;
+            } else {
+              if (j > loopedQues) { // to account for empty days with no reservation
                 break;
               }
             }
-            if (j < dayLength) {
-              let s = dayStart.clone().add(j * period, 'minute')
-              let jDate = s.clone().locale('fa')
-              days[i].push({
-                id: j,
-                is_empty: true,
-                is_friday: isFriday,
-                is_holiday: isHoliday,
-                is_today: isToday,
-                is_reserved: app.status == 1,
-                is_accepted: app.status == 2,
-                is_canceled: app.status == 3,
-                is_waiting: app.waiting,
-                start_at: s.format('YYYY/MM/DD HH:mm:ss'),
-                start_at_time_fa: jDate.locale('en').format('HH:mm'),
-                index: j,
-              })
-            }
-          } else {
-            let s = dayStart.clone().add(j * period, 'minute')
-            days[i].push({
-              id: j,
-              is_empty: true,
-              is_friday: isFriday,
-              is_holiday: isHoliday,
-              is_today: isToday,
-              is_reserved: app.status == 1,
-              is_accepted: app.status == 2,
-              is_canceled: app.status == 3,
-              is_waiting: app.waiting,
-              start_at: s.format('YYYY/MM/DD HH:mm:ss'),
-              start_at_time_fa: s.format('HH:mm'),
-              index: j,
-            })
           }
-        }
-        startDay = startDay.add(1, 'days')
-        i++;
-      }
-      maxLength = days.reduce((maxSize, subArray) => {
-        const subArraySize = subArray.length;
-        return Math.max(maxSize, subArraySize);
-      }, 0)
-      this.maxLength = maxLength
-      for (let i = 0; i < days.length; i++) {
-        let dayStart = this.startDate.clone().add(i, 'day')
-        for (let j = days[i].length; j < maxLength; j++) {
-          let isHoliday = false
-          for (let h = 0; h < holidays.length; h++) {
-            if (dayStart.format("YYYY-MM-DD") == holidays[h].hdate) {
-              isHoliday = true
-              break
-            }
-          }
-          let jDate = dayStart.clone().locale('fa')
-          days[i].push({
-            id: j,
-            is_empty: true,
-            is_friday: jDate.isoWeekday() == 5,
-            is_holiday: isHoliday,
-            is_reserved: app.status == 1,
-            is_accepted: app.status == 2,
-            is_canceled: app.status == 3,
-            is_waiting: app.waiting,
-            is_today: jDate.format("YYYYMMDD") == today,
-            start_at: dayStart.format('YYYY/MM/DD HH:mm:ss'),
-            start_at_time_fa: dayStart.locale('en').format('HH:mm'),
-            index: j,
-          })
+          this.queIndexMax = Math.max(this.ques[i].length - 1, this.queIndexMax);
         }
       }
-      this.loading = false
-      this.simpleDays = days
-      const millis = Date.now() - start;
-      alert(`seconds elapsed = ${Math.floor(millis)}`);
-    },
-    setSlider() {
-      setTimeout(() => {
-        const slider = document.getElementById('table-wrapper');
-        let isDown = false;
-        let startX;
-        let scrollLeft;
-        if (slider) {
-          slider.addEventListener('mousedown', (e) => {
-            isDown = true;
-            slider.classList.add('active');
-            startX = e.pageX - slider.offsetLeft;
-            scrollLeft = slider.scrollLeft;
-          });
-          slider.addEventListener('mouseleave', () => {
-            isDown = false;
-            slider.classList.remove('active');
-          });
-          slider.addEventListener('mouseup', () => {
-            isDown = false;
-            slider.classList.remove('active');
-          });
-          slider.addEventListener('mousemove', (e) => {
-            if (!isDown) return;
-            e.preventDefault();
-            const x = e.pageX - slider.offsetLeft;
-            const walk = (x - startX) * 3;
-            slider.scrollLeft = scrollLeft - walk;
-          });
-          slider.addEventListener('scroll', (e) => {
-            const start = Math.abs(slider.scrollLeft) / 105
-            console.log(start + 2, "start")
+      this.loading = false;
+      this.loaded = true;
 
-          });
-        }
-      }, 500)
+    },
+    sameDay(d1, d2) {
+      if (!d2) return false;
+      return d1.getDate() === d2.getDate() &&
+        d1.getMonth() === d2.getMonth() &&
+        d1.getFullYear() === d2.getFullYear();
     },
     openItem(id) {
       this.appointmentID = id
       this.showItemModal = true
     },
-    onTableScroll(e) {
-      return true
-    },
-    goNext() {
-      let index = this.startIndex + this.tableWidth
-      if (index > this.simpleDays.length - this.tableWidth) {
-        index = this.simpleDays.length - this.tableWidth
-      }
-      this.startIndex = index
-    },
-    goPrev() {
-      let index = this.startIndex - this.tableWidth
-      if (index < 0) {
-        index = 0
-      }
-      this.startIndex = index
-    },
-    setHeaderDays() {
-      let holidays = this.holidays
-      const days = []
-      let day = this.startDate.clone().startOf("jMonth")
-      while (day.locale('en').isBefore(this.endDate.clone().locale('en').format('YYYY/MM/DD HH:mm:ss'))) {
-        let isHoliday = false
-        let holiday_title = ''
-        for (let i = 0; i < holidays.length; i++) {
-          if (day.format("YYYY-MM-DD") == holidays[i].hdate) {
-            isHoliday = true
-            holiday_title = holidays[i].title
-            break
-          }
+    calcMonthDates() {
+      for (let i = 0; i < this.period; i++) {
+        let m = this.startDate.clone().add(i, 'days');
+        // rounding minute
+        m.seconds(0).minutes((Math.floor(m.minutes() / 15) * 15) % 60);
+        let date = m.toDate();
+        if (date.getDay() === 5) date.isFriday = true;
+        if (m.isSame(this.todayDate, 'day')) {
+          date.today = true;
         }
-        let jDate = day.clone()
-        days.push({
-          is_friday: jDate.locale('fa').isoWeekday() == 5,
-          is_holiday: isHoliday,
-          holiday_title: holiday_title,
-          is_today: jDate.locale('fa').format("YYYYMMDD") == moment().locale('fa').format("YYYYMMDD"),
-          title: jDate.locale('fa').format("dddd"),
-          sub_title: jDate.locale('fa').format("jDD jMMMM"),
-          start_at: `${day.format('YYYY/MM/DD')}`,
-        })
-        day = day.add(1, 'jDay')
+        this.monthDates[i] = date;
       }
-      this.headerDays = days
     },
-    openPazireshModal(startAt, header = false) {
-      if (header) {
-          this.initTime = `${startAt} ${moment().format("HH:mm:ss")}`
-          const start = moment(this.initTime);
-          const remainder = 15 - (start.minute() % 15);
-          this.initTime = moment(start)
-              .add(remainder, "minutes")
-              .format("YYYY/MM/DD HH:mm:ss")
-      } else {
-          this.initTime = startAt
-      }
+    newAppointment(dayIndex) {
+      this.initTime = dayIndex
       this.showPazireshModal = true
     },
+    summary(appointment) {
+      this.openItem(appointment.id)
+    },
+    newFromEmptyTime(date) {
+      this.openPazireshModal(moment(date).seconds(0).format('YYYY-MM-DD HH:mm'))
+    }
   },
   computed: {
-    isGoNextDisabled() {
-      if (this.loading) return true
-      return this.startIndex + this.tableW >= this.simpleDays.length
-    },
-    isGoPrevDisabled() {
-      if (this.loading) return true
-      return this.startIndex === 0
-    },
     startDate: {
       get() {
         return this.$store.getters['appointment/getStartDate']
@@ -536,6 +247,22 @@ export default {
       },
       set(val) {
         return this.$store.dispatch('appointment/setEndDate', val)
+      }
+    },
+    initTime: {
+      get() {
+        return this.$store.getters['appointment/getInitTime']
+      },
+      set(val) {
+        this.$store.dispatch('appointment/setInitTime', val)
+      }
+    },
+    showPazireshModal: {
+      get() {
+        return this.$store.getters['appointment/getShowPazireshModal']
+      },
+      set(val) {
+        this.$store.dispatch('appointment/setShowPazireshModal', val)
       }
     },
     loadList: {
@@ -602,7 +329,7 @@ export default {
         this.$store.dispatch('appointment/setAppointmentID', val)
       }
     },
-    showHour: {
+    isTimeBased: {
       get() {
         return this.$store.getters['appointment/getShowHour'];
       },
@@ -668,29 +395,94 @@ export default {
     },
   },
   watch: {
-    loadList(val) {
+    async loadList(val) {
       if (val) {
-        this.startIndex = 0
-        this.startDay = 0
-        this.setHeaderDays()
-        this.getAppointments()
-        this.setSlider()
+        await this.calcMonthDates()
+        await this.getAppointments()
       }
     },
   }
 }
 </script>
 <style scoped>
-.table-appointment-item  {
-  width: 101px !important;
-  min-width: 101px !important;
-  height: 86px !important;
-  min-height: 86px !important;
-  margin: 3px;
+.table thead th {
+  vertical-align: bottom;
+  border-bottom: 2px solid #dee2e6;
 }
-.header-case-type-th {
-  width: 101px !important;
-  min-width: 101px !important;
-  margin: 0 3px;
+#appointment-table .table-bordered td, #appointment-table .table-bordered th {
+  border: 1px solid #c9c9ca !important;
+}
+.text-sm {
+  font-size: small;
+}
+.font-weight-normal {
+  font-weight: 400!important;
+}
+.text-nowrap {
+  white-space: nowrap!important;
+}
+.btn:not(:disabled):not(.disabled) {
+  cursor: pointer;
+}
+#appointment-table tbody tr td {
+  vertical-align: middle;
+  position: relative;
+  height: 1px;
+}
+.btn-block {
+  display: block;
+  width: 100%;
+}
+.table-responsive>.table-bordered {
+  border: 0;
+}
+.text-center {
+  text-align: center!important;
+}
+.m-0 {
+  margin: 0!important;
+}
+.fade {
+  transition: opacity .15s linear;
+}
+.btn .badge {
+  position: relative;
+  top: -1px;
+}
+
+.badge-secondary {
+  color: #fff;
+  background-color: #56565a;
+}
+.badge {
+  display: inline-block;
+  padding: 0.25em 0.4em;
+  font-size: 75%;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0.5rem;
+  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+td > button {
+  padding: 5px;
+}
+th {
+  padding: 5px;
+  min-width: 86px;
+}
+table {
+  border-collapse: collapse;
+}
+#appointment-table .btn-clock-empty {
+  height: 100%;
+  background: linear-gradient(180deg,#e5fff9,#c4dfe0) repeat-x #b4d8de;
+  border-color: #cdeef9;
+  border-radius: 0;
+}
+button:focus {
+  outline: none;
 }
 </style>
