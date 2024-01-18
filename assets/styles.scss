@@ -1,42 +1,390 @@
-&.surgeries {
-//background: #299565 !important;
+.header-case-type-th {
+  padding: 0 !important;
 
-//.tafkik {
-  //  color: #FFFFFF;
-  //}
-//
-//.theme--light.v-select {
-//  .v-select__selections {
-    //    color: #FFFFFF;
-    //  }
-//}
-//
-//.theme--light.v-icon,
-//.theme--light.v-label {
-  //  color: #FFFFFF;
-  //}
-//
-//.theme--light.v-input {
-//  input {
-    //    color: #FFFFFF;
-    //  }
-//}
-//
-//.show-button {
-  //  background: transparent !important;
-  //  border: 1px solid #FFFFFF !important;
-  //  color: #FFFFFF;
-//
-//  &.active {
-     //    border: 1px solid #299565 !important;
-     //    background: #FFFFFF !important;
-     //    color: #299565;
-//
-//    svg {
-//      .a {
-        //        fill: #299565 !important;
-        //      }
-//    }
-//  }
-//}
+  &:last-child {
+
+    .header-case-type-box,
+    .header-date {
+      margin-left: unset;
+    }
+  }
+
+  .header-date {
+    font-size: 12px;
+    font-weight: bold;
+    min-width: 100px;
+    margin: 3px;
+    background: #F0F0F0 0 0 no-repeat padding-box;
+    border: 1px solid #DBDBDB;
+    border-radius: 4px;
+    height: 48px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    &.is-friday {
+      background: #FFF7EB 0 0 no-repeat padding-box !important;
+      border: 1px solid #EBEBEB !important;
+    }
+
+    &.is-today {
+      background: #FAFFFA 0 0 no-repeat padding-box !important;
+      border: 1px solid #388E3C !important;
+    }
+
+    &.is-holiday {
+      //background: #ff9c95 0 0 no-repeat padding-box !important;
+      background: #FFC0CB 0 0 no-repeat padding-box !important;
+      border: 1px solid #EBEBEB !important;
+      color: #000000 !important;
+    }
+  }
+}
+
+.header-case-type-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  margin-left: 5px;
+
+  .header-case-type {
+    background: #FAFAFA 0 0 no-repeat padding-box;
+    border: 1px solid #EBEBEB;
+    border-radius: 4px;
+    min-width: 100px;
+    width: 100%;
+    margin-bottom: 5px !important;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    height: 30px;
+
+    font-size: .75rem;
+    text-align: right;
+
+    div {
+      margin-right: 10px;
+
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 61px;
+    }
+
+    span {
+      text-align: center;
+      font: normal normal bold 12px/26px 'IRANYekanRegular';
+      letter-spacing: 0;
+      color: #141432;
+      background: #EBEBEB 0 0 no-repeat padding-box;
+      border: 1px solid #EBEBEB;
+      border-radius: 4px;
+      width: 28px;
+      min-width: 28px;
+      height: 100%;
+
+      &.is-zero {
+        border: 1px solid #f16161;
+      }
+
+      &.is-red {
+        background: #f16161 0 0 no-repeat padding-box;
+        border: 1px solid #f16161;
+        color: #fff;
+      }
+    }
+  }
+}
+
+.appointment-table {
+  -webkit-overflow-scrolling: touch;
+  &.v3 {
+    .table-appointment-item {
+      width: 101px !important;
+      min-width: 101px !important;
+      height: 86px !important;
+      min-height: 86px !important;
+      margin: 3px;
+    }
+  }
+  .day-count-box {
+    background: #FFFFFF 0 0 no-repeat padding-box;
+    border: 1px solid #EBEBEB;
+    border-radius: 8px;
+    text-align: center;
+    font: normal normal normal 16px/28px IRANYekanRegular !important;
+    letter-spacing: 0;
+    color: #141432;
+    margin: 3px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .table-appointment-none, .table-appointment-component {
+    margin: 3px;
+  }
+  width: 100%;
+  &.surgeries {
+    .day-count-box {
+      background: #EFF7EF 0 0 no-repeat padding-box !important;
+      border: 1px solid #EBEBEB !important;
+      border-radius: 8px;
+    }
+    thead {
+      background: #388E3C !important;
+      &.none {
+        background: #FFF !important;
+      }
+    }
+    tbody {
+      background: #8BCC8E !important;
+    }
+    .table-appointment-none, .table-appointment-component {
+      background: #EFF7EF 0 0 no-repeat padding-box;
+      margin: 3px;
+      &.is-today {
+        background: #EBF0FF 0 0 no-repeat padding-box !important
+      }
+
+      &.is-friday {
+        background: #FFFAFA 0 0 no-repeat padding-box !important;
+      }
+
+      &.is-holiday {
+        background: #ff9c95 0 0 no-repeat padding-box;
+      }
+    }
+    .header-case-type-th {
+      background: #388E3C !important;
+    }
+    background: #EBEBEB !important;
+
+    .header-case-type-th {
+      background: #388E3C 0 0 no-repeat padding-box !important;
+      border: 1px solid #388E3C !important;
+      padding: 2px 0 !important;
+
+      .header-date {
+        background: #F5FFF5 0 0 no-repeat padding-box !important;
+        border: 1px solid #8BCC8E !important;
+        border-radius: 4px !important;
+
+        &.is-today {
+          background: #EBF0FF 0 0 no-repeat padding-box !important;
+          border: 1px solid #5063FF !important;
+        }
+
+        &.is-friday {
+          background: #FFFAFA 0 0 no-repeat padding-box !important;
+          border: 1px solid #F44336 !important;
+        }
+
+        &.is-holiday {
+          background: #ff9c95 0 0 no-repeat padding-box !important;
+          border: 1px solid #EBEBEB !important;
+          color: #000000 !important;
+        }
+      }
+    }
+  }
+
+  tr,
+  tr:nth-child(even) {
+    background: none !important;
+  }
+
+  td {
+    border: none !important;
+    padding: 0 !important;
+    padding-left: 5px !important;
+    margin-top: 5px;
+
+    &:last-child {
+      padding-left: unset !important;
+    }
+  }
+}
+
+.table-appointment-component {
+  position: relative;
+  background: #F5F5FF 0 0 no-repeat padding-box;
+  //border: 1px solid #5063FF;
+  border: 1px solid #EBEBEB;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  padding: 5px;
+  cursor: pointer;
+  min-height: 86px;
+  &.is-time-based {
+    margin-bottom: 5px;
+  }
+
+  &.surgeries {
+    background: #EFF7EF 0 0 no-repeat padding-box;
+    //border: 1px solid #BCE0BC;
+
+    &.is-today {
+      background: #F5F5FF 0 0 no-repeat padding-box;
+      //border: 1px solid #5063FF;
+    }
+  }
+
+  &.is-today {
+    background: #FAFFFA 0 0 no-repeat padding-box;
+    //border: 1px solid #388E3C;
+  }
+
+  &.is-friday {
+    background: #FFF7EB 0 0 no-repeat padding-box;
+    //border: 1px solid #EBEBEB;
+  }
+
+  &.is-holiday {
+    background: #FFC0CB 0 0 no-repeat padding-box;
+    //background: #F44336 0 0 no-repeat padding-box;
+    //border: 1px solid #EBEBEB;
+  }
+
+  .full-name {
+    text-align: center;
+    font: normal normal bold 14px/16px IRANYekanRegular !important;
+    letter-spacing: 0;
+    color: #141432;
+    div {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 82px;
+    }
+  }
+
+  .start-at {
+    text-align: center;
+    font: normal normal bold 12px/16px IRANYekanRegular !important;
+    letter-spacing: 0;
+    color: #141432
+  }
+  .holiday-title {
+    text-align: center;
+    font: normal normal normal 10px/16px IRANYekanRegular !important;
+    letter-spacing: 0;
+    color: #141432;
+    background: #ff9c95 0 0 no-repeat padding-box;
+    border: 1px solid #EBEBEB !important;
+    border-radius: 4px;
+    padding: 5px;
+    margin-top: 5px;
+  }
+
+  .case-type {
+    text-align: center;
+    font: normal normal normal 12px/16px IRANYekanRegular !important;
+    letter-spacing: 0;
+    color: #141432;
+    background: #E6E6E6 0 0 no-repeat padding-box;
+    border-radius: 4px;
+    padding: 5px;
+  }
+  .vip-tag {
+    position: absolute;
+    z-index: 9;
+    rotate: -45deg;
+    bottom: 0;
+    right: 0;
+    width: 40px;
+    background: none;
+    color: #9300ff;
+    font-size: 1rem !important;
+    font-family: 'Material Design Icons' !important;
+  }
+  &.is-accepted {
+    border: 1px solid #5063FF;
+  }
+  &.is-reserved {
+    border: 1px solid #F5AC00;
+  }
+  &.is-canceled {
+    border: 1px solid #F44336;
+    background-color: #FFC0CB !important;
+  }
+  &.is-waiting {
+    border: 1px solid #F5AC00;
+  }
+}
+
+.table-appointment-none {
+  background: #FCFCFC 0 0 no-repeat padding-box;
+  border: 1px solid #EBEBEB;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  //width: 100%;
+  width: 101px;
+  min-width: 101px;
+  padding: 5px;
+  cursor: pointer;
+  min-height: 86px;
+  //margin: 3px;
+  margin: 1px !important;
+
+  &.show-hour {
+    cursor: pointer !important;
+  }
+
+  &.surgeries {
+    background: #EFF7EF 0 0 no-repeat padding-box;
+    border: 1px solid #BCE0BC;
+
+    &.is-today {
+      background: #F5F5FF 0 0 no-repeat padding-box;
+      border: 1px solid #5063FF;
+    }
+  }
+
+  &.is-today {
+    background: #FAFFFA 0% 0% no-repeat padding-box;
+    border: 1px solid #388E3C;
+  }
+
+  &.is-friday {
+    background: #FFF7EB 0 0 no-repeat padding-box;
+    border: 1px solid #EBEBEB;
+  }
+
+  &.is-holiday {
+    background: #FFC0CB 0 0 no-repeat padding-box !important;
+    border: 1px solid #EBEBEB !important;
+    color: #000000 !important;
+  }
+  .case-type {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    font: normal normal normal 14px/25px IRANYekanRegular !important;
+    letter-spacing: 0;
+    //color: #26264E;
+    color: #000000;
+    text-align: center;
+
+    span {
+      background: #F0F0F5 0 0 no-repeat padding-box;
+      border-radius: 6px;
+      padding: 4px 24px;
+      margin-right: 15px;
+    }
+  }
 }

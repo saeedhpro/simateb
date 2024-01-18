@@ -176,7 +176,8 @@ export default {
         this.years.push(i)
       }
       this.startDate = moment().startOf("jMonth")
-      this.endDate = moment().endOf("jMonth").add(11, 'jDay')
+      // this.endDate = moment().endOf("jMonth").add(11, 'jDay')
+      this.endDate = this.startDate.clone().add(41, 'day')
       await this.getOrganizationHolidays(this.startDate, this.endDate)
       this.loadList = true
       this.loading = false
