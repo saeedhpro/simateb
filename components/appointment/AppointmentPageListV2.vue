@@ -133,7 +133,7 @@ export default {
           this.default_duration = res.data.default_duration
           this.max_length = res.data.max_length
           this.renderQues()
-          const millis = Date.now() - start;
+          const millis = Date.now() - started;
           alert(`seconds elapsed = ${Math.floor(millis)}`);
           // this.calcSimpleDays()
         })
