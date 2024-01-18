@@ -34,7 +34,6 @@ export default {
     {src: '~/plugins/vuelidate.js', ssr: false},
     {src: '~/plugins/topersian.js', ssr: false},
     {src: '~/plugins/apexchart.js', ssr: false},
-    {src: '~/plugins/virtual.js', ssr: false},
     {src: '~/plugins/password-strength.js', ssr: false},
   ],
 
