@@ -2,7 +2,7 @@
   <v-row>
     <v-col
       cols="12"
-      v-if="!isLaptop && simpleDays.length > 0"
+      v-if="!isLaptop && ques.length > 0"
     >
       <div class="d-flex flex-row align-center justify-start ltr">
         <v-btn
@@ -56,9 +56,9 @@
             </tr>
             <tr class="">
               <th class="table-active"></th>
-              <th class="" v-for="(dayIndex, j) in showLength"
+              <th class="" v-for="(dayIndex, j) in shownMonthDates"
                   :class="{'table-warning':dayIndex && dayIndex.isFriday&&!dayIndex.today,'table-success is-today':dayIndex &&dayIndex.today}"
-                  :id="`column_${j}`" @click="newAppointment(monthDates[j])">
+                  :id="`column_${j}`" @click="newAppointment(dayIndex)">
                 <button class="btn btn-success btn-block btn-sm p-1 text-sm font-weight-normal"
                         :class="{'btn-light':dayIndex &&!dayIndex.today,'holiday':dayIndex &&dayIndex.holiday}"
                         v-if="dayIndex && !dayIndex.isFriday" >
@@ -273,6 +273,7 @@ export default {
         index = this.ques.length - this.showLength
       }
       this.startIndex = index
+      this.endIndex = this.startIndex + this.showLength
     },
     goPrev() {
       let index = this.startIndex - this.showLength
@@ -280,6 +281,7 @@ export default {
         index = 0
       }
       this.startIndex = index
+      this.endIndex = this.startIndex + this.showLength
     },
   },
   computed: {
@@ -347,14 +349,6 @@ export default {
         return this.$store.dispatch('appointment/setHolidays', val)
       }
     },
-    simpleDays: {
-      get() {
-        return this.$store.getters['appointment/getSimpleDays']
-      },
-      set(val) {
-        return this.$store.dispatch('appointment/setSimpleDays', val)
-      }
-    },
     workHour: {
       get() {
         return this.$store.getters['appointment/getWorkHour']
@@ -387,39 +381,8 @@ export default {
         return this.$store.dispatch('appointment/setShowHour', val);
       }
     },
-    shownDays() {
-      if (this.isLaptop) {
-        return this.simpleDays
-      }
-      return this.simpleDays.slice(this.startIndex, this.startIndex + this.tableWidth)
-    },
-    showHeaderDays() {
-      if (this.isLaptop) {
-        return this.headerDays
-      }
-      return this.headerDays.slice(this.startIndex, this.startIndex + this.tableWidth)
-    },
-    shownDayCounts() {
-      if (this.isLaptop) {
-        return this.dayCounts
-      }
-      return this.dayCounts.slice(this.startIndex, this.startIndex + this.tableWidth)
-    },
     isLaptop() {
       return this.$vuetify.breakpoint.lgAndUp
-    },
-    tableWidth() {
-      const slider = document.getElementById('table-wrapper');
-      const width = slider.offsetWidth;
-      this.tableW = parseInt(width / 105)
-      return parseInt(width / 105)
-    },
-    dayCounts() {
-      let list = Array(this.simpleDays.length).fill(0);
-      for (let i = 0; i < this.simpleDays.length; i++) {
-          list[i] = this.simpleDays[i].filter(i => !i.is_empty).length
-      }
-      return list;
     },
     showCaseType: {
       get() {
@@ -431,20 +394,38 @@ export default {
     },
     limitList() {
       let limitDays = []
-      for (let i = 0; i < this.shownDays.length; i++) {
-        limitDays[i] = []
-        for (let j = 0; j < this.limits.length; j++) {
-          let count =this.limits[j].limitation - this.shownDays[i].filter(i => i.case_type == this.limits[j].name).length
-          limitDays[i][j] = {
-            ...this.limits[j],
-            limitations: count
-          }
-        }
-      }
+      // for (let i = 0; i < this.shownDays.length; i++) {
+      //   limitDays[i] = []
+      //   for (let j = 0; j < this.limits.length; j++) {
+      //     let count =this.limits[j].limitation - this.shownDays[i].filter(i => i.case_type == this.limits[j].name).length
+      //     limitDays[i][j] = {
+      //       ...this.limits[j],
+      //       limitations: count
+      //     }
+      //   }
+      // }
       return limitDays
     },
     shownQues() {
       return this.ques.slice(this.startIndex, this.endIndex)
+    },
+    shownMonthDates() {
+      let dates = Array(this.showLength)
+      if (!this.startDate) {
+        return dates
+      }
+      let s = this.startDate.clone().add(this.startIndex, 'days')
+      for (let i = 0; i < this.showLength; i++) {
+        let m = s.clone().add(i, 'days');
+        m.seconds(0).minutes((Math.floor(m.minutes() / 15) * 15) % 60);
+        let date = m.toDate();
+        if (date.getDay() === 5) date.isFriday = true;
+        if (m.isSame(this.todayDate, 'day')) {
+          date.today = true;
+        }
+        dates[i] = date;
+      }
+      return dates
     },
     showLength() {
       if (this.isLaptop) {
@@ -516,7 +497,7 @@ export default {
 .badge {
   display: inline-block;
   padding: 0.25em 0.4em;
-  font-size: 75%;
+  font-size: .75rem;
   font-weight: 700;
   line-height: 1;
   text-align: center;
