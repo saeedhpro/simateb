@@ -29,12 +29,12 @@
               <th class="table-active"></th>
               <th class="" v-for="(dayIndex, j) in showLength"
                   :class="{'table-warning':dayIndex && dayIndex.isFriday&&!dayIndex.today,'table-success is-today':dayIndex &&dayIndex.today}"
-                  :id="`column_${j}`" @click="newAppointment(dayIndex)">
+                  :id="`column_${j}`" @click="newAppointment(monthDates[j])">
                 <button class="btn btn-success btn-block btn-sm p-1 text-sm font-weight-normal"
-                        :class="{'btn-light':dayIndex &&!dayIndex.today,'holiday':dayIndex &&dayIndex.holiday}" @click="newAppointment(dayIndex)"
+                        :class="{'btn-light':dayIndex &&!dayIndex.today,'holiday':dayIndex &&dayIndex.holiday}"
                         v-if="dayIndex && !dayIndex.isFriday" >
-                  {{dayIndex | toPersianDate('dddd')}} <br>
-                  <span class="text-nowrap">{{dayIndex| toPersianDate('jD jMMMM')}}</span>
+                  {{monthDates[j] | toPersianDate('dddd')}} <br>
+                  <span class="text-nowrap">{{monthDates[j]| toPersianDate('jD jMMMM')}}</span>
                 </button>
                 <span v-if="dayIndex && dayIndex.isFriday" class="text-sm font-weight-normal">
                             <span>{{dayIndex | toPersianDate('dddd')}}</span>
