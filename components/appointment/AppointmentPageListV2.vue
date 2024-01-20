@@ -62,8 +62,8 @@
                 <button class="btn btn-success btn-block btn-sm p-1 text-sm font-weight-normal"
                         :class="{'btn-light':dayIndex &&!dayIndex.today,'holiday':dayIndex &&dayIndex.holiday}"
                         v-if="dayIndex && !dayIndex.isFriday" >
-                  {{monthDates[j] | toPersianDate('dddd')}} <br>
-                  <span class="text-nowrap">{{monthDates[j]| toPersianDate('jD jMMMM')}}</span>
+                  {{dayIndex | toPersianDate('dddd')}} <br>
+                  <span class="text-nowrap">{{dayIndex| toPersianDate('jD jMMMM')}}</span>
                 </button>
                 <span v-if="dayIndex && dayIndex.isFriday" class="text-sm font-weight-normal">
                             <span>{{dayIndex | toPersianDate('dddd')}}</span>
