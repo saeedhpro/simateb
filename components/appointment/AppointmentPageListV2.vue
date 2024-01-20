@@ -21,13 +21,13 @@
             <thead class="text-center sticky">
             <tr class="">
               <th class="table-active"></th>
-              <td class="" v-for="dayIndex in 7">
+              <td class="" v-for="dayIndex in showLength">
                 <span class=" text-sm" v-if="dayIndex && !dayIndex.isFriday">{{dayIndex.total}}</span>
               </td>
             </tr>
             <tr class="">
               <th class="table-active"></th>
-              <th class="" v-for="(dayIndex, j) in 7"
+              <th class="" v-for="(dayIndex, j) in showLength"
                   :class="{'table-warning':dayIndex && dayIndex.isFriday&&!dayIndex.today,'table-success is-today':dayIndex &&dayIndex.today}"
                   :id="`column_${j}`" @click="newAppointment(dayIndex)">
                 <button class="btn btn-success btn-block btn-sm p-1 text-sm font-weight-normal"
@@ -48,7 +48,7 @@
               <th class="align-middle text-center">
                 {{queIndex}}
               </th>
-              <td v-for="(dayIndex, i) in 7" :key="i"
+              <td v-for="(dayIndex, i) in showLength" :key="i"
                   :class="{'table-warning':dayIndex &&dayIndex.isFriday&&!dayIndex.today,'table-success':dayIndex && dayIndex.today, 'holiday':dayIndex &&  dayIndex.holiday}"
                   class="text-sm ">
                 <button class="text-nowrap text-center btn btn-block btn-sm  p-1"
@@ -199,7 +199,6 @@ export default {
       }
       this.loading = false;
       this.loaded = true;
-
     },
     sameDay(d1, d2) {
       if (!d2) return false;
@@ -397,12 +396,15 @@ export default {
       return limitDays
     },
     shownQues() {
-      if (this.isLaptop) {
-        return this.ques
-      }
       let start = 0
-      let end = 7
+      let end = this.showLength
       return this.ques.slice(start, end)
+    },
+    showLength() {
+      if (this.isLaptop) {
+        return this.ques.length
+      }
+      return 7
     }
   },
   watch: {
