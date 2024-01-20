@@ -1,5 +1,34 @@
 <template>
   <v-row>
+    <v-col
+      cols="12"
+      v-if="!isLaptop && simpleDays.length > 0"
+    >
+      <div class="d-flex flex-row align-center justify-start ltr">
+        <v-btn
+          @click="goNext"
+          icon
+          class="mr-3"
+        >
+          <v-icon
+            large
+          >
+            mdi-chevron-left
+          </v-icon>
+        </v-btn>
+        <v-btn
+          @click="goPrev"
+          class="ml-3"
+          icon
+        >
+          <v-icon
+            large
+          >
+            mdi-chevron-right
+          </v-icon>
+        </v-btn>
+      </div>
+    </v-col>
     <v-col cols="12">
       <div style="overflow-x: scroll; -webkit-overflow-scrolling: touch" id="table-wrapper" ref="table-wrapper">
         <div class="appointment-table d-flex flex-column"
@@ -105,6 +134,8 @@ export default {
       monthDates: Array(this.period),
       displayLimits: false,
       queIndexMax: 0,
+      startIndex: 0,
+      endIndex: 0,
       todayDate: moment(),
       statuses: {
         1: {title: "رزرو شده", color: "#ff981e"},
@@ -112,6 +143,9 @@ export default {
         3: {title: "کنسل", color: "#ff2c1b"}
       }
     }
+  },
+  mounted() {
+    this.endIndex = this.showLength
   },
   methods: {
     async getAppointments() {
@@ -232,7 +266,21 @@ export default {
     },
     newFromEmptyTime(date) {
       this.openPazireshModal(moment(date).seconds(0).format('YYYY-MM-DD HH:mm'))
-    }
+    },
+    goNext() {
+      let index = this.startIndex + this.showLength
+      if (index > this.ques.length - this.showLength) {
+        index = this.ques.length - this.showLength
+      }
+      this.startIndex = index
+    },
+    goPrev() {
+      let index = this.startIndex - this.showLength
+      if (index < 0) {
+        index = 0
+      }
+      this.startIndex = index
+    },
   },
   computed: {
     startDate: {
@@ -396,9 +444,7 @@ export default {
       return limitDays
     },
     shownQues() {
-      let start = 0
-      let end = this.showLength
-      return this.ques.slice(start, end)
+      return this.ques.slice(this.startIndex, this.endIndex)
     },
     showLength() {
       if (this.isLaptop) {
