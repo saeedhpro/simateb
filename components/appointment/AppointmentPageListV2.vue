@@ -83,8 +83,9 @@
                 <button class="text-nowrap text-center btn btn-block btn-sm  p-1"
                         v-if="shownQues[i][queIndex] && !shownQues[i][queIndex].empty"
                         @click="summary(shownQues[i][queIndex])">
-                  <h6 class="m-0 "><span class="badge badge-secondary"
-                                         :style="{'background-color': statuses[shownQues[i][queIndex].status].color}">{{statuses[shownQues[i][queIndex].status].title}}</span>
+                  <h6 class="m-0 ">
+                    <span class="badge badge-secondary"
+                      :style="{'background-color': statuses[shownQues[i][queIndex].status].color}">{{statuses[shownQues[i][queIndex].status].title}}</span>
                   </h6>
                   <span>{{shownQues[i][queIndex].user_full_name}}</span><br>
                   <span class="badge badge-secondary" v-if="shownQues[i][queIndex].case_type">{{shownQues[i][queIndex].case_type}}</span><br>
@@ -92,12 +93,11 @@
                   </h6>
                   <h6 class="m-0 " v-if="shownQues[i][queIndex].is_vip"><span class="badge badge-info">VIP</span>
                   </h6>
-
                 </button>
                 <button class="text-nowrap text-center text-secondary btn btn-block btn-sm p-1 "
                         :class="{'btn-clock-empty':!dayIndex.isFriday && (!shownQues[i][queIndex] || (shownQues[i][queIndex].empty))}"
                         v-if="!shownQues[i][queIndex] || (shownQues[i][queIndex] && shownQues[i][queIndex].empty && dayIndex &&!dayIndex.isFriday)"
-                        @click="newFromEmptyTime(shownQues[i][queIndex].start_at)">
+                        @click="newFromEmptyTime(shownQues[i][queIndex] ? shownQues[i][queIndex].start_at : $moment.now())">
                   <span v-if="shownQues[i][queIndex]">
                     <span>{{ dayIndex.isFriday }}</span>
                     {{shownQues[i][queIndex].start_at | toPersianDate('HH:mm')}} </span>
@@ -160,17 +160,19 @@ export default {
         url += `&is_surgery=0`
       }
       this.$axios.get(url)
-        .then(res => {
+        .then(async res => {
           this.appointments = res.data.appointments
           this.limits = res.data.limits
-          this.default_duration = res.data.default_duration
+          this.default_duration = this.workHour.period
           this.max_length = res.data.max_length
-          this.renderQues()
+          await this.renderQues()
         })
     },
-    renderQues() {
-      this.ques = [];
+    async renderQues() {
+      this.loaded = false
       if (this.isTimeBased) {
+        const ques = this.ques
+        this.ques = []
         let fixedDate = new Date();
         let maxWorkTime = new Date('2019-01-10 ' + this.workHour.end);
         let minWorkTime = new Date('2019-01-10 ' + this.workHour.start);
@@ -179,39 +181,95 @@ export default {
         let minutes = duration.asMinutes();
         this.queIndexMax = Math.floor(minutes / this.default_duration);
         let normalTimeSpan = this.queIndexMax;
-
         let queCounter = 0;
-        for (let i = 0; i < 41; i++) {
+        for (let i = 0; i < this.period; i++) {
           this.ques[i] = [];
           let baseDate = moment(this.monthDates[i]).seconds(0).hours(moment(minWorkTime).hours()).minutes(moment(minWorkTime).minutes());
-          for (let k = 0; k <= normalTimeSpan || (this.appointments[queCounter] && this.sameDay(new Date(this.appointments[queCounter].start_at), baseDate.toDate())); k++) {
-            if (this.appointments[queCounter] &&
-              (!baseDate.isBefore(this.appointments[queCounter].start_at)
-                || (k > normalTimeSpan)
-              )) {//day matches to this gap
-              this.ques[i].push(this.appointments[queCounter]);
-              baseDate.add(this.appointments[queCounter].duration, 'minutes');
-              queCounter++;
-              this.monthDates[i].isWorkDay = true;
-              if (k > normalTimeSpan) {
-                // $scope.queIndexMax++;
+          let endDate = moment(this.monthDates[i]).seconds(59).hours(moment(maxWorkTime).hours()).minutes(moment(maxWorkTime).minutes());
+          let startBox = baseDate.clone()
+          for (let k = 0; k < normalTimeSpan; k++) {
+            // if (ques[i][k]) {
+            //   console.log(startBox.format("jYYYY/jMM/jDD HH:mm:ss"), "b", i, "i", (k < normalTimeSpan || ques[i][k]), "ques", k, "k")
+            // }
+            let inWhile = false
+            if (ques[i][k]) {
+              while (startBox.isBefore(moment(ques[i][k].start_at))) {
+                this.ques[i].push({
+                  start_at: startBox.clone().local('en'),
+                  empty: true
+                });
+                inWhile = true;
+                startBox.add(this.default_duration, 'minutes');
+              }
+              if (inWhile) {
+                startBox.add(this.default_duration, 'minutes');
+              }
+              if (moment(ques[i][k].start_at).isBefore(baseDate)) {
+                this.ques[i].push(ques[i][k]);
+                this.monthDates[i].isWorkDay = true;
+              } else if (moment(ques[i][k].start_at).isAfter(endDate)) {
+                this.ques[i].push(ques[i][k]);
+                this.monthDates[i].isWorkDay = true;
+              } else {
+                this.ques[i].push(ques[i][k]);
+                // startBox.add(ques[i][k].duration, 'minutes');
+                this.monthDates[i].isWorkDay = true;
               }
             } else {
               this.ques[i].push({
-                start_at: moment(baseDate),
+                start_at: startBox.clone().local('en'),
                 empty: true
               });
-              baseDate.add(this.default_duration, 'minutes');
+              startBox.add(this.default_duration, 'minutes');
             }
+            // if (ques[i][k] && startBox.isBefore(ques[i][k].start_at)) {
+
+            // }
+            // if (ques[i][k] &&
+            //     (!baseDate.isBefore(ques[i][k].start_at))) {//day matches to this gap
+            //       this.ques[i].push(ques[i][k]);
+            //       baseDate.add(ques[i][k].duration, 'minutes');
+            //       queCounter++;
+            //       this.monthDates[i].isWorkDay = true;
+            //       if (k > normalTimeSpan) {
+            //         // $scope.queIndexMax++;
+            //       }
+            //   } else {
+            //     this.ques[i].push({
+            //       start_at: moment(baseDate),
+            //       empty: true
+            //     });
+            //   }
           }
+          // for (let k = 0; k < normalTimeSpan || (this.appointments[queCounter] && this.sameDay(new Date(this.appointments[queCounter].start_at), baseDate.toDate())); k++) {
+          //   if (this.appointments[queCounter] &&
+          //     ((!baseDate.isBefore(this.appointments[queCounter].start_at))
+          //       || (k > normalTimeSpan)
+          //     )) {//day matches to this gap
+          //       this.ques[i].push(this.appointments[queCounter]);
+          //       baseDate.add(this.appointments[queCounter].duration, 'minutes');
+          //       queCounter++;
+          //       this.monthDates[i].isWorkDay = true;
+          //       if (k > normalTimeSpan) {
+          //         // $scope.queIndexMax++;
+          //       }
+          //   } else {
+          //     this.ques[i].push({
+          //       start_at: moment(baseDate),
+          //       empty: true
+          //     });
+          //     baseDate.add(this.default_duration, 'minutes');
+          //   }
+          // }
         }
         this.queIndexMax = Math.max.apply(Math, this.ques.map(function (a) {
           return a.length;
         }));
       } else {
+        this.ques = [];
         this.queIndexMax = 4;
         let loopedQues = 0;
-        for (let i = 0; i < 42; i++) {
+        for (let i = 0; i < this.period; i++) {
           this.ques[i] = [];
           for (let j = loopedQues; j < this.appointments.length; j++) {
             let que = this.appointments[j];
@@ -262,6 +320,13 @@ export default {
     },
     newFromEmptyTime(date) {
       this.openPazireshModal(moment(date).seconds(0).format('YYYY-MM-DD HH:mm'))
+    },
+    openPazireshModal(startAt) {
+      this.initTime = startAt
+      this.togglePazireshModal()
+    },
+    togglePazireshModal() {
+      this.showPazireshModal = !this.showPazireshModal
     },
     goNext() {
       let index = this.startIndex + this.showLength
@@ -425,7 +490,7 @@ export default {
     },
     showLength() {
       if (this.isLaptop) {
-        return this.ques.length
+        return this.period
       }
       return 7
     }
@@ -437,6 +502,9 @@ export default {
         await this.getAppointments()
       }
     },
+    isTimeBased() {
+      this.renderQues()
+    }
   }
 }
 </script>
