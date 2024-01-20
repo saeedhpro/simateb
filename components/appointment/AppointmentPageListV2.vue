@@ -21,13 +21,13 @@
             <thead class="text-center sticky">
             <tr class="">
               <th class="table-active"></th>
-              <td class="" v-for="dayIndex in monthDates">
+              <td class="" v-for="dayIndex in 7">
                 <span class=" text-sm" v-if="dayIndex && !dayIndex.isFriday">{{dayIndex.total}}</span>
               </td>
             </tr>
             <tr class="">
               <th class="table-active"></th>
-              <th class="" v-for="(dayIndex, j) in monthDates"
+              <th class="" v-for="(dayIndex, j) in 7"
                   :class="{'table-warning':dayIndex && dayIndex.isFriday&&!dayIndex.today,'table-success is-today':dayIndex &&dayIndex.today}"
                   :id="`column_${j}`" @click="newAppointment(dayIndex)">
                 <button class="btn btn-success btn-block btn-sm p-1 text-sm font-weight-normal"
@@ -48,30 +48,30 @@
               <th class="align-middle text-center">
                 {{queIndex}}
               </th>
-              <td v-for="(dayIndex, i) in monthDates" :key="i"
+              <td v-for="(dayIndex, i) in 7" :key="i"
                   :class="{'table-warning':dayIndex &&dayIndex.isFriday&&!dayIndex.today,'table-success':dayIndex && dayIndex.today, 'holiday':dayIndex &&  dayIndex.holiday}"
                   class="text-sm ">
                 <button class="text-nowrap text-center btn btn-block btn-sm  p-1"
-                        v-if="ques[i][queIndex] && !ques[i][queIndex].empty"
-                        @click="summary(ques[i][queIndex])">
+                        v-if="shownQues[i][queIndex] && !shownQues[i][queIndex].empty"
+                        @click="summary(shownQues[i][queIndex])">
                   <h6 class="m-0 "><span class="badge badge-secondary"
-                                         :style="{'background-color': statuses[ques[i][queIndex].status].color}">{{statuses[ques[i][queIndex].status].title}}</span>
+                                         :style="{'background-color': statuses[shownQues[i][queIndex].status].color}">{{statuses[shownQues[i][queIndex].status].title}}</span>
                   </h6>
-                  <span>{{ques[i][queIndex].user_full_name}}</span><br>
-                  <span class="badge badge-secondary" v-if="ques[i][queIndex].case_type">{{ques[i][queIndex].case_type}}</span><br>
-                  <h6 class="m-0"><span class="font-weight-bold badge badge-light"> {{ques[i][queIndex].start_at | toPersianDate('HH:mm') }} </span>
+                  <span>{{shownQues[i][queIndex].user_full_name}}</span><br>
+                  <span class="badge badge-secondary" v-if="shownQues[i][queIndex].case_type">{{shownQues[i][queIndex].case_type}}</span><br>
+                  <h6 class="m-0"><span class="font-weight-bold badge badge-light"> {{shownQues[i][queIndex].start_at | toPersianDate('HH:mm') }} </span>
                   </h6>
-                  <h6 class="m-0 " v-if="ques[i][queIndex].is_vip"><span class="badge badge-info">VIP</span>
+                  <h6 class="m-0 " v-if="shownQues[i][queIndex].is_vip"><span class="badge badge-info">VIP</span>
                   </h6>
 
                 </button>
                 <button class="text-nowrap text-center text-secondary btn btn-block btn-sm p-1 "
-                        :class="{'btn-clock-empty':!dayIndex.isFriday && (!ques[i][queIndex] || (ques[i][queIndex].empty))}"
-                        v-if="!ques[i][queIndex] || (ques[i][queIndex] && ques[i][queIndex].empty && dayIndex &&!dayIndex.isFriday)"
-                        @click="newFromEmptyTime(ques[i][queIndex].start_at)">
-                  <span v-if="ques[i][queIndex]">
+                        :class="{'btn-clock-empty':!dayIndex.isFriday && (!shownQues[i][queIndex] || (shownQues[i][queIndex].empty))}"
+                        v-if="!shownQues[i][queIndex] || (shownQues[i][queIndex] && shownQues[i][queIndex].empty && dayIndex &&!dayIndex.isFriday)"
+                        @click="newFromEmptyTime(shownQues[i][queIndex].start_at)">
+                  <span v-if="shownQues[i][queIndex]">
                     <span>{{ dayIndex.isFriday }}</span>
-                    {{ques[i][queIndex].start_at | toPersianDate('HH:mm')}} </span>
+                    {{shownQues[i][queIndex].start_at | toPersianDate('HH:mm')}} </span>
                 </button>
                 <span v-if="dayIndex &&dayIndex.isFriday">{{queIndex}}</span>
               </td>
@@ -98,7 +98,7 @@ export default {
     return {
       loading: true,
       loaded: true,
-      period: 41,
+      period: 42,
       default_duration: 16,
       max_length: 16,
       ques: [],
@@ -396,6 +396,14 @@ export default {
       }
       return limitDays
     },
+    shownQues() {
+      if (this.isLaptop) {
+        return this.ques
+      }
+      let start = 0
+      let end = 7
+      return this.ques.slice(start, end)
+    }
   },
   watch: {
     async loadList(val) {
@@ -487,5 +495,8 @@ table {
 }
 button:focus {
   outline: none;
+}
+.appointment-table td {
+  padding-left: 0 !important;
 }
 </style>
