@@ -197,12 +197,20 @@ export default {
           this.queIndexMax = Math.floor(minutes / this.default_duration);
           let normalTimeSpan = this.queIndexMax;
           let queCounter = 0;
-          let s = 0
           for (let i = 0; i < this.period; i++) {
               this.ques[i] = [];
               let baseDate = moment(this.monthDates[i]).seconds(0).hours(moment(minWorkTime).hours()).minutes(moment(minWorkTime).minutes());
+              let endDate = moment(this.monthDates[i]).seconds(59).hours(moment(maxWorkTime).hours()).minutes(moment(maxWorkTime).minutes());
               for (let k = 0; k < normalTimeSpan || (this.appointments[queCounter] && this.sameDay(new Date(this.appointments[queCounter].start_at), baseDate.toDate())); k++) {
-                if (!this.appointments[queCounter] || !this.sameDay(new Date(this.appointments[queCounter].start_at), baseDate.toDate())) {
+                if (k < normalTimeSpan && (!this.appointments[queCounter] || !this.sameDay(new Date(this.appointments[queCounter].start_at), baseDate.toDate()))) {
+                  while (k < normalTimeSpan) {
+                    this.ques[i].push({
+                      start_at: moment(baseDate),
+                      empty: true
+                    });
+                    baseDate.add(this.default_duration, 'minutes');
+                    k++
+                  }
                   continue
                 }
                 if (this.appointments[queCounter] &&
@@ -220,6 +228,16 @@ export default {
                     });
                     baseDate.add(this.default_duration, 'minutes');
                   }
+              }
+              if (this.ques[i].length === 0) {
+                this.ques[i] = []
+                for (let k = 0; k < normalTimeSpan || baseDate.isSameOrBefore(endDate); k++) {
+                  this.ques[i].push({
+                    start_at: moment(baseDate),
+                    empty: true
+                  });
+                  baseDate.add(this.default_duration, 'minutes');
+                }
               }
           }
       } else {
