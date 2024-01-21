@@ -67,7 +67,7 @@
             <tr>
               <th class="table-active"></th>
               <th v-for="(i, n) in countList" :key="n">
-                <div class="day-count-box">
+                <div class="text-sm">
                   {{ i }}
                 </div>
               </th>
@@ -103,13 +103,13 @@
                 <button class="text-nowrap text-center btn btn-block btn-sm  p-1"
                         v-if="shownQues[i][j] && !shownQues[i][j].empty"
                         @click="summary(shownQues[i][j])">
-                  <h6 class="m-0 ">
+                  <div class="m-0 ">
                     <span class="badge badge-secondary"
                       :style="{'background-color': statuses[shownQues[i][j].status].color}">{{statuses[shownQues[i][j].status].title}}</span>
-                  </h6>
-                  <span>{{shownQues[i][j].user_full_name}}</span><br>
+                  </div>
+                  <span class="user-full-name">{{shownQues[i][j].user_full_name}}</span><br>
                   <span class="badge badge-secondary" v-if="shownQues[i][j].case_type">{{shownQues[i][j].case_type}}</span><br>
-                  <h6 class="m-0"><span class="font-weight-bold badge badge-light"> {{shownQues[i][j].start_at | toPersianDate('HH:mm') }} </span>
+                  <h6 class="m-0"><span class="user-full-name font-weight-bold badge badge-light"> {{shownQues[i][j].start_at | toPersianDate('HH:mm') }} </span>
                   </h6>
                   <h6 class="m-0 " v-if="shownQues[i][j].is_vip"><span class="badge badge-info">VIP</span>
                   </h6>
@@ -204,8 +204,8 @@ export default {
               for (let k = 0; k < normalTimeSpan || (this.appointments[queCounter] && this.sameDay(new Date(this.appointments[queCounter].start_at), baseDate.toDate())); k++) {
                 if (k < normalTimeSpan && (!this.appointments[queCounter] || !this.sameDay(new Date(this.appointments[queCounter].start_at), baseDate.toDate()))) {
                   if (this.ques[i].length > 0) {
-                    let base = moment(this.ques[i].start_at)
-                    while (k < normalTimeSpan) {
+                    let base = moment(this.ques[i][this.ques[i].length - 1].start_at).add(this.default_duration, 'minutes')
+                    while (true) {
                       this.ques[i].push({
                         start_at: moment(base),
                         empty: true
@@ -245,6 +245,7 @@ export default {
                   baseDate.add(this.default_duration, 'minutes');
                 }
               }
+            this.queIndexMax = Math.max(this.ques[i].length, this.queIndexMax);
           }
       } else {
         this.queIndexMax = 4;
@@ -257,12 +258,12 @@ export default {
                 this.ques[i].push(que);
                 loopedQues++;
               } else {
-                if (j > loopedQues) { // to account for empty days with no reservation
+                if (j > loopedQues) {
                   break;
                 }
               }
           }
-          this.queIndexMax = Math.max(this.ques[i].length - 1, this.queIndexMax);
+          this.queIndexMax = Math.max(this.ques[i].length, this.queIndexMax);
         }
       }
       this.loading = false;
@@ -291,18 +292,18 @@ export default {
         this.monthDates[i] = date;
       }
     },
-    newAppointment(dayIndex) {
-      this.initTime = dayIndex
-      this.showPazireshModal = true
+    newAppointment(date) {
+      let minWorkTime = new Date('2019-01-10 ' + this.workHour.start);
+      this.openPazireshModal(moment(date).hours(moment(minWorkTime).hours()).minutes(moment(minWorkTime).minutes()))
     },
     summary(appointment) {
       this.openItem(appointment.id)
     },
     newFromEmptyTime(date) {
-      this.openPazireshModal(moment(date).seconds(0).format('YYYY-MM-DD HH:mm'))
+      this.openPazireshModal(date)
     },
     openPazireshModal(startAt) {
-      this.initTime = startAt
+      this.initTime = startAt.locale('en').format('YYYY/MM/DD HH:mm')
       this.togglePazireshModal()
     },
     togglePazireshModal() {
@@ -511,6 +512,7 @@ export default {
       return dates
     },
     showLength() {
+      return this.period
       if (this.isLaptop) {
         return this.period
       }
@@ -590,13 +592,13 @@ export default {
 
 .badge-secondary {
   color: #fff;
-  background-color: #56565a;
+  background-color: #6d6d6d;
 }
 .badge {
+  font-size: .565rem;
+  font-weight: 700;
   display: inline-block;
   padding: 0.25em 0.4em;
-  font-size: .75rem;
-  font-weight: 700;
   line-height: 1;
   text-align: center;
   white-space: nowrap;
@@ -627,5 +629,11 @@ button:focus {
 }
 .appointment-table td {
   padding-left: 0 !important;
+}
+.user-full-name {
+  font-size: .875rem;
+  font-weight: bold;
+  display: inline-flex;
+  margin: 3px 0;
 }
 </style>
