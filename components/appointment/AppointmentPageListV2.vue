@@ -512,7 +512,6 @@ export default {
       return dates
     },
     showLength() {
-      return this.period
       if (this.isLaptop) {
         return this.period
       }
