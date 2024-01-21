@@ -204,8 +204,8 @@ export default {
               for (let k = 0; k < normalTimeSpan || (this.appointments[queCounter] && this.sameDay(new Date(this.appointments[queCounter].start_at), baseDate.toDate())); k++) {
                 if (k < normalTimeSpan && (!this.appointments[queCounter] || !this.sameDay(new Date(this.appointments[queCounter].start_at), baseDate.toDate()))) {
                   if (this.ques[i].length > 0) {
-                    let base = moment(this.ques[i].start_at)
-                    while (k < normalTimeSpan) {
+                    let base = moment(this.ques[i][this.ques[i].length - 1].start_at).add(this.default_duration, 'minutes')
+                    while (true) {
                       this.ques[i].push({
                         start_at: moment(base),
                         empty: true
@@ -245,6 +245,7 @@ export default {
                   baseDate.add(this.default_duration, 'minutes');
                 }
               }
+            this.queIndexMax = Math.max(this.ques[i].length, this.queIndexMax);
           }
       } else {
         this.queIndexMax = 4;
@@ -257,12 +258,12 @@ export default {
                 this.ques[i].push(que);
                 loopedQues++;
               } else {
-                if (j > loopedQues) { // to account for empty days with no reservation
+                if (j > loopedQues) {
                   break;
                 }
               }
           }
-          this.queIndexMax = Math.max(this.ques[i].length - 1, this.queIndexMax);
+          this.queIndexMax = Math.max(this.ques[i].length, this.queIndexMax);
         }
       }
       this.loading = false;
