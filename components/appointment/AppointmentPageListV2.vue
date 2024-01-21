@@ -33,7 +33,7 @@
       <div style="overflow-x: scroll; -webkit-overflow-scrolling: touch" id="table-wrapper" ref="table-wrapper">
         <div class="appointment-table d-flex flex-column"
            id="appointment-table"
-           :class="{'surgeries': isSurgery}"
+           :class="{'surgeries': isSurgery, 'is-time-based': isTimeBased}"
         >
           <table class="table table-bordered table-sm text-center m-0 fade " v-show="!loading && loaded"
                  v-cloak>
@@ -203,14 +203,14 @@ export default {
               let endDate = moment(this.monthDates[i]).seconds(59).hours(moment(maxWorkTime).hours()).minutes(moment(maxWorkTime).minutes());
               for (let k = 0; k < normalTimeSpan || (this.appointments[queCounter] && this.sameDay(new Date(this.appointments[queCounter].start_at), baseDate.toDate())); k++) {
                 if (k < normalTimeSpan && (!this.appointments[queCounter] || !this.sameDay(new Date(this.appointments[queCounter].start_at), baseDate.toDate()))) {
-                  while (k < normalTimeSpan) {
-                    this.ques[i].push({
-                      start_at: moment(baseDate),
-                      empty: true
-                    });
-                    baseDate.add(this.default_duration, 'minutes');
-                    k++
-                  }
+                  // while (k < normalTimeSpan) {
+                  //   this.ques[i].push({
+                  //     start_at: moment(baseDate),
+                  //     empty: true
+                  //   });
+                  //   baseDate.add(this.default_duration, 'minutes');
+                  //   k++
+                  // }
                   continue
                 }
                 if (this.appointments[queCounter] &&
@@ -610,8 +610,10 @@ table {
 }
 #appointment-table .btn-clock-empty {
   height: 100%;
-  background: linear-gradient(180deg,#e5fff9,#c4dfe0) repeat-x #b4d8de;
-  border-color: #cdeef9;
+  &.is-time-based {
+    background: linear-gradient(180deg,#e5fff9,#c4dfe0) repeat-x #b4d8de;
+    border-color: #cdeef9;
+  }
   border-radius: 0;
 }
 button:focus {
