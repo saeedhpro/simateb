@@ -121,7 +121,7 @@
                   <span v-if="shownQues[i][j]">
                     {{shownQues[i][j].start_at | toPersianDate('HH:mm')}} </span>
                 </button>
-                <span v-if="shownMonthDates[dayIndex - 1] &&shownMonthDates[dayIndex - 1].isFriday">{{queIndex + 1}}</span>
+                <span v-if="shownMonthDates[dayIndex - 1] && shownMonthDates[dayIndex - 1].isFriday">{{queIndex}}</span>
               </td>
             </tr>
             </tbody>
