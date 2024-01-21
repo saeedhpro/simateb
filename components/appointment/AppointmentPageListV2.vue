@@ -203,14 +203,20 @@ export default {
               let endDate = moment(this.monthDates[i]).seconds(59).hours(moment(maxWorkTime).hours()).minutes(moment(maxWorkTime).minutes());
               for (let k = 0; k < normalTimeSpan || (this.appointments[queCounter] && this.sameDay(new Date(this.appointments[queCounter].start_at), baseDate.toDate())); k++) {
                 if (k < normalTimeSpan && (!this.appointments[queCounter] || !this.sameDay(new Date(this.appointments[queCounter].start_at), baseDate.toDate()))) {
-                  // while (k < normalTimeSpan) {
-                  //   this.ques[i].push({
-                  //     start_at: moment(baseDate),
-                  //     empty: true
-                  //   });
-                  //   baseDate.add(this.default_duration, 'minutes');
-                  //   k++
-                  // }
+                  if (this.ques[i].length > 0) {
+                    let base = moment(this.ques[i].start_at)
+                    while (k < normalTimeSpan) {
+                      this.ques[i].push({
+                        start_at: moment(base),
+                        empty: true
+                      });
+                      base.add(this.default_duration, 'minutes');
+                      k++
+                      if (base.isAfter(endDate)) {
+                        break;
+                      }
+                    }
+                  }
                   continue
                 }
                 if (this.appointments[queCounter] &&
