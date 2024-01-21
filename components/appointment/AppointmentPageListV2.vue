@@ -37,27 +37,45 @@
         >
           <table class="table table-bordered table-sm text-center m-0 fade " v-show="!loading && loaded"
                  v-cloak>
-            <thead v-if="displayLimits">
-            <tr class="" v-for="(limit, i) in limits" :key="i">
-              <th class="table-active"></th>
-              <td class="text-sm text-nowrap py-0" v-for="dayIndex in monthDates">
-                <span class="text-nowrap">{{limit.name}}</span>
-                <span class="badge badge-secondary"
-                      :class="{'badge-danger':(limit.limitation-dayIndex['limit'+limit.id].total)<1}">{{limit.limitation-dayIndex['limit'+limit.id].total}}</span>
-              </td>
-            </tr>
+            <thead v-if="showCaseType">
+              <tr v-for="(_, i) in limitList" :key="i" class="header-case-type-tr text-center">
+                <th class="table-active"></th>
+                <td class="text-sm text-nowrap py-0" v-for="(_, j) in limitList[i].length">
+                  <div class="header-case-type-box">
+                    <div class="header-case-type">
+                    <v-tooltip top>
+                      <template v-slot:activator="{ on, attrs }">
+                        <div
+                          v-bind="attrs"
+                          v-on="on"
+                        >
+                          {{ limitList[i][j].name }}
+                        </div>
+                      </template>
+                      <div>{{ limitList[i][j].name }}</div>
+                    </v-tooltip>
+                    <span class="ltr" v-if="limitList[i][j].is_limited"
+                          :class="{ 'is-red': limitList[i][j].limitations < 0, 'is-zero': limitList[i][j].limitations == 0 }">
+                      {{ limitList[i][j].limitations }}
+                    </span>
+                  </div>
+                  </div>
+                </td>
+              </tr>
             </thead>
             <thead class="text-center sticky">
-            <tr class="">
+            <tr>
               <th class="table-active"></th>
-              <td class="" v-for="dayIndex in showLength">
-                <span class=" text-sm" v-if="dayIndex && !dayIndex.isFriday">{{dayIndex.total}}</span>
-              </td>
+              <th v-for="(i, n) in countList" :key="n">
+                <div class="day-count-box">
+                  {{ i }}
+                </div>
+              </th>
             </tr>
             <tr class="">
               <th class="table-active"></th>
-              <th class="" v-for="(dayIndex, j) in shownMonthDates"
-                  :class="{'table-warning':dayIndex && dayIndex.isFriday&&!dayIndex.today,'table-success is-today':dayIndex &&dayIndex.today}"
+              <th class="header-date" v-for="(dayIndex, j) in shownMonthDates"
+                  :class="{'is-friday':dayIndex && dayIndex.isFriday&&!dayIndex.today,'table-success is-today':dayIndex &&dayIndex.today}"
                   :id="`column_${j}`" @click="newAppointment(dayIndex)">
                 <button class="btn btn-success btn-block btn-sm p-1 text-sm font-weight-normal"
                         :class="{'btn-light':dayIndex &&!dayIndex.today,'holiday':dayIndex &&dayIndex.holiday}"
@@ -65,44 +83,45 @@
                   {{dayIndex | toPersianDate('dddd')}} <br>
                   <span class="text-nowrap">{{dayIndex| toPersianDate('jD jMMMM')}}</span>
                 </button>
-                <span v-if="dayIndex && dayIndex.isFriday" class="text-sm font-weight-normal">
-                            <span>{{dayIndex | toPersianDate('dddd')}}</span>
-                            <span class="text-nowrap">{{dayIndex | toPersianDate('jD jMMMM')}}</span>
-                    </span>
+                <button v-if="dayIndex && dayIndex.isFriday" class="text-sm font-weight-normal text-sm font-weight-normal">
+                  <span>{{dayIndex | toPersianDate('dddd')}}</span>
+                  <span class="text-nowrap">{{dayIndex | toPersianDate('jD jMMMM')}}</span>
+                </button>
               </th>
             </tr>
             </thead>
             <tbody>
-            <tr v-for="(queIndex) in queIndexMax" :key="queIndex">
+            <tr v-for="(queIndex, j) in queIndexMax" :key="j">
               <th class="align-middle text-center">
-                {{queIndex}}
+                {{j + 1}}
               </th>
               <td v-for="(dayIndex, i) in showLength" :key="i"
-                  :class="{'table-warning':dayIndex &&dayIndex.isFriday&&!dayIndex.today,'table-success':dayIndex && dayIndex.today, 'holiday':dayIndex &&  dayIndex.holiday}"
+                  :class="{'is-friday':shownMonthDates[dayIndex - 1] &&shownMonthDates[dayIndex - 1].isFriday,
+                  'table-success is-today':shownMonthDates[dayIndex - 1] && shownMonthDates[dayIndex - 1].today,
+                   'is-holiday':shownMonthDates[dayIndex - 1] &&  shownMonthDates[dayIndex - 1].holiday}"
                   class="text-sm ">
                 <button class="text-nowrap text-center btn btn-block btn-sm  p-1"
-                        v-if="shownQues[i][queIndex] && !shownQues[i][queIndex].empty"
-                        @click="summary(shownQues[i][queIndex])">
+                        v-if="shownQues[i][j] && !shownQues[i][j].empty"
+                        @click="summary(shownQues[i][j])">
                   <h6 class="m-0 ">
                     <span class="badge badge-secondary"
-                      :style="{'background-color': statuses[shownQues[i][queIndex].status].color}">{{statuses[shownQues[i][queIndex].status].title}}</span>
+                      :style="{'background-color': statuses[shownQues[i][j].status].color}">{{statuses[shownQues[i][j].status].title}}</span>
                   </h6>
-                  <span>{{shownQues[i][queIndex].user_full_name}}</span><br>
-                  <span class="badge badge-secondary" v-if="shownQues[i][queIndex].case_type">{{shownQues[i][queIndex].case_type}}</span><br>
-                  <h6 class="m-0"><span class="font-weight-bold badge badge-light"> {{shownQues[i][queIndex].start_at | toPersianDate('HH:mm') }} </span>
+                  <span>{{shownQues[i][j].user_full_name}}</span><br>
+                  <span class="badge badge-secondary" v-if="shownQues[i][j].case_type">{{shownQues[i][j].case_type}}</span><br>
+                  <h6 class="m-0"><span class="font-weight-bold badge badge-light"> {{shownQues[i][j].start_at | toPersianDate('HH:mm') }} </span>
                   </h6>
-                  <h6 class="m-0 " v-if="shownQues[i][queIndex].is_vip"><span class="badge badge-info">VIP</span>
+                  <h6 class="m-0 " v-if="shownQues[i][j].is_vip"><span class="badge badge-info">VIP</span>
                   </h6>
                 </button>
                 <button class="text-nowrap text-center text-secondary btn btn-block btn-sm p-1 "
-                        :class="{'btn-clock-empty':!dayIndex.isFriday && (!shownQues[i][queIndex] || (shownQues[i][queIndex].empty))}"
-                        v-if="!shownQues[i][queIndex] || (shownQues[i][queIndex] && shownQues[i][queIndex].empty && dayIndex &&!dayIndex.isFriday)"
-                        @click="newFromEmptyTime(shownQues[i][queIndex] ? shownQues[i][queIndex].start_at : $moment.now())">
-                  <span v-if="shownQues[i][queIndex]">
-                    <span>{{ dayIndex.isFriday }}</span>
-                    {{shownQues[i][queIndex].start_at | toPersianDate('HH:mm')}} </span>
+                        :class="{'btn-clock-empty':!shownMonthDates[dayIndex - 1].isFriday && (!shownQues[i][j] || (shownQues[i][j].empty))}"
+                        v-if="!shownQues[i][j] || (shownQues[i][j] && shownQues[i][j].empty && shownMonthDates[dayIndex - 1] &&!shownMonthDates[dayIndex - 1].isFriday)"
+                        @click="shownQues[i][j] ? newFromEmptyTime(shownQues[i][j].start_at) : () => {}">
+                  <span v-if="shownQues[i][j]">
+                    {{shownQues[i][j].start_at | toPersianDate('HH:mm')}} </span>
                 </button>
-                <span v-if="dayIndex &&dayIndex.isFriday">{{queIndex}}</span>
+                <span v-if="shownMonthDates[dayIndex - 1] &&shownMonthDates[dayIndex - 1].isFriday">{{queIndex + 1}}</span>
               </td>
             </tr>
             </tbody>
@@ -132,15 +151,14 @@ export default {
       max_length: 16,
       ques: [],
       monthDates: Array(this.period),
-      displayLimits: false,
       queIndexMax: 0,
       startIndex: 0,
       endIndex: 0,
       todayDate: moment(),
       statuses: {
-        1: {title: "رزرو شده", color: "#ff981e"},
-        2: {title: "پذیرش شده", color: "#008daf"},
-        3: {title: "کنسل", color: "#ff2c1b"}
+        1: {title: "رزرو شده", color: "#F5AC00"},
+        2: {title: "پذیرش شده", color: "#5063FF"},
+        3: {title: "کنسل", color: "#F44336"}
       }
     }
   },
@@ -170,117 +188,55 @@ export default {
     },
     async renderQues() {
       this.loaded = false
+      this.ques = [];
       if (this.isTimeBased) {
-        const ques = this.ques
-        this.ques = []
-        let fixedDate = new Date();
-        let maxWorkTime = new Date('2019-01-10 ' + this.workHour.end);
-        let minWorkTime = new Date('2019-01-10 ' + this.workHour.start);
-
-        let duration = moment.duration(moment(maxWorkTime).diff(minWorkTime));
-        let minutes = duration.asMinutes();
-        this.queIndexMax = Math.floor(minutes / this.default_duration);
-        let normalTimeSpan = this.queIndexMax;
-        let queCounter = 0;
-        for (let i = 0; i < this.period; i++) {
-          this.ques[i] = [];
-          let baseDate = moment(this.monthDates[i]).seconds(0).hours(moment(minWorkTime).hours()).minutes(moment(minWorkTime).minutes());
-          let endDate = moment(this.monthDates[i]).seconds(59).hours(moment(maxWorkTime).hours()).minutes(moment(maxWorkTime).minutes());
-          let startBox = baseDate.clone()
-          for (let k = 0; k < normalTimeSpan; k++) {
-            // if (ques[i][k]) {
-            //   console.log(startBox.format("jYYYY/jMM/jDD HH:mm:ss"), "b", i, "i", (k < normalTimeSpan || ques[i][k]), "ques", k, "k")
-            // }
-            let inWhile = false
-            if (ques[i][k]) {
-              while (startBox.isBefore(moment(ques[i][k].start_at))) {
-                this.ques[i].push({
-                  start_at: startBox.clone().local('en'),
-                  empty: true
-                });
-                inWhile = true;
-                startBox.add(this.default_duration, 'minutes');
+          let maxWorkTime = new Date('2019-01-10 ' + this.workHour.end);
+          let minWorkTime = new Date('2019-01-10 ' + this.workHour.start);
+          let duration = moment.duration(moment(maxWorkTime).diff(minWorkTime));
+          let minutes = duration.asMinutes();
+          this.queIndexMax = Math.floor(minutes / this.default_duration);
+          let normalTimeSpan = this.queIndexMax;
+          let queCounter = 0;
+          let s = 0
+          for (let i = 0; i < this.period; i++) {
+              this.ques[i] = [];
+              let baseDate = moment(this.monthDates[i]).seconds(0).hours(moment(minWorkTime).hours()).minutes(moment(minWorkTime).minutes());
+              for (let k = 0; k < normalTimeSpan || (this.appointments[queCounter] && this.sameDay(new Date(this.appointments[queCounter].start_at), baseDate.toDate())); k++) {
+                if (!this.appointments[queCounter] || !this.sameDay(new Date(this.appointments[queCounter].start_at), baseDate.toDate())) {
+                  continue
+                }
+                if (this.appointments[queCounter] &&
+                    ((!baseDate.isBefore(this.appointments[queCounter].start_at))
+                      || (k > normalTimeSpan)
+                    )) {
+                      this.ques[i].push(this.appointments[queCounter]);
+                      baseDate = baseDate.add(this.appointments[queCounter].duration, 'minutes');
+                      queCounter++;
+                      this.monthDates[i].isWorkDay = true;
+                  } else {
+                    this.ques[i].push({
+                      start_at: moment(baseDate),
+                      empty: true
+                    });
+                    baseDate.add(this.default_duration, 'minutes');
+                  }
               }
-              if (inWhile) {
-                startBox.add(this.default_duration, 'minutes');
-              }
-              if (moment(ques[i][k].start_at).isBefore(baseDate)) {
-                this.ques[i].push(ques[i][k]);
-                this.monthDates[i].isWorkDay = true;
-              } else if (moment(ques[i][k].start_at).isAfter(endDate)) {
-                this.ques[i].push(ques[i][k]);
-                this.monthDates[i].isWorkDay = true;
-              } else {
-                this.ques[i].push(ques[i][k]);
-                // startBox.add(ques[i][k].duration, 'minutes');
-                this.monthDates[i].isWorkDay = true;
-              }
-            } else {
-              this.ques[i].push({
-                start_at: startBox.clone().local('en'),
-                empty: true
-              });
-              startBox.add(this.default_duration, 'minutes');
-            }
-            // if (ques[i][k] && startBox.isBefore(ques[i][k].start_at)) {
-
-            // }
-            // if (ques[i][k] &&
-            //     (!baseDate.isBefore(ques[i][k].start_at))) {//day matches to this gap
-            //       this.ques[i].push(ques[i][k]);
-            //       baseDate.add(ques[i][k].duration, 'minutes');
-            //       queCounter++;
-            //       this.monthDates[i].isWorkDay = true;
-            //       if (k > normalTimeSpan) {
-            //         // $scope.queIndexMax++;
-            //       }
-            //   } else {
-            //     this.ques[i].push({
-            //       start_at: moment(baseDate),
-            //       empty: true
-            //     });
-            //   }
           }
-          // for (let k = 0; k < normalTimeSpan || (this.appointments[queCounter] && this.sameDay(new Date(this.appointments[queCounter].start_at), baseDate.toDate())); k++) {
-          //   if (this.appointments[queCounter] &&
-          //     ((!baseDate.isBefore(this.appointments[queCounter].start_at))
-          //       || (k > normalTimeSpan)
-          //     )) {//day matches to this gap
-          //       this.ques[i].push(this.appointments[queCounter]);
-          //       baseDate.add(this.appointments[queCounter].duration, 'minutes');
-          //       queCounter++;
-          //       this.monthDates[i].isWorkDay = true;
-          //       if (k > normalTimeSpan) {
-          //         // $scope.queIndexMax++;
-          //       }
-          //   } else {
-          //     this.ques[i].push({
-          //       start_at: moment(baseDate),
-          //       empty: true
-          //     });
-          //     baseDate.add(this.default_duration, 'minutes');
-          //   }
-          // }
-        }
-        this.queIndexMax = Math.max.apply(Math, this.ques.map(function (a) {
-          return a.length;
-        }));
       } else {
-        this.ques = [];
         this.queIndexMax = 4;
         let loopedQues = 0;
         for (let i = 0; i < this.period; i++) {
           this.ques[i] = [];
           for (let j = loopedQues; j < this.appointments.length; j++) {
-            let que = this.appointments[j];
-            if (this.sameDay(new Date(que.start_at), this.monthDates[i])) {
-              this.ques[i].push(que);
-              loopedQues++;
-            } else {
-              if (j > loopedQues) { // to account for empty days with no reservation
-                break;
+              let que = this.appointments[j];
+              if (this.sameDay(new Date(que.start_at), this.monthDates[i])) {
+                this.ques[i].push(que);
+                loopedQues++;
+              } else {
+                if (j > loopedQues) { // to account for empty days with no reservation
+                  break;
+                }
               }
-            }
           }
           this.queIndexMax = Math.max(this.ques[i].length - 1, this.queIndexMax);
         }
@@ -344,6 +300,39 @@ export default {
       this.startIndex = index
       this.endIndex = this.startIndex + this.showLength
     },
+    async setSlider() {
+      setTimeout(() => {
+
+        const slider = document.getElementById('table-wrapper');
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+        if (slider) {
+          slider.addEventListener('mousedown', (e) => {
+            isDown = true;
+            slider.classList.add('active');
+            startX = e.pageX - slider.offsetLeft;
+            scrollLeft = slider.scrollLeft;
+          });
+          slider.addEventListener('mouseleave', () => {
+            isDown = false;
+            slider.classList.remove('active');
+          });
+          slider.addEventListener('mouseup', () => {
+            isDown = false;
+            slider.classList.remove('active');
+          });
+          slider.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - slider.offsetLeft;
+            const walk = (x - startX) * 3;
+            slider.scrollLeft = scrollLeft - walk;
+          });
+        }
+      }, 500)
+    }
+
   },
   computed: {
     startDate: {
@@ -455,17 +444,26 @@ export default {
     },
     limitList() {
       let limitDays = []
-      // for (let i = 0; i < this.shownDays.length; i++) {
-      //   limitDays[i] = []
-      //   for (let j = 0; j < this.limits.length; j++) {
-      //     let count =this.limits[j].limitation - this.shownDays[i].filter(i => i.case_type == this.limits[j].name).length
-      //     limitDays[i][j] = {
-      //       ...this.limits[j],
-      //       limitations: count
-      //     }
-      //   }
-      // }
+      let i = 0;
+      this.limits.forEach(limit => {
+        limitDays[i] = [i]
+        for (let j = 0; j < this.shownQues.length; j++) {
+          let count = limit.limitation - this.shownQues[i].filter(i => i.case_type == limit.name).length
+          limitDays[i][j] = {
+            ...this.limits[i],
+            limitations: count
+          }
+        }
+        i++
+      })
       return limitDays
+    },
+    countList() {
+      let list = []
+      for (let j = 0; j < this.shownQues.length; j++) {
+        list[j] = this.shownQues[j].filter(i => i && !i.empty).length
+      }
+      return list
     },
     shownQues() {
       return this.ques.slice(this.startIndex, this.endIndex)
@@ -500,6 +498,7 @@ export default {
       if (val) {
         await this.calcMonthDates()
         await this.getAppointments()
+        await this.setSlider()
       }
     },
     isTimeBased() {
@@ -515,6 +514,11 @@ export default {
 }
 #appointment-table .table-bordered td, #appointment-table .table-bordered th {
   border: 1px solid #c9c9ca !important;
+}
+#appointment-table .table-bordered td {
+  &.is-friday {
+    background: #FFF7EB 0 0 no-repeat padding-box !important;
+  }
 }
 .text-sm {
   font-size: small;
@@ -536,6 +540,12 @@ export default {
 .btn-block {
   display: block;
   width: 100%;
+}
+.is-today {
+  .btn-block {
+    //background-color: #7cdf81;
+    background-color: #EBFFEB;
+  }
 }
 .table-responsive>.table-bordered {
   border: 0;
@@ -575,7 +585,7 @@ td > button {
 }
 th {
   padding: 5px;
-  min-width: 86px;
+  //min-width: 86px;
 }
 table {
   border-collapse: collapse;
