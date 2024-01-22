@@ -77,6 +77,7 @@
               <th class="header-date" v-for="(dayIndex, j) in shownMonthDates"
                   :class="{'is-friday':dayIndex && dayIndex.isFriday&&!dayIndex.today,'table-success is-today':dayIndex &&dayIndex.today}"
                   :id="`column_${j}`" @click="newAppointment(dayIndex)">
+                {{ `${dayIndex && dayIndex.isFriday}` }}
                 <button class="btn btn-success btn-block btn-sm p-1 text-sm font-weight-normal"
                         :class="{'btn-light':dayIndex &&!dayIndex.today,'holiday':dayIndex &&dayIndex.holiday}"
                         v-if="dayIndex && !dayIndex.isFriday" >
@@ -287,9 +288,6 @@ export default {
         let date = m.locale('en');
         date = date.toDate()
         if (date.getDay() === 5) date.isFriday = true;
-        if (date.getDay() === 5) {
-          alert(`${date.isFriday}, friday, ${m.toLocaleString()}`)
-        }
         if (m.isSame(this.todayDate, 'day')) {
           date.today = true;
         }
