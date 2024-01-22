@@ -284,7 +284,8 @@ export default {
         let m = this.startDate.clone().add(i, 'days');
         // rounding minute
         m.seconds(0).minutes((Math.floor(m.minutes() / 15) * 15) % 60);
-        let date = m.toDate();
+        let date = m.locale('en');
+        date = date.toDate()
         if (date.getDay() === 5) date.isFriday = true;
         if (m.isSame(this.todayDate, 'day')) {
           date.today = true;
