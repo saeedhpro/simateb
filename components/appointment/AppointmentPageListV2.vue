@@ -101,6 +101,7 @@
                    'is-holiday':shownMonthDates[dayIndex - 1] &&  shownMonthDates[dayIndex - 1].holiday}"
                   class="text-sm ">
                 {{ dayIndex - 1 }}
+                {{ shownMonthDates[dayIndex - 1].getDay() }}
                 <button class="text-nowrap text-center btn btn-block btn-sm  p-1"
                         v-if="shownQues[i][j] && !shownQues[i][j].empty"
                         @click="summary(shownQues[i][j])">
