@@ -5259,6 +5259,10 @@ tr.waiting {
     border: 1px solid #EBEBEB !important;
     color: #000000 !important;
   }
+
+  &.holiday {
+    background: #FFC0CB 0 0 no-repeat padding-box !important;
+  }
 }
 
 .header-case-type-th {
