@@ -184,8 +184,6 @@ export default {
         }
         let todays = document.getElementsByClassName('is-today')
         if (todays.length > 0) {
-          // let bound = todays[0].getBoundingClientRect()
-          // let table = document.getElementById('appointment-table')
           todays[0].scrollIntoView({
             inline: "end",
             behavior: 'smooth'

@@ -75,11 +75,12 @@
             <tr class="">
               <th class="table-active"></th>
               <th class="header-date" v-for="(dayIndex, j) in shownMonthDates"
-                  :class="{'is-friday':dayIndex && dayIndex.isFriday&&!dayIndex.today,'table-success is-today':dayIndex &&dayIndex.today}"
+                  :class="{'is-friday':dayIndex && dayIndex.isFriday&&!dayIndex.today,
+                  'table-success is-today':dayIndex &&dayIndex.today,
+                  'holiday':holidayList[j + startIndex]}"
                   :id="`column_${j}`" @click="newAppointment(dayIndex)">
-                {{ `${dayIndex && dayIndex.isFriday}` }}
                 <button class="btn btn-success btn-block btn-sm p-1 text-sm font-weight-normal"
-                        :class="{'btn-light':dayIndex &&!dayIndex.today,'holiday':dayIndex &&dayIndex.holiday}"
+                        :class="{'btn-light':dayIndex &&!dayIndex.today,'holiday':holidayList[j + startIndex]}"
                         v-if="dayIndex && !dayIndex.isFriday" >
                   {{dayIndex | toPersianDate('dddd')}} <br>
                   <span class="text-nowrap">{{dayIndex| toPersianDate('jD jMMMM')}}</span>
@@ -99,7 +100,7 @@
               <td v-for="(dayIndex, i) in showLength" :key="i"
                   :class="{'is-friday':shownMonthDates[dayIndex - 1] &&shownMonthDates[dayIndex - 1].isFriday,
                   'table-success is-today':shownMonthDates[dayIndex - 1] && shownMonthDates[dayIndex - 1].today,
-                   'is-holiday':shownMonthDates[dayIndex - 1] &&  shownMonthDates[dayIndex - 1].holiday}"
+                   'is-holiday':holidayList[dayIndex - 1 + startIndex]}"
                   class="text-sm ">
                 <button class="text-nowrap text-center btn btn-block btn-sm  p-1"
                         v-if="shownQues[i][j] && !shownQues[i][j].empty"
@@ -151,6 +152,7 @@ export default {
       default_duration: 16,
       max_length: 16,
       ques: [],
+      holidayList: [],
       monthDates: Array(this.period),
       queIndexMax: 0,
       startIndex: 0,
@@ -281,6 +283,7 @@ export default {
       this.showItemModal = true
     },
     calcMonthDates() {
+      this.holidayList = Array(this.period).fill(false)
       for (let i = 0; i < this.period; i++) {
         let m = this.startDate.clone().add(i, 'days');
         // rounding minute
@@ -291,8 +294,30 @@ export default {
         if (m.isSame(this.todayDate, 'day')) {
           date.today = true;
         }
+        for (let j = 0; j < this.holidays.length; j++) {
+          if (m.isSame(moment(this.holidays[j].hdate), 'day')) {
+            date.holiday = true;
+            this.holidayList[i] = true
+            break;
+          }
+        }
         this.monthDates[i] = date;
       }
+    },
+    calcHolidays() {
+      // for (let i = 0; i < this.period; i++) {
+      //   let m = this.startDate.clone().add(i, 'days');
+      //   m.seconds(0).minutes((Math.floor(m.minutes() / 15) * 15) % 60);
+      //   let date = m.locale('en');
+      //   date = date.toDate()
+      //   for (let j = 0; j < this.holidays.length; j++) {
+      //     if (m.isSame(moment(this.holidays[j].hdate), 'day')) {
+      //       console.log('yes')
+      //       this.monthDates[i].hoiday = true;
+      //       break;
+      //     }
+      //   }
+      // }
     },
     newAppointment(date) {
       let minWorkTime = new Date('2019-01-10 ' + this.workHour.start);
@@ -358,6 +383,16 @@ export default {
           });
         }
       }, 500)
+      setTimeout(() => {
+        let todays = document.getElementsByClassName('is-today')
+        if (todays.length > 0) {
+          todays[0].scrollIntoView({
+            inline: "start",
+            behavior: 'smooth',
+            block: 'nearest'
+          })
+        }
+      }, 1000)
     }
 
   },
@@ -524,6 +559,7 @@ export default {
     async loadList(val) {
       if (val) {
         await this.calcMonthDates()
+        await this.calcHolidays()
         await this.getAppointments()
         await this.setSlider()
       }
@@ -542,10 +578,14 @@ export default {
 #appointment-table .table-bordered td, #appointment-table .table-bordered th {
   border: 1px solid #c9c9ca !important;
 }
-#appointment-table .table-bordered td {
-  &.is-friday {
+#appointment-table .table-bordered td.is-friday {
     background: #FFF7EB 0 0 no-repeat padding-box !important;
-  }
+}
+#appointment-table .table-bordered td.is-today > .btn-block {
+    background-color: #EBFFEB;
+}
+#appointment-table .table-bordered td.is-holiday > .btn-block {
+    background-color: #FFC0CB;
 }
 .text-sm {
   font-size: small;
@@ -567,12 +607,6 @@ export default {
 .btn-block {
   display: block;
   width: 100%;
-}
-.is-today {
-  .btn-block {
-    //background-color: #7cdf81;
-    background-color: #EBFFEB;
-  }
 }
 .table-responsive>.table-bordered {
   border: 0;
