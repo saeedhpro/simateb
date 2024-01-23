@@ -1,11 +1,9 @@
 <template>
-  <v-container
-    fluid
-  >
+  <v-container>
     <appointment-page-header
       @togglePazireshModal="togglePazireshModal"
     />
-    <appointment-page-content/>
+    <appointment-page-content-v2/>
     <create-appointment-form-component
       :is-surgery="false"
       v-if="showPazireshModal"
