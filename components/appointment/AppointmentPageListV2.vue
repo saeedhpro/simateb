@@ -32,17 +32,17 @@
     <v-col cols="12">
       <div style="overflow-x: scroll; -webkit-overflow-scrolling: touch" id="table-wrapper" ref="table-wrapper">
         <div class="appointment-table d-flex flex-column"
-           id="appointment-table"
-           :class="{'surgeries': isSurgery, 'is-time-based': isTimeBased}"
+             id="appointment-table"
+             :class="{'surgeries': isSurgery, 'is-time-based': isTimeBased}"
         >
           <table class="table table-bordered table-sm text-center m-0 fade " v-show="!loading && loaded"
                  v-cloak>
             <thead v-if="showCaseType">
-              <tr v-for="(_, i) in limitList" :key="i" class="header-case-type-tr text-center">
-                <th class="table-active"></th>
-                <td class="text-sm text-nowrap py-0" v-for="(_, j) in limitList[i].length">
-                  <div class="header-case-type-box">
-                    <div class="header-case-type">
+            <tr v-for="(_, i) in limitList" :key="i" class="header-case-type-tr text-center">
+              <th class="table-active"></th>
+              <td class="text-sm text-nowrap py-0" v-for="(_, j) in limitList[i].length">
+                <div class="header-case-type-box">
+                  <div class="header-case-type">
                     <v-tooltip top>
                       <template v-slot:activator="{ on, attrs }">
                         <div
@@ -59,9 +59,9 @@
                       {{ limitList[i][j].limitations }}
                     </span>
                   </div>
-                  </div>
-                </td>
-              </tr>
+                </div>
+              </td>
+            </tr>
             </thead>
             <thead class="text-center sticky">
             <tr>
@@ -77,11 +77,23 @@
               <th class="header-date" v-for="(dayIndex, j) in shownMonthDates"
                   :class="{'is-friday':dayIndex && dayIndex.isFriday&&!dayIndex.today,
                   'table-success is-today':dayIndex &&dayIndex.today,
-                  'holiday':holidayList[j + startIndex]}"
+                  'holiday':holidayList[j + startIndex] && holidayList[j + startIndex].is_holiday}"
                   :id="`column_${j}`" @click="newAppointment(dayIndex)">
-                <button class="btn btn-success btn-block btn-sm p-1 text-sm font-weight-normal"
-                        :class="{'btn-light':dayIndex &&!dayIndex.today,'holiday':holidayList[j + startIndex]}"
-                        v-if="dayIndex && !dayIndex.isFriday" >
+                <v-tooltip top v-if="holidayList[j + startIndex] && holidayList[j + startIndex].is_holiday">
+                  <template v-slot:activator="{ on, attrs }">
+                    <button
+                      v-bind="attrs"
+                      v-on="on"
+                    >
+                      {{dayIndex | toPersianDate('dddd')}} <br>
+                      <span class="text-nowrap">{{dayIndex| toPersianDate('jD jMMMM')}}</span>
+                    </button>
+                  </template>
+                  <span>{{ holidayList[j + startIndex].title }}</span>
+                </v-tooltip>
+                <button v-else-if="dayIndex && !dayIndex.isFriday" class="btn btn-success btn-block btn-sm p-1 text-sm font-weight-normal"
+                  :class="{'btn-light':dayIndex &&!dayIndex.today,'holiday':holidayList[j + startIndex] && holidayList[j + startIndex].is_holiday}"
+                >
                   {{dayIndex | toPersianDate('dddd')}} <br>
                   <span class="text-nowrap">{{dayIndex| toPersianDate('jD jMMMM')}}</span>
                 </button>
@@ -100,14 +112,14 @@
               <td v-for="(dayIndex, i) in showLength" :key="i"
                   :class="{'is-friday':shownMonthDates[dayIndex - 1] &&shownMonthDates[dayIndex - 1].isFriday,
                   'table-success is-today':shownMonthDates[dayIndex - 1] && shownMonthDates[dayIndex - 1].today,
-                   'is-holiday':holidayList[dayIndex - 1 + startIndex]}"
+                   'is-holiday':holidayList[dayIndex - 1 + startIndex] && holidayList[dayIndex - 1 + startIndex].is_holiday}"
                   class="text-sm ">
-                <button class="text-nowrap text-center btn btn-block btn-sm  p-1"
+                <button class="text-nowrap text-center btn btn-block btn-sm p-1 appointment"
                         v-if="shownQues[i][j] && !shownQues[i][j].empty"
                         @click="summary(shownQues[i][j])">
                   <div class="m-0 ">
                     <span class="badge badge-secondary"
-                      :style="{'background-color': statuses[shownQues[i][j].status].color}">{{statuses[shownQues[i][j].status].title}}</span>
+                          :style="{'background-color': statuses[shownQues[i][j].status].color}">{{statuses[shownQues[i][j].status].title}}</span>
                   </div>
                   <span class="user-full-name">{{shownQues[i][j].user_full_name}}</span><br>
                   <span class="badge badge-secondary" v-if="shownQues[i][j].case_type">{{shownQues[i][j].case_type}}</span><br>
@@ -135,6 +147,7 @@
 </template>
 <script>
 import moment from "jalali-moment";
+import { isMobile } from 'mobile-device-detect';
 
 export default {
   name: "AppointmentPageListV2",
@@ -147,7 +160,7 @@ export default {
   data() {
     return {
       loading: true,
-      loaded: true,
+      loaded: false,
       period: 42,
       default_duration: 16,
       max_length: 16,
@@ -165,10 +178,15 @@ export default {
       }
     }
   },
+  created() {
+    window.addEventListener("resize", this.reRender);
+  },
   mounted() {
     this.endIndex = this.showLength
   },
   methods: {
+    reRender(e) {
+    },
     async getAppointments() {
       this.loading = true
       const start = this.startDate.clone().locale('en').format("YYYY/MM/DD")
@@ -285,6 +303,10 @@ export default {
     calcMonthDates() {
       this.holidayList = Array(this.period).fill(false)
       for (let i = 0; i < this.period; i++) {
+        this.holidayList[i] = {
+          is_holiday: false,
+          title: ''
+        }
         let m = this.startDate.clone().add(i, 'days');
         // rounding minute
         m.seconds(0).minutes((Math.floor(m.minutes() / 15) * 15) % 60);
@@ -297,7 +319,10 @@ export default {
         for (let j = 0; j < this.holidays.length; j++) {
           if (m.isSame(moment(this.holidays[j].hdate), 'day')) {
             date.holiday = true;
-            this.holidayList[i] = true
+            this.holidayList[i] = {
+              is_holiday: true,
+              title: this.holidays[j].title
+            }
             break;
           }
         }
@@ -494,7 +519,7 @@ export default {
       }
     },
     isLaptop() {
-      return this.$vuetify.breakpoint.lgAndUp
+      return !isMobile
     },
     showCaseType: {
       get() {
@@ -506,18 +531,16 @@ export default {
     },
     limitList() {
       let limitDays = []
-      let i = 0;
-      this.limits.forEach(limit => {
-        limitDays[i] = [i]
-        for (let j = 0; j < this.shownQues.length; j++) {
-          let count = limit.limitation - this.shownQues[i].filter(i => i.case_type == limit.name).length
-          limitDays[i][j] = {
-            ...this.limits[i],
+      for (let j = 0; j < this.limits.length; j++) {
+        limitDays[j] = []
+        for (let i = 0; i < this.shownQues.length; i++) {
+          let count = this.limits[j].limitation - this.shownQues[i].filter(i => i.case_type == this.limits[j].name).length
+          limitDays[j][i] = {
+            ...this.limits[j],
             limitations: count
           }
         }
-        i++
-      })
+      }
       return limitDays
     },
     countList() {
@@ -558,10 +581,18 @@ export default {
   watch: {
     async loadList(val) {
       if (val) {
-        await this.calcMonthDates()
-        await this.calcHolidays()
-        await this.getAppointments()
-        await this.setSlider()
+        let length = this.endDate.diff(this.startDate, 'days') + 1
+        this.period = length <= 42 ? length : 42
+        setTimeout(async () => {
+          await this.calcMonthDates()
+          await this.calcHolidays()
+          await this.getAppointments()
+          await this.setSlider()
+        }, 200)
+      } else {
+        this.queIndexMax = 0
+        this.loaded = false
+        this.loading = true
       }
     },
     isTimeBased() {
@@ -651,7 +682,14 @@ th {
 table {
   border-collapse: collapse;
 }
+#appointment-table .text-sm{
+  cursor: move;
+}
+#appointment-table .appointment{
+  cursor: pointer;
+}
 #appointment-table .btn-clock-empty {
+  cursor: move;
   height: 100%;
   &.is-time-based {
     background: linear-gradient(180deg,#e5fff9,#c4dfe0) repeat-x #b4d8de;
