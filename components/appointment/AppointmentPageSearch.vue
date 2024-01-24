@@ -189,7 +189,11 @@ export default {
       date = date.jMonth(this.month - 1)
       this.startDate = date.clone()
       date = date.endOf('jMonth').clone()
-      this.endDate = date.clone()
+      if (moment().isBetween(this.startDate, date)) {
+        this.endDate = this.startDate.clone().add(41, 'day')
+      } else {
+        this.endDate = date.clone()
+      }
       await this.getOrganizationHolidays(this.startDate, this.endDate)
       setTimeout(() => {
         this.loadList = true

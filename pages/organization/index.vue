@@ -199,14 +199,13 @@
               <data-table-component
                 v-if="isDoctor"
                 :headers="doctorHeaders"
-                :page="search.page"
+                :page="1"
                 :total="appointments.meta.total"
-                :per-page="search.limit"
-                @paginate="paginate"
+                :per-page="appointments.meta.total"
               >
                 <template v-slot:body>
                   <tr v-for="(i, n) in appointments.data" :key="n" :class="{'waiting': waiting(i)}">
-                    <td class="text-center">{{ (search.page - 1) * 10 + n + 1 }}</td>
+                    <td class="text-center">{{ n + 1 }}</td>
                     <td class="text-center">
                       <div class="table-row flex flex-row align-center justify-start">
                         <img
@@ -328,10 +327,9 @@
               <data-table-component
                 v-else
                 :headers="headers"
-                :page="search.page"
+                :page="1"
                 :total="appointments.meta.total"
-                :per-page="search.limit"
-                @paginate="paginate"
+                :per-page="appointments.meta.total"
               >
                 <template v-slot:body>
                   <tr v-for="(i, n) in appointments.data" :key="n" :class="{'waiting': waiting(i)}">
@@ -390,14 +388,6 @@
           </v-row>
         </v-card>
       </v-col>
-<!--      <appointment-form-component-v2-->
-<!--        :open="showAppointmentModal"-->
-<!--        :item="item"-->
-<!--        :is-surgery="false"-->
-<!--        @close="closeAppointmentModal"-->
-<!--        @done="doneAppointmentModal"-->
-<!--        @remove="paginate"-->
-<!--      />-->
       <appointment-page-item-form
         :id="appointmentID"
         :is-surgery="false"
@@ -609,6 +599,8 @@ export default {
           this.search.admissioned = 1
         }
       }
+      delete this.search.page
+      delete this.search.limit
       this.$store.dispatch('appointments/getOrganizationAppointmentsList', this.search)
     },
     getUsers() {

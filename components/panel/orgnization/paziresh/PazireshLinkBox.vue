@@ -58,11 +58,11 @@ export default {
       this.showPazireshModal = !this.showPazireshModal
     },
     closePazireshModal() {
-      this.togglePazireshModal()
+      this.showPazireshModal = false
       this.$emit('closePazireshModal')
     },
     createdPazireshModal() {
-      this.togglePazireshModal()
+      this.showPazireshModal = false
       this.$emit('createdPazireshModal')
     }
   },
