@@ -38,7 +38,7 @@
           <table class="table table-bordered table-sm text-center m-0 fade " v-show="!loading && loaded"
                  v-cloak>
             <thead v-if="showCaseType">
-            <tr v-for="(_, i) in limitList" :key="i" class="header-case-type-tr text-center">
+            <tr v-for="(_, i) in limitList" :key="i" class="header-case-type-tr pointer text-center">
               <th class="table-active"></th>
               <td class="text-sm text-nowrap py-0" v-for="(_, j) in limitList[i].length">
                 <div class="header-case-type-box">
@@ -66,7 +66,7 @@
             <thead class="text-center sticky">
             <tr>
               <th class="table-active"></th>
-              <th v-for="(i, n) in countList" :key="n">
+              <th class="pointer" v-for="(i, n) in countList" :key="n">
                 <div class="text-sm">
                   {{ i }}
                 </div>
@@ -74,7 +74,7 @@
             </tr>
             <tr class="">
               <th class="table-active"></th>
-              <th class="header-date" v-for="(dayIndex, j) in shownMonthDates"
+              <th class="header-date pointer" v-for="(dayIndex, j) in shownMonthDates"
                   :class="{'is-friday':dayIndex && dayIndex.isFriday&&!dayIndex.today,
                   'table-success is-today':dayIndex &&dayIndex.today,
                   'holiday':holidayList[j + startIndex] && holidayList[j + startIndex].is_holiday}"
@@ -209,66 +209,82 @@ export default {
     },
     async renderQues() {
       this.loaded = false
-      this.ques = [];
       if (this.isTimeBased) {
-          let maxWorkTime = new Date('2019-01-10 ' + this.workHour.end);
-          let minWorkTime = new Date('2019-01-10 ' + this.workHour.start);
-          let duration = moment.duration(moment(maxWorkTime).diff(minWorkTime));
-          let minutes = duration.asMinutes();
-          this.queIndexMax = Math.floor(minutes / this.default_duration);
-          let normalTimeSpan = this.queIndexMax;
-          let queCounter = 0;
-          for (let i = 0; i < this.period; i++) {
-              this.ques[i] = [];
-              let baseDate = moment(this.monthDates[i]).seconds(0).hours(moment(minWorkTime).hours()).minutes(moment(minWorkTime).minutes());
-              let endDate = moment(this.monthDates[i]).seconds(59).hours(moment(maxWorkTime).hours()).minutes(moment(maxWorkTime).minutes());
-              for (let k = 0; k < normalTimeSpan || (this.appointments[queCounter] && this.sameDay(new Date(this.appointments[queCounter].start_at), baseDate.toDate())); k++) {
-                if (k < normalTimeSpan && (!this.appointments[queCounter] || !this.sameDay(new Date(this.appointments[queCounter].start_at), baseDate.toDate()))) {
-                  if (this.ques[i].length > 0) {
-                    let base = moment(this.ques[i][this.ques[i].length - 1].start_at).add(this.default_duration, 'minutes')
-                    while (true) {
-                      this.ques[i].push({
-                        start_at: moment(base),
-                        empty: true
-                      });
-                      base.add(this.default_duration, 'minutes');
-                      k++
-                      if (base.isAfter(endDate)) {
-                        break;
-                      }
-                    }
-                  }
-                  continue
-                }
-                if (this.appointments[queCounter] &&
-                    ((!baseDate.isBefore(this.appointments[queCounter].start_at))
-                      || (k > normalTimeSpan)
-                    )) {
-                      this.ques[i].push(this.appointments[queCounter]);
-                      baseDate = baseDate.add(this.appointments[queCounter].duration, 'minutes');
-                      queCounter++;
-                      this.monthDates[i].isWorkDay = true;
-                  } else {
-                    this.ques[i].push({
-                      start_at: moment(baseDate),
-                      empty: true
-                    });
-                    baseDate.add(this.default_duration, 'minutes');
-                  }
-              }
-              if (this.ques[i].length === 0) {
-                this.ques[i] = []
-                for (let k = 0; k < normalTimeSpan || baseDate.isSameOrBefore(endDate); k++) {
+        // const ques = this.ques.map( row => row.filter(col => !col.empty))
+        this.ques = []
+        let maxWorkTime = new Date('2019-01-10 ' + this.workHour.end);
+        let minWorkTime = new Date('2019-01-10 ' + this.workHour.start);
+        let duration = moment.duration(moment(maxWorkTime).diff(minWorkTime));
+        let minutes = duration.asMinutes();
+        this.queIndexMax = Math.floor(minutes / this.default_duration);
+        let normalTimeSpan = this.queIndexMax;
+        let queCounter = 0;
+        for (let i = 0; i <= this.period; i++) {
+          this.ques[i] = [];
+          let baseDate = moment(this.monthDates[i]).seconds(0).hours(moment(minWorkTime).hours()).minutes(moment(minWorkTime).minutes());
+          let endDate = moment(this.monthDates[i]).seconds(59).hours(moment(maxWorkTime).hours()).minutes(moment(maxWorkTime).minutes());
+          for (let k = 0; k < normalTimeSpan || (this.appointments[queCounter] && this.sameDay(new Date(this.appointments[queCounter].start_at), baseDate.toDate())); k++) {
+            if (k < normalTimeSpan && (!this.appointments[queCounter] || !this.sameDay(new Date(this.appointments[queCounter].start_at), baseDate.toDate()))) {
+              if (this.ques[i].length > 0) {
+                let base = moment(this.ques[i][this.ques[i].length - 1].start_at)
+                while (true) {
                   this.ques[i].push({
-                    start_at: moment(baseDate),
+                    start_at: moment(base),
                     empty: true
                   });
-                  baseDate.add(this.default_duration, 'minutes');
+                  base.add(this.default_duration, 'minutes');
+                  k++
+                  if (base.isAfter(endDate)) {
+                    break;
+                  }
                 }
               }
-            this.queIndexMax = Math.max(this.ques[i].length, this.queIndexMax);
+              continue
+            }
+            if (this.appointments[queCounter] && ((!baseDate.isBefore(this.appointments[queCounter].start_at))
+                  || (k > normalTimeSpan))) {
+                  this.ques[i].push(this.appointments[queCounter]);
+                  if (baseDate.isBefore(endDate)) {
+                    baseDate = baseDate.add(this.appointments[queCounter].duration, 'minutes');
+                  }
+                  queCounter++;
+                  this.monthDates[i].isWorkDay = true;
+              } else {
+                this.ques[i].push({
+                  start_at: moment(baseDate),
+                  empty: true
+                });
+                baseDate.add(this.default_duration, 'minutes');
+              }
+            }
+            if (this.ques[i].length === 0) {
+              this.ques[i] = []
+              for (let k = 0; k < normalTimeSpan || baseDate.isSameOrBefore(endDate); k++) {
+                this.ques[i].push({
+                  start_at: moment(baseDate),
+                  empty: true
+                });
+                baseDate.add(this.default_duration, 'minutes');
+              }
+            }
+          this.queIndexMax = Math.max(this.ques[i].length, this.queIndexMax);
+        }
+        for (let i = 0; i < this.ques.length; i++) {
+          let endDate = moment(this.monthDates[i]).seconds(59).hours(moment(maxWorkTime).hours()).minutes(moment(maxWorkTime).minutes());
+          for (let j = this.ques[i].length; j < this.queIndexMax; j++) {
+            let box = moment(this.ques[i][j - 1].start_at).add(this.default_duration, 'minutes')
+            if (box.isSameOrBefore(endDate)) {
+              this.ques[i].push({
+                start_at: moment(box),
+                empty: true
+              });
+            } else {
+              break;
+            }
           }
+        }
       } else {
+        this.ques = [];
         this.queIndexMax = 4;
         let loopedQues = 0;
         for (let i = 0; i < this.period; i++) {
@@ -534,7 +550,7 @@ export default {
       for (let j = 0; j < this.limits.length; j++) {
         limitDays[j] = []
         for (let i = 0; i < this.shownQues.length; i++) {
-          let count = this.limits[j].limitation - this.shownQues[i].filter(i => i.case_type == this.limits[j].name).length
+          let count = this.limits[j].limitation - this.shownQues[i].filter(i => i.case_type == this.limits[j].name && i.status != 3).length
           limitDays[j][i] = {
             ...this.limits[j],
             limitations: count
@@ -596,7 +612,9 @@ export default {
       }
     },
     isTimeBased() {
-      this.renderQues()
+      setTimeout(() => {
+        this.renderQues()
+      }, 200)
     }
   }
 }
@@ -684,6 +702,9 @@ table {
 }
 #appointment-table .text-sm{
   cursor: move;
+}
+#appointment-table .pointer .text-sm{
+  cursor: pointer !important;
 }
 #appointment-table .appointment{
   cursor: pointer;
