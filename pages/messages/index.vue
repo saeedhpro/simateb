@@ -273,6 +273,8 @@
                                v-model="selectedMessages"
                                :value="i"
                         />
+                        <img
+                        :src="getLogo(i)">
                         <div class="mr-2">
                           <nuxt-link :to="`/profile/${i.user ? i.user.id : 1}`">{{
                               i.user ? `${i.user.fname} ${i.user.lname}` : '-'
@@ -462,6 +464,17 @@ export default {
     clearSmsForm() {
       this.selectedUsers = []
     },
+    getLogo(app) {
+      if (app.user && app.user.logo) {
+        return app.user.logo
+      } else {
+        if (app.user && app.user.gender == 'female') {
+          return '/images/profile/woman.svg'
+        } else {
+          return '/images/profile/man.svg'
+        }
+      }
+    }
   },
   computed: {
     messages() {

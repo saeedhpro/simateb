@@ -63,12 +63,17 @@
                     @input="onUserChanged"
                     @search-change="onSearchUsers"
                   >
-                    <template slot="singleLabel" slot-scope="props"><span
-                      class="option__desc"><span
+                    <template slot="singleLabel" slot-scope="props">
+                      <span
+                      class="option__desc d-flex flex-row">
+                        <img :src="getLogo(props.option)" style="height: 25px; margin-left: 5px; border-radius: 5px"/>
+                      <span
                       class="option__title">{{ `${props.option.fname} ${props.option.lname}` }}</span></span>
                     </template>
                     <template slot="option" slot-scope="props">
-                      <div class="option__desc"><span class="option__title">{{ `${props.option.fname} ${props.option.lname}` }}</span></div>
+                      <div class="option__desc d-flex flex-row">
+                        <img :src="getLogo(props.option)" style="height: 25px; margin-left: 5px; border-radius: 5px"/>
+                        <span class="option__title">{{ `${props.option.fname} ${props.option.lname}` }}</span></div>
                     </template>
                   </multiselect>
                   <span class="create-update-modal-input-error" v-if="errors.user_id">{{ errors.user_id }}</span>
@@ -433,7 +438,22 @@ export default {
       this.showCreateUser = false
       this.user = user
       this.getUsers()
-    }
+    },
+    getLogo(user) {
+      if (user && user.logo) {
+        return user.logo
+      } else {
+        if (user) {
+          if (user.gender == 'female') {
+            return '/images/profile/woman.svg'
+          } else {
+            return '/images/profile/man.svg'
+          }
+        } else {
+          return '/images/profile/man.svg'
+        }
+      }
+    },
   },
   computed: {
     cases() {
