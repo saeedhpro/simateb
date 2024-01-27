@@ -535,6 +535,7 @@ export default {
       }
     },
     isLaptop() {
+      // return this.$vuetify.breakpoint.lgAndUp
       return !isMobile
     },
     showCaseType: {
@@ -610,6 +611,9 @@ export default {
         this.loaded = false
         this.loading = true
       }
+    },
+    isLaptop(val) {
+      console.log(val, "val")
     },
     isTimeBased() {
       setTimeout(() => {

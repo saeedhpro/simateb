@@ -333,7 +333,7 @@
               >
                 <template v-slot:body>
                   <tr v-for="(i, n) in appointments.data" :key="n" :class="{'waiting': waiting(i)}">
-                    <td class="text-center">{{ (search.page - 1) * 10 + n + 1 }}</td>
+                    <td class="text-center">{{ n + 1 }}</td>
                     <td class="text-center">
                       <div class="table-row flex flex-row align-center justify-start">
                         <input type="checkbox"

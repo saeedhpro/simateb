@@ -88,7 +88,7 @@ export default {
     },
     getDayName() {
       if (!this.startAt) return ""
-      return moment.from(this.startAt, "en", "YYYY/MM/DDTHH:mm:ssZ").locale("fa").format("dddd")
+      return moment.from(this.startAt, "en", "YYYY/MM/DDTHH:mm:ssZ").locale("fa").format("dddd jYYYY/jMM/jDD")
     },
     getTime() {
       if (!this.startAt) return ""

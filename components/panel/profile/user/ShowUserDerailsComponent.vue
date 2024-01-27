@@ -310,7 +310,13 @@
         </v-card-title>
         <v-card-text>
           <v-container>
+            <div
+              v-if="loading"
+            >
+              <LoadingCard />
+            </div>
             <v-img
+              v-else
               :src="image"
               max-height="200px"
               max-width="200px"
@@ -360,10 +366,12 @@ import AdminUpdateUserFormComponent from "~/components/admin/user/AdminUpdateUse
 import DeleteUserModalComponent from "~/components/global/delete/DeleteUserModalComponent";
 import AlertDeleteUserModalComponent from "~/components/global/alert/AlertDeleteUserModalComponent";
 import CropImageComponent from "~/components/panel/global/CropImageComponent.vue";
+import LoadingCard from "~/components/global/LoadingCard.vue";
 
 export default {
   name: "ShowUserDerailsComponent",
   components: {
+    LoadingCard,
     CropImageComponent,
     DeleteUserModalComponent,
     AlertDeleteUserModalComponent,
@@ -377,6 +385,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       showDelete: false,
       showNextDelete: false,
       showHistoryModal: false,
@@ -440,9 +449,6 @@ export default {
       }
     },
     openImageChooser() {
-      if (this.loginUser.organization.profession_id != 1) {
-        return
-      }
       this.$refs.file.value = null
       this.$refs.file.click()
     },
@@ -461,6 +467,7 @@ export default {
       this.showUpdateImage = false
     },
     updateProfile() {
+      this.loading = true
       const data = {
         image: this.image,
         id: this.user.id
@@ -476,6 +483,7 @@ export default {
         })
         .finally(() => {
           this.closeUpdateImageForm()
+          this.loading = false
         })
     }
   },
