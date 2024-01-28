@@ -115,24 +115,24 @@
                    'is-holiday':holidayList[dayIndex - 1 + startIndex] && holidayList[dayIndex - 1 + startIndex].is_holiday}"
                   class="text-sm ">
                 <button class="text-nowrap text-center btn btn-block btn-sm p-1 appointment"
-                        v-if="shownQues[i][j] && !shownQues[i][j].empty"
-                        @click="summary(shownQues[i][j])">
+                        v-if="shownQues[i] && shownQues[i][j] && !shownQues[i][j].empty"
+                        @click="summary(shownQues[i] ? shownQues[i][j] : null)">
                   <div class="m-0 ">
                     <span class="badge badge-secondary"
                           :style="{'background-color': statuses[shownQues[i][j].status].color}">{{statuses[shownQues[i][j].status].title}}</span>
                   </div>
                   <span class="user-full-name">{{shownQues[i][j].user_full_name}}</span><br>
-                  <span class="badge badge-secondary" v-if="shownQues[i][j].case_type">{{shownQues[i][j].case_type}}</span><br>
+                  <span class="badge badge-secondary" v-if="shownQues[i] && shownQues[i][j].case_type">{{shownQues[i][j].case_type}}</span><br>
                   <h6 class="m-0"><span class="user-full-name font-weight-bold badge badge-light"> {{shownQues[i][j].start_at | toPersianDate('HH:mm') }} </span>
                   </h6>
-                  <h6 class="m-0 " v-if="shownQues[i][j].is_vip"><span class="badge badge-info">VIP</span>
+                  <h6 class="m-0 " v-if="shownQues[i] && shownQues[i][j].is_vip"><span class="badge badge-info">VIP</span>
                   </h6>
                 </button>
                 <button class="text-nowrap text-center text-secondary btn btn-block btn-sm p-1 "
-                        :class="{'btn-clock-empty':!shownMonthDates[dayIndex - 1].isFriday && (!shownQues[i][j] || (shownQues[i][j].empty))}"
-                        v-if="!shownQues[i][j] || (shownQues[i][j] && shownQues[i][j].empty && shownMonthDates[dayIndex - 1] &&!shownMonthDates[dayIndex - 1].isFriday)"
-                        @click="shownQues[i][j] ? newFromEmptyTime(shownQues[i][j].start_at) : () => {}">
-                  <span v-if="shownQues[i][j]">
+                        :class="{'btn-clock-empty':!shownMonthDates[dayIndex - 1].isFriday && shownQues[i] && (!shownQues[i][j] || (shownQues[i][j].empty))}"
+                        v-if="shownQues[i] && !shownQues[i][j] || shownQues[i] && (shownQues[i][j] && shownQues[i][j].empty && shownMonthDates[dayIndex - 1] &&!shownMonthDates[dayIndex - 1].isFriday)"
+                        @click="shownQues[i] && shownQues[i][j] ? newFromEmptyTime(shownQues[i][j].start_at) : () => {}">
+                  <span v-if="shownQues[i] && shownQues[i][j]">
                     {{shownQues[i][j].start_at | toPersianDate('HH:mm')}} </span>
                 </button>
                 <span v-if="shownMonthDates[dayIndex - 1] && shownMonthDates[dayIndex - 1].isFriday">{{queIndex}}</span>
@@ -182,7 +182,7 @@ export default {
     window.addEventListener("resize", this.reRender);
   },
   mounted() {
-    this.endIndex = this.showLength
+    this.endIndex = this.startIndex + this.showLength
   },
   methods: {
     reRender(e) {
@@ -345,27 +345,14 @@ export default {
         this.monthDates[i] = date;
       }
     },
-    calcHolidays() {
-      // for (let i = 0; i < this.period; i++) {
-      //   let m = this.startDate.clone().add(i, 'days');
-      //   m.seconds(0).minutes((Math.floor(m.minutes() / 15) * 15) % 60);
-      //   let date = m.locale('en');
-      //   date = date.toDate()
-      //   for (let j = 0; j < this.holidays.length; j++) {
-      //     if (m.isSame(moment(this.holidays[j].hdate), 'day')) {
-      //       console.log('yes')
-      //       this.monthDates[i].hoiday = true;
-      //       break;
-      //     }
-      //   }
-      // }
-    },
     newAppointment(date) {
       let minWorkTime = new Date('2019-01-10 ' + this.workHour.start);
       this.openPazireshModal(moment(date).hours(moment(minWorkTime).hours()).minutes(moment(minWorkTime).minutes()))
     },
     summary(appointment) {
-      this.openItem(appointment.id)
+      if (appointment) {
+        this.openItem(appointment.id)
+      }
     },
     newFromEmptyTime(date) {
       this.openPazireshModal(date)
@@ -535,8 +522,7 @@ export default {
       }
     },
     isLaptop() {
-      // return this.$vuetify.breakpoint.lgAndUp
-      return !isMobile
+      return this.$vuetify.breakpoint.width > 1200
     },
     showCaseType: {
       get() {
@@ -601,8 +587,14 @@ export default {
         let length = this.endDate.diff(this.startDate, 'days') + 1
         this.period = length <= 42 ? length : 42
         setTimeout(async () => {
+          if (this.todayDate.isBetween(this.startDate, this.endDate) && !this.isLaptop) {
+            let diff = this.todayDate.diff(this.startDate, 'days')
+            if (diff > 4) {
+              this.startIndex = diff
+              this.endIndex = diff + this.showLength
+            }
+          }
           await this.calcMonthDates()
-          await this.calcHolidays()
           await this.getAppointments()
           await this.setSlider()
         }, 200)
@@ -612,8 +604,21 @@ export default {
         this.loading = true
       }
     },
-    isLaptop(val) {
-      console.log(val, "val")
+    async isLaptop(val) {
+      let length = this.endDate.diff(this.startDate, 'days') + 1
+      this.period = length <= 42 ? length : 42
+      this.startIndex = 0
+      this.endIndex = this.period
+      if (this.todayDate.isBetween(this.startDate, this.endDate) && !this.isLaptop) {
+        let diff = this.todayDate.diff(this.startDate, 'days')
+        if (diff > 4) {
+          this.startIndex = diff
+          this.endIndex = diff + this.showLength
+        }
+      }
+      await this.calcMonthDates()
+      await this.renderQues()
+      await this.setSlider()
     },
     isTimeBased() {
       setTimeout(() => {
