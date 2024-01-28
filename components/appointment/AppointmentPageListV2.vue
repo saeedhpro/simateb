@@ -147,7 +147,6 @@
 </template>
 <script>
 import moment from "jalali-moment";
-import { isMobile } from 'mobile-device-detect';
 
 export default {
   name: "AppointmentPageListV2",
@@ -522,7 +521,17 @@ export default {
       }
     },
     isLaptop() {
-      return this.$vuetify.breakpoint.width > 1200 || !isMobile
+      return this.isMobileOrTablet
+      return this.$vuetify.breakpoint.width > 1200
+    },
+    isMobileOrTablet() {
+      const userAgent = navigator.userAgent.toLowerCase();
+      const isChrome = /chrome/.test(userAgent);
+      const isTabletOrMobile = /(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(
+        userAgent
+      );
+
+      return !(isChrome && !isTabletOrMobile)
     },
     showCaseType: {
       get() {
