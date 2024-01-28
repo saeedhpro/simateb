@@ -521,7 +521,7 @@ export default {
       }
     },
     isLaptop() {
-      return this.isMobileOrTablet
+      return !this.isMobileOrTablet
       return this.$vuetify.breakpoint.width > 1200
     },
     isMobileOrTablet() {
