@@ -522,7 +522,7 @@ export default {
       }
     },
     isLaptop() {
-      return this.$vuetify.breakpoint.width > 800
+      return this.$vuetify.breakpoint.width > 1200 || !isMobile
     },
     showCaseType: {
       get() {
