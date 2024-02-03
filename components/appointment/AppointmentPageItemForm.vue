@@ -1391,8 +1391,8 @@ export default {
       this.showAddDescModal = false
     },
     removeResultImage(image, index) {
-      const list = image.split('_temp')
-      if (list.length > 1) {
+      const first = image.split(':')[0]
+      if (first == 'data') {
         this.newFiles = this.newFiles.filter(i => i !== image)
         // this.newFiles = this.newFiles.filter(i => i.url !== image)
       } else {
