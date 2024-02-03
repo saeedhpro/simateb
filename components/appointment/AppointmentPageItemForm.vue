@@ -1393,22 +1393,24 @@ export default {
     removeResultImage(image, index) {
       const list = image.split('_temp')
       if (list.length > 1) {
-        this.newFiles = this.newFiles.filter(i => i.url !== image)
+        this.newFiles = this.newFiles.filter(i => i !== image)
+        // this.newFiles = this.newFiles.filter(i => i.url !== image)
       } else {
         this.results = this.results.filter(i => i !== image)
         this.deletedResults.push(image)
       }
     },
     imaged(file) {
-      this.$axios.post(`/appointments/${this.id}/result/upload`, {
-        result: file,
-      })
-        .then(res => {
-          this.newFiles.push(res.data)
-        })
-        .catch(err => {
-          console.log(err.response)
-        })
+      this.newFiles.push(file)
+      // this.$axios.post(`/appointments/${this.id}/result/upload`, {
+      //   result: file,
+      // })
+      //   .then(res => {
+      //     this.newFiles.push(res.data)
+      //   })
+      //   .catch(err => {
+      //     console.log(err.response)
+      //   })
     },
     chooseImage(e) {
       this.$refs.crop.setImage(e)
@@ -1525,9 +1527,10 @@ export default {
         this.loading()
         return
       }
+      // results: this.newFiles.map(i => i.name),
       const data = {
         ...this.appointment,
-        results: this.newFiles.map(i => i.name),
+        results: this.newFiles,
         start_at: this.appointment.start_at,
       }
       delete data.staff
@@ -1598,9 +1601,10 @@ export default {
         this.loading()
         return
       }
+      // results: this.newFiles.map(i => i.name),
       const data = {
         ...this.appointment,
-        results: this.newFiles.map(i => i.name),
+        results: this.newFiles,
         start_at: this.appointment.start_at,
       }
       delete data.staff
@@ -1629,9 +1633,10 @@ export default {
         this.loading()
         return
       }
+      // results: this.newFiles.map(i => i.name),
       const data = {
         id: this.appointment.id,
-        results: this.newFiles.map(i => i.name),
+        results: this.newFiles,
         deleted_results: this.deletedResults
       }
       this.$store.dispatch('appointments/sendAppointmentResults', data)
@@ -1842,10 +1847,12 @@ export default {
       }
     },
     allResults() {
-      return this.results.concat(this.newFiles.map(i => i.url))
+      // return this.results.concat(this.newFiles.map(i => i.url))
+      return this.results.concat(this.newFiles)
     },
     allReferedResults() {
-      return this.results.concat(this.newFiles.map(i => i.url))
+      // return this.results.concat(this.newFiles.map(i => i.url))
+      return this.results.concat(this.newFiles)
     },
     listReferedResults() {
       return this.$store.getters['appointments/getReferedResults']
