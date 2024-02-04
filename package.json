@@ -25,6 +25,7 @@
     "nuxt": "^2.15.8",
     "nuxt-compress": "^5.0.0",
     "nuxt-moment-jalaali": "^1.6.2",
+    "pako": "^2.1.0",
     "remove": "^0.1.5",
     "sass": "^1.49.11",
     "swiper": "^9.3.2",

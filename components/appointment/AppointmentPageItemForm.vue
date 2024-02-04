@@ -1022,7 +1022,6 @@ import UpdateAppointmentFormComponent
 import NewAppointmentPageDoctorPrescriptionModal
   from "~/components/appointment/NewAppointmentPageDoctorPrescriptionModal.vue";
 
-
 export default {
   name: "AppointmentPageItemForm",
   components: {
@@ -1524,7 +1523,7 @@ export default {
     },
     doUpdate() {
       if (!this.appointment.user_id) {
-        this.loading()
+        this.loading = false
         return
       }
       // results: this.newFiles.map(i => i.name),
@@ -1598,7 +1597,7 @@ export default {
     },
     saveDesc() {
       if (!this.appointment.user_id) {
-        this.loading()
+        this.loading = false
         return
       }
       // results: this.newFiles.map(i => i.name),
@@ -1630,7 +1629,7 @@ export default {
       //   return
       // }
       if (!this.appointment.user_id) {
-        this.loading()
+        this.loading = false
         return
       }
       // results: this.newFiles.map(i => i.name),
