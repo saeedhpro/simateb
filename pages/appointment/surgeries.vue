@@ -5,7 +5,7 @@
     <appointment-page-header
       @togglePazireshModal="togglePazireshModal"
     />
-    <appointment-page-content
+    <appointment-page-content-v2
       :is-surgery="true"
     />
     <create-appointment-form-component
