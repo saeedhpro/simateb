@@ -904,7 +904,7 @@
       ref="crop"
       @changed="cropped"
       @imaged="imaged"
-      @newImage="chooseImage"
+      @newImage="openAddResultModal"
     />
     <appointment-page-prescription-list-modal
       :open="showPrescriptionList"
@@ -1021,7 +1021,7 @@ import UpdateAppointmentFormComponent
   from "~/components/panel/appointment/AppointmentForm/UpdateAppointmentFormComponent.vue";
 import NewAppointmentPageDoctorPrescriptionModal
   from "~/components/appointment/NewAppointmentPageDoctorPrescriptionModal.vue";
-
+import pako from "pako";
 export default {
   name: "AppointmentPageItemForm",
   components: {
@@ -1638,11 +1638,18 @@ export default {
         results: this.newFiles,
         deleted_results: this.deletedResults
       }
-      this.$store.dispatch('appointments/sendAppointmentResults', data)
-        .then(() => {
+      this.$axios.post(`/appointments/${this.appointment.id}/result`, data, {
+        headers: {
+          'Content-Encoding': 'gzip',
+          'Content-Type': 'application/json',
+        }
+      })
+        .then((res) => {
+            console.log(res, "res")
           this.$toast.success('با موفقیت انجام شد');
         })
         .catch(err => {
+            console.log(err, "err")
           this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
         })
         .finally(() => {
