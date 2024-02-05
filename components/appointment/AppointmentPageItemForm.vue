@@ -567,6 +567,16 @@
                   </Fancybox>
                 </v-row>
               </v-col>
+              <v-col cols="12">
+                <dropzone
+                  @vdropzone-success="onSuccess"
+                  @vdropzone-removed-file="onRemove"
+                  id="foo"
+                  ref="dropzone"
+                  :options="dropzoneOptions"
+                  :destroyDropzone="true"
+                />
+              </v-col>
             </v-row>
             <v-row
               v-if="isReDoctor"
@@ -661,16 +671,7 @@
                       class="fancybox-item result-image"
                       :data-fancybox-index="n"
                     >
-<!--                      <v-btn-->
-<!--                        class="remove-button"-->
-<!--                        icon-->
-<!--                        color="white"-->
-<!--                        x-small-->
-<!--                        @click="removeReferedItem($event, i)"-->
-<!--                      >-->
                         <v-icon @click.prevent="removeResultImage(i, n)" class="remove-result-image" color="red">mdi-delete</v-icon>
-<!--                        <v-icon small>mdi-close</v-icon>-->
-<!--                      </v-btn>-->
                       <img
                         class="prescription-image"
                         :src="i"
@@ -1021,10 +1022,13 @@ import UpdateAppointmentFormComponent
   from "~/components/panel/appointment/AppointmentForm/UpdateAppointmentFormComponent.vue";
 import NewAppointmentPageDoctorPrescriptionModal
   from "~/components/appointment/NewAppointmentPageDoctorPrescriptionModal.vue";
-import pako from "pako";
+import Dropzone from 'nuxt-dropzone'
+import 'nuxt-dropzone/dropzone.css'
+
 export default {
   name: "AppointmentPageItemForm",
   components: {
+    Dropzone,
     NewAppointmentPageDoctorPrescriptionModal,
     UpdateAppointmentFormComponent,
     DeleteUserModalComponent, CropImageComponent, ReferBoxComponent, LoadingCard},
@@ -1046,6 +1050,12 @@ export default {
   },
   data() {
     return {
+      dropzoneOptions: {
+        url: "https://api.sabaapp.ir/api/upload",
+        thumbnailWidth: 100,
+        thumbnailHeight: 100,
+        addRemoveLinks: true,
+      },
       loading: true,
       removed_items: [],
       appointment: {
@@ -1111,6 +1121,49 @@ export default {
       // setTimeout(() => {
       //   this.getAppointment(this.id)
       // }, 200)
+    },
+    onSuccess(e, l) {
+      e.url = l.url
+      this.newFiles.push(e)
+    },
+    onRemove(e) {
+      this.newFiles = this.newFiles.filter(i => i.upload.uuid != e.upload.uuid)
+    },
+    addFile(base64) {
+      const file = this.dataURLtoFile(base64, `${this.$moment().format('YYYY_MM_DD_HH_mm_ss')}_temp.png`)
+      console.log(file, "file")
+      this.$refs.dropzone.addFile(file);
+    },
+    dataURLtoFile(dataurl, filename) {
+      const arr = dataurl.split(',');
+      const mime = arr[0].match(/:(.*?);/)[1];
+      const bstr = atob(arr[1]);
+      let n = bstr.length;
+      const u8arr = new Uint8Array(n);
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new File([u8arr], filename, { type: mime })
+    },
+    removeFile(image, index) {
+      const list = []
+      for (let i = 0; i < this.newFiles.length; i++) {
+        if (i !== index - this.results.length) {
+          list.push(this.newFiles[i])
+        }
+      }
+      this.$refs.dropzone.removeAllFiles();
+      this.newFiles = []
+      this.$nextTick(() => {
+        // const dropzoneInstance = this.$refs.dropzone.dropzone
+        list.forEach(file => {
+          console.log(file, "ffff")
+          this.$refs.dropzone.addFile(file);
+          // dropzoneInstance.emit("addedfile", file);
+          // dropzoneInstance.emit("thumbnail", file, file.dataURL)
+          // dropzoneInstance.emit("complete", file);
+        })
+      })
     },
     getAppointment(id) {
       this.$store.dispatch('appointments/getAppointment', id)
@@ -1392,24 +1445,14 @@ export default {
     removeResultImage(image, index) {
       const first = image.split(':')[0]
       if (first == 'data') {
-        this.newFiles = this.newFiles.filter(i => i !== image)
-        // this.newFiles = this.newFiles.filter(i => i.url !== image)
+        this.removeFile(image, index)
       } else {
         this.results = this.results.filter(i => i !== image)
         this.deletedResults.push(image)
       }
     },
     imaged(file) {
-      this.newFiles.push(file)
-      // this.$axios.post(`/appointments/${this.id}/result/upload`, {
-      //   result: file,
-      // })
-      //   .then(res => {
-      //     this.newFiles.push(res.data)
-      //   })
-      //   .catch(err => {
-      //     console.log(err.response)
-      //   })
+      this.addFile(file)
     },
     chooseImage(e) {
       this.$refs.crop.setImage(e)
@@ -1529,7 +1572,7 @@ export default {
       // results: this.newFiles.map(i => i.name),
       const data = {
         ...this.appointment,
-        results: this.newFiles,
+        results: this.newFiles.map(i => i.url),
         start_at: this.appointment.start_at,
       }
       delete data.staff
@@ -1603,7 +1646,7 @@ export default {
       // results: this.newFiles.map(i => i.name),
       const data = {
         ...this.appointment,
-        results: this.newFiles,
+        results: this.newFiles.map(i => i.url),
         start_at: this.appointment.start_at,
       }
       delete data.staff
@@ -1635,7 +1678,7 @@ export default {
       // results: this.newFiles.map(i => i.name),
       const data = {
         id: this.appointment.id,
-        results: this.newFiles,
+        results: this.newFiles.map(i => i.url),
         deleted_results: this.deletedResults
       }
       this.$axios.post(`/appointments/${this.appointment.id}/result`, data, {
@@ -1853,12 +1896,10 @@ export default {
       }
     },
     allResults() {
-      // return this.results.concat(this.newFiles.map(i => i.url))
-      return this.results.concat(this.newFiles)
+      return this.results.concat(this.newFiles.map(i => i.dataURL))
     },
     allReferedResults() {
-      // return this.results.concat(this.newFiles.map(i => i.url))
-      return this.results.concat(this.newFiles)
+      return this.results.concat(this.newFiles.map(i => i.dataURL))
     },
     listReferedResults() {
       return this.$store.getters['appointments/getReferedResults']
