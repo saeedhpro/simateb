@@ -1131,7 +1131,6 @@ export default {
     },
     addFile(base64) {
       const file = this.dataURLtoFile(base64, `${this.$moment().format('YYYY_MM_DD_HH_mm_ss')}_temp.png`)
-      console.log(file, "file")
       this.$refs.dropzone.addFile(file);
     },
     dataURLtoFile(dataurl, filename) {
@@ -1155,13 +1154,8 @@ export default {
       this.$refs.dropzone.removeAllFiles();
       this.newFiles = []
       this.$nextTick(() => {
-        // const dropzoneInstance = this.$refs.dropzone.dropzone
         list.forEach(file => {
-          console.log(file, "ffff")
           this.$refs.dropzone.addFile(file);
-          // dropzoneInstance.emit("addedfile", file);
-          // dropzoneInstance.emit("thumbnail", file, file.dataURL)
-          // dropzoneInstance.emit("complete", file);
         })
       })
     },
