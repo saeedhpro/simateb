@@ -402,7 +402,11 @@ export default {
     },
     createHoliday() {
       const type = this.create ? 'holidays/createHoliday' : 'holidays/updateHoliday'
-      this.$store.dispatch(type, this.form)
+      const data = {
+        ...this.form,
+        organization_id: this.organization.id,
+      }
+      this.$store.dispatch(type, data)
         .then(() => {
           setTimeout(() => {
             this.closeForm()
