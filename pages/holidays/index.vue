@@ -334,7 +334,7 @@ export default {
       const start = moment.from(`${this.year}/01/01 00:00:00`, 'fa', 'YYYY/MM/DD HH:mm:ss')
         .locale("en")
         .format('YYYY-MM-DD HH:mm:ss')
-      const end = moment.from(`${this.year}/12/01 23:59:59`, 'fa', 'YYYY/MM/DD HH:mm:ss')
+      const end = moment.from(`${this.year + 1}/01/01 23:59:59`, 'fa', 'YYYY/MM/DD HH:mm:ss')
         .locale("en")
         .subtract("1 day").format('YYYY-MM-DD HH:mm:ss')
       this.search.start = start
@@ -404,7 +404,7 @@ export default {
       const type = this.create ? 'holidays/createHoliday' : 'holidays/updateHoliday'
       const data = {
         ...this.form,
-        organization_id: this.organization.id,
+        organization_id: this.loginUser.organization_id,
       }
       this.$store.dispatch(type, data)
         .then(() => {
@@ -450,9 +450,6 @@ export default {
     }
   },
   computed: {
-    organization() {
-      return this.$store.getters['organizations/getOrganization']
-    },
     holidays() {
       return this.$store.getters['holidays/getList']
     },
