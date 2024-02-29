@@ -450,6 +450,9 @@ export default {
     }
   },
   computed: {
+    organization() {
+      return this.$store.getters['organizations/getOrganization']
+    },
     holidays() {
       return this.$store.getters['holidays/getList']
     },
