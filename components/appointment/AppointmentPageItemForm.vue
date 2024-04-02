@@ -1662,9 +1662,11 @@ export default {
         })
     },
     sendResult() {
-      // if (this.newFiles.length == 0) {
-      //   return
-      // }
+      if (this.newFiles.length == 0) {
+        this.$toast.error('لطفا حداقل یک تصویر جدید بارگذاری نمایید')
+        this.loading = false
+        return
+      }
       if (!this.appointment.user_id) {
         this.loading = false
         return
@@ -1682,11 +1684,9 @@ export default {
         }
       })
         .then((res) => {
-            console.log(res, "res")
           this.$toast.success('با موفقیت انجام شد');
         })
         .catch(err => {
-            console.log(err, "err")
           this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
         })
         .finally(() => {

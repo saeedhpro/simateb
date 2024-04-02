@@ -112,8 +112,8 @@ const setupProgress = (axios, ctx) => {
 }
 
 export default (ctx, inject) => {
-  const baseURL = 'http://localhost:8000/api'
-  // const baseURL = 'https://api.sabaapp.ir/api'
+  // const baseURL = 'http://localhost:8000/api'
+  const baseURL = 'https://api.sabaapp.ir/api'
   const token = ctx.$cookies.get('access_token');
   const headers = {
     common: {
