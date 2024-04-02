@@ -13,8 +13,8 @@
           <v-checkbox
             v-model="selectedAll"
           ></v-checkbox>
-          <div class="selected-count" v-if="selectedCategories.length > 0">
-            {{ selectedCategories.length }}
+          <div class="selected-count" v-if="selectedItems.length > 0">
+            {{ selectedItems.length }}
           </div>
           <v-select
             outlined
@@ -41,7 +41,7 @@
       >
         <div @click="openCreateModal" class="page-actions">
           <img src="/images/pages/plus.svg" alt="users">
-          <span class="title-main">دسته بندی جدید</span>
+          <span class="title-main">نمونه کار جدید</span>
         </div>
       </v-col>
     </v-row>
@@ -52,23 +52,20 @@
         <data-table-component
           :headers="headers"
           :page="page"
-          :total="categories.meta.total"
+          :total="items.meta.total"
           @paginate="paginate"
         >
           <template v-slot:body>
-            <tr v-for="(i, n) in categories.data" :key="n">
+            <tr v-for="(i, n) in items.data" :key="n">
               <td class="text-center">{{ (page - 1) * 10 + n + 1 }}</td>
               <td class="text-center">
                 <div class="table-row flex flex-row align-center justify-start">
                   <input type="checkbox"
                          class="table-selectable-checkbox"
-                         v-model="selectedCategories"
+                         v-model="selectedItems"
                          :value="i"
                   />
-                  <img alt="" :src="getLogo(i)">
-                  <span><nuxt-link :to="`/admin/organizations/${organization.id}/samples/${i.id}`">{{
-                      i.name ? i.name : '-' | toPerisanNumber
-                    }}</nuxt-link></span>
+                  <img v-for="(img, n) in i.image_list" :key="n" alt="" :src="img">
                 </div>
               </td>
               <td class="text-center">{{ i.description ? i.description : '-' }}</td>
@@ -87,7 +84,7 @@
             </tr>
           </template>
           <template v-slot:notfound>
-            <div v-if="categories.meta.total === 0">اطلاعاتی یافت نشد</div>
+            <div v-if="items.meta.total === 0">اطلاعاتی یافت نشد</div>
           </template>
         </data-table-component>
       </v-col>
@@ -128,7 +125,7 @@
                 sm="12"
                 md="12"
               >
-                <div class="create-update-model-input-description">آیا از حذف کردن این دسته بندی اطمینان دارید؟
+                <div class="create-update-model-input-description">آیا از حذف کردن این نمونه کار اطمینان دارید؟
                 </div>
               </v-col>
             </v-row>
@@ -166,21 +163,19 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <create-sample-category
-      :open="showCreateModal"
+    <create-sample-item
       :organization_id="organization.id"
-      :title="'نمونه کار'"
-      :type="'sample'"
+      :category_id="categoryID"
+      :open="showCreateModal"
       @close="closeCreateModal"
       @done="doneCreateModal"
     />
-    <update-sample-category
-      :open="showUpdateModal"
-      v-if="sample && showUpdateModal"
+    <update-sample-item
+      v-if="item && showUpdateModal"
+      :item="item"
       :organization_id="organization.id"
-      :sample="sample"
-      :title="'نمونه کار'"
-      :type="'sample'"
+      :category_id="categoryID"
+      :open="showUpdateModal"
       @close="closeUpdateModal"
       @done="doneUpdateModal"
     />
@@ -189,14 +184,14 @@
 
 <script>
 import DataTableComponent from "~/components/panel/global/DataTableComponent";
-import CreateSampleCategory from "~/components/admin/sample/CreateSampleCategory.vue";
-import UpdateSampleCategory from "~/components/admin/sample/UpdateSampleCategory.vue";
+import CreateSampleItem from "~/components/admin/sample/CreateSampleItem.vue";
+import UpdateSampleItem from "~/components/admin/sample/UpdateSampleItem.vue";
 
 export default {
-  name: "AdminOrganizationSamplesComponent",
+  name: "AdminOrganizationSampleItemComponent",
   components: {
-    CreateSampleCategory,
-    UpdateSampleCategory,
+    UpdateSampleItem,
+    CreateSampleItem,
     DataTableComponent,
   },
   data() {
@@ -204,16 +199,8 @@ export default {
       showDelete: false,
       showCreateModal: false,
       showUpdateModal: false,
-      selectedCategories: [],
-      form: {
-        id: 0,
-        name: '',
-        type: 'sample',
-        description: '',
-        logo: '',
-        organization_id: 1,
-      },
-      categories: {
+      selectedItems: [],
+      items: {
         data: [],
         meta: {
           total: 0
@@ -221,7 +208,7 @@ export default {
       },
       headers: [
         '',
-        'عنوان',
+        'تصاویر',
         'توضیحات',
         'عملیات',
       ],
@@ -241,45 +228,43 @@ export default {
       action: null,
       selectedItem: null,
       showRemoveItemModal: false,
-      sample: null
+      sample: null,
+      item: null
     }
   },
   mounted() {
     this.paginate(1)
-    if (this.organization) {
-      this.form.organization_id = this.organization.id
-    }
   },
   methods: {
     paginate(page = 1) {
-      this.getCategoriesList()
+      this.getItemsList()
       this.$emit('paginate', page)
     },
-    getCategoriesList() {
-      this.selectedCategories = []
+    getItemsList() {
+      this.selectedItems = []
       const data =  {
         page: this.page,
         limit: this.limit,
-        id: this.organization.id,
+        id: this.$route.params.sample,
       }
-      this.$store.dispatch('admin/organizations/getSampleCategories',data)
+      this.$store.dispatch('admin/organizations/getSampleItems',data)
         .then(res => {
-          this.categories = {
+          this.items = {
             ...res.data,
           }
         })
     },
-    openCreateModal(category = null) {
-      if (category) {
+    openCreateModal(item = null) {
+      if (item) {
         this.form = {
-          ...category
+          ...item
         }
       }
       this.showCreateModal = true
     },
-    openUpdateModal(category) {
-      this.sample = {
-        ...category
+    openUpdateModal(item) {
+      this.item = {
+        ...item
       }
       this.showUpdateModal = true
     },
@@ -288,9 +273,11 @@ export default {
     },
     closeUpdateModal() {
       this.showUpdateModal = false
+      this.item = null
     },
     doneCreateModal() {
       this.showCreateModal = false
+      this.item = null
       this.paginate(1)
     },
     doneUpdateModal() {
@@ -309,22 +296,22 @@ export default {
       }
     },
     itemSelected(e) {
-      this.selectedCategories = e
+      this.selectedItems = e
     },
     toggleShowDelete() {
       this.showDelete = !this.showDelete
     },
     remove() {
-      this.deleteCategories(this.selectedCategories.map(i => i.id))
+      this.deleteItems(this.selectedItems.map(i => i.id))
         .then(()=> {
           this.action = null
-          this.selectedCategories = []
+          this.selectedItems = []
           this.toggleShowDelete()
-          this.getCategoriesList()
+          this.getItemsList()
         })
     },
-    deleteCategories(ids) {
-      return this.$store.dispatch('admin/organizations/deleteOrganizationCategories', {
+    deleteItems(ids) {
+      return this.$store.dispatch('admin/organizations/deleteOrganizationItems', {
         ids,
         id: this.organization.id,
       })
@@ -338,7 +325,7 @@ export default {
         })
     },
     getLogo(i) {
-      return i.logo
+      return i.icon ?? i.logo
     },
     showRemoveItem(id) {
       this.selectedItem = id
@@ -352,10 +339,13 @@ export default {
       this.toggleRemoveItemModal()
     },
     removeItem() {
-      this.deleteCategories([this.selectedItem])
+      this.deleteItems([this.selectedItem])
     }
   },
   computed: {
+    categoryID() {
+      return parseInt(this.$route.params.sample)
+    },
     organization() {
       return this.$store.getters['organizations/getOrganization']
     },
@@ -364,14 +354,14 @@ export default {
     },
     selectedAll: {
       get() {
-        return this.selectedCategories.length > 0 && this.selectedCategories.length === this.categories.data.length
+        return this.selectedItems.length > 0 && this.selectedItems.length === this.items.data.length
       },
       set(bool) {
         if (bool) {
-          this.selectedCategories = []
-          this.selectedCategories = this.categories.data
+          this.selectedItems = []
+          this.selectedItems = this.items.data
         } else {
-          this.selectedCategories = []
+          this.selectedItems = []
         }
       }
     },

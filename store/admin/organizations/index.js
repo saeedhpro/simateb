@@ -242,6 +242,95 @@ export const actions = {
       .catch(err => {
         return Promise.reject(err)
       })
+  },
+  getSampleCategories(ctx, data) {
+    const d = Object.entries(data);
+    const arr = [];
+    for (let i = 0; i < d.length; i++) {
+      if (d[i][1]) {
+        arr.push(`${d[i][0]}=${d[i][1]}`)
+      }
+    }
+    return this.$axios.get(`/admin/organizations/${data.id}/categories?${arr.join('&')}`)
+      .then(res => {
+        const data = res.data;
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  deleteOrganizationCategories(ctx, data) {
+    return this.$axios.post(`/admin/organizations/${data.id}/categories/deletes`, data)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  createOrganizationCategories(ctx, data) {
+    return this.$axios.post(`/admin/organizations/${data.id}/categories`, data)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  updateOrganizationCategory(ctx, data) {
+    return this.$axios.put(`/admin/organizations/${data.organization_id}/categories/${data.id}`, data)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  getOrganizationCategory(ctx, data) {
+    return this.$axios.get(`/admin/organizations/${data.organization_id}/categories/${data.id}`)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  getSampleItems(ctx, data) {
+    return this.$axios.get(`/admin/categories/${data.id}/samples?page=${data.page}&limit=${data.limit}`)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  deleteOrganizationItems(ctx, data) {
+    return this.$axios.post(`/admin/samples/deletes`, data)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  createOrganizationSample(ctx, data) {
+    return this.$axios.post(`/admin/samples`, data)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+    updateOrganizationSample(ctx, data) {
+    return this.$axios.put(`/admin/samples/${data.id}`, data)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
   }
 }
 

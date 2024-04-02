@@ -316,7 +316,6 @@ export default {
         })
     },
     deleteFaqs(ids) {
-      console.log(ids, "ids")
       return this.$store.dispatch('admin/organizations/deleteOrganizationFaqs', {
         ids
       })

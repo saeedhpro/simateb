@@ -66,6 +66,9 @@ main {
 .relative {
   position: relative;
 }
+.absolute {
+  position: absolute !important;
+}
 
 .open-drawer {
   display: none !important;
