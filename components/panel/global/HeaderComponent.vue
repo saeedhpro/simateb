@@ -228,6 +228,12 @@ export default {
           isAdmin: false,
         },
         {
+          link: '/refers',
+          title: 'ارجاعیات',
+          isAdmin: false,
+          onlyDoctor: true,
+        },
+        {
           link: '/reports',
           title: 'گزارش ها',
           isAdmin: false,

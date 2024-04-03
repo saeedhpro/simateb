@@ -1662,7 +1662,7 @@ export default {
         })
     },
     sendResult() {
-      if (this.newFiles.length == 0) {
+      if (this.newFiles.length == 0 && this.deletedResults.length == 0) {
         this.$toast.error('لطفا حداقل یک تصویر جدید بارگذاری نمایید')
         this.loading = false
         return
@@ -1857,7 +1857,7 @@ export default {
       return 'photography';
     },
     professionName() {
-      const profession_id = this.loginUser.organization.profession_id;
+      const profession_id = parseInt(this.loginUser.organization.profession_id);
       switch (profession_id) {
         case 1:
           return 'فتوگرافی';

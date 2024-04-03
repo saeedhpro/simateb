@@ -37,6 +37,18 @@ export const state = () => ({
   results: [],
   allResults: [],
   referedResults: [],
+  referedAppointments: {
+    data: [],
+    limit: 10,
+    page: 1,
+    sort: '',
+    total_rows: 0,
+    total_pages: 0,
+    meta: {
+      total: 0,
+      last_page: 1,
+    }
+  },
 })
 
 export const mutations = {
@@ -63,6 +75,9 @@ export const mutations = {
   },
   setPriceList(state, priceList) {
     state.priceList = priceList
+  },
+  setReferedAppointments(state, appointments) {
+    state.referedAppointments = appointments
   }
 }
 
@@ -373,6 +388,36 @@ export const actions = {
         return Promise.reject(err)
       })
   },
+  getReferedAppointments(ctx, data) {
+    console.log(data, "da")
+    const d = Object.entries(data);
+    const arr = [];
+    for (let i = 0; i < d.length; i++) {
+      if (d[i][1]) {
+        arr.push(`${d[i][0]}=${d[i][1]}`)
+      }
+    }
+    ctx.commit('setReferedAppointments', {
+      data: [],
+      limit: 10,
+      page: 1,
+      sort: '',
+      total_rows: 0,
+      total_pages: 0,
+      meta: {
+        total: 0,
+      }
+    })
+    return this.$axios.get(`/organizations/appointments/refered?${arr.join('&')}`)
+      .then(res => {
+        const data = res.data
+        ctx.commit('setReferedAppointments', data)
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
 }
 
 export const getters = {
@@ -393,6 +438,9 @@ export const getters = {
   },
   getReferedResults(state) {
     return state.referedResults
+  },
+  getReferedAppointments(state) {
+    return state.referedAppointments
   },
   getPriceList(state) {
     return state.priceList
