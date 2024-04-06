@@ -51,7 +51,7 @@ export default {
       this.$store.dispatch('users/getUsers', {limit: 100, page: 1})
     },
     getCaseTypes() {
-      this.$store.dispatch('cases/getCaseTypes', {type: 1})
+      this.$store.dispatch('cases/getCaseTypes', {type: 2})
     },
     togglePazireshModal() {
       this.showPazireshModal = !this.showPazireshModal
