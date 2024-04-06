@@ -345,7 +345,7 @@ export default {
     disableRadiologySelect() {
       if (!this.loginUser) return true
       const profession_id = this.loginUser.organization.profession_id
-      return profession_id != 5 && profession_id != 7
+      return profession_id <= 3
     }
   },
   watch: {

@@ -78,7 +78,8 @@ export default {
   },
   computed: {
     canSee() {
-      return this.$route.name !== 'admin-organizations-id-about'
+      return this.$route.name !== 'admin-organizations-id-about' &&
+        this.$route.name !== 'admin-organizations-id-samples'
     },
   }
 }

@@ -237,8 +237,8 @@
           <v-row class="search-box">
             <v-col
               cols="12"
-              sm="6"
-              md="4"
+              sm="4"
+              md="3"
             >
               <div class="create-update-model-input-box flex flex-row justify-start align-center">
                 <label class="mb-0 ml-2">سال</label>
@@ -254,6 +254,30 @@
                   <template slot="option" slot-scope="props">
                     <div class="option__desc"><span
                       class="option__title">{{ `${props.option}` }}</span></div>
+                  </template>
+                </multiselect>
+              </div>
+            </v-col>
+            <v-col
+              cols="12"
+              sm="4"
+              md="3"
+            >
+              <div class="create-update-model-input-box flex flex-row justify-start align-center">
+                <label class="mb-0 ml-2">ماه</label>
+                <multiselect
+                  v-model="month"
+                  :options="months"
+                  :close-on-select="true"
+                  :show-labels="false"
+                >
+                  <template slot="singleLabel" slot-scope="props"><span
+                    class="option__desc"><span
+                    class="option__title">{{ `${props.option.label}` }}</span></span>
+                  </template>
+                  <template slot="option" slot-scope="props">
+                    <div class="option__desc"><span
+                      class="option__title">{{ `${props.option.label}` }}</span></div>
                   </template>
                 </multiselect>
               </div>
@@ -340,6 +364,57 @@ export default {
       organization: null,
       selectedItem: null,
       selectedHolidays: [],
+      months: [
+        {
+          id: 1,
+          label: 'فروردین',
+        },
+        {
+          id: 2,
+          label: 'اردیبهشت',
+        },
+        {
+          id: 3,
+          label: 'خرداد',
+        },
+        {
+          id: 4,
+          label: 'تیر',
+        },
+        {
+          id: 5,
+          label: 'مرداد',
+        },
+        {
+          id: 6,
+          label: 'شهریور',
+        },
+        {
+          id: 7,
+          label: 'مهر',
+        },
+        {
+          id: 8,
+          label: 'آبان',
+        },
+        {
+          id: 9,
+          label: 'آذر',
+        },
+        {
+          id: 10,
+          label: 'دی',
+        },
+        {
+          id: 11,
+          label: 'بهمن',
+        },
+        {
+          id: 12,
+          label: 'اسفند',
+        },
+      ],
+      month: null,
     }
   },
   mounted() {
@@ -352,6 +427,7 @@ export default {
       this.changeYear()
     },
     changeYear() {
+      this.month = null
       const start = moment.from(`${this.year}/01/01 00:00:00`, 'fa', 'YYYY/MM/DD HH:mm:ss')
         .locale("en")
         .format('YYYY-MM-DD HH:mm:ss')
@@ -362,6 +438,26 @@ export default {
       this.search.start = start
       this.search.end = end
       this.paginate()
+    },
+    changeMonth() {
+      if (this.month) {
+        let month = this.month.id
+        if (month < 10) {
+          month = `0${month}`
+        }
+        const start = moment.from(`${this.year}/${month}/01 00:00:00`, 'fa', 'YYYY/MM/DD HH:mm:ss')
+          .locale("en")
+          .format('YYYY-MM-DD HH:mm:ss')
+        const end = moment.from(`${this.year}/${month}/01 00:00:00`, 'fa', 'YYYY/MM/DD HH:mm:ss')
+          .endOf('jMonth')
+          .locale("en")
+          .format('YYYY-MM-DD HH:mm:ss')
+        this.search.start = start
+        this.search.end = end
+        this.paginate()
+      } else {
+        this.changeYear()
+      }
     },
     doAction() {
       if (!this.action) return
@@ -525,6 +621,9 @@ export default {
   watch: {
     year() {
       this.changeYear()
+    },
+    month() {
+      this.changeMonth()
     }
   }
 }
