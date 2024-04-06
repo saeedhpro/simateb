@@ -140,24 +140,24 @@
                         }"
                     >{{ statuses[appointment.status - 1].title }}</div>
                   </div>
-                  <div class="phone-box second d-flex flex-row align-center" style="width: 100%" v-if="admissioned && !isReDoctor">
-                    <span class="small" style="width: 50px">
-                          کد اپ:
-                    </span>
-                    <span v-if="appointment.appcode">
-                      {{ appointment.appcode }}
-                    </span>
-                    <div class="d-flex flex-row align-center" style="width: 100%" v-else>
-                      <div>غیر فعال</div>
-                      <button
-                        class="main-button form-button mr-1"
-                        style="max-width: 180px"
-                        @click="doAction('appcode')"
-                      >
-                        ایجاد کد جدید
-                      </button>
-                    </div>
-                  </div>
+<!--                  <div class="phone-box second d-flex flex-row align-center" style="width: 100%" v-if="admissioned && !isReDoctor">-->
+<!--                    <span class="small" style="width: 50px">-->
+<!--                          کد اپ:-->
+<!--                    </span>-->
+<!--                    <span v-if="appointment.appcode">-->
+<!--                      {{ appointment.appcode }}-->
+<!--                    </span>-->
+<!--&lt;!&ndash;                    <div class="d-flex flex-row align-center" style="width: 100%" v-else>&ndash;&gt;-->
+<!--&lt;!&ndash;                      <div>غیر فعال</div>&ndash;&gt;-->
+<!--&lt;!&ndash;                      <button&ndash;&gt;-->
+<!--&lt;!&ndash;                        class="main-button form-button mr-1"&ndash;&gt;-->
+<!--&lt;!&ndash;                        style="max-width: 180px"&ndash;&gt;-->
+<!--&lt;!&ndash;                        @click="doAction('appcode')"&ndash;&gt;-->
+<!--&lt;!&ndash;                      >&ndash;&gt;-->
+<!--&lt;!&ndash;                        ایجاد کد جدید&ndash;&gt;-->
+<!--&lt;!&ndash;                      </button>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </div>&ndash;&gt;-->
+<!--                  </div>-->
                 </div>
               </v-col>
             </v-row>
@@ -1848,10 +1848,13 @@ export default {
       const profession_id = this.loginUser.organization.profession_id;
       switch (profession_id) {
         case 1:
+        case "1":
           return 'photography';
         case 2:
+        case "2":
           return 'laboratory';
         case 3:
+        case "3":
           return 'radiology';
       }
       return 'photography';

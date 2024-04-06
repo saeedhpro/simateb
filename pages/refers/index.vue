@@ -11,6 +11,7 @@
             ارجاعیات
             </span>
           </div>
+          <v-divider inset v-if="!mini"/>
         </div>
       </v-col>
     </v-row>
@@ -223,7 +224,7 @@
                       }}</nuxt-link>
                     </span>
                     </td>
-                    <td class="text-center">{{ i.user && i.user.age ? i.user.age : '-' }}</td>
+                    <td class="text-center">{{ getOrganizations(i) }}</td>
                     <td class="text-center" v-if="i.start_at_ago_fa">
                       {{ i.start_at_ago_fa }}
                     </td>
@@ -433,6 +434,19 @@ export default {
     },
     isReDoctor(id) {
       return false
+    },
+    getOrganizations(app) {
+      let names = [];
+      if (app.photography) {
+        names.push(app.photography.name)
+      }
+      if (app.radiology) {
+        names.push(app.radiology.name)
+      }
+      if (app.doctor) {
+        names.push(app.doctor.name)
+      }
+      return names.join(' - ')
     }
   },
   computed: {

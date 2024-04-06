@@ -107,7 +107,7 @@
                   v-for="(p, n) in radiologyCasesArray"
                   :key="n"
                   class="prescription radiology"
-                  :class="{'resulted': resulted, 'admissioned': admissioned}"
+                  :class="{'resulted': resulted(3), 'admissioned': admissioned(3)}"
                 >
                   {{ p  }}
                 </span>
@@ -144,7 +144,7 @@
                   v-for="(p, n) in photographyCasesArray"
                   :key="n"
                   class="prescription photography"
-                  :class="{'resulted': resulted, 'admissioned': admissioned}"
+                  :class="{'resulted': resulted(1), 'admissioned': admissioned(1)}"
                 >
                   {{ p  }}
                 </span>
@@ -179,7 +179,7 @@
                 {{ doctor ? doctor.name : '' }}<span v-if="!isReDoctor"> (ارجاع شده)</span>:
                 <span
                   class="prescription photography"
-                  :class="{'resulted': resulted, 'admissioned': admissioned}"
+                  :class="{'resulted': resulted(1), 'admissioned': admissioned(1)}"
                   v-if="doctorDesc"
                 >
                   {{ doctorDesc  }}
@@ -602,7 +602,42 @@ export default {
     },
     onMagnifyClick() {
 
-    }
+    },
+    resulted(type) {
+      if (!type) {
+        type = this.loginUser.organization.profession_id;
+      }
+      if (type == 1) {
+        return this.pAdmissionAt != "" && this.pResultAt != "" && this.pAdmissionAt != null && this.pResultAt != null
+      } else if (type == 2) {
+        return this.lAdmissionAt != "" && this.lResultAt != "" && this.lAdmissionAt != null && this.lResultAt != null
+      } else if (type == 3) {
+        return this.rAdmissionAt != "" && this.rResultAt != "" && this.rAdmissionAt != null && this.rResultAt != null
+      } else if (this.isReDoctor) {
+        return this.dAdmissionAt != "" && this.dResultAt != "" && this.dAdmissionAt != null && this.dResultAt != null
+      } else {
+        return (this.pAdmissionAt != "" && this.pResultAt != "" && this.pAdmissionAt != null && this.pResultAt != null) ||
+          (this.lAdmissionAt != "" && this.lResultAt != "" && this.lAdmissionAt != null && this.lResultAt) ||
+          (this.rAdmissionAt != "" && this.rResultAt != "" && this.rAdmissionAt != null && this.rResultAt != null);
+      }
+    },
+    admissioned(type) {
+      if (!type) {
+        type = this.loginUser.organization.profession_id;
+      }
+      if (type == 1) {
+        return this.pAdmissionAt != "" && this.pAdmissionAt != null
+      } else if (type == 2) {
+        return this.lAdmissionAt != "" && this.lAdmissionAt != null
+      } else if (type == 3) {
+        return this.rAdmissionAt != "" && this.rAdmissionAt != null
+      } else if (this.isReDoctor) {
+        return this.dAdmissionAt != "" && this.dAdmissionAt != null
+      }
+      return this.pAdmissionAt != "" && this.pAdmissionAt != null ||
+        this.lAdmissionAt != "" && this.lAdmissionAt != null ||
+        this.rAdmissionAt != "" && this.rAdmissionAt != null;
+    },
   },
   computed: {
     canSeeInfo() {
@@ -647,37 +682,6 @@ export default {
     },
     isDoctor() {
       return this.loginUser.organization_id == this.organizationId
-    },
-    resulted() {
-      const type = this.loginUser.organization.profession_id;
-      if (type == 1) {
-        return this.pAdmissionAt != "" && this.pResultAt != "" && this.pAdmissionAt != null && this.pResultAt != null
-      } else if (type == 2) {
-        return this.lAdmissionAt != "" && this.lResultAt != "" && this.lAdmissionAt != null && this.lResultAt != null
-      } else if (type == 3) {
-        return this.rAdmissionAt != "" && this.rResultAt != "" && this.rAdmissionAt != null && this.rResultAt != null
-      } else if (this.isReDoctor) {
-        return this.dAdmissionAt != "" && this.dResultAt != "" && this.dAdmissionAt != null && this.dResultAt != null
-      } else {
-        return (this.pAdmissionAt != "" && this.pResultAt != "" && this.pAdmissionAt != null && this.pResultAt != null) ||
-          (this.lAdmissionAt != "" && this.lResultAt != "" && this.lAdmissionAt != null && this.lResultAt) ||
-          (this.rAdmissionAt != "" && this.rResultAt != "" && this.rAdmissionAt != null && this.rResultAt != null);
-      }
-    },
-    admissioned() {
-      const type = this.loginUser.organization.profession_id;
-      if (type == 1) {
-        return this.pAdmissionAt != "" && this.pAdmissionAt != null
-      } else if (type == 2) {
-        return this.lAdmissionAt != "" && this.lAdmissionAt != null
-      } else if (type == 3) {
-        return this.rAdmissionAt != "" && this.rAdmissionAt != null
-      } else if (this.isReDoctor) {
-        return this.dAdmissionAt != "" && this.dAdmissionAt != null
-      }
-      return this.pAdmissionAt != "" && this.pAdmissionAt != null ||
-        this.lAdmissionAt != "" && this.lAdmissionAt != null ||
-        this.rAdmissionAt != "" && this.rAdmissionAt != null;
     },
     profession() {
       const profession_id = this.loginUser.organization.profession_id;
