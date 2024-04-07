@@ -282,6 +282,30 @@
                 </multiselect>
               </div>
             </v-col>
+            <v-col
+              cols="12"
+              sm="4"
+              md="3"
+            >
+              <div class="create-update-model-input-box flex flex-row justify-start align-center">
+                <label class="mb-0 ml-2">موسسه</label>
+                <multiselect
+                  v-model="org"
+                  :options="allOrganizations"
+                  :close-on-select="true"
+                  :show-labels="false"
+                >
+                  <template slot="singleLabel" slot-scope="props"><span
+                    class="option__desc"><span
+                    class="option__title">{{ `${props.option.name}` }}</span></span>
+                  </template>
+                  <template slot="option" slot-scope="props">
+                    <div class="option__desc"><span
+                      class="option__title">{{ `${props.option.name}` }}</span></div>
+                  </template>
+                </multiselect>
+              </div>
+            </v-col>
           </v-row>
           <v-row>
             <v-col
@@ -354,6 +378,7 @@ export default {
         page: 1,
         start: '',
         end: '',
+        organization_id: null,
       },
       form: {
         organization_id: null,
@@ -362,6 +387,7 @@ export default {
       },
       year: 1398,
       organization: null,
+      org: null,
       selectedItem: null,
       selectedHolidays: [],
       months: [
@@ -459,6 +485,14 @@ export default {
         this.changeYear()
       }
     },
+    changeOrg() {
+      if (this.org) {
+        this.search.organization_id = this.org.id
+      } else {
+        this.search.organization_id = null
+      }
+      this.paginate()
+    },
     doAction() {
       if (!this.action) return
       switch (this.action) {
@@ -474,6 +508,7 @@ export default {
     clearFilterForm() {
       this.search = {
         page: this.search.page,
+        organization_id: null,
         start: '',
         end: '',
         q: '',
@@ -508,7 +543,11 @@ export default {
       this.getHolidayList()
     },
     getHolidayList() {
-      this.$store.dispatch('admin/holidays/getList', this.search)
+      const data = {
+        ...this.search,
+      }
+      console.log(data, "filter")
+      this.$store.dispatch('admin/holidays/getList', data)
     },
     getStatus(sent) {
       return sent ? 'ارسال شده' : 'ارسال نشد'
@@ -596,6 +635,15 @@ export default {
     organizations() {
       return this.$store.getters['admin/organizations/getOrganizations']
     },
+    allOrganizations() {
+      return [
+        {
+          id: 'all',
+          name: 'مدیریت'
+        },
+        ...this.organizations
+      ];
+    },
     selectedAll: {
       get() {
         return this.selectedHolidays.length > 0 && this.selectedHolidays.length === this.holidays.data.length
@@ -624,6 +672,9 @@ export default {
     },
     month() {
       this.changeMonth()
+    },
+    org() {
+      this.changeOrg()
     }
   }
 }

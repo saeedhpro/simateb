@@ -81,16 +81,75 @@
                           <v-row>
                             <v-col
                               cols="12"
-                              sm="4"
-                              v-for="(p, i) in professions"
-                              :key="i"
+                              sm="6"
+                              md="4"
                             >
-                              <v-checkbox
-                                v-model="search.professions"
-                                :value="p.id"
-                                :label="p.name.toString()"
-                                hide-details
-                              ></v-checkbox>
+                              <div class="create-update-model-input-box flex flex-row justify-start align-center">
+                                <label class="mb-0 ml-2">تخصص</label>
+                                <multiselect
+                                  v-model="search.professions"
+                                  :options="professions"
+                                  :close-on-select="true"
+                                  :show-labels="false"
+                                >
+                                  <template slot="singleLabel" slot-scope="props"><span
+                                    class="option__desc"><span
+                                    class="option__title">{{ `${props.option.name}` }}</span></span>
+                                  </template>
+                                  <template slot="option" slot-scope="props">
+                                    <div class="option__desc"><span
+                                      class="option__title">{{ `${props.option.name}` }}</span></div>
+                                  </template>
+                                </multiselect>
+                              </div>
+                            </v-col>
+                            <v-col
+                              cols="12"
+                              sm="6"
+                              md="4"
+                            >
+                              <div class="create-update-model-input-box flex flex-row justify-start align-center">
+                                <label class="mb-0 ml-2">مطب</label>
+                                <multiselect
+                                  v-model="search.organization_id"
+                                  :options="organizations"
+                                  :close-on-select="true"
+                                  :show-labels="false"
+                                >
+                                  <template slot="singleLabel" slot-scope="props"><span
+                                    class="option__desc"><span
+                                    class="option__title">{{ `${props.option.name}` }}</span></span>
+                                  </template>
+                                  <template slot="option" slot-scope="props">
+                                    <div class="option__desc"><span
+                                      class="option__title">{{ `${props.option.name}` }}</span></div>
+                                  </template>
+                                </multiselect>
+                              </div>
+                            </v-col>
+                            <v-col
+                              cols="12"
+                              sm="6"
+                              md="4"
+                            >
+                              <div class="create-update-model-input-box flex flex-row justify-start align-center">
+                                <label class="mb-0 ml-2">وضعیت</label>
+                                <multiselect
+                                  v-model="search.status"
+                                  :options="statusList"
+                                  :close-on-select="true"
+                                  :show-labels="false"
+                                >
+                                  <template slot="singleLabel" slot-scope="props"><span
+                                    class="option__desc"><span
+                                    class="option__title">{{ `${props.option.name}` }}</span></span>
+                                  </template>
+                                  <template slot="option" slot-scope="props">
+                                    <div class="option__desc"><span
+                                      class="option__title">{{ `${props.option.name}` }}</span></div>
+                                  </template>
+                                </multiselect>
+                              </div>
                             </v-col>
                           </v-row>
                           <v-row>
@@ -270,6 +329,7 @@ import { debounce } from "lodash";
 import DataTableComponent from "~/components/panel/global/DataTableComponent";
 import CropImageComponent from "~/components/panel/global/CropImageComponent";
 import LoadingCard from "~/components/global/LoadingCard.vue";
+import organizations from "~/pages/admin/organizations/index.vue";
 
 export default {
   name: "index",
@@ -295,7 +355,12 @@ export default {
         page: 1,
         start: '',
         end: '',
-        professions: [],
+        professions: {
+          id: null,
+          name: 'همه'
+        },
+        organization_id: null,
+        status: null,
       },
       showFilterModal: false,
       loading: false,
@@ -331,11 +396,29 @@ export default {
           background: '#FFF9EB'
         }
       ],
+      statusList: [
+        {
+          id: null,
+          name: 'همه',
+        },
+        {
+          id: 'waiting',
+          name: 'در انتظار مراجعه',
+        },
+        {
+          id: 'accepted',
+          title: 'پذیرش شده',
+        },
+        {
+          id: 'resulted',
+          title: 'نتایج ارسال شده',
+        },
+      ],
     }
   },
   mounted() {
     this.paginate()
-    this.getProfessions()
+    this.getOrganizationsByProfession()
   },
   methods: {
     paginate(page = 1) {
@@ -349,7 +432,9 @@ export default {
       this.showFilterModal = false
       const data = {
         ...this.search,
-        professions: this.search.professions.join(','),
+        professions: this.search.professions ? this.search.professions.id : null,
+        organization_id: this.search.organization_id ? this.search.organization_id.id : null,
+        status: this.search.status ? this.search.status.id : null,
       }
       this.$store.dispatch('appointments/getReferedAppointments', data)
     },
@@ -365,7 +450,12 @@ export default {
         page: this.search.page,
         start: '',
         end: '',
-        professions: [],
+        professions: {
+          id: null,
+          name: 'همه'
+        },
+        organization_id: null,
+        status: null,
       }
     },
     getLogo(user) {
@@ -378,9 +468,6 @@ export default {
           return '/images/profile/man.svg'
         }
       }
-    },
-    getProfessions() {
-      this.$store.dispatch('admin/professions/getProfessions')
     },
     resulted(appointment, type) {
       if (!type) {
@@ -447,14 +534,46 @@ export default {
         names.push(app.doctor.name)
       }
       return names.join(' - ')
+    },
+    getOrganizationsByProfession() {
+      let professions = this.search.professions
+      let id = professions ? professions.id : null
+      if (id && id > 3) {
+        id = 'doctor'
+      }
+      this.$store.dispatch('organizations/getReferedDoctorList', id)
     }
   },
   computed: {
+    organizations() {
+      return this.$store.getters['organizations/getReferedDoctorList']
+    },
     appointments() {
       return this.$store.getters['appointments/getReferedAppointments']
     },
     professions() {
-      return this.$store.getters['admin/professions/getProfessions']
+      return [
+        {
+          id: null,
+          name: 'همه'
+        },
+        {
+          id: 'doctor',
+          name: 'دکتر'
+        },
+        {
+          id: 1,
+          name: 'فوتوگرافی'
+        },
+        {
+          id: 3,
+          name: 'رادیولوژی'
+        },
+        {
+          id: 2,
+          name: 'آزمایشگاه'
+        },
+      ]
     },
     loginUser() {
       return this.$store.getters['login/getUser']
@@ -463,6 +582,11 @@ export default {
       return this.$vuetify.breakpoint.mdAndDown
     },
   },
+  watch: {
+    'search.professions'(val) {
+      this.getOrganizationsByProfession()
+    }
+  }
 }
 </script>
 
