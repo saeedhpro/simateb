@@ -29,7 +29,14 @@ export const mutations = {
 
 export const actions = {
   getList(ctx, data) {
-    return this.$axios.get(`/admin/holidays?page=${data.page}&q=${data.q}&start=${data.start}&end=${data.end}`)
+    const d = Object.entries(data);
+    const arr = [];
+    for (let i = 0; i < d.length; i++) {
+      if (d[i][1]) {
+        arr.push(`${d[i][0]}=${d[i][1]}`)
+      }
+    }
+    return this.$axios.get(`/admin/holidays?${arr.join('&')}`)
       .then(res => {
         const data = res.data;
         ctx.commit('setList', data)

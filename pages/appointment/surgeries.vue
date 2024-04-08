@@ -1,6 +1,5 @@
 <template>
   <v-container
-    fluid
   >
     <appointment-page-header
       @togglePazireshModal="togglePazireshModal"

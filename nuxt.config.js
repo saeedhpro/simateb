@@ -81,7 +81,11 @@ export default {
       name: 'سیماطب',
       short_name: 'سیماطب',
       lang: 'fa'
-    }
+    },
+    icon: {
+      sizes: [64, 120, 144, 152, 192, 384, 512],
+    },
+    targetDir: "static"
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify

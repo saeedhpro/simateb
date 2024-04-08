@@ -3,6 +3,7 @@ export const state = () => ({
   radiologyList: [],
   photographyList: [],
   relationDoctorList: [],
+  referedDoctorList: [],
   organization: null,
   workHour: {
     start: '',
@@ -24,6 +25,9 @@ export const mutations = {
   },
   setOrganization(state, organization) {
     state.organization = organization
+  },
+  setReferedDoctorList(state, referedDoctorList) {
+    state.referedDoctorList = referedDoctorList
   },
   setOrganizationWorkHour(state, workHour) {
     state.workHour = {
@@ -88,6 +92,7 @@ export const actions = {
   updateOrganizationCases(ctx, data) {
     return this.$axios.put(`/organizations/${data.id}/cases`, data)
       .then(res => {
+        const data = res.data;
         ctx.commit('login/setOrganizationCases', data.cases);
         return Promise.resolve(res)
       })
@@ -98,6 +103,7 @@ export const actions = {
   updateOrganizationWorkHour(ctx, data) {
     return this.$axios.put(`/organizations/${data.organization_id}/work`, data)
       .then(res => {
+        const data = res.data;
         ctx.commit('setOrganizationWorkHour', data)
         return Promise.resolve(res)
       })
@@ -108,6 +114,19 @@ export const actions = {
   createCardToCard(ctx, data) {
     return this.$axios.post(`/organizations/payments`, data)
       .then(res => {
+        const data = res.data;
+        ctx.commit('setOrganizationWorkHour', data)
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  getReferedDoctorList(ctx, profession_id) {
+    return this.$axios.get(`/organizations/professional?profession_id=${profession_id}`)
+      .then(res => {
+        const data = res.data.data;
+        ctx.commit('setReferedDoctorList', data)
         return Promise.resolve(res)
       })
       .catch(err => {
@@ -125,6 +144,9 @@ export const getters = {
   },
   getRelationDoctorList(state) {
     return state.relationDoctorList
+  },
+  getReferedDoctorList(state) {
+    return state.referedDoctorList
   },
   getOrganization(state) {
     return state.organization

@@ -389,7 +389,6 @@ export const actions = {
       })
   },
   getReferedAppointments(ctx, data) {
-    console.log(data, "da")
     const d = Object.entries(data);
     const arr = [];
     for (let i = 0; i < d.length; i++) {
