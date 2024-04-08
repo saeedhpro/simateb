@@ -359,8 +359,14 @@ export default {
           id: null,
           name: 'همه'
         },
-        organization_id: null,
-        status: null,
+        organization_id: {
+          id: null,
+          name: 'همه'
+        },
+        status: {
+          id: null,
+          name: 'همه'
+        },
       },
       showFilterModal: false,
       loading: false,
@@ -407,11 +413,11 @@ export default {
         },
         {
           id: 'accepted',
-          title: 'پذیرش شده',
+          name: 'پذیرش شده',
         },
         {
           id: 'resulted',
-          title: 'نتایج ارسال شده',
+          name: 'نتایج ارسال شده',
         },
       ],
     }
@@ -454,8 +460,14 @@ export default {
           id: null,
           name: 'همه'
         },
-        organization_id: null,
-        status: null,
+        organization_id: {
+          id: null,
+          name: 'همه'
+        },
+        status: {
+          id: null,
+          name: 'همه'
+        },
       }
     },
     getLogo(user) {
@@ -546,7 +558,13 @@ export default {
   },
   computed: {
     organizations() {
-      return this.$store.getters['organizations/getReferedDoctorList']
+      return [
+        {
+          id: null,
+          name: 'همه'
+        },
+        ...this.$store.getters['organizations/getReferedDoctorList']
+      ]
     },
     appointments() {
       return this.$store.getters['appointments/getReferedAppointments']
