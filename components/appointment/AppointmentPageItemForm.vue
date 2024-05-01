@@ -1010,6 +1010,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <input type="hidden" value="1" id="index"/>
   </div>
 </template>
 <script>
@@ -1051,10 +1052,19 @@ export default {
   data() {
     return {
       dropzoneOptions: {
-        url: "https://api.sabaapp.ir/api/upload",
+        // url: "https://api.sabaapp.ir/api/upload",
+        url: "http://127.0.0.1:8000/api/upload",
         thumbnailWidth: 100,
         thumbnailHeight: 100,
         addRemoveLinks: true,
+        init: function() {
+          this.on('sending', function(file, xhr, formData) {
+            let index = document.getElementById('index')
+            let random = parseInt(index.value)
+            index.value = random + 1
+            formData.append('index', random);
+          });
+        }
       },
       loading: true,
       removed_items: [],
@@ -1124,7 +1134,9 @@ export default {
     },
     onSuccess(e, l) {
       e.url = l.url
+      e.index = parseInt(l.index)
       this.newFiles.push(e)
+      this.newFiles = this.newFiles.sort((a, b) => a.index < b.index ? -1 : a.index > b.index ? 1 : 0)
     },
     onRemove(e) {
       this.newFiles = this.newFiles.filter(i => i.upload.uuid != e.upload.uuid)
