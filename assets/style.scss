@@ -1355,6 +1355,8 @@ tr.waiting {
         border-radius: 8px;
         box-shadow: 0 12px 16px rgb(20 20 50 / 8%);
         border: 1px solid rgba(20, 20, 50, 0.08);
+        min-width: 100px;
+        max-width: 110px;
       }
     }
   }
@@ -1984,6 +1986,7 @@ tr.waiting {
       cursor: pointer;
       border-radius: 8px;
       width: 100%;
+      min-width: 100px;
     }
   }
 
@@ -5662,5 +5665,10 @@ tr.waiting {
   img {
     width: 100px;
     height: 100px;
+  }
+}
+.paziresh-form {
+  .prescription-image {
+    width: 100px;
   }
 }

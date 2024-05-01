@@ -85,6 +85,38 @@ export default {
     icon: {
       sizes: [64, 120, 144, 152, 192, 384, 512],
     },
+    "icons": [
+      {
+        "src": "images/logo.png",
+        "sizes": "48x48",
+        "type": "image/png"
+      },
+      {
+        "src": "images/logo.png",
+        "sizes": "72x72",
+        "type": "image/png"
+      },
+      {
+        "src": "images/logo.png",
+        "sizes": "96x96",
+        "type": "image/png"
+      },
+      {
+        "src": "images/logo.png",
+        "sizes": "144x144",
+        "type": "image/png"
+      },
+      {
+        "src": "images/logo.png",
+        "sizes": "168x168",
+        "type": "image/png"
+      },
+      {
+        "src": "images/logo.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      }
+    ],
     targetDir: "static"
   },
 
