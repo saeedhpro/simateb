@@ -161,6 +161,20 @@
                   v-model="organization.sms_credit"
                 />
               </v-col>
+              <v-col
+                cols="12"
+                sm="6"
+                md="4"
+              >
+                <div class="create-update-model-input-box">
+                  <label>وضعیت ارسال پیامک</label>
+                  <v-switch
+                    v-model="organization.is_sms_active"
+                    inset
+                    :label="organization.is_sms_active ? `فعال` : `غیرفعال`"
+                  ></v-switch>
+                </div>
+              </v-col>
             </v-row>
             <v-row>
               <v-col
@@ -368,6 +382,7 @@ export default {
       this.organization = {
         id: this.item.id,
         name: this.item.name,
+        is_sms_active: this.item.is_sms_active,
         new: null,
         profession_id: this.item.profession_id,
         website: this.item.website,
