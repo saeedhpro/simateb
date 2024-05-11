@@ -1052,8 +1052,8 @@ export default {
   data() {
     return {
       dropzoneOptions: {
-        // url: "https://api.sabaapp.ir/api/upload",
-        url: "http://127.0.0.1:8000/api/upload",
+        url: "https://api.sabaapp.ir/api/upload",
+        // url: "http://127.0.0.1:8000/api/upload",
         thumbnailWidth: 100,
         thumbnailHeight: 100,
         addRemoveLinks: true,
