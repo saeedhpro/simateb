@@ -1051,22 +1051,6 @@ export default {
   },
   data() {
     return {
-      dropzoneOptions: {
-        url: "https://api.sabaapp.ir/api/upload",
-        // url: "http://127.0.0.1:8000/api/upload",
-        thumbnailWidth: 100,
-        thumbnailHeight: 100,
-        addRemoveLinks: true,
-        maxFilesize: this.loginUser.organization.profession_id == 3 ? 1000 : 5000,
-        init: function() {
-          this.on('sending', function(file, xhr, formData) {
-            let index = document.getElementById('index')
-            let random = parseInt(index.value)
-            index.value = random + 1
-            formData.append('index', random);
-          });
-        }
-      },
       loading: true,
       removed_items: [],
       appointment: {
@@ -1719,6 +1703,25 @@ export default {
     }
   },
   computed: {
+    dropzoneOptions() {
+      let self = this;
+      return {
+        url: "https://api.sabaapp.ir/api/upload",
+        // url: "http://127.0.0.1:8000/api/upload",
+        thumbnailWidth: 100,
+        thumbnailHeight: 100,
+        addRemoveLinks: true,
+        maxFilesize: self.loginUser.organization.profession_id == 3 ? 1 : 5,
+        init: function() {
+          this.on('sending', function(file, xhr, formData) {
+            let index = document.getElementById('index')
+            let random = parseInt(index.value)
+            index.value = random + 1
+            formData.append('index', random);
+          });
+        }
+      }
+    },
     moment() {
       return moment
     },
