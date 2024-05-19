@@ -1057,6 +1057,7 @@ export default {
         thumbnailWidth: 100,
         thumbnailHeight: 100,
         addRemoveLinks: true,
+        maxFilesize: this.loginUser.organization.profession_id == 3 ? 1000 : 5000,
         init: function() {
           this.on('sending', function(file, xhr, formData) {
             let index = document.getElementById('index')
