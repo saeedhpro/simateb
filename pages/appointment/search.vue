@@ -474,6 +474,7 @@ export default {
         })
     },
     onSearch: debounce(function ($e) {
+      this.search.page = 1
       let value = $e.target.value;
       this.getAppointmentList()
     }, 500),

@@ -460,6 +460,7 @@ export default {
       this.getUsersList()
     },
     onSearch: debounce(function ($e) {
+      this.search.page = 1
       this.getUsersList()
     }, 500),
     getUsersList() {
