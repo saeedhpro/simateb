@@ -432,6 +432,7 @@ export default {
       this.getAppointmentsList()
     },
     onSearch: debounce(function ($e) {
+      this.search.page = 1
       this.getAppointmentsList()
     }, 500),
     getAppointmentsList() {

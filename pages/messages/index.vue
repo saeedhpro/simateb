@@ -382,6 +382,7 @@ export default {
   },
   methods: {
     onSearch: debounce(function ($e) {
+      this.search.page = 1
       this.getMessageList()
     }, 500),
     doAction() {
