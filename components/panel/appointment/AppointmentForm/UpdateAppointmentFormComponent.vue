@@ -109,6 +109,7 @@
                 <custom-text-input
                   :label="'شماره پرونده'"
                   v-model="appointment.file_id"
+                  @input="getUserByFileId"
                 />
               </v-col>
               <v-col
@@ -515,6 +516,38 @@ export default {
         }
       }
     },
+    getUserByFileId: debounce(function (file_id) {
+      if (file_id) {
+        this.$axios.get(`/organizations/patients/file_id/${file_id}`)
+          .then(res => {
+            const user = res.data.data
+            if (user) {
+              this.user = user
+              this.appointment.file_id = user.file_id
+              this.appointment.cardno = user.cardno
+              this.appointment.user_id = user.id
+              this.appointment.tel = user.tel
+            } else {
+              this.user = null
+              // this.appointment.file_id = ''
+              this.appointment.cardno = ''
+              this.appointment.user_id = null
+              this.appointment.tel = ''
+            }
+          })
+          .catch(err => {})
+      } else {
+        if (!this.user) {
+          this.user = null
+          // this.appointment.file_id = ''
+          this.appointment.cardno = ''
+          this.appointment.user_id = null
+          this.appointment.tel = ''
+        } else {
+          this.appointment.file_id = this.user.file_id
+        }
+      }
+    }, 500),
   },
   computed: {
     cases() {

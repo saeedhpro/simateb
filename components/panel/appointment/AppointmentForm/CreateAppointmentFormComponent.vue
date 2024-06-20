@@ -460,7 +460,6 @@ export default {
         this.$axios.get(`/organizations/patients/file_id/${file_id}`)
           .then(res => {
             const user = res.data.data
-            console.log(user, "user")
             if (user) {
               this.user = user
               this.appointment.file_id = user.file_id
