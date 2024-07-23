@@ -458,8 +458,8 @@ export default {
   },
   methods: {
     onTelChanged: debounce(function ($e) {
-      let val = $e.target.value;
-        if (val && val.length >= 11 && val.length <= 13) {
+      let val = $e;
+      if (val && val.length >= 11 && val.length <= 13) {
         this.getUser(val)
       }
     }, 500),
