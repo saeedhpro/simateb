@@ -332,8 +332,15 @@
                 <button
                   class="main-button"
                   @click="createUser"
+                  :disabled="createUserLoading"
                 >
-                  ذخیره
+                  <v-progress-circular
+                    indeterminate
+                    color="white"
+                    :size="17"
+                    :width="4"
+                    v-if="createUserLoading"/>
+                  <span v-else>ذخیره</span>
                 </button>
               </v-col>
             </v-row>
@@ -355,10 +362,12 @@ import CustomToggleInput from "~/components/custom/CustomToggleInput";
 import CustomNationalCodeInput from "~/components/custom/CustomNationalCodeInput";
 import CustomPhoneNumberInput from "~/components/custom/CustomPhoneNumberInput";
 import CustomPriceInput from "~/components/custom/CustomPriceInput";
+import LoadingCard from "~/components/global/LoadingCard.vue";
 
 export default {
   name: "CreateUserFormComponent",
   components: {
+    LoadingCard,
     CustomPriceInput,
     CustomPhoneNumberInput,
     CustomNationalCodeInput,
@@ -442,6 +451,7 @@ export default {
         name: "همدان",
         county_id: 419,
       },
+      createUserLoading: false
     }
   },
   mounted() {
@@ -647,6 +657,7 @@ export default {
       this.form.new = file
     },
     createUser() {
+      this.createUserLoading = true
       if (this.validateFrom()) {
         const data = {
           ...this.form,
@@ -655,11 +666,17 @@ export default {
         this.$store.dispatch('users/createUser', data)
           .then((res) => {
             this.$toast.success('با موفقیت انجام شد');
-            this.closeForm(true, res.data.data)
+            setTimeout(() => {
+              this.createUserLoading = false
+              this.closeForm(true, res.data.data)
+            }, 1000)
           })
           .catch(err => {
+            this.createUserLoading = false
             this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
           })
+      } else {
+        this.createUserLoading = false
       }
     },
     getProvinces() {

@@ -115,7 +115,16 @@ export const actions = {
     return this.$axios.post(`/organizations/payments`, data)
       .then(res => {
         const data = res.data;
-        ctx.commit('setOrganizationWorkHour', data)
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  getCardToCard(ctx, data) {
+    return this.$axios.get(`/organizations/payments?page=${data.page}&limit=${data.limit}`, data)
+      .then(res => {
+        const data = res.data;
         return Promise.resolve(res)
       })
       .catch(err => {

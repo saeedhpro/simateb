@@ -5,12 +5,18 @@
     <v-row>
       <v-col align-self="center">
         <div class="page-header-box messages pay">
-          <div class="page-header">
+          <nuxt-link to="/messages/pay" class="page-header">
             <img src="/images/pages/sms.svg" alt="organizations">
             <span class="title">
             افزایش اعتبار پیامک
           </span>
-          </div>
+          </nuxt-link>
+          <nuxt-link to="/messages/pay/list" class="page-header">
+            <img src="/images/pages/sms.svg" alt="organizations">
+            <span class="title">
+              لیست اعتبار پیامک
+            </span>
+          </nuxt-link>
           <v-divider class="d-none d-lg-flex" inset/>
           <v-spacer class="d-none d-sm-flex d-lg-none"/>
           <div class="page-actions-secondary">
