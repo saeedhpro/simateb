@@ -364,8 +364,15 @@
                 <button
                   class="main-button"
                   @click="createUser"
+                  :disabled="createUserLoading"
                 >
-                  ذخیره
+                  <v-progress-circular
+                    indeterminate
+                    color="white"
+                    :size="17"
+                    :width="4"
+                    v-if="createUserLoading"/>
+                  <span v-else>ذخیره</span>
                 </button>
               </v-col>
             </v-row>
@@ -477,6 +484,7 @@ export default {
         id: 1,
         name: "فتوگرافی سیما طب"
       },
+      createUserLoading: false
     }
   },
   mounted() {
@@ -557,15 +565,22 @@ export default {
       this.form.new = file
     },
     createUser() {
+      this.createUserLoading = true
       if (this.validateFrom()) {
         this.$store.dispatch('admin/users/createUser', this.form)
           .then(() => {
             this.$toast.success('با موفقیت انجام شد');
-            this.closeForm()
+            setTimeout(() => {
+              this.createUserLoading = false
+              this.closeForm()
+            }, 1000)
           })
           .catch(err => {
+            this.createUserLoading = false
             this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
           })
+      } else {
+        this.createUserLoading = false
       }
     },
     resetErrors() {
