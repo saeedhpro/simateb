@@ -143,6 +143,7 @@ export default {
         .then(res => {
           const data = res.data
           this.payments.data = data.data
+          this.payments.meta.total = data.meta.total
         })
         .catch(err => {
           this.$toast.error('متاسفانه خطایی رخ داده است')
