@@ -33,7 +33,7 @@
             </v-col>
             <v-col cols="12">
               <v-text-field
-              type="password"
+              :type="showPassword ? 'text' : 'password'"
               placeholder="رمز عبور"
               class="form-input"
               background-color="#F5F5F5"
@@ -47,8 +47,9 @@
                 <v-icon
                   slot="prepend-inner"
                   color="#141432"
+                  @click="toggleShowPassword"
                 >
-                  mdi-lock-outline
+                  mdi-eye-outline
                 </v-icon>
               </v-text-field>
             </v-col>
@@ -130,6 +131,7 @@ export default {
       },
       loading: false,
       showForgetModal: false,
+      showPassword: false,
     }
   },
   methods: {
@@ -151,6 +153,9 @@ export default {
     },
     showForgetPasswordModal() {
       this.showForgetModal = !this.showForgetModal
+    },
+    toggleShowPassword() {
+      this.showPassword = !this.showPassword
     }
   }
 }

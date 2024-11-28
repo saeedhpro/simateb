@@ -474,17 +474,19 @@ export default {
               this.appointment.tel = ''
             }
           })
-          .catch(err => {})
+          .catch(err => {
+            this.user = null
+            // this.appointment.file_id = ''
+            this.appointment.cardno = ''
+            this.appointment.user_id = null
+            this.appointment.tel = ''
+          })
       } else {
-        if (!this.user) {
-          this.user = null
-          // this.appointment.file_id = ''
-          this.appointment.cardno = ''
-          this.appointment.user_id = null
-          this.appointment.tel = ''
-        } else {
-          this.appointment.file_id = this.user.file_id
-        }
+        this.user = null
+        // this.appointment.file_id = ''
+        this.appointment.cardno = ''
+        this.appointment.user_id = null
+        this.appointment.tel = ''
       }
     }, 500),
   },
