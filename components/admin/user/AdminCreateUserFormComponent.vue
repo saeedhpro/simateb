@@ -573,7 +573,7 @@ export default {
             setTimeout(() => {
               this.createUserLoading = false
               this.closeForm()
-            }, 1000)
+            }, 4000)
           })
           .catch(err => {
             this.createUserLoading = false
