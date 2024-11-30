@@ -55,10 +55,13 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
     font-size: 14px;
     button {
       background: #1A1A1A;
       border-radius: 50%;
+      height: 24px;
+      width: 24px;
     }
   }
 </style>

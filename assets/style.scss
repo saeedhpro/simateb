@@ -59,7 +59,23 @@ main {
   margin-top: 64px !important;
 }
 .has-notif {
-  margin-top: 104px !important;
+  margin-top: 84px !important;
+  padding-top: 10px;
+}
+@media only screen and (max-width: 428px) {
+  .has-notif {
+    margin-top: 94px !important;
+  }
+}
+@media only screen and (min-width: 600px) and (max-width: 832px) {
+  .has-notif {
+    margin-top: 124px !important;
+  }
+}
+@media only screen and (min-width: 832px) and (max-width: 1263px) {
+  .has-notif {
+    margin-top: 144px !important;
+  }
 }
 
 .v-main {
