@@ -1,10 +1,12 @@
 <template>
   <v-app dir="rtl">
     <header-component />
-    <v-main>
+    <v-main :class="{'has-notif': show}">
       <div class="notif" v-if="show">
         <span>
-          اعتبار پیامکی شما به پایان رسیده است. در صورت عدم شارژ اعتبار خود، در مدت سه روز آینده امکان ارسال پیامک لغو می گردد!
+        <span>
+پزشک عزیز اعتبار کیف پول شما منفی شده است. لطفا برای پیشگیری از قطع شدن سرویس پیامکی شما در سریعترین زمان اعتبار کیف پول تان را افزایش دهید.        </span>
+        <nuxt-link to="/messages/pay" style="color: gold !important;">افزایش اعتبار</nuxt-link>
         </span>
         <button
           @click="closeShowNotif"
@@ -40,7 +42,7 @@ export default {
     },
     show() {
       return this.showNotif && this.loginUser.organization.sms_credit <= -20000
-    }
+    },
   }
 }
 </script>
