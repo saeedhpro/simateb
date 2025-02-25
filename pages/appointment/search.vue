@@ -257,7 +257,7 @@
                         <input type="checkbox"
                                class="table-selectable-checkbox"
                                v-model="selectedItems"
-                               :value="i.id"
+                               :value="i"
                         />
                         <img
                           alt=""
@@ -305,6 +305,8 @@
         </v-card>
       </v-col>
     </v-row>
+    <send-sms-component :users="allUsers" :multiple="true" :selectedItems="selectedUsers" :open="showSmsModal"
+                        @selected="itemSelected" @close="closeSmsForm" />
     <create-appointment-form-component
       :is-surgery="false"
       :open="showPazireshModal"
@@ -329,14 +331,17 @@ import DataTableComponent from "~/components/panel/global/DataTableComponent";
 import CaseTypeCheckboxComponent from "~/components/panel/appointment/CaseTypeCheckboxComponent";
 import CreateAppointmentFormComponent
   from "~/components/panel/appointment/AppointmentForm/CreateAppointmentFormComponent";
+import SendSmsComponent from "~/components/global/sms/SendSmsComponent.vue";
 
 export default {
   name: "appointment-search",
-  components: {CreateAppointmentFormComponent, CaseTypeCheckboxComponent, DataTableComponent},
+  components: {SendSmsComponent, CreateAppointmentFormComponent, CaseTypeCheckboxComponent, DataTableComponent},
   layout: 'panel',
   middleware: 'auth',
   data() {
     return {
+      selectedUsers: [],
+      showSmsModal: false,
       showFilterModal: false,
       showPazireshModal: false,
       selectedItems: [],
@@ -428,8 +433,17 @@ export default {
     this.getAppointmentList()
     this.getUsers()
     this.getCaseTypes()
+    this.getAllUsers()
   },
   methods: {
+    closeSmsForm() {
+      this.selectedItems = []
+      this.action = null
+      this.toggleSmsModal()
+    },
+    itemSelected(e) {
+      this.selectedUsers = e
+    },
     clearForm() {
       this.search = {
         page: this.search.page,
@@ -498,10 +512,26 @@ export default {
     getUsers() {
       this.$store.dispatch('users/getUsers', {limit: 100, page: 1})
     },
+    getAllUsers() {
+      this.$store.dispatch('users/getOrganizationUsers', this.organization.id)
+    },
     getCaseTypes() {
       this.$store.dispatch('cases/getCaseTypes', {})
     },
     doAction() {
+      if (!this.action) return
+      switch (this.action) {
+        case 1:
+        case '1':
+          break;
+        case 2:
+        case '2':
+          this.toggleSmsModal();
+          break;
+      }
+    },
+    toggleSmsModal() {
+      this.showSmsModal = !this.showSmsModal
     },
     customLabel(item) {
       return item.fname
@@ -592,6 +622,9 @@ export default {
     cases() {
       return this.$store.getters['cases/getCaseTypes']
     },
+    allUsers() {
+      return this.$store.getters['users/getUsers']
+    },
     selectedAll: {
       get() {
         return this.selectedItems.length > 0 && this.selectedItems.length === this.appointments.data.length
@@ -599,9 +632,12 @@ export default {
       set(bool) {
         if (bool) {
           this.selectedItems = []
-          this.selectedItems = this.appointments.data.map(i => i.id)
+          this.selectedUsers = []
+          this.selectedItems = this.appointments.data
+          this.selectedUsers = this.appointments.data.map(i => i.user)
         } else {
           this.selectedItems = []
+          this.selectedUsers = []
         }
       }
     },
@@ -615,9 +651,15 @@ export default {
       if (!this.loginUser) return true
       const profession_id = this.loginUser.organization.profession_id
       return !(profession_id == 5 || profession_id == 7)
+    },
+    organization(){
+      return this.loginUser.organization
     }
   },
   watch: {
+    selectedItems(val) {
+      this.selectedUsers = val.map(i => i.user)
+    },
     user(item) {
       if (item) {
         this.appointment.user_id = item.id
