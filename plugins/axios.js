@@ -3,8 +3,6 @@ import Axios from 'axios'
 const axiosExtra = {
   setBaseURL (baseURL) {
     this.defaults.baseURL = baseURL
-
-    // https://achilan-back.kashanam.com/api
   },
   setHeader (name, value, scopes = 'common') {
     for (const scope of Array.isArray(scopes) ? scopes : [scopes]) {

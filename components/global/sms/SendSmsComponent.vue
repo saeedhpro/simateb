@@ -185,7 +185,6 @@
           <button
             class="action-button accept-button"
             @click="toggleCreateModal"
-
           >
             خیر
           </button>

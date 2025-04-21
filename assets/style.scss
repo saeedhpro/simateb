@@ -2315,6 +2315,7 @@ tr.waiting {
   font: normal normal bold 12px/21px IRANYekanRegular !important;
   text-align: center;
   letter-spacing: 0;
+  white-space: nowrap;
 
   &.message-sent {
     background: #EBFFEC 0 0 no-repeat padding-box;

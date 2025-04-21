@@ -354,8 +354,15 @@
                 <button
                   class="main-button"
                   @click="updateUser"
+                  :disabled="updateUserLoading"
                 >
-                  ذخیره
+                  <v-progress-circular
+                    indeterminate
+                    color="white"
+                    :size="17"
+                    :width="4"
+                    v-if="updateUserLoading"/>
+                  <span v-else>ذخیره</span>
                 </button>
               </v-col>
             </v-row>
@@ -466,6 +473,7 @@ export default {
         id: 1,
         name: "فتوگرافی سیما طب"
       },
+      updateUserLoading: false,
     }
   },
   mounted() {
@@ -681,6 +689,7 @@ export default {
       this.form.new = file
     },
     updateUser() {
+      this.updateUserLoading = true
       if (this.validateFrom()) {
         const data = {
           ...this.form,
@@ -689,11 +698,17 @@ export default {
         this.$store.dispatch('users/updateUser', data)
         .then(() => {
           this.$toast.success('با موفقیت انجام شد');
-          this.closeForm(true)
+          setTimeout(() => {
+            this.updateUserLoading = false
+            this.closeForm(true)
+          }, 1000)
         })
         .catch(err => {
+          this.updateUserLoading = false
           this.$toast.error('متاسفانه خطایی رخ داده است. لطفا دوباره امتحان کنید');
         })
+      } else {
+        this.updateUserLoading = false
       }
     },
     getProvinces() {
