@@ -133,32 +133,6 @@ export default {
         },
       ],
       years: [],
-      actions: [
-        {
-          id: 0,
-          label: 'تنظیمات'
-        },
-        {
-          id: 1,
-          label: 'روزهای تعطیل'
-        },
-        {
-          id: 2,
-          label: 'تنظیمات نوبت دهی vip'
-        },
-        {
-          id: 3,
-          label: 'برنامه نوبت دهی vip'
-        },
-        {
-          id: 4,
-          label: 'تنظیمات علل مراجعه'
-        },
-        {
-          id: 5,
-          label: 'ساعت کاری'
-        },
-      ],
       action: null,
     }
   },
@@ -270,6 +244,51 @@ export default {
     },
   },
   computed: {
+    actions() {
+      return this.isSurgery ? [
+        {
+          id: 0,
+          label: 'تنظیمات'
+        },
+        {
+          id: 1,
+          label: 'روزهای تعطیل'
+        },
+        {
+          id: 4,
+          label: 'تنظیمات علل مراجعه'
+        },
+        {
+          id: 5,
+          label: 'ساعت کاری'
+        },
+      ] : [
+        {
+          id: 0,
+          label: 'تنظیمات'
+        },
+        {
+          id: 1,
+          label: 'روزهای تعطیل'
+        },
+        {
+          id: 2,
+          label: 'تنظیمات نوبت دهی vip'
+        },
+        {
+          id: 3,
+          label: 'برنامه نوبت دهی vip'
+        },
+        {
+          id: 4,
+          label: 'تنظیمات علل مراجعه'
+        },
+        {
+          id: 5,
+          label: 'ساعت کاری'
+        },
+      ];
+    },
     showWorkHour: {
       get() {
         return this.$store.getters['appointment/getShowWorkHour'];

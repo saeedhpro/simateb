@@ -22,7 +22,7 @@
       :open="showAppointmentModal"
       @close="closeAppointmentModal"
     />
-    <work-hour-component
+    <work-hour-surgery-component
       :start="''"
       :end="''"
       :period="15"
@@ -35,10 +35,11 @@
 import CreateAppointmentFormComponent
   from "~/components/panel/appointment/AppointmentForm/CreateAppointmentFormComponent.vue";
 import WorkHourComponent from "~/components/panel/appointment/WorkHourComponent.vue";
+import WorkHourSurgeryComponent from "~/components/panel/appointment/WorkHourSurgeryComponent.vue";
 
 export default {
   name: "AppointmentPage",
-  components: {WorkHourComponent, CreateAppointmentFormComponent},
+  components: {WorkHourSurgeryComponent, WorkHourComponent, CreateAppointmentFormComponent},
   layout: 'panel',
   middleware: 'auth',
   mounted() {
@@ -65,6 +66,9 @@ export default {
     },
     createdPazireshModal() {
       this.togglePazireshModal()
+      this.getAppointmentList()
+    },
+    doneAppointmentModal() {
       this.getAppointmentList()
     },
     closeAppointmentModal() {
