@@ -21,8 +21,12 @@
         <img src="/images/pages/about.svg" alt="users">
         <span class="title">نمونه کارها</span>
       </nuxt-link>
-      <v-divider class="d-none d-lg-flex" :style="{'margin-left': canSee ? '72px' : '0'}" inset/>
-      <v-spacer class="d-none d-sm-flex d-lg-none"/>
+      <nuxt-link :to="`/admin/organizations/${organization.id}/api`" class="page-header">
+        <img src="/images/pages/about.svg" alt="users">
+        <span class="title">API Key</span>
+      </nuxt-link>
+<!--      <v-divider class="d-none d-lg-flex" :style="{'margin-left': canSee ? '72px' : '0'}" inset/>-->
+<!--      <v-spacer class="d-none d-sm-flex d-lg-none"/>-->
       <div class="page-actions"
            @click="toggleAddUserModal"
            v-if="canSee"

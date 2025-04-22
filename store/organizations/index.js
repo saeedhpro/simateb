@@ -11,6 +11,12 @@ export const state = () => ({
     period: 15,
     organization_id: 0,
   },
+  surgeryWorkHour: {
+    start: '',
+    end: '',
+    period: 15,
+    organization_id: 0,
+  },
 })
 
 export const mutations = {
@@ -31,6 +37,14 @@ export const mutations = {
   },
   setOrganizationWorkHour(state, workHour) {
     state.workHour = {
+      start: workHour.start,
+      end: workHour.end,
+      period: parseInt(workHour.period),
+      organization_id: workHour.organization_id,
+    }
+  },
+  setOrganizationSurgeryWorkHour(state, workHour) {
+    state.surgeryWorkHour = {
       start: workHour.start,
       end: workHour.end,
       period: parseInt(workHour.period),
@@ -80,6 +94,17 @@ export const actions = {
         return Promise.reject(err)
       })
   },
+  getOrganizationSurgeryWorkHour(ctx, id) {
+    return this.$axios.get(`/organizations/${id}/work/surgery`)
+      .then(res => {
+        const data = res.data;
+        ctx.commit('setOrganizationSurgeryWorkHour', data)
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
   updateOrganizationAbout(ctx, data) {
     return this.$axios.put(`/organizations/${data.id}/about`, data)
       .then(res => {
@@ -102,6 +127,17 @@ export const actions = {
   },
   updateOrganizationWorkHour(ctx, data) {
     return this.$axios.put(`/organizations/${data.organization_id}/work`, data)
+      .then(res => {
+        const data = res.data;
+        ctx.commit('setOrganizationWorkHour', data)
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  updateOrganizationSurgeryWorkHour(ctx, data) {
+    return this.$axios.put(`/organizations/${data.organization_id}/work/surgery`, data)
       .then(res => {
         const data = res.data;
         ctx.commit('setOrganizationWorkHour', data)

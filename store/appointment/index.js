@@ -2,11 +2,18 @@ require('whatwg-fetch')
 
 export const state = () => ({
   showWorkHour: false,
+  showSurgeryWorkHour: false,
   showHour: false,
   showCaseType: false,
   workHour: {
     start: '15:00:00',
     end: '20:00:00',
+    period: 15,
+    organization_id: 0,
+  },
+  surgeryWorkHour: {
+    start: '09:00:00',
+    end: '17:00:00',
     period: 15,
     organization_id: 0,
   },
@@ -29,6 +36,9 @@ export const mutations = {
   setShowWorkHour(state, showWorkHour) {
     state.showWorkHour = showWorkHour
   },
+  setShowSurgeryWorkHour(state, showWorkHour) {
+    state.showSurgeryWorkHour = showWorkHour
+  },
   setShowHour(state, showHour) {
     state.showHour = showHour
   },
@@ -37,6 +47,14 @@ export const mutations = {
   },
   setWorkHour(state, workHour) {
     state.workHour = {
+      start: workHour.start,
+      end: workHour.end,
+      period: workHour.period,
+      organization_id: workHour.organization_id,
+    }
+  },
+  setSurgeryWorkHour(state, workHour) {
+    state.surgeryWorkHour = {
       start: workHour.start,
       end: workHour.end,
       period: workHour.period,
@@ -88,11 +106,20 @@ export const actions = {
   setShowWorkHour(ctx, val) {
     ctx.commit('setShowWorkHour', val)
   },
+  setShowSurgeryWorkHour(ctx, val) {
+    ctx.commit('setShowSurgeryWorkHour', val)
+  },
   setWorkHour(ctx, val) {
     ctx.commit('setWorkHour', val)
   },
   setShowHour(ctx, val) {
     ctx.commit('setShowHour', val)
+  },
+  setSurgeryWorkHour(ctx, val) {
+    ctx.commit('setSurgeryWorkHour', val)
+  },
+  setSurgeryShowHour(ctx, val) {
+    ctx.commit('setSurgeryShowHour', val)
   },
   setShowCaseType(ctx, val) {
     ctx.commit('setShowCaseType', val)
@@ -164,8 +191,14 @@ export const getters = {
   getShowWorkHour(state) {
     return state.showWorkHour
   },
+  getShowSurgeryWorkHour(state) {
+    return state.showSurgeryWorkHour
+  },
   getWorkHour(state) {
     return state.workHour
+  },
+  getSurgeryWorkHour(state) {
+    return state.surgeryWorkHour
   },
   getShowHour(state) {
     return state.showHour
