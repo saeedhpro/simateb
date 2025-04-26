@@ -37,6 +37,24 @@ export const actions = {
         return Promise.reject(err)
       })
   },
+  resetPassword(ctx, data) {
+    return this.$axios.post('/password', data)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
+  verifyResetPassword(ctx, data) {
+    return this.$axios.post('/password/verify', data)
+      .then(res => {
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
   exit(ctx) {
     ctx.commit('setToken', null)
     ctx.commit('setUser', null)
