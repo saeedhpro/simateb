@@ -110,6 +110,16 @@
                   <div class="sms-number">تعداد پیامک: <span>{{ smsNumber  }}</span></div>
                 </div>
               </v-col>
+              <v-col
+                cols="12"
+              >
+                <div class="create-update-model-input-box">
+                  <v-checkbox
+                    label="کلیه ی قوانین ارسال پیام از جمله عدم ارسال پیام نامناسب و غیرمرتبط با موضوع سایت را می پذیرم!"
+                    v-model="form.accept"
+                  />
+                </div>
+              </v-col>
             </v-row>
           </v-container>
         </v-card-text>
@@ -239,6 +249,7 @@ export default {
         msg: '',
         numbers: [],
         phone_number: '',
+        accept: false,
       },
       errors: {
         phone_number: '',
@@ -299,6 +310,10 @@ export default {
         })
     },
     toggleCreateModal() {
+      if (!this.form.accept) {
+        this.$toast.error('پذیرش قوانین ارسال اجباری است!');
+        return
+      }
       this.showCreateModal = !this.showCreateModal
     }
   },

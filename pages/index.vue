@@ -88,7 +88,43 @@
                       </span>
                       <img src="/images/login/logo.png">
                       <div class="forget-title">فـرامـوشـی رمـز عـبـور</div>
-                      <v-container v-if="showVerifyCode">
+                      <v-container v-if="codeVerified">
+                        <v-row>
+                          <v-col
+                            cols="12"
+                            sm="8"
+                            md="8"
+                          >
+                            <v-col
+                              cols="12"
+                              sm="4"
+                              md="4"
+                            >
+                              <custom-text-input
+                                :label="'رمز عبور'"
+                                :error="errors.pass"
+                                v-model="password"
+                                @input="errors.pass = ''"
+                                type="password"
+                              />
+                            </v-col>
+                          </v-col>
+                          <v-col
+                            cols="12"
+                            sm="4"
+                            md="4"
+                          >
+                            <custom-text-input
+                              :label="'تکرار رمز عبور'"
+                              :error="errors.pass"
+                              v-model="repeat_password"
+                              @input="errors.pass = ''"
+                              type="password"
+                            />
+                          </v-col>
+                        </v-row>
+                      </v-container>
+                      <v-container v-else-if="showVerifyCode">
                         <v-row>
                           <v-col
                             cols="12"
@@ -102,7 +138,6 @@
                               :has-custom-label="false"
                               @input="errors.organization_id = ''"
                               label="مطب مورد نظر را انتخاب کنید"
-
                             />
                           </v-col>
                           <v-col
@@ -150,7 +185,27 @@
                             </button>
                           </v-col>
                           <v-col
-                            v-if="showVerifyCode"
+                            v-if="codeVerified"
+                            cols="12"
+                            sm="4"
+                            md="4"
+                          >
+                            <button
+                              class="main-button"
+                              @click="changePassword"
+                              :disabled="loadingChangePassword"
+                            >
+                              <v-progress-circular
+                                indeterminate
+                                color="white"
+                                :size="17"
+                                :width="4"
+                                v-if="loadingChangePassword"/>
+                              <span v-else>ثبت پسورد</span>
+                            </button>
+                          </v-col>
+                          <v-col
+                            v-else-if="showVerifyCode"
                             cols="12"
                             sm="4"
                             md="4"
@@ -228,11 +283,15 @@ export default {
       showPassword: false,
       loadingResetPassword: false,
       loadingVerifyCode: false,
+      loadingChangePassword: false,
       showVerifyCode: false,
+      codeVerified: false,
       organization: null,
       organizations: [],
       code: '',
       tel: '',
+      password: '',
+      repeat_password: '',
       errors: {
         tel: '',
         organization_id: '',
@@ -297,6 +356,30 @@ export default {
         this.loadingVerifyCode = false
       })
     },
+    changePassword() {
+      if (this.loadingChangePassword) {
+        return
+      }
+      if (!this.password || !this.repeat_password) {
+        return;
+      }
+      if (this.password != this.repeat_password) {
+        this.$toast.error("مز عبور و تکرار رمز عبور یکسان نیست!");
+        return;
+      }
+      this.loadingChangePassword = true
+      const data = {
+        'tel': this.tel,
+        'organization_id': this.organization ? this.organization.id : null,
+        'password': this.password,
+      }
+      this.$store.dispatch('login/changePassword', data)
+      .then(res => {
+        this.$toast.success("پسورد جدید با موفقیت ثبت");
+        this.loadingChangePassword = false
+        this.closeForgetPasswordModal()
+      })
+    },
     showForgetPasswordModal() {
       this.showForgetModal = true
     },
@@ -308,7 +391,9 @@ export default {
       this.showForgetModal = false
       this.loadingResetPassword = false
       this.showVerifyCode = false
+      this.codeVerified = false
       this.loadingVerifyCode = false
+      this.loadingChangePassword = false
     },
     toggleShowPassword() {
       this.showPassword = !this.showPassword
