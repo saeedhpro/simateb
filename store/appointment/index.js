@@ -135,6 +135,17 @@ export const actions = {
         return Promise.reject(err)
       })
   },
+  getOrganizationSurgeryWorkHour(ctx, id) {
+    return this.$axios.get(`/organizations/${id}/work/surgery`)
+      .then(res => {
+        const data = res.data;
+        ctx.commit('setSurgeryWorkHour', data)
+        return Promise.resolve(res)
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
+  },
   getOrganizationHolidays(ctx, data) {
     return this.$axios.get(`/organizations/holidays?start=${data.start}&end=${data.end}`)
       .then(res => {

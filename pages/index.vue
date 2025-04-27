@@ -68,6 +68,7 @@
                 transition="dialog-bottom-transition"
                 max-width="600"
                 v-model="showForgetModal"
+                persistent
               >
                 <template v-slot:activator="{ on, attrs }">
                   <div class="forget-password" @click="showForgetPasswordModal">رمز عبورم را فراموش کرده‌ام</div>
@@ -88,16 +89,155 @@
                       </span>
                       <img src="/images/login/logo.png">
                       <div class="forget-title">فـرامـوشـی رمـز عـبـور</div>
-                      <div class="forget-text">
-                        در صورت فراموشی رمز عبور خود، لطفا با <span class="font-weight-bold">مدیریت سیماطب</span> ارتباط حاصل فرمایید <br> با تشکر
-                      </div>
-                      <button
-                        @click.prevent="showForgetPasswordModal"
-                        class="close-forget"
-                      >
-                        متوجه شدم
-                      </button>
+                      <v-container v-if="codeVerified">
+                        <v-row>
+                          <v-col
+                            cols="12"
+                          >
+                            <custom-text-input
+                              :label="'رمز عبور'"
+                              :error="errors.pass"
+                              v-model="password"
+                              @input="errors.pass = ''"
+                              type="password"
+                            />
+                          </v-col>
+                          <v-col
+                            cols="12"
+                          >
+                            <custom-text-input
+                              :label="'تکرار رمز عبور'"
+                              :error="errors.pass"
+                              v-model="repeat_password"
+                              @input="errors.pass = ''"
+                              type="password"
+                            />
+                          </v-col>
+                        </v-row>
+                      </v-container>
+                      <v-container v-else-if="showVerifyCode">
+                        <v-row>
+                          <v-col
+                            cols="12"
+                            sm="8"
+                            md="8"
+                          >
+                            <custom-multi-select
+                              v-model="organization"
+                              :items="organizations"
+                              :error="errors.organization_id"
+                              :has-custom-label="false"
+                              @input="errors.organization_id = ''"
+                              label="مطب مورد نظر را انتخاب کنید"
+                            />
+                          </v-col>
+                          <v-col
+                            cols="12"
+                            sm="4"
+                            md="4"
+                          >
+                            <custom-phone-number-input
+                              :label="'کد تایید'"
+                              :error="errors.code"
+                              v-model="code"
+                            />
+                          </v-col>
+                        </v-row>
+                      </v-container>
+                      <v-container v-else>
+                        <v-row>
+                          <v-col
+                            cols="12"
+                            sm="12"
+                            md="12"
+                          >
+                            <custom-phone-number-input
+                              :label="'شماره موبایل'"
+                              :error="errors.tel"
+                              v-model="tel"
+                            />
+                          </v-col>
+                        </v-row>
+                      </v-container>
                     </v-card-text>
+                    <v-card-actions>
+                      <v-container>
+                        <v-row class="justify-center">
+                          <v-col
+                            cols="12"
+                            sm="4"
+                            md="4"
+                          >
+                            <button
+                              class="second-button full-width"
+                              @click="closeForgetPasswordModal"
+                            >
+                              بستن
+                            </button>
+                          </v-col>
+                          <v-col
+                            v-if="codeVerified"
+                            cols="12"
+                            sm="4"
+                            md="4"
+                          >
+                            <button
+                              class="main-button"
+                              @click="changePassword"
+                              :disabled="loadingChangePassword"
+                            >
+                              <v-progress-circular
+                                indeterminate
+                                color="white"
+                                :size="17"
+                                :width="4"
+                                v-if="loadingChangePassword"/>
+                              <span v-else>ثبت پسورد</span>
+                            </button>
+                          </v-col>
+                          <v-col
+                            v-else-if="showVerifyCode"
+                            cols="12"
+                            sm="4"
+                            md="4"
+                          >
+                            <button
+                              class="main-button"
+                              @click="verifyResetPassword"
+                              :disabled="loadingVerifyCode"
+                            >
+                              <v-progress-circular
+                                indeterminate
+                                color="white"
+                                :size="17"
+                                :width="4"
+                                v-if="loadingVerifyCode"/>
+                              <span v-else>تایید کد</span>
+                            </button>
+                          </v-col>
+                          <v-col
+                            cols="12"
+                            sm="4"
+                            md="4"
+                            v-else
+                          >
+                            <button
+                              class="main-button"
+                              @click="resetPassword"
+                              :disabled="loadingResetPassword"
+                            >
+                              <v-progress-circular
+                                indeterminate
+                                color="white"
+                                :size="17"
+                                :width="4"
+                                v-if="loadingResetPassword"/>
+                              <span v-else>ارسال کد تایید</span>
+                            </button>
+                          </v-col>
+                        </v-row>
+                      </v-container>
+                    </v-card-actions>
                   </v-card>
                 </template>
               </v-dialog>
@@ -132,6 +272,21 @@ export default {
       loading: false,
       showForgetModal: false,
       showPassword: false,
+      loadingResetPassword: false,
+      loadingVerifyCode: false,
+      loadingChangePassword: false,
+      showVerifyCode: false,
+      codeVerified: false,
+      organization: null,
+      organizations: [],
+      code: '',
+      tel: '',
+      password: '',
+      repeat_password: '',
+      errors: {
+        tel: '',
+        organization_id: '',
+      }
     }
   },
   methods: {
@@ -151,8 +306,86 @@ export default {
         this.$toast.error("کاربر یافت نشد!");
       })
     },
+    resetPassword() {
+      if (this.loadingResetPassword) {
+        return
+      }
+      this.loadingResetPassword = true
+      const data = {
+        'tel': this.tel,
+      }
+      this.$store.dispatch('login/resetPassword', data)
+      .then(res => {
+        this.$toast.success("کد تایید برای شما ارسال شد");
+        this.loadingResetPassword = false
+        this.organizations = res.data.data
+        this.showVerifyCode = true
+      })
+      .catch(err => {
+        this.$toast.error("شماره وارد شده صحیح نیست!");
+        this.loadingResetPassword = false
+      })
+    },
+    verifyResetPassword() {
+      if (this.loadingVerifyCode) {
+        return
+      }
+      this.loadingVerifyCode = true
+      const data = {
+        'tel': this.tel,
+        'organization_id': this.organization ? this.organization.id : null,
+        'code': this.code,
+      }
+      this.$store.dispatch('login/verifyResetPassword', data)
+      .then(res => {
+        this.loadingVerifyCode = false
+        this.codeVerified = true
+      })
+      .catch(err => {
+        this.$toast.error("کد وارد شده صحیح نیست!");
+        this.loadingVerifyCode = false
+      })
+    },
+    changePassword() {
+      if (this.loadingChangePassword) {
+        return
+      }
+      if (!this.password || !this.repeat_password) {
+        return;
+      }
+      if (this.password != this.repeat_password) {
+        this.$toast.error("مز عبور و تکرار رمز عبور یکسان نیست!");
+        return;
+      }
+      this.loadingChangePassword = true
+      const data = {
+        'tel': this.tel,
+        'organization_id': this.organization ? this.organization.id : null,
+        'password': this.password,
+      }
+      this.$store.dispatch('login/changePassword', data)
+      .then(res => {
+        this.$toast.success("پسورد جدید با موفقیت ثبت");
+        this.loadingChangePassword = false
+        this.closeForgetPasswordModal()
+      })
+    },
     showForgetPasswordModal() {
-      this.showForgetModal = !this.showForgetModal
+      this.showForgetModal = true
+    },
+    closeForgetPasswordModal() {
+      this.tel = ''
+      this.organization = null
+      this.organizations = []
+      this.code = ''
+      this.password = ''
+      this.repeat_password = ''
+      this.showForgetModal = false
+      this.loadingResetPassword = false
+      this.showVerifyCode = false
+      this.codeVerified = false
+      this.loadingVerifyCode = false
+      this.loadingChangePassword = false
     },
     toggleShowPassword() {
       this.showPassword = !this.showPassword

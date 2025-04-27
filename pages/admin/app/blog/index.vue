@@ -45,12 +45,6 @@
 </template>
 
 <script>
-import DataTableComponent from "~/components/panel/global/DataTableComponent";
-import CropImageComponent from "~/components/panel/global/CropImageComponent";
-import CreateUserFormComponent from "~/components/panel/profile/user/CreateUserFormComponent";
-import AdminCreateUserFormComponent from "~/components/admin/user/AdminCreateUserFormComponent";
-import SendSmsComponent from "~/components/global/sms/SendSmsComponent";
-import AdminDeleteUsersComponent from "~/components/admin/global/AdminDeleteUsersComponent";
 import AppHeaderComponent from "~/components/admin/app/AppHeaderComponent.vue";
 import CategoryList from "~/components/admin/app/CategoryList.vue";
 import ArticleList from "~/components/admin/app/ArticleList.vue";

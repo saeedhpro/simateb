@@ -110,7 +110,7 @@
 import moment from "jalali-moment";
 
 export default {
-  name: "AppointmentPageListV2",
+  name: "AppointmentPageListV4",
   props: {
     isSurgery: {
       type: Boolean,
