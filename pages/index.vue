@@ -68,6 +68,7 @@
                 transition="dialog-bottom-transition"
                 max-width="600"
                 v-model="showForgetModal"
+                persistent
               >
                 <template v-slot:activator="{ on, attrs }">
                   <div class="forget-password" @click="showForgetPasswordModal">رمز عبورم را فراموش کرده‌ام</div>
@@ -92,27 +93,17 @@
                         <v-row>
                           <v-col
                             cols="12"
-                            sm="8"
-                            md="8"
                           >
-                            <v-col
-                              cols="12"
-                              sm="4"
-                              md="4"
-                            >
-                              <custom-text-input
-                                :label="'رمز عبور'"
-                                :error="errors.pass"
-                                v-model="password"
-                                @input="errors.pass = ''"
-                                type="password"
-                              />
-                            </v-col>
+                            <custom-text-input
+                              :label="'رمز عبور'"
+                              :error="errors.pass"
+                              v-model="password"
+                              @input="errors.pass = ''"
+                              type="password"
+                            />
                           </v-col>
                           <v-col
                             cols="12"
-                            sm="4"
-                            md="4"
                           >
                             <custom-text-input
                               :label="'تکرار رمز عبور'"
@@ -171,7 +162,7 @@
                     </v-card-text>
                     <v-card-actions>
                       <v-container>
-                        <v-row>
+                        <v-row class="justify-center">
                           <v-col
                             cols="12"
                             sm="4"
@@ -347,9 +338,8 @@ export default {
       }
       this.$store.dispatch('login/verifyResetPassword', data)
       .then(res => {
-        this.$toast.success("پسورد جدید برای شما ارسال شد");
         this.loadingVerifyCode = false
-        this.closeForgetPasswordModal()
+        this.codeVerified = true
       })
       .catch(err => {
         this.$toast.error("کد وارد شده صحیح نیست!");
@@ -388,6 +378,8 @@ export default {
       this.organization = null
       this.organizations = []
       this.code = ''
+      this.password = ''
+      this.repeat_password = ''
       this.showForgetModal = false
       this.loadingResetPassword = false
       this.showVerifyCode = false

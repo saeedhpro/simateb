@@ -228,13 +228,26 @@ export default {
           this.openShowWorkHour()
           break;
       }
+      this.action = this.actions[0]
     },
     async openShowWorkHour() {
-      await this.getOrganizationWorkHour()
-      await this.$store.dispatch('appointment/setShowWorkHour', true)
+      if (this.isSurgery) {
+        await this.getOrganizationSurgeryWorkHour()
+        await this.$store.dispatch('appointment/setShowSurgeryWorkHour', true)
+      } else {
+        await this.getOrganizationWorkHour()
+        await this.$store.dispatch('appointment/setShowWorkHour', true)
+      }
     },
     async getOrganizationWorkHour() {
-      await this.$store.dispatch('appointment/getOrganizationWorkHour', this.loginUser.organization_id)
+      if (this.isSurgery) {
+        await this.$store.dispatch('appointment/getOrganizationSurgeryWorkHour', this.loginUser.organization_id)
+      } else {
+        await this.$store.dispatch('appointment/getOrganizationWorkHour', this.loginUser.organization_id)
+      }
+    },
+    async getOrganizationSurgeryWorkHour() {
+      await this.$store.dispatch('appointment/getOrganizationSurgeryWorkHour', this.loginUser.organization_id)
     },
     async getOrganizationHolidays(start, end) {
       await this.$store.dispatch('appointment/getOrganizationHolidays', {

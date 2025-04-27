@@ -5,7 +5,7 @@
     >
       <v-card
         class="page-main-box"
-        :class="{'surgeries': isSurgery}"
+        :class="{'surgeries': this.isSurgery}"
       >
         <appointment-page-search
           v-if="!loading"
