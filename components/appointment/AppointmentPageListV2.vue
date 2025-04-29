@@ -211,8 +211,14 @@ export default {
       if (this.isTimeBased) {
         // const ques = this.ques.map( row => row.filter(col => !col.empty))
         this.ques = []
-        let maxWorkTime = new Date('2019-01-10 ' + this.workHour.end);
-        let minWorkTime = new Date('2019-01-10 ' + this.workHour.start);
+        let end = this.workHour.end
+        let start = this.workHour.start
+        if (this.isSurgery) {
+          end = this.surgeryWorkHour.end
+          start = this.surgeryWorkHour.start
+        }
+        let maxWorkTime = new Date('2019-01-10 ' + end);
+        let minWorkTime = new Date('2019-01-10 ' + start);
         let duration = moment.duration(moment(maxWorkTime).diff(minWorkTime));
         let minutes = duration.asMinutes();
         this.queIndexMax = Math.floor(minutes / this.default_duration);
@@ -494,6 +500,14 @@ export default {
       },
       set(val) {
         return this.$store.dispatch('appointment/setWorkHour', val)
+      }
+    },
+    surgeryWorkHour: {
+      get() {
+        return this.$store.getters['appointment/getSurgeryWorkHour']
+      },
+      set(val) {
+        return this.$store.dispatch('appointment/setSurgeryWorkHour', val)
       }
     },
     showItemModal: {
