@@ -7,6 +7,7 @@
                     <v-tabs
                         v-model="tabs"
                         centered
+                        show-arrows
                         class="profile-tabs-header"
                     >
                         <v-tab

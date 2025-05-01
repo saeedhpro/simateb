@@ -211,7 +211,9 @@ export default {
           this.$axios.post('/organizations/reports', {
             type: 'age',
             start: this.form.start,
-            end: this.form.end
+            end: this.form.end,
+            age_start: this.form.age_start,
+            age_end: this.form.age_end,
           })
             .then(res => {
               this.age_result = res.data
