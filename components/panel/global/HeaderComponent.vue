@@ -239,6 +239,12 @@ export default {
           isAdmin: false,
           onlyDoctor: true,
         },
+        {
+          link: '/wallet',
+          title: 'کیف پول',
+          isAdmin: false,
+          onlyDoctor: false,
+        },
       ]
     }
   },

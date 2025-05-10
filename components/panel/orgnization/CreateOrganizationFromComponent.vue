@@ -176,6 +176,20 @@
                   ></v-switch>
                 </div>
               </v-col>
+              <v-col
+                cols="12"
+                sm="6"
+                md="4"
+              >
+                <div class="create-update-model-input-box">
+                  <label>نمایش در اپلیکیشن</label>
+                  <v-switch
+                    v-model="organization.show_in_app"
+                    inset
+                    :label="organization.show_in_app ? `فعال` : `غیرفعال`"
+                  ></v-switch>
+                </div>
+              </v-col>
             </v-row>
             <v-row>
               <v-col
@@ -357,6 +371,7 @@ export default {
         image3: '',
         text3: '',
         is_sms_active: true,
+        show_in_app: true,
         rel_organizations: [],
       },
       profession: null,
