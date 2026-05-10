@@ -99,7 +99,7 @@
               @click="closeCreateModal"
               class="create-update-modal-close"
             >
-              <v-icon>mdi-close</v-icon>
+              <img src="/images/login/close.svg">
             </button>
             <span v-if="created">فرم ایجاد سوال</span>
             <span v-else>فرم ویرایش سوال</span>

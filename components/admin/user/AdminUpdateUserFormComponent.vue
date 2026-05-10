@@ -16,7 +16,7 @@
               @click="closeForm(false)"
               class="create-update-modal-close"
             >
-              <v-icon>mdi-close</v-icon>
+              <img src="/images/login/close.svg">
             </button>
             <span>ویرایش کاربر</span>
           </div>

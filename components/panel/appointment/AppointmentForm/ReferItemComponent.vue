@@ -49,6 +49,18 @@
               :error="notSelected"
               :clearable="true"
             ></v-select>
+            <v-select
+              v-if="type === 'laboratory'"
+              outlined
+              :items="laboratoryList"
+              label="آزمایشگاه"
+              item-value="id"
+              item-text="name"
+              v-model="selectedItem"
+              class="refer-item-select"
+              :error="notSelected"
+              :clearable="true"
+            ></v-select>
           </v-col>
           <v-col
             cols="12"
@@ -69,6 +81,14 @@
             >
               <v-icon color="#fff">mdi-camera-outline</v-icon>
               فرم فتوگرافی
+            </button>
+            <button
+              v-if="type === 'laboratory'"
+              class="main-button"
+              @click="openLaboratoryFrom"
+            >
+              <v-icon color="#fff">mdi-camera-outline</v-icon>
+              فرم ازمایشگاه
             </button>
             <button
               v-if="type === 'doctor'"
@@ -101,6 +121,14 @@
       @close="closePhotographyFrom"
       @setPhotographyCases="setPhotographyCases"
     />
+    <laboratory-select-form
+      v-if="organization"
+      :open="showLaboratoryFrom"
+      :organization="organization"
+      :items="items"
+      @close="closeLaboratoryFrom"
+      @setLaboratoryCases="setLaboratoryCases"
+    />
     <radiology-select-form
       v-if="organization"
       :open="showRadiologyFrom"
@@ -126,7 +154,7 @@
               @click="closeShowDoctorFrom"
               class="create-update-modal-close"
             >
-              <v-icon>mdi-close</v-icon>
+              <img src="/images/login/close.svg">
             </button>
             <span>فرم ارسال نتایج</span>
           </div>
@@ -202,10 +230,11 @@
 <script>
 import PhotographySelectForm from "~/components/panel/appointment/AppointmentForm/PhotographySelectForm";
 import RadiologySelectForm from "~/components/panel/appointment/AppointmentForm/RadiologySelectForm";
+import LaboratorySelectForm from "~/components/panel/appointment/AppointmentForm/LaboratorySelectForm.vue";
 
 export default {
   name: "ReferItemComponent",
-  components: {RadiologySelectForm, PhotographySelectForm},
+  components: {LaboratorySelectForm, RadiologySelectForm, PhotographySelectForm},
   props: {
     type: {
       type: String,
@@ -236,6 +265,7 @@ export default {
       showRadiologyFrom: false,
       showDoctorFrom: false,
       showPhotographyFrom: false,
+      showLaboratoryFrom: false,
       notSelected: false,
       doctorImages: [],
       msg: '',
@@ -266,14 +296,27 @@ export default {
       }
       this.toggleShowPhotographyFrom()
     },
+    openLaboratoryFrom() {
+      if (!this.selectedItem) {
+        this.notSelected = true
+        return
+      }
+      this.toggleShowLaboratoryFrom()
+    },
     closePhotographyFrom() {
       this.toggleShowPhotographyFrom()
+    },
+    closeLaboratoryFrom() {
+      this.toggleShowLaboratoryFrom()
     },
     closeRadiologyForm() {
       this.toggleShowRadiologyFrom()
     },
     toggleShowPhotographyFrom() {
       this.showPhotographyFrom = !this.showPhotographyFrom
+    },
+    toggleShowLaboratoryFrom() {
+      this.showLaboratoryFrom = !this.showLaboratoryFrom
     },
     openRadiologyFrom() {
       if (!this.selectedItem) {
@@ -317,6 +360,10 @@ export default {
       this.$emit('setPhotographyCases', cases)
       this.closePhotographyFrom()
     },
+    setLaboratoryCases(cases) {
+      this.$emit('setLaboratoryCases', cases)
+      this.closeLaboratoryFrom()
+    },
     setRadiologyCases(cases) {
       this.$emit('setRadiologyCases', cases)
       this.closeRadiologyForm()
@@ -339,6 +386,9 @@ export default {
     doctorList() {
       return this.$store.getters['organizations/getRelationDoctorList']
     },
+    laboratoryList() {
+      return this.$store.getters['organizations/getRelationLaboratoryList']
+    },
     loginUser() {
       return this.$store.getters['login/getUser']
     },
@@ -355,6 +405,8 @@ export default {
           this.$emit('setPhotographyCases', [])
         } else if(this.type === 'radiology') {
           this.$emit('setRadiologyCases', [])
+        } else if(this.type === 'laboratory') {
+          this.$emit('setLaboratoryCases', [])
         } else if(this.type === 'doctor') {
           this.$emit('setLaboratoryCases', [])
         }
@@ -365,6 +417,8 @@ export default {
         this.organization = this.photographyList.find(i => i.id === val)
       } else if(this.type === 'radiology') {
         this.organization = this.radiologyList.find(i => i.id === val)
+      } else if(this.type === 'laboratory') {
+        this.organization = this.laboratoryList.find(i => i.id === val)
       } else if(this.type === 'doctor') {
         this.organization = this.doctorList.find(i => i.id === val)
       }

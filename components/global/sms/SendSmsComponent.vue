@@ -16,7 +16,7 @@
               @click="closeForm"
               class="create-update-modal-close"
             >
-              <v-icon>mdi-close</v-icon>
+              <img src="/images/login/close.svg">
             </button>
             <span>فرم ارسال پیامک</span>
           </div>
@@ -179,7 +179,7 @@
           class="close"
           @click="toggleCreateModal"
         >
-          <v-icon>mdi-close</v-icon>
+          <img src="/images/login/close.svg">
         </button>
         <v-card-title class="accept-file-remove-title">
           <span>ارسال پیامک</span>

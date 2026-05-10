@@ -105,7 +105,7 @@
               @click="cancelRemoveItem"
               class="create-update-modal-close"
             >
-              <v-icon>mdi-close</v-icon>
+              <img src="/images/login/close.svg">
             </button>
           </div>
           <v-spacer/>

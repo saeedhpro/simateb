@@ -59,6 +59,22 @@
                 @setDoctorImagesCases="setDoctorImagesCases"
               />
             </v-col>
+            <v-col
+              cols="12"
+              sm="6"
+              md="6"
+            >
+              <refer-item-component
+                type="laboratory"
+                title="آزمایشگاه"
+                :refer="doctor"
+                :message="doctorMsg"
+                :items="doctorItems"
+                @selected="itemSelected"
+                @setMsg="setMsg"
+                @setDoctorImagesCases="setDoctorImagesCases"
+              />
+            </v-col>
           </v-row>
         </v-expansion-panel-content>
       </v-expansion-panel>
@@ -84,6 +100,10 @@ export default {
       type: Object,
       default: null,
     },
+    laboratory: {
+      type: Object,
+      default: null,
+    },
     doctorItems: {
       type: Array,
       default: () => []
@@ -96,6 +116,10 @@ export default {
       type: Array,
       default: () => []
     },
+    laboratoryItems: {
+      type: Array,
+      default: () => []
+    },
     radiologyMsg: {
       type: String,
       default: "",
@@ -105,6 +129,10 @@ export default {
       default: "",
     },
     doctorMsg: {
+      type: String,
+      default: "",
+    },
+    laboratoryMsg: {
       type: String,
       default: "",
     },
@@ -127,6 +155,9 @@ export default {
     },
     setRadiologyCases(cases) {
       this.$emit('setRadiologyCases', cases)
+    },
+    setLaboratoryCases(cases) {
+      this.$emit('setLaboratoryCases', cases)
     }
   }
 }

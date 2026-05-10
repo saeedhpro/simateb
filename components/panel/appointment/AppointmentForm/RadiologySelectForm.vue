@@ -16,7 +16,7 @@
               @click="closeForm"
               class="create-update-modal-close"
             >
-              <v-icon>mdi-close</v-icon>
+              <img src="/images/login/close.svg">
             </button>
             <span>فرم رادیولوژی</span>
           </div>
@@ -220,7 +220,7 @@
                               <v-divider vertical/>
                               <div class="right">{{ selectedLeftBottomDents.join(',') }}</div>
                             </div>
-                            <div class="remove-dents" @click="removeDents('Periapical')"><v-icon>mdi-close</v-icon></div>
+                            <div class="remove-dents" @click="removeDents('Periapical')"><img src="/images/login/close.svg"></div>
                           </div>
                         </div>
                         <button class="radio-select-button" @click="showSelectDent('Periapical')">انتخاب</button>
@@ -408,7 +408,7 @@
                                   <v-divider vertical/>
                                   <div class="right">{{ selectedCBCTLeftBottomDents.join(',') }}</div>
                                 </div>
-                                <div class="remove-dents" @click="removeDents('CBCT')"><v-icon>mdi-close</v-icon></div>
+                                <div class="remove-dents" @click="removeDents('CBCT')"><img src="/images/login/close.svg"></div>
                               </div>
                             </div>
                             <button class="radio-select-button" @click="showSelectDent('CBCT')">انتخاب</button>
@@ -560,7 +560,7 @@
               @click="toggleShowDentModal"
               class="create-update-modal-close"
             >
-              <v-icon>mdi-close</v-icon>
+              <img src="/images/login/close.svg">
             </button>
             <span>فرم رادیولوژی</span>
           </div>

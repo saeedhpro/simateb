@@ -302,7 +302,7 @@
               @click="closeUpdateImageForm"
               class="create-update-modal-close"
             >
-              <v-icon>mdi-close</v-icon>
+              <img src="/images/login/close.svg">
             </button>
             <span>ویرایش عکس پروفایل بیمار</span>
           </div>

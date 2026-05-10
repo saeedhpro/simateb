@@ -36,7 +36,7 @@
                   @click="removeImage('new1')"
                   class="remove-image"
                 >
-                  <v-icon>mdi-close</v-icon>
+                  <img src="/images/login/close.svg">
                 </v-btn>
                 <img :src="new1" alt="">
               </div>
@@ -46,7 +46,7 @@
                   @click="removeImage('image1')"
                   class="remove-image"
                 >
-                  <v-icon>mdi-close</v-icon>
+                  <img src="/images/login/close.svg">
                 </v-btn>
                 <img :src="image1_link" alt="">
               </div>
@@ -80,7 +80,7 @@
                   @click="removeImage('new2')"
                   class="remove-image"
                 >
-                  <v-icon>mdi-close</v-icon>
+                  <img src="/images/login/close.svg">
                 </v-btn>
                 <img :src="new2" alt="">
               </div>
@@ -90,7 +90,7 @@
                   @click="removeImage('image2')"
                   class="remove-image"
                 >
-                  <v-icon>mdi-close</v-icon>
+                  <img src="/images/login/close.svg">
                 </v-btn>
                 <img :src="image2_link" alt="">
               </div>
@@ -124,7 +124,7 @@
                   @click="removeImage('new3')"
                   class="remove-image"
                 >
-                  <v-icon>mdi-close</v-icon>
+                  <img src="/images/login/close.svg">
                 </v-btn>
                 <img :src="new3" alt="">
               </div>
@@ -134,7 +134,7 @@
                   @click="removeImage('image3')"
                   class="remove-image"
                 >
-                  <v-icon>mdi-close</v-icon>
+                  <img src="/images/login/close.svg">
                 </v-btn>
                 <img :src="image3_link" alt="">
               </div>
@@ -168,7 +168,7 @@
                   @click="removeImage('new4')"
                   class="remove-image"
                 >
-                  <v-icon>mdi-close</v-icon>
+                  <img src="/images/login/close.svg">
                 </v-btn>
                 <img :src="new4" alt="">
               </div>
@@ -178,7 +178,7 @@
                   @click="removeImage('image4')"
                   class="remove-image"
                 >
-                  <v-icon>mdi-close</v-icon>
+                  <img src="/images/login/close.svg">
                 </v-btn>
                 <img :src="image4_link" alt="">
               </div>

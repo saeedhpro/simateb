@@ -84,7 +84,7 @@
               class="close"
               @click="remove"
             >
-              <v-icon>mdi-close</v-icon>
+              <img src="/images/login/close.svg">
             </button>
             <v-card-title class="accept-file-remove-title">
               <span>لطفا در انجام این عمل دقت کنید!</span>
