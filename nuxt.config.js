@@ -125,7 +125,10 @@ export default {
     treeShake: true,
     customVariables: ['~/assets/variables.scss'],
     icons: {
-      iconfont: 'mdiSvg', // 'mdi' || 'mdiSvg' || 'md' || 'fa' || 'fa4' || 'faSvg'
+      iconfont: 'mdiSvg',
+    },
+    defaultAssets: {
+      icons: false
     },
     theme: {
       rtl: true,
