@@ -127,6 +127,9 @@ export default {
     icons: {
       iconfont: 'mdiSvg', // 'mdi' || 'mdiSvg' || 'md' || 'fa' || 'fa4' || 'faSvg'
     },
+    defaultAssets: {
+      icons: false
+    },
     theme: {
       rtl: true,
       dark: false,
