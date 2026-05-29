@@ -17,7 +17,7 @@
               @click="closeForm"
               class="create-update-modal-close"
             >
-              <v-icon>mdi-close</v-icon>
+              <img src="/images/login/close.svg">
             </button>
             <span>فرم پذیرش</span>
           </div>
@@ -788,7 +788,7 @@
               @click="closeActionForm"
               class="create-update-modal-close"
             >
-              <v-icon>mdi-close</v-icon>
+              <img src="/images/login/close.svg">
             </button>
             <span>اقدامات</span>
           </div>
@@ -899,7 +899,7 @@
               @click="showPrescriptionList = false"
               class="create-update-modal-close"
             >
-              <v-icon>mdi-close</v-icon>
+              <img src="/images/login/close.svg">
             </button>
             <span>لیست اقدامات قبلی</span>
           </div>
@@ -983,7 +983,7 @@
               @click="closeAddDescModal"
               class="create-update-modal-close"
             >
-              <v-icon>mdi-close</v-icon>
+              <img src="/images/login/close.svg">
             </button>
             <span>توضیحات</span>
           </div>

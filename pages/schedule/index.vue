@@ -120,7 +120,7 @@
         <v-card-title class="create-update-modal-title-box">
           <div class="create-update-modal-title">
             <button @click="closeForm" class="create-update-modal-close">
-              <v-icon>mdi-close</v-icon>
+              <img src="/images/login/close.svg">
             </button>
             <span>فرم ایجاد نوبت دهی اینترنتی (VIP)</span>
           </div>
@@ -227,7 +227,7 @@
         <v-card-title class="create-update-modal-title-box">
           <div class="create-update-modal-title">
             <button @click="cancelRemoveItem" class="create-update-modal-close">
-              <v-icon>mdi-close</v-icon>
+              <img src="/images/login/close.svg">
             </button>
           </div>
           <v-spacer />
@@ -268,7 +268,7 @@
         <v-card-title class="create-update-modal-title-box">
           <div class="create-update-modal-title">
             <button @click="closeCasesModal" class="create-update-modal-close">
-              <v-icon>mdi-close</v-icon>
+              <img src="/images/login/close.svg">
             </button>
             <span>خدمات</span>
           </div>

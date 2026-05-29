@@ -17,7 +17,7 @@
               @click="closeForm"
               class="create-update-modal-close"
             >
-              <v-icon>mdi-close</v-icon>
+              <img src="/images/login/close.svg">
             </button>
             <span>فرم پذیرش</span>
           </div>
@@ -314,12 +314,15 @@
                   <refer-box-component
                     :photography="appointment.photography"
                     :radiology="appointment.radiology"
+                    :laboratory="appointment.laboratory"
                     :radio-items="radiologyCases"
                     :photo-items="photographyCases"
+                    :laboratory-items="laboratoryCases"
                     @selected="itemSelected"
                     @setMsg="setMsg"
                     @setPhotographyCases="setPhotographyCases"
                     @setRadiologyCases="setRadiologyCases"
+                    @setLaboratoryCases="setLaboratoryCases"
                   />
                 </v-col>
               </v-row>
@@ -679,7 +682,7 @@
               @click="closeActionForm"
               class="create-update-modal-close"
             >
-              <v-icon>mdi-close</v-icon>
+              <img src="/images/login/close.svg">
             </button>
             <span>اقدامات</span>
           </div>
@@ -790,7 +793,7 @@
               @click="showPrescriptionList = false"
               class="create-update-modal-close"
             >
-              <v-icon>mdi-close</v-icon>
+              <img src="/images/login/close.svg">
             </button>
             <span>لیست اقدامات قبلی</span>
           </div>
@@ -1615,6 +1618,9 @@ export default {
     setRadiologyCases(cases) {
       this.appointment.radiology_cases = cases.join(',')
     },
+    setLaboratoryCases(cases) {
+      this.appointment.laboratory_cases = cases.join(',')
+    },
     openEditModal() {
       // this.$emit('openUpdate', this.item)
       this.toggleUpdateModal()
@@ -1694,6 +1700,12 @@ export default {
         return []
       }
       return this.appointment.radiology_cases.split(',')
+    },
+    laboratoryCases() {
+      if (this.appointment.laboratory_cases == "") {
+        return []
+      }
+      return this.appointment.laboratory_cases.split(',')
     },
     show() {
       return this.open;

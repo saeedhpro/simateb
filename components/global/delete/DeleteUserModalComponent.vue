@@ -10,7 +10,7 @@
         class="close"
         @click="close"
       >
-        <v-icon>mdi-close</v-icon>
+        <img src="/images/login/close.svg">
       </button>
       <v-card-title class="accept-file-remove-title">
         <span>حذف {{ title }}</span>

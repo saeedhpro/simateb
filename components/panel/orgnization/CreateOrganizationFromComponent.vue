@@ -16,7 +16,7 @@
               @click="closeForm"
               class="create-update-modal-close"
             >
-              <v-icon>mdi-close</v-icon>
+              <img src="/images/login/close.svg">
             </button>
             <span>افزودن موسسه</span>
           </div>
@@ -416,6 +416,8 @@ export default {
         text2: '',
         image3: '',
         text3: '',
+        is_sms_active: true,
+        show_in_app: true,
         rel_organizations: [],
       }
       this.profession = null
@@ -447,7 +449,9 @@ export default {
         error = 'فیلد شماره تماس اجباری است'
         isValid = false
       }
-      this.$toast.error(error);
+      if (!isValid) {
+        this.$toast.error(error);
+      }
       return isValid;
     },
     createOrganization() {
@@ -465,6 +469,8 @@ export default {
           ],
           sms_price: this.organization.sms_price,
           sms_credit: this.organization.sms_credit,
+          is_sms_active: this.organization.is_sms_active,
+          show_in_app: this.organization.show_in_app,
         }
         delete data.logo
         this.$store.dispatch('admin/organizations/createOrganization', data)

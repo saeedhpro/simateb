@@ -41,7 +41,7 @@
             @click="removeImage(s)"
             class="remove-image"
           >
-            <v-icon>mdi-close</v-icon>
+            <img src="/images/login/close.svg">
           </v-btn>
           <img :src="s" alt="">
         </div>
@@ -60,7 +60,7 @@
             @click="removeSlider(s)"
             class="remove-image"
           >
-            <v-icon>mdi-close</v-icon>
+            <img src="/images/login/close.svg">
           </v-btn>
           <img :src="s" alt="">
         </div>

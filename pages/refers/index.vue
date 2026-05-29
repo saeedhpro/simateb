@@ -5,13 +5,15 @@
     <v-row>
       <v-col align-self="center">
         <div class="page-header-box organization">
-          <div class="page-header">
+          <nuxt-link to="/refers" class="page-header">
             <img src="/images/pages/users.svg" alt="users">
-            <span class="title">
-            ارجاعیات
-            </span>
-          </div>
-          <v-divider inset v-if="!mini"/>
+            <span class="title">ارجاعیات</span>
+          </nuxt-link>
+          <nuxt-link to="/refers/forms" class="page-header">
+            <img src="/images/pages/users.svg" alt="users">
+            <span class="title">فرم ارجاعیات</span>
+          </nuxt-link>
+          <v-divider inset/>
         </div>
       </v-col>
     </v-row>
@@ -70,7 +72,7 @@
                             @click="closeFilterModal"
                             class="create-update-modal-close"
                           >
-                            <v-icon>mdi-close</v-icon>
+                            <img src="/images/login/close.svg">
                           </button>
                           <span>جستجو پیشرفته</span>
                         </div>

@@ -3,6 +3,7 @@ export const state = () => ({
   radiologyList: [],
   photographyList: [],
   relationDoctorList: [],
+  relationLaboratoryList: [],
   referedDoctorList: [],
   organization: null,
   workHour: {
@@ -28,6 +29,9 @@ export const mutations = {
   },
   setRelationDoctorList(state, doctorList) {
     state.relationDoctorList = doctorList
+  },
+  setLaboratoryList(state, laboratoryList) {
+    state.relationLaboratoryList = laboratoryList
   },
   setOrganization(state, organization) {
     state.organization = organization
@@ -64,6 +68,8 @@ export const actions = {
           ctx.commit('setPhotographyList', data)
         } else if (type === 'doctor') {
           ctx.commit('setRelationDoctorList', data)
+        } else if (type === 'laboratory') {
+          ctx.commit('setLaboratoryList', data)
         }
         return Promise.resolve(res)
       })
@@ -189,6 +195,9 @@ export const getters = {
   },
   getRelationDoctorList(state) {
     return state.relationDoctorList
+  },
+  getRelationLaboratoryList(state) {
+    return state.relationLaboratoryList
   },
   getReferedDoctorList(state) {
     return state.referedDoctorList

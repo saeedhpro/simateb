@@ -142,7 +142,7 @@
         <v-card-title class="create-update-modal-title-box">
           <div class="create-update-modal-title">
             <button @click="closeCreateModal" class="create-update-modal-close">
-              <v-icon>mdi-close</v-icon>
+              <img src="/images/login/close.svg">
             </button>
             <span>{{ isUpdate ? 'ویرایش' : 'ثبت' }} پرداخت</span>
           </div>
